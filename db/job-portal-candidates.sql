@@ -107,6 +107,7 @@ CREATE TABLE t_profile(
 	mobile_number VARCHAR(15),
 	photo_id VARCHAR(36),
 	cv_id VARCHAR(36),
+	expected_salary VARCHAR(36),
 	gender_id VARCHAR(36),
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,

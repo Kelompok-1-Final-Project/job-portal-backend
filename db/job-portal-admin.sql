@@ -1,6 +1,7 @@
 
 --DROP TABLE IF EXISTS t_result;
 --DROP TABLE IF EXISTS t_question_option;
+--DROP TABLE IF EXISTS t_skill_test_question;
 --DROP TABLE IF EXISTS t_question;
 --DROP TABLE IF EXISTS t_skill_test;
 --DROP TABLE IF EXISTS t_hired;
@@ -25,6 +26,7 @@
 --DROP TABLE IF EXISTS t_company;
 --DROP TABLE IF EXISTS t_role;
 --DROP TABLE IF EXISTS t_file;
+--DROP TABLE IF EXISTS t_gender;
 
 CREATE TABLE t_file(
 	id VARCHAR(36) NOT NULL ,
@@ -164,11 +166,27 @@ ALTER TABLE t_status_process ADD CONSTRAINT status_process_pk
 ALTER TABLE t_status_process ADD CONSTRAINT status_process_bk
 	UNIQUE(process_code);
 
+CREATE TABLE t_gender(
+	id VARCHAR(36) NOT NULL,
+	gender_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_gender ADD CONSTRAINT gender_pk
+	PRIMARY KEY(id);
+
+
 CREATE TABLE t_profile(
 	id VARCHAR(36) NOT NULL ,
 	id_number VARCHAR(16),
 	full_name VARCHAR(30),
 	mobile_number VARCHAR(15),
+	gender_id VARCHAR(36),
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -181,6 +199,9 @@ ALTER TABLE t_profile ADD CONSTRAINT profile_pk
 	PRIMARY KEY(id);
 ALTER TABLE t_profile ADD CONSTRAINT profile_bk
 	UNIQUE(id_number);
+ALTER TABLE t_profile ADD CONSTRAINT profile_gender_fk
+	FOREIGN KEY(gender_id)
+	REFERENCES t_gender(id);
 
 CREATE TABLE t_user(
 	id VARCHAR(36) NOT NULL ,
@@ -208,22 +229,35 @@ ALTER TABLE t_user ADD CONSTRAINT user_role_fk
 	REFERENCES t_role(id);
 
 CREATE TABLE t_candidate_profile(
-	id VARCHAR(36) NOT NULL ,
-	id_number VARCHAR(15) NOT NULL,
+	id VARCHAR(36) NOT NULL,
+	id_number VARCHAR(15),
 	full_name VARCHAR(30) NOT NULL,
-	mobile_number VARCHAR(15) NOT NULL,
+	mobile_number VARCHAR(15),
+	photo_id VARCHAR(36),
+	cv_id VARCHAR(36),
+	expected_salary BIGINT,
+	gender_id VARCHAR(36),
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
 	updated_at timestamp,
 	is_active boolean NOT NULL,
-	versions int NOT NULL
+	ver int NOT NULL
 );
 
 ALTER TABLE t_candidate_profile ADD CONSTRAINT candidate_profile_pk
 	PRIMARY KEY(id);
 ALTER TABLE t_candidate_profile ADD CONSTRAINT candidate_profile_bk
 	UNIQUE(id_number);
+ALTER TABLE t_candidate_profile ADD CONSTRAINT candidate_profile_gender_fk
+	FOREIGN KEY(gender_id)
+	REFERENCES t_gender(id);
+ALTER TABLE t_candidate_profile ADD CONSTRAINT candidate_profile_photo_fk
+	FOREIGN KEY(photo_id)
+	REFERENCES t_file(id);
+ALTER TABLE t_candidate_profile ADD CONSTRAINT candidate_profile_cv_fk
+	FOREIGN KEY(cv_id)
+	REFERENCES t_file(id);
 
 CREATE TABLE t_candidate(
 	id VARCHAR(36) NOT NULL ,
@@ -405,6 +439,9 @@ ALTER TABLE t_interview ADD CONSTRAINT interview_candidate_fk
 ALTER TABLE t_interview ADD CONSTRAINT interview_interviewer_fk
 	FOREIGN KEY(interviewer_id)
 	REFERENCES t_user(id);
+ALTER TABLE t_interview ADD CONSTRAINT interview_job_fk
+	FOREIGN KEY(job_id)
+	REFERENCES t_job(id);
 
 CREATE TABLE t_medical_checkup(
 	id VARCHAR(36) NOT NULL ,
@@ -494,7 +531,6 @@ ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_job_fk
 CREATE TABLE t_question(
 	id VARCHAR(36) NOT NULL ,
 	question text NOT NULL,
-	skill_test_id VARCHAR(36) NOT NULL ,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -505,9 +541,27 @@ CREATE TABLE t_question(
 
 ALTER TABLE t_question ADD CONSTRAINT question_pk
 	PRIMARY KEY(id);
-ALTER TABLE t_question ADD CONSTRAINT question_skill_test_fk
+
+CREATE TABLE t_skill_test_question(
+	id VARCHAR(36) NOT NULL,
+	question_id VARCHAR(36) NOT NULL,
+	skill_test_id VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_question_fk
 	FOREIGN KEY(skill_test_id)
 	REFERENCES t_skill_test(id);
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_skill_fk
+	FOREIGN KEY(question_id)
+	REFERENCES t_question(id);
 
 CREATE TABLE t_question_option(
 	id VARCHAR(36) NOT NULL ,
