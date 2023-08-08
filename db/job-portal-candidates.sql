@@ -1,20 +1,28 @@
 
---DROP TABLE IF EXISTS t_blacklist;
+--DROP TABLE IF EXISTS t_organization;
+--DROP TABLE IF EXISTS t_relationship;
+--DROP TABLE IF EXISTS t_family;
 --DROP TABLE IF EXISTS t_employee;
+--DROP TABLE IF EXISTS t_blacklist;
 --DROP TABLE IF EXISTS t_save_job;
 --DROP TABLE IF EXISTS t_work_experience;
 --DROP TABLE IF EXISTS t_education;
+--DROP TABLE IF EXISTS t_job_benefit;
 --DROP TABLE IF EXISTS t_job;
 --DROP TABLE IF EXISTS t_employement_type;
 --DROP TABLE IF EXISTS t_job_status;
 --DROP TABLE IF EXISTS t_user_skill;
 --DROP TABLE IF EXISTS t_user;
+--DROP TABLE IF EXISTS t_benefit;
 --DROP TABLE IF EXISTS t_profile;
 --DROP TABLE IF EXISTS t_skill;
+--DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_company;
+--DROP TABLE IF EXISTS t_person_type;
 --DROP TABLE IF EXISTS t_gender;
---DROP TABLE IF EXISTS t_role;
+--DROP TABLE IF EXISTS t_marital_status;
 --DROP TABLE IF EXISTS t_file;
+
 
 CREATE TABLE t_file(
 	id VARCHAR(36) NOT NULL,
@@ -31,23 +39,6 @@ CREATE TABLE t_file(
 ALTER TABLE t_file ADD CONSTRAINT file_pk
 	PRIMARY KEY(id);
 
-CREATE TABLE t_role(
-	id VARCHAR(36) NOT NULL,
-	role_code VARCHAR(5) NOT NULL,
-	role_name VARCHAR(30) NOT NULL,
-	created_by VARCHAR(36) NOT NULL,
-	created_at timestamp NOT NULL,
-	updated_by VARCHAR(36),
-	updated_at timestamp,
-	is_active boolean NOT NULL,
-	ver int NOT NULL
-);
-
-ALTER TABLE t_role ADD CONSTRAINT role_pk
-	PRIMARY KEY(id);
-ALTER TABLE t_role ADD CONSTRAINT role_code_bk
-	UNIQUE(role_code);
-
 CREATE TABLE t_gender(
 	id VARCHAR(36) NOT NULL,
 	gender_name VARCHAR(30) NOT NULL,
@@ -61,6 +52,51 @@ CREATE TABLE t_gender(
 
 ALTER TABLE t_gender ADD CONSTRAINT gender_pk
 	PRIMARY KEY(id);
+
+CREATE TABLE t_marital_status(
+	id VARCHAR(36) NOT NULL,
+	status_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_pk
+	PRIMARY KEY(id);
+
+CREATE TABLE t_level(
+	id VARCHAR(36) NOT NULL,
+	level_name VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_level ADD CONSTRAINT level_pk
+	PRIMARY KEY(id);
+
+CREATE TABLE t_person_type(
+	id VARCHAR(36) NOT NULL,
+	type_code VARCHAR(5) NOT NULL,
+	type_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_person_type ADD CONSTRAINT person_type_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_person_type ADD CONSTRAINT person_type_code_bk
+	UNIQUE(type_code);
 
 CREATE TABLE t_company(
 	id VARCHAR(36) NOT NULL,
@@ -104,11 +140,15 @@ CREATE TABLE t_profile(
 	id VARCHAR(36) NOT NULL,
 	id_number VARCHAR(16),
 	full_name VARCHAR(30) NOT NULL,
+	summary TEXT,
+	birthdate DATE,
 	mobile_number VARCHAR(15),
 	photo_id VARCHAR(36),
 	cv_id VARCHAR(36),
 	expected_salary VARCHAR(36),
 	gender_id VARCHAR(36),
+	marital_status_id VARCHAR(36),
+	person_type_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -130,6 +170,12 @@ ALTER TABLE t_profile ADD CONSTRAINT profile_cv_fk
 ALTER TABLE t_profile ADD CONSTRAINT profile_gender_fk
 	FOREIGN KEY(gender_id)
 	REFERENCES t_gender(id);
+ALTER TABLE t_profile ADD CONSTRAINT profile_marital_status_fk
+	FOREIGN KEY(marital_status_id)
+	REFERENCES t_marital_status(id);
+ALTER TABLE t_profile ADD CONSTRAINT profile_person_type_fk
+	FOREIGN KEY(person_type_id)
+	REFERENCES t_person_type(id);
 
 CREATE TABLE t_user(
 	id VARCHAR(36) NOT NULL,
@@ -262,7 +308,6 @@ CREATE TABLE t_work_experience(
 	id VARCHAR(36) NOT NULL,
 	position_name VARCHAR(30) NOT NULL,
 	company_name VARCHAR(30) NOT NULL,
-	years VARCHAR(4) NOT NULL,
 	start_date DATE NOT NULL,
 	end_date DATE NOT NULL,
 	candidate_id VARCHAR(36) NOT NULL,
@@ -300,10 +345,11 @@ ALTER TABLE t_save_job ADD CONSTRAINT save_job_candidate_fk
 ALTER TABLE t_save_job ADD CONSTRAINT save_job_job_fk
 	FOREIGN KEY(job_id)
 	REFERENCES t_job(id);
-	
-CREATE TABLE t_employee(
+
+CREATE TABLE t_benefit(
 	id VARCHAR(36) NOT NULL,
-	candidate_id VARCHAR(36) NOT NULL,
+	benefit_code VARCHAR(5) NOT NULL,
+	benefit_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -312,16 +358,15 @@ CREATE TABLE t_employee(
 	ver int NOT NULL
 );
 
-ALTER TABLE t_employee ADD CONSTRAINT employee_pk
+ALTER TABLE t_benefit ADD CONSTRAINT benefit_pk
 	PRIMARY KEY(id);
-ALTER TABLE t_employee ADD CONSTRAINT employee_candidate_fk
-	FOREIGN KEY(candidate_id)
-	REFERENCES t_user(id);
-
-CREATE TABLE t_blacklist(
+ALTER TABLE t_benefit ADD CONSTRAINT benefit_bk
+	UNIQUE(benefit_code);
+	
+CREATE TABLE t_job_benefit(
 	id VARCHAR(36) NOT NULL,
-	candidate_id VARCHAR(36) NOT NULL,
-	company_id VARCHAR(36) NOT NULL,
+	benefit_id VARCHAR(36) NOT NULL,
+	job_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -330,12 +375,74 @@ CREATE TABLE t_blacklist(
 	ver int NOT NULL
 );
 
-ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_pk
+ALTER TABLE t_job_benefit ADD CONSTRAINT job_benefit_pk
 	PRIMARY KEY(id);
-ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_candidate_fk
+ALTER TABLE t_job_benefit ADD CONSTRAINT job_benefit_benefit_fk
+	FOREIGN KEY(benefit_id)
+	REFERENCES t_benefit(id);
+ALTER TABLE t_job_benefit ADD CONSTRAINT job_benefit_job_fk
+	FOREIGN KEY(job_id)
+	REFERENCES t_job(id);
+	
+CREATE TABLE t_relationship(
+	id VARCHAR(36) NOT NULL,
+	relationship_code VARCHAR(5) NOT NULL,
+	relationship_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_relationship ADD CONSTRAINT relationship_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_relationship ADD CONSTRAINT relationship_bk
+	UNIQUE(relationship_code);
+	
+CREATE TABLE t_family(
+	id VARCHAR(36) NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	family_name VARCHAR(30) NOT NULL,
+	relationship_id VARCHAR(36) NOT NULL,
+	family_degree VARCHAR(36) NOT NULL,
+	family_birthdate VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_family ADD CONSTRAINT family_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_family ADD CONSTRAINT family_relationship_fk
+	FOREIGN KEY(relationship_id)
+	REFERENCES t_relationship(id);
+ALTER TABLE t_family ADD CONSTRAINT family_candidate_fk
 	FOREIGN KEY(candidate_id)
 	REFERENCES t_user(id);
-ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_company_fk
-	FOREIGN KEY(company_id)
-	REFERENCES t_company(id);
 	
+CREATE TABLE t_organization(
+	id VARCHAR(36) NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	organization_name VARCHAR(30) NOT NULL,
+	position_name VARCHAR(30) NOT NULL,
+	start_date DATE NOT NULL,
+	end_date DATE,
+	description TEXT,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_organization ADD CONSTRAINT organization_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_organization ADD CONSTRAINT organization_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_user(id);
