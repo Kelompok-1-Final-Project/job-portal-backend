@@ -320,6 +320,7 @@ ALTER TABLE t_employee ADD CONSTRAINT employee_candidate_fk
 CREATE TABLE t_blacklist(
 	id VARCHAR(36) NOT NULL,
 	candidate_id VARCHAR(36) NOT NULL,
+	company_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -333,4 +334,7 @@ ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_pk
 ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_candidate_fk
 	FOREIGN KEY(candidate_id)
 	REFERENCES t_user(id);
+ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_company_fk
+	FOREIGN KEY(company_id)
+	REFERENCES t_company(id);
 	
