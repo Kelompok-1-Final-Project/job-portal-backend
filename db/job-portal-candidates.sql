@@ -1,7 +1,7 @@
 
 --DROP TABLE IF EXISTS t_organization;
---DROP TABLE IF EXISTS t_relationship;
 --DROP TABLE IF EXISTS t_family;
+--DROP TABLE IF EXISTS t_relationship;
 --DROP TABLE IF EXISTS t_employee;
 --DROP TABLE IF EXISTS t_blacklist;
 --DROP TABLE IF EXISTS t_save_job;
@@ -18,6 +18,7 @@
 --DROP TABLE IF EXISTS t_skill;
 --DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_company;
+--DROP TABLE IF EXISTS t_industry;
 --DROP TABLE IF EXISTS t_person_type;
 --DROP TABLE IF EXISTS t_gender;
 --DROP TABLE IF EXISTS t_marital_status;
@@ -98,11 +99,28 @@ ALTER TABLE t_person_type ADD CONSTRAINT person_type_pk
 ALTER TABLE t_person_type ADD CONSTRAINT person_type_code_bk
 	UNIQUE(type_code);
 
+CREATE TABLE t_industry(
+	id VARCHAR(36) NOT NULL,
+	industry_code VARCHAR(5) NOT NULL,
+	industry_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_industry ADD CONSTRAINT industry_pk
+	PRIMARY KEY(id);
+
+
 CREATE TABLE t_company(
 	id VARCHAR(36) NOT NULL,
 	company_code VARCHAR(5) NOT NULL,
 	company_name VARCHAR(30) NOT NULL,
 	file_id VARCHAR(36) NOT NULL,
+	industry_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -118,6 +136,9 @@ ALTER TABLE t_company ADD CONSTRAINT company_code_bk
 ALTER TABLE t_company ADD CONSTRAINT company_file_fk
 	FOREIGN KEY(file_id)
 	REFERENCES t_file(id);
+ALTER TABLE t_company ADD CONSTRAINT company_industry_fk
+	FOREIGN KEY(industry_id)
+	REFERENCES t_industry(id);
 
 CREATE TABLE t_skill(
 	id VARCHAR(36) NOT NULL,
