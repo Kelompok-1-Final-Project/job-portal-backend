@@ -24,38 +24,47 @@ public class Family {
 	
 	@Column(name = "family_degree",length =36,nullable = false)
 	private String familyDegree;
+	
 	@Column(name = "family_birthdate",length =36,nullable = false)
 	private String familyBirtdate;
-	
 	
 	
 	public User getCandidate() {
 		return candidate;
 	}
+	
 	public void setCandidate(User candidate) {
 		this.candidate = candidate;
 	}
+	
 	public String getFamilyname() {
 		return familyname;
 	}
+	
 	public void setFamilyname(String familyname) {
 		this.familyname = familyname;
 	}
+	
 	public Relationship getRelationship() {
 		return relationship;
 	}
+	
 	public void setRelationship(Relationship relationship) {
 		this.relationship = relationship;
 	}
+	
 	public String getFamilyDegree() {
 		return familyDegree;
 	}
+	
 	public void setFamilyDegree(String familyDegree) {
 		this.familyDegree = familyDegree;
 	}
+	
 	public String getFamilyBirtdate() {
 		return familyBirtdate;
 	}
+	
 	public void setFamilyBirtdate(String familyBirtdate) {
 		this.familyBirtdate = familyBirtdate;
 	}

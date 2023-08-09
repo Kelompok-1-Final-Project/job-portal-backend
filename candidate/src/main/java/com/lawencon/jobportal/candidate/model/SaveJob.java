@@ -12,6 +12,7 @@ public class SaveJob {
 	@OneToOne
 	@JoinColumn(name = "candidate_id")
 	private User candidate;
+	
 	@OneToOne
 	@JoinColumn(name = "job_id")
 	private Job job;
@@ -19,12 +20,15 @@ public class SaveJob {
 	public User getCandidate() {
 		return candidate;
 	}
+	
 	public void setCandidate(User candidate) {
 		this.candidate = candidate;
 	}
+	
 	public Job getJob() {
 		return job;
 	}
+	
 	public void setJob(Job job) {
 		this.job = job;
 	}

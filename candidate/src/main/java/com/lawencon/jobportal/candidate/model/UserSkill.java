@@ -9,8 +9,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_user_skill")
 public class UserSkill {
+	
 	@OneToOne
 	@JoinColumn(name = "candidate_id")
+	
 	private User candidate;
 	@OneToOne
 	@JoinColumn(name = "skill_id")
@@ -19,12 +21,15 @@ public class UserSkill {
 	public User getCandidate() {
 		return candidate;
 	}
+	
 	public void setCandidate(User candidate) {
 		this.candidate = candidate;
 	}
+	
 	public Skill getSkill() {
 		return skill;
 	}
+	
 	public void setSkill(Skill skill) {
 		this.skill = skill;
 	}

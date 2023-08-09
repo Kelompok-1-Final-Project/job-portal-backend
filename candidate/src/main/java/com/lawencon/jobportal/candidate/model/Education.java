@@ -14,39 +14,48 @@ public class Education {
 	
 	@Column(name = "education_name",length =30,nullable = false)
 	private String educationName;
+	
 	@Column(name = "start_date",nullable = false)
 	private LocalDate startDate;
+	
 	@Column(name = "end_date")
 	private LocalDate endDate;
+	
 	@OneToOne
 	@JoinColumn(name = "candidate_id")
 	private User candidate;
+	
 	public String getEducationName() {
 		return educationName;
 	}
+	
 	public void setEducationName(String educationName) {
 		this.educationName = educationName;
 	}
+	
 	public LocalDate getStartDate() {
 		return startDate;
 	}
+	
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
+	
 	public LocalDate getEndDate() {
 		return endDate;
 	}
+	
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
+	
 	public User getCandidate() {
 		return candidate;
 	}
+	
 	public void setCandidate(User candidate) {
 		this.candidate = candidate;
 	}
-	
-	
 }
 
 

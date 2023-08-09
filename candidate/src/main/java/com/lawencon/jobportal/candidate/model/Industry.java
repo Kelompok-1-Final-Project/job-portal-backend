@@ -11,6 +11,7 @@ public class Industry {
 	
 	@Column(name = "industry_code",length =5,nullable = false)
 	private String industryCode;
+	
 	@Column(name = "industry_name",length =30,nullable = false)
 	private String industryName;
 	
