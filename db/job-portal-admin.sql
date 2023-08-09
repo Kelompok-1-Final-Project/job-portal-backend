@@ -1,8 +1,6 @@
 --DROP TABLE IF EXISTS t_job_benefit;
 --DROP TABLE IF EXISTS t_benefit;
 --DROP TABLE IF EXISTS t_blacklist;
---DROP TABLE IF EXISTS t_level;
---DROP TABLE IF EXISTS t_result;
 --DROP TABLE IF EXISTS t_question_option;
 --DROP TABLE IF EXISTS t_skill_test_question;
 --DROP TABLE IF EXISTS t_question;
@@ -15,15 +13,15 @@
 --DROP TABLE IF EXISTS t_application;
 --DROP TABLE IF EXISTS t_job_candidate_status;
 --DROP TABLE IF EXISTS t_user_skill;
+--DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_candidate;
 --DROP TABLE IF EXISTS t_candidate_profile;
 --DROP TABLE IF EXISTS t_job;
---DROP TABLE IF EXISTS t_candidate;
 --DROP TABLE IF EXISTS t_user;
 --DROP TABLE IF EXISTS t_profile;
 --DROP TABLE IF EXISTS t_status_process;
 --DROP TABLE IF EXISTS t_skill;
---DROP TABLE IF EXISTS t_employement_type;
+--DROP TABLE IF EXISTS t_employment_type;
 --DROP TABLE IF EXISTS t_job_position;
 --DROP TABLE IF EXISTS t_job_status;
 --DROP TABLE IF EXISTS t_company;
@@ -86,6 +84,7 @@ ALTER TABLE t_level ADD CONSTRAINT level_code_bk
 
 CREATE TABLE t_marital_status(
 	id VARCHAR(36) NOT NULL,
+	status_code VARCHAR(5) NOT NULL,
 	status_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -97,6 +96,8 @@ CREATE TABLE t_marital_status(
 
 ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_bk
+	UNIQUE(status_code);
 
 CREATE TABLE t_person_type(
 	id VARCHAR(36) NOT NULL,
@@ -132,6 +133,7 @@ ALTER TABLE t_industry ADD CONSTRAINT industry_pk
 
 CREATE TABLE t_city(
 	id VARCHAR(36) NOT NULL,
+	city_code VARCHAR(5) NOT NULL,
 	city_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -143,6 +145,8 @@ CREATE TABLE t_city(
 
 ALTER TABLE t_city ADD CONSTRAINT city_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_city ADD CONSTRAINT city_bk
+	UNIQUE(city_code);
 
 CREATE TABLE t_company(
 	id VARCHAR(36) NOT NULL ,
@@ -207,10 +211,10 @@ ALTER TABLE t_job_position ADD CONSTRAINT job_position_pk
 ALTER TABLE t_job_position ADD CONSTRAINT job_position_bk
 	UNIQUE(position_code);
 	
-CREATE TABLE t_employement_type(
+CREATE TABLE t_employment_type(
 	id VARCHAR(36) NOT NULL ,
-	employement_code VARCHAR(5) NOT NULL,
-	employement_name VARCHAR(30) NOT NULL,
+	employment_code VARCHAR(5) NOT NULL,
+	employment_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -219,10 +223,10 @@ CREATE TABLE t_employement_type(
 	ver int NOT NULL
 );
 
-ALTER TABLE t_employement_type ADD CONSTRAINT employement_pk
+ALTER TABLE t_employment_type ADD CONSTRAINT employment_pk
 	PRIMARY KEY(id);
-ALTER TABLE t_employement_type ADD CONSTRAINT employement_bk
-	UNIQUE(employement_code);
+ALTER TABLE t_employment_type ADD CONSTRAINT employment_bk
+	UNIQUE(employment_code);
 
 CREATE TABLE t_skill(
 	id VARCHAR(36) NOT NULL ,
@@ -260,6 +264,7 @@ ALTER TABLE t_status_process ADD CONSTRAINT status_process_bk
 
 CREATE TABLE t_gender(
 	id VARCHAR(36) NOT NULL,
+	gender_code VARCHAR(5) NOT NULL,
 	gender_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -271,7 +276,8 @@ CREATE TABLE t_gender(
 
 ALTER TABLE t_gender ADD CONSTRAINT gender_pk
 	PRIMARY KEY(id);
-
+ALTER TABLE t_gender ADD CONSTRAINT gender_bk
+	UNIQUE(gender_code);
 
 CREATE TABLE t_profile(
 	id VARCHAR(36) NOT NULL ,
@@ -393,7 +399,7 @@ CREATE TABLE t_job(
 	company_id VARCHAR(36) NOT NULL ,
 	job_position_id VARCHAR(36) NOT NULL ,
 	job_status_id VARCHAR(36) NOT NULL ,
-	employement_type_id VARCHAR(36) NOT NULL ,
+	employment_type_id VARCHAR(36) NOT NULL ,
 	hr_id VARCHAR(36) NOT NULL ,
 	interviewer_id VARCHAR(36) NOT NULL ,
 	created_by VARCHAR(36) NOT NULL,
@@ -412,9 +418,9 @@ ALTER TABLE t_job ADD CONSTRAINT job_company_fk
 ALTER TABLE t_job ADD CONSTRAINT job_status_fk
 	FOREIGN KEY(job_status_id)
 	REFERENCES t_job_status(id);
-ALTER TABLE t_job ADD CONSTRAINT job_employement_fk
-	FOREIGN KEY(employement_type_id)
-	REFERENCES t_employement_type(id);
+ALTER TABLE t_job ADD CONSTRAINT job_employment_fk
+	FOREIGN KEY(employment_type_id)
+	REFERENCES t_employment_type(id);
 ALTER TABLE t_job ADD CONSTRAINT job_hr_id 
 	FOREIGN KEY(hr_id)
 	REFERENCES t_user(id);
@@ -712,7 +718,7 @@ ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_pk
 	PRIMARY KEY(id);
 ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_candidate_fk
 	FOREIGN KEY(candidate_id)
-	REFERENCES t_user(id);
+	REFERENCES t_candidate(id);
 ALTER TABLE t_blacklist ADD CONSTRAINT blacklist_company_fk
 	FOREIGN KEY(company_id)
 	REFERENCES t_company(id);
@@ -760,25 +766,31 @@ ALTER TABLE t_job_benefit ADD CONSTRAINT job_benefit_job_fk
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
 
+INSERT INTO t_profile(id, full_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'system', 0, NOW(), TRUE, 0);
+
+INSERT INTO t_role(id, role_code, role_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'RL001', 'Admin', 0, NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL002', 'HR', 0, NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL003', 'Interviewer', 0, NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL004', 'System', 0, NOW(), TRUE, 0);
+
+INSERT INTO t_user(id, email, pass, profile_id, role_id, created_by, created_at, is_active, ver) VALUES
+	(uuid_generate_v4(), 'system', 'system', (SELECT id FROM t_profile  WHERE full_name = 'system'), (SELECT id FROM t_role WHERE role_name = 'System') , 0, NOW(), TRUE, 0);
+
 INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'PT001', 'Candidate', 0, NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'PT002', 'Employee', 0, NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'PT001', 'Candidate', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'PT002', 'Employee', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
-INSERT INTO t_profile (id, full_name, person_type_id, created_by, created_at, is_active, ver) VALUES
-	(uuid_generate_v4(), 'system', (SELECT id FROM t_person_type WHERE type_code = 'PT002'), 0, NOW(), TRUE, 0);
-
-INSERT INTO t_user(id, email, pass, profile_id, created_by, created_at, is_active, ver) VALUES
-	(uuid_generate_v4(), 'system', 'system', (SELECT id FROM t_profile  WHERE full_name = 'system'), 0, NOW(), TRUE, 0);
-
-INSERT INTO t_employement_type (id, employement_code, employement_name, created_by, created_at, is_active, ver) VALUES 
+INSERT INTO t_employment_type (id, employment_code, employment_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ET001', 'Internship', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET002', 'Contract', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET003', 'Full Time', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET004', 'Part Time', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0);
 
-INSERT INTO t_gender(id, gender_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Male', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Female', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
+INSERT INTO t_gender(id, gender_code, gender_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),'GD001', 'Male', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(),'GD002', 'Female', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ID001', 'Technology', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
@@ -789,10 +801,10 @@ INSERT INTO t_level(id, level_code, level_name, created_by, created_at, is_activ
 	(uuid_generate_v4(), 'LV002', 'Intermediate', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'LV003', 'Expert', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 	
-INSERT INTO t_marital_status(id, status_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Single', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Married', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Divorced', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
+INSERT INTO t_marital_status(id, status_code, status_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'MS001', 'Single', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'MS002', 'Married', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'MS003', 'Divorced', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, is_active, ver) VALUES
 	(uuid_generate_v4(), 'SK001', 'Data Visualization', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
@@ -812,12 +824,6 @@ INSERT INTO t_benefit(id, benefit_code, benefit_name, created_by, created_at, is
 	(uuid_generate_v4(), 'BN006', 'Vehicle', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'BN007', 'Insurance', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'BN008', 'Bonus', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
-
-INSERT INTO t_role(id, role_code, role_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'RL001', 'Admin', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'RL002', 'HR', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'RL003', 'Interviewer', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'RL004', 'System', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 	
 INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'SP001', 'Application', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
@@ -832,3 +838,122 @@ INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, i
 	(uuid_generate_v4(), 'JS001', 'Open', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS002', 'Closed', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS003', 'Draft', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
+
+INSERT INTO t_file(id, ext, file, created_by, created_at, is_active, ver ) VALUES 
+	(uuid_generate_v4(), '.jpg', 'system',(SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE,0 );
+	
+INSERT INTO t_city(id, city_code, city_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),'CT001', 'Jakarta', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0 ),
+	(uuid_generate_v4(),'CT002', 'Bandung', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0 ),
+	(uuid_generate_v4(),'CT003', 'Surabaya', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0 );
+
+INSERT INTO t_company(id, company_code, company_name, city_id, file_id, industry_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'CP001', 'Lawencon', (SELECT id FROM t_city WHERE city_name='Jakarta'),(SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_industry WHERE industry_code='ID001'), (SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'CP002', 'Linov', (SELECT id FROM t_city WHERE city_name='Jakarta'),(SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_industry WHERE industry_code='ID002'), (SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'CP003', 'Rocket', (SELECT id FROM t_city WHERE city_name='Jakarta'),(SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_industry WHERE industry_code='ID001'), (SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0);
+	
+INSERT INTO t_job_position(id,position_code, position_name, created_by, created_at,is_active,ver) VALUES 
+	(uuid_generate_v4(), 'JP001', 'Fullstack Developer', (SELECT id FROM t_user WHERE email='system'),NOW(),TRUE, 0),
+	(uuid_generate_v4(), 'JP002', 'Backend Developer', (SELECT id FROM t_user WHERE email='system'),NOW(),TRUE, 0),
+	(uuid_generate_v4(), 'JP003', 'Frontend Developer', (SELECT id FROM t_user WHERE email='system'),NOW(),TRUE, 0);
+
+INSERT INTO t_profile(id, id_number, full_name, mobile_number, gender_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),'1234567890','Anggi', '082219823926', (SELECT id FROM t_gender WHERE gender_code='G001'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0),
+	(uuid_generate_v4(), '0987654321','Firman','082219823926', (SELECT id FROM t_gender WHERE gender_code='G001'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0),
+	(uuid_generate_v4(),'1029384756', 'Torang','082219823926', (SELECT id FROM t_gender WHERE gender_code='G002'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0);
+
+INSERT INTO t_user(id, email, pass, profile_id, role_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'anggi@gmail.com', 'anggi', (SELECT id FROM t_profile WHERE full_name='Anggi'), (SELECT id FROM t_role WHERE role_code='RL001'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'firman@gmail.com', 'firman', (SELECT id FROM t_profile WHERE full_name='Firman'), (SELECT id FROM t_role WHERE role_code='RL002'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'torang@gmail.com', 'torang', (SELECT id FROM t_profile WHERE full_name='Torang'), (SELECT id FROM t_role WHERE role_code='RL003'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0);
+
+INSERT INTO t_job(id, job_title, salary_start , salary_end, description, end_date, company_id , job_position_id , job_status_id , employment_type_id , hr_id ,interviewer_id , created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Fullstack Developer', 8000000, 10000000, 'Looking for Fullstack Developer','2023-08-10',(SELECT id FROM t_company WHERE company_code='CP001'), (SELECT id FROM t_job_position WHERE position_code='JP001'),(SELECT id FROM t_job_status WHERE status_code='JS001'),(SELECT id FROM t_employment_type WHERE employment_code='ET001'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Backend Developer', 6000000, 8000000, 'Looking for Backend Developer','2023-08-11' ,(SELECT id FROM t_company WHERE company_code='CP002'), (SELECT id FROM t_job_position WHERE position_code='JP002'),(SELECT id FROM t_job_status WHERE status_code='JS002'),(SELECT id FROM t_employment_type WHERE employment_code='ET002'),(SELECT id FROM t_user WHERE email='firman@gmail.com'),(SELECT id FROM t_user WHERE email='firman@gmail.com'), (SELECT id FROM t_user WHERE email='firman@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Frontend Developer', 7000000, 9000000, 'Looking for Frontend Developer','2023-08-12 ',(SELECT id FROM t_company WHERE company_code='CP003'), (SELECT id FROM t_job_position WHERE position_code='JP003'),(SELECT id FROM t_job_status WHERE status_code='JS003'),(SELECT id FROM t_employment_type WHERE employment_code='ET003'),(SELECT id FROM t_user WHERE email='torang@gmail.com'),(SELECT id FROM t_user WHERE email='torang@gmail.com'), (SELECT id FROM t_user WHERE email='torang@gmail.com'), NOW(), TRUE, 0);
+
+INSERT INTO t_candidate_profile(id, id_number, full_name, summary, birthdate, mobile_number, photo_id, cv_id, expected_salary, gender_id, marital_status_id, person_type_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), '1234567890', 'Anggi', 'Im a Fullstack Developer', '2000-12-20' ,'082219823926', (SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_file WHERE file='system'),10000000,(SELECT id FROM t_gender WHERE gender_code='GD001'),(SELECT id FROM t_marital_status WHERE status_code='MS001'),(SELECT id FROM t_person_type WHERE type_code='PT001'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), '0987654321', 'Firman', 'Im a Backend Developer', '2000-12-20' ,'082219823926', (SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_file WHERE file='system'),9000000,(SELECT id FROM t_gender WHERE gender_code='GD002'),(SELECT id FROM t_marital_status WHERE status_code='MS002'),(SELECT id FROM t_person_type WHERE type_code='PT002'), (SELECT id FROM t_user WHERE email='firman@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), '9809876567', 'Torang', 'Im a Frontend Developer','2000-12-20' ,'082219823926', (SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_file WHERE file='system'),8000000,(SELECT id FROM t_gender WHERE gender_code='GD001'),(SELECT id FROM t_marital_status WHERE status_code='MS003'),(SELECT id FROM t_person_type WHERE type_code='PT001'), (SELECT id FROM t_user WHERE email='torang@gmail.com'), NOW(), TRUE, 0);
+
+INSERT INTO t_candidate(id, email, pass, profile_id, created_by, created_at, is_active, ver) VALUES
+	(uuid_generate_v4(), 'anggi@gmail.com', 'anggi', (SELECT id FROM t_candidate_profile WHERE full_name='Anggi'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'firman@gmail.com', 'firman', (SELECT id FROM t_candidate_profile WHERE full_name='Firman'), (SELECT id FROM t_user WHERE email='firman@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'torang@gmail.com', 'torang', (SELECT id FROM t_candidate_profile WHERE full_name='Torang'), (SELECT id FROM t_user WHERE email='torang@gmail.com'), NOW(), TRUE, 0);
+
+INSERT INTO t_user_skill(id, candidate_id, skill_id , level_id , created_by , created_at , is_active , ver ) VALUES 
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'), (SELECT id FROM t_skill WHERE skill_code='SK001'),(SELECT id FROM t_level WHERE level_code='LV001'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='firman@gmail.com'), (SELECT id FROM t_skill WHERE skill_code='SK002'),(SELECT id FROM t_level WHERE level_code='LV002'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='torang@gmail.com'), (SELECT id FROM t_skill WHERE skill_code='SK003'),(SELECT id FROM t_level WHERE level_code='LV003'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0);
+
+INSERT INTO t_job_candidate_status(id, candidate_id, job_id, status_id, created_by, created_at, is_active,ver) VALUES 
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'), (SELECT id FROM t_job WHERE job_title='Fullstack Developer'), (SELECT id FROM t_status_process WHERE process_code='SP001'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='firman@gmail.com'), (SELECT id FROM t_job WHERE job_title='Backend Developer'), (SELECT id FROM t_status_process WHERE process_code='SP002'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='torang@gmail.com'), (SELECT id FROM t_job WHERE job_title='Frontend Developer'), (SELECT id FROM t_status_process WHERE process_code='SP003'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'), (SELECT id FROM t_job WHERE job_title='Fullstack Developer'), (SELECT id FROM t_status_process WHERE process_code='SP004'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='firman@gmail.com'), (SELECT id FROM t_job WHERE job_title='Backend Developer'), (SELECT id FROM t_status_process WHERE process_code='SP005'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='torang@gmail.com'), (SELECT id FROM t_job WHERE job_title='Frontend Developer'), (SELECT id FROM t_status_process WHERE process_code='SP006'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'), (SELECT id FROM t_job WHERE job_title='Fullstack Developer'), (SELECT id FROM t_status_process WHERE process_code='SP007'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0);
+
+INSERT INTO t_application(id, candidate_id, job_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'), (SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='firman@gmail.com'), (SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='torang@gmail.com'), (SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE, 0);
+
+INSERT INTO t_assessment(id, candidate_id, job_id, hr_id, schedule, notes, created_by, created_at, is_active, ver) VALUES
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(),'Good Job Anggi',(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(),TRUE,0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='firman@gmail.com'),NOW(),'Good Job Firman',(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(),TRUE,0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='torang@gmail.com'),NOW(),'Good Job Torang',(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(),TRUE,0);
+	
+INSERT INTO t_interview (id, candidate_id, job_id, interviewer_id, schedule, notes, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(),'Good Job Anggi',(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='firman@gmail.com'),NOW(),'Good Job Firman',(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='torang@gmail.com'),NOW(),'Good Job Torang',(SELECT id FROM t_user WHERE email='anggi@gmail.com'),NOW(), TRUE, 0);
+
+INSERT INTO t_medical_checkup (id, candidate_id, job_id, file_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'), (SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='firman@gmail.com'), (SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='torang@gmail.com'), (SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0);
+
+INSERT INTO t_offering(id, candidate_id, job_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='anggi@gmail.com'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+	
+INSERT INTO t_hired(id, candidate_id, job_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='anggi@gmail.com'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+	
+INSERT INTO t_skill_test(id, test_name, job_id, grade, notes, candidate_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Test Fullstack Developer',(SELECT id FROM t_job WHERE job_title='Fullstack Developer'), 90, 'Good Job',(SELECT id FROM t_candidate WHERE email='anggi@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'Test Backend Developer',(SELECT id FROM t_job WHERE job_title='Backend Developer'), 80, 'Good Job',(SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'Test Frontend Developer',(SELECT id FROM t_job WHERE job_title='Frontend Developer'), 70, 'Good Job',(SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+
+INSERT INTO t_question(id, question, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),'1+1=?',(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),'1+2=?',(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),'1+3=?',(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+
+INSERT INTO t_skill_test_question(id, question_id, skill_test_id, created_by, created_at, is_active, ver) VALUES
+	(uuid_generate_v4(), (SELECT id FROM t_question WHERE question='1+1=?'),(SELECT id FROM t_skill_test WHERE test_name='Test Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(), (SELECT id FROM t_question WHERE question='1+2=?'),(SELECT id FROM t_skill_test WHERE test_name='Test Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(), (SELECT id FROM t_question WHERE question='1+3=?'),(SELECT id FROM t_skill_test WHERE test_name='Test Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+
+INSERT INTO t_question_option(id, labels, is_answer, question_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),'2',TRUE,(SELECT id FROM t_question WHERE question='1+1=?'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),'3',FALSE,(SELECT id FROM t_question WHERE question='1+1=?'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),'4',FALSE,(SELECT id FROM t_question WHERE question='1+1=?'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),'5',FALSE,(SELECT id FROM t_question WHERE question='1+1=?'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+
+INSERT INTO t_blacklist (id, candidate_id, company_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='anggi@gmail.com'),(SELECT id FROM t_company WHERE company_code='CP001'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_company WHERE company_code='CP002'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_company WHERE company_code='CP003'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+
+INSERT INTO t_job_benefit(id,benefit_id, job_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN001'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN002'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN003'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+
