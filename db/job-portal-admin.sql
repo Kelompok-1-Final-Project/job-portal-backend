@@ -1,6 +1,7 @@
 --DROP TABLE IF EXISTS t_job_benefit;
 --DROP TABLE IF EXISTS t_benefit;
 --DROP TABLE IF EXISTS t_blacklist;
+--DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_result;
 --DROP TABLE IF EXISTS t_question_option;
 --DROP TABLE IF EXISTS t_skill_test_question;
@@ -66,6 +67,22 @@ ALTER TABLE t_role ADD CONSTRAINT role_pk
 ALTER TABLE t_role ADD CONSTRAINT role_code_bk
 	UNIQUE(role_code);
 
+CREATE TABLE t_level(
+	id VARCHAR(36) NOT NULL ,
+	level_code VARCHAR(5) NOT NULL,
+	level_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_level ADD CONSTRAINT level_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_level ADD CONSTRAINT level_code_bk
+	UNIQUE(level_code);
 
 CREATE TABLE t_marital_status(
 	id VARCHAR(36) NOT NULL,
@@ -412,6 +429,7 @@ CREATE TABLE t_user_skill(
 	id VARCHAR(36) NOT NULL ,
 	candidate_id VARCHAR(36) NOT NULL ,
 	skill_id VARCHAR(36) NOT NULL ,
+	level_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -428,6 +446,9 @@ ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_candidate_fk
 ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_skill_fk
 	FOREIGN KEY(skill_id)
 	REFERENCES t_skill(id);
+ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_level_fk
+	FOREIGN KEY(level_id)
+	REFERENCES t_level(id);
 
 CREATE TABLE t_job_candidate_status(
 	id VARCHAR(36) NOT NULL ,
@@ -745,29 +766,29 @@ INSERT INTO t_employement_type (id, employement_code, employement_name, created_
 	(uuid_generate_v4(), 'ET003', 'Full Time', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET004', 'Part Time', uuid_generate_v4(), NOW(),TRUE,0);
 
-INSERT INTO t_gender(id, gender_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_gender(id, gender_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'Male', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Female', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ID001', 'Technology', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'ID002', 'Finance', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_level(id, level_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Basic', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Intermediate', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Expert', uuid_generate_v4(), NOW(), TRUE, 0);
+INSERT INTO t_level(id, level_code, level_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'LV001', 'Basic', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'LV002', 'Intermediate', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'LV003', 'Expert', uuid_generate_v4(), NOW(), TRUE, 0);
 	
-INSERT INTO t_marital_status(id, status_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_marital_status(id, status_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'Single', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Married', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Divorced', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'PT001', 'Candidate', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'PT002', 'Employee', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES
+INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, is_active, ver) VALUES
 	(uuid_generate_v4(), 'SK001', 'Data Visualization', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK002', 'Microsoft Office', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK003', 'Graphic Design', uuid_generate_v4(), NOW(), TRUE, 0),
@@ -776,7 +797,7 @@ INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, updated_
 	(uuid_generate_v4(), 'SK006', 'Communication', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK007', 'Programming', uuid_generate_v4(), NOW(), TRUE, 0);
 	
-INSERT INTO t_benefit(id, benefit_code, benefit_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_benefit(id, benefit_code, benefit_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'BN001', 'BPJS', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'BN002', 'Transportation Fee', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'BN003', 'Laptop', uuid_generate_v4(), NOW(), TRUE, 0),
@@ -786,13 +807,13 @@ INSERT INTO t_benefit(id, benefit_code, benefit_name, created_by, created_at, up
 	(uuid_generate_v4(), 'BN007', 'Insurance', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'BN008', 'Bonus', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_role(id, role_code, role_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_role(id, role_code, role_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'RL001', 'Admin', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'RL002', 'HR', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'RL003', 'Interviewer', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'RL004', 'System', uuid_generate_v4(), NOW(), TRUE, 0);
 	
-INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'SP001', 'Application', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP002', 'Assessment', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP003', 'Interview', uuid_generate_v4(), NOW(), TRUE, 0),
@@ -801,7 +822,7 @@ INSERT INTO t_status_process(id, process_code, process_name, created_by, created
 	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'JS001', 'Open', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS002', 'Closed', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS003', 'Draft', uuid_generate_v4(), NOW(), TRUE, 0);
