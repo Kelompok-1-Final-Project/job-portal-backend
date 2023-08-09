@@ -4,6 +4,7 @@
 --DROP TABLE IF EXISTS t_relationship;
 --DROP TABLE IF EXISTS t_blacklist;
 --DROP TABLE IF EXISTS t_save_job;
+--DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_work_experience;
 --DROP TABLE IF EXISTS t_education;
 --DROP TABLE IF EXISTS t_job_benefit;
@@ -18,6 +19,7 @@
 --DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_company;
 --DROP TABLE IF EXISTS t_industry;
+--DROP TABLE IF EXISTS t_city;
 --DROP TABLE IF EXISTS t_person_type;
 --DROP TABLE IF EXISTS t_gender;
 --DROP TABLE IF EXISTS t_marital_status;
@@ -240,6 +242,7 @@ CREATE TABLE t_user_skill(
 	id VARCHAR(36) NOT NULL,
 	candidate_id VARCHAR(36) NOT NULL,
 	skill_id VARCHAR(36) NOT NULL,
+	level_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -256,6 +259,9 @@ ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_candidate_fk
 ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_skill_fk
 	FOREIGN KEY(skill_id)
 	REFERENCES t_skill(id);
+ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_level_fk
+	FOREIGN KEY(level_id)
+	REFERENCES t_level(id);
 
 CREATE TABLE t_job_status(
 	id VARCHAR(36) NOT NULL,
