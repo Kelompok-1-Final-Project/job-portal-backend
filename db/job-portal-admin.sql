@@ -760,70 +760,76 @@ ALTER TABLE t_job_benefit ADD CONSTRAINT job_benefit_job_fk
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
 
+INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'PT001', 'Candidate', 0, NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'PT002', 'Employee', 0, NOW(), TRUE, 0);
+
+INSERT INTO t_profile (id, full_name, person_type_id, created_by, created_at, is_active, ver) VALUES
+	(uuid_generate_v4(), 'system', (SELECT id FROM t_person_type WHERE type_code = 'PT002'), 0, NOW(), TRUE, 0);
+
+INSERT INTO t_user(id, email, pass, profile_id, created_by, created_at, is_active, ver) VALUES
+	(uuid_generate_v4(), 'system', 'system', (SELECT id FROM t_profile  WHERE full_name = 'system'), 0, NOW(), TRUE, 0);
+
 INSERT INTO t_employement_type (id, employement_code, employement_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'ET001', 'Internship', uuid_generate_v4(), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'ET002', 'Contract', uuid_generate_v4(), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'ET003', 'Full Time', uuid_generate_v4(), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'ET004', 'Part Time', uuid_generate_v4(), NOW(),TRUE,0);
+	(uuid_generate_v4(), 'ET001', 'Internship', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'ET002', 'Contract', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'ET003', 'Full Time', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'ET004', 'Part Time', (SELECT id FROM t_user  WHERE email = 'system'), NOW(),TRUE,0);
 
 INSERT INTO t_gender(id, gender_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Male', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Female', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'Male', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Female', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'ID001', 'Technology', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'ID002', 'Finance', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'ID001', 'Technology', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'ID002', 'Finance', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_level(id, level_code, level_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'LV001', 'Basic', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'LV002', 'Intermediate', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'LV003', 'Expert', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'LV001', 'Basic', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'LV002', 'Intermediate', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'LV003', 'Expert', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 	
 INSERT INTO t_marital_status(id, status_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Single', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Married', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Divorced', uuid_generate_v4(), NOW(), TRUE, 0);
-
-INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'PT001', 'Candidate', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'PT002', 'Employee', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'Single', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Married', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Divorced', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, is_active, ver) VALUES
-	(uuid_generate_v4(), 'SK001', 'Data Visualization', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SK002', 'Microsoft Office', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SK003', 'Graphic Design', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SK004', 'Problem Solving', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SK005', 'Time Management', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SK006', 'Communication', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SK007', 'Programming', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'SK001', 'Data Visualization', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK002', 'Microsoft Office', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK003', 'Graphic Design', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK004', 'Problem Solving', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK005', 'Time Management', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK006', 'Communication', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK007', 'Programming', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 	
 INSERT INTO t_benefit(id, benefit_code, benefit_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'BN001', 'BPJS', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'BN002', 'Transportation Fee', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'BN003', 'Laptop', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'BN004', 'Gadget', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'BN005', 'THR', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'BN006', 'Vehicle', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'BN007', 'Insurance', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'BN008', 'Bonus', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'BN001', 'BPJS', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN002', 'Transportation Fee', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN003', 'Laptop', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN004', 'Gadget',(SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN005', 'THR', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN006', 'Vehicle', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN007', 'Insurance', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN008', 'Bonus', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_role(id, role_code, role_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'RL001', 'Admin', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'RL002', 'HR', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'RL003', 'Interviewer', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'RL004', 'System', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'RL001', 'Admin', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL002', 'HR', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL003', 'Interviewer', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL004', 'System', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 	
 INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'SP001', 'Application', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP002', 'Assessment', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP003', 'Interview', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP004', 'Medical Check Up', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP005', 'Offering', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'SP001', 'Application', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP002', 'Assessment', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP003', 'Interview', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP004', 'Medical Check Up', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP005', 'Offering', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP006', 'Hired', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP007', 'Rejected', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'JS001', 'Open', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'JS002', 'Closed', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'JS003', 'Draft', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'JS001', 'Open', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS002', 'Closed', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS003', 'Draft', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 	
