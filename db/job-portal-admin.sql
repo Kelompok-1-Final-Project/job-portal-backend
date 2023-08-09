@@ -1,4 +1,3 @@
-
 --DROP TABLE IF EXISTS t_job_benefit;
 --DROP TABLE IF EXISTS t_benefit;
 --DROP TABLE IF EXISTS t_blacklist;
@@ -16,6 +15,7 @@
 --DROP TABLE IF EXISTS t_job_candidate_status;
 --DROP TABLE IF EXISTS t_user_skill;
 --DROP TABLE IF EXISTS t_candidate;
+
 --DROP TABLE IF EXISTS t_candidate_profile;
 --DROP TABLE IF EXISTS t_job;
 --DROP TABLE IF EXISTS t_candidate;
