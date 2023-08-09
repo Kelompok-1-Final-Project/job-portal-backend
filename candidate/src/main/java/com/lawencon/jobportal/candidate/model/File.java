@@ -9,8 +9,10 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name = "t_file")
 public class File extends BaseEntity{
+	
 	@Column(name = "ext",length =5,nullable = false)
 	private String ext;
+	
 	@Column(name = "file")
 	private String file;
 	

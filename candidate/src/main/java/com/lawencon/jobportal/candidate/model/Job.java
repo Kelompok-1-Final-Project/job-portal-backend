@@ -38,7 +38,7 @@ public class Job {
 	
 	@OneToOne
 	@JoinColumn(name = "employement_type_id")
-	private EmployementType employementType;
+	private EmploymentType employementType;
 	
 	public String getJobTitle() {
 		return jobTitle;
@@ -96,11 +96,11 @@ public class Job {
 		this.jobStatus = jobStatus;
 	}
 	
-	public EmployementType getEmployementType() {
+	public EmploymentType getEmployementType() {
 		return employementType;
 	}
 	
-	public void setEmployementType(EmployementType employementType) {
+	public void setEmployementType(EmploymentType employementType) {
 		this.employementType = employementType;
 	}
 	
