@@ -18,24 +18,24 @@ public class GenderDao extends AbstractJpaDao{
 				+ "FROM "
 				+ "t_gender "
 				+ "WHERE "
-				+ "role_code = :code";
+				+ "gender_code = :code";
 		
-		final Object roleObj = this.em.createNativeQuery(sql, Role.class)
+		final Object genderObj = this.em.createNativeQuery(sql, Gender.class)
 				.setParameter("code", code)
 				.getSingleResult();
 		
-		final Object[] roleArr = (Object[]) roleObj;
+		final Object[] genderArr = (Object[]) genderObj;
 		
-		Role role = null;
+		Gender gender = null;
 		
-		if (roleArr.length > 0) {
-			role = new Role();
-			role.setId(roleArr[0].toString());
-			role.setRoleName(roleArr[1].toString());
-			role.setRoleCode(roleArr[2].toString());
-			role.setVersion(Integer.valueOf(roleArr[3].toString()));
+		if (genderArr.length > 0) {
+			gender = new Gender();
+			gender.setId(genderArr[0].toString());
+			gender.setGenderName(genderArr[1].toString());
+			gender.setGenderCode(genderArr[2].toString());
+			gender.setVersion(Integer.valueOf(genderArr[3].toString()));
 		}
 		
-		return role;
+		return gender;
 	}
 }

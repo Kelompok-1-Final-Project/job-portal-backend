@@ -8,10 +8,13 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_marital_status")
-public class MaritalStatus extends BaseEntity{
-	
+public class MaritalStatus extends BaseEntity {
+
 	@Column(name = "status_name", length = 30, nullable = false)
 	private String statusName;
+
+	@Column(name = "status_code", length = 5, nullable = false)
+	private String statusCode;
 
 	public String getStatusName() {
 		return statusName;
@@ -20,5 +23,13 @@ public class MaritalStatus extends BaseEntity{
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
 	}
-	
+
+	public String getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
+	}
+
 }

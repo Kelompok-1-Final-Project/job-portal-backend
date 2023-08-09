@@ -58,6 +58,7 @@ ALTER TABLE t_gender ADD CONSTRAINT gender_pk
 CREATE TABLE t_marital_status(
 	id VARCHAR(36) NOT NULL,
 	status_name VARCHAR(30) NOT NULL,
+	status_code VARCHAR(5) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -68,6 +69,8 @@ CREATE TABLE t_marital_status(
 
 ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_code_bk
+	UNIQUE(status_code);
 
 CREATE TABLE t_level(
 	id VARCHAR(36) NOT NULL,

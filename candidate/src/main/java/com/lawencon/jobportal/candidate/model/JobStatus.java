@@ -4,10 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.lawencon.base.BaseEntity;
+
 
 @Entity
 @Table(name = "t_job_status")
-public class JobStatus {
+public class JobStatus extends BaseEntity{
 	
 	@Column(name = "status_code",length =5,unique=true,nullable = false)
 	private String statusCode;
