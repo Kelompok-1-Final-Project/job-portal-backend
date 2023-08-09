@@ -28,6 +28,14 @@ public class SkillTest extends BaseEntity{
 		this.job = job;
 	}
 
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
 	public Double getGrade() {
 		return grade;
 	}
@@ -53,6 +61,9 @@ public class SkillTest extends BaseEntity{
 	
 	@Column(name = "grade", nullable=false)
 	private Double grade;
+	
+	@Column(name = "notes", nullable=false)
+	private String notes;
 	
 	@OneToOne
 	@JoinColumn(name = "candidate_id")

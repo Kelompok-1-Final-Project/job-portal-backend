@@ -21,6 +21,10 @@ public class Company extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "file_id", nullable = false)
 	private File file;
+	
+	@OneToOne
+	@JoinColumn(name = "city_id", nullable = false)
+	private City city;
 
 	@OneToOne
 	@JoinColumn(name = "industry_id", nullable = false)
@@ -48,6 +52,14 @@ public class Company extends BaseEntity {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
 	}
 
 	public Industry getIndustry() {
