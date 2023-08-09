@@ -721,3 +721,63 @@ ALTER TABLE t_job_benefit ADD CONSTRAINT job_benefit_job_fk
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
 
+INSERT INTO t_employement_type (id, employement_code, employement_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'ET001', 'Internship', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'ET002', 'Contract', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'ET003', 'Full Time', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'ET004', 'Part Time', uuid_generate_v4(), NOW(),TRUE,0);
+
+INSERT INTO t_gender(id, gender_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Male', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Female', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'ID001', 'Technology', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'ID002', 'Finance', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_level(id, level_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Basic', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Intermediate', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Expert', uuid_generate_v4(), NOW(), TRUE, 0);
+	
+INSERT INTO t_marital_status(id, status_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Single', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Married', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Divorced', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'PT001', 'Candidate', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'PT002', 'Employee', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES
+	(uuid_generate_v4(), 'SK001', 'Data Visualization', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK002', 'Microsoft Office', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK003', 'Graphic Design', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK004', 'Problem Solving', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK005', 'Time Management', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK006', 'Communication', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SK007', 'Programming', uuid_generate_v4(), NOW(), TRUE, 0);
+	
+INSERT INTO t_benefit(id, benefit_code, benefit_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'BN001', 'BPJS', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN002', 'Transportation Fee', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN003', 'Laptop', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN004', 'Gadget', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN005', 'THR', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN006', 'Vehicle', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN007', 'Insurance', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'BN008', 'Bonus', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_role(id, role_code, role_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'RL001', 'Admin', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL002', 'HR', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL003', 'Interviewer', uuid_generate_v4(), NOW(), TRUE, 0);
+	
+INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'SP001', 'Application', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP002', 'Assessment', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP003', 'Interview', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP004', 'Medical Check Up', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP005', 'Offering', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);
