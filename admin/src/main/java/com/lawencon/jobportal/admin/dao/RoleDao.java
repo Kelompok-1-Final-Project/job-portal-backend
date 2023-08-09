@@ -1,18 +1,17 @@
 package com.lawencon.jobportal.admin.dao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.Role;
 
 @Repository
 public class RoleDao extends AbstractJpaDao{
 
-	@PersistenceContext
-	private EntityManager em;
+	private final EntityManager em = ConnHandler.getManager();
 	
 	public Role getByCode(String code) {
 		final String sql = "SELECT "

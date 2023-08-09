@@ -832,4 +832,3 @@ INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, i
 	(uuid_generate_v4(), 'JS001', 'Open', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS002', 'Closed', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS003', 'Draft', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
-	
