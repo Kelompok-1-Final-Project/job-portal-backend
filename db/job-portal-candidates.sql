@@ -8,7 +8,7 @@
 --DROP TABLE IF EXISTS t_education;
 --DROP TABLE IF EXISTS t_job_benefit;
 --DROP TABLE IF EXISTS t_job;
---DROP TABLE IF EXISTS t_employement_type;
+--DROP TABLE IF EXISTS t_employment_type;
 --DROP TABLE IF EXISTS t_job_status;
 --DROP TABLE IF EXISTS t_user_skill;
 --DROP TABLE IF EXISTS t_user;
@@ -257,10 +257,10 @@ ALTER TABLE t_job_status ADD CONSTRAINT job_status_pk
 ALTER TABLE t_job_status ADD CONSTRAINT job_status_bk
 	UNIQUE(status_code);
 
-CREATE TABLE t_employement_type(
+CREATE TABLE t_employment_type(
 	id VARCHAR(36) NOT NULL,
-	employement_code VARCHAR(5) NOT NULL,
-	employement_name VARCHAR(30) NOT NULL,
+	employment_code VARCHAR(5) NOT NULL,
+	employment_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -269,10 +269,10 @@ CREATE TABLE t_employement_type(
 	ver int NOT NULL
 );
 
-ALTER TABLE t_employement_type ADD CONSTRAINT employement_pk
+ALTER TABLE t_employment_type ADD CONSTRAINT employment_pk
 	PRIMARY KEY(id);
-ALTER TABLE t_employement_type ADD CONSTRAINT employement_bk
-	UNIQUE(employement_code);
+ALTER TABLE t_employment_type ADD CONSTRAINT employment_bk
+	UNIQUE(employment_code);
 
 CREATE TABLE t_job(
 	id VARCHAR(36) NOT NULL,
@@ -283,7 +283,7 @@ CREATE TABLE t_job(
 	end_date DATE NOT NULL,
 	company_id VARCHAR(36) NOT NULL,
 	job_status_id VARCHAR(36) NOT NULL,
-	employement_type_id VARCHAR(36) NOT NULL,
+	employment_type_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -300,9 +300,9 @@ ALTER TABLE t_job ADD CONSTRAINT job_company_fk
 ALTER TABLE t_job ADD CONSTRAINT job_status_fk
 	FOREIGN KEY(job_status_id)
 	REFERENCES t_job_status(id);
-ALTER TABLE t_job ADD CONSTRAINT job_employement_fk
-	FOREIGN KEY(employement_type_id)
-	REFERENCES t_employement_type(id);
+ALTER TABLE t_job ADD CONSTRAINT job_employment_fk
+	FOREIGN KEY(employment_type_id)
+	REFERENCES t_employment_type(id);
 
 CREATE TABLE t_education(
 	id VARCHAR(36) NOT NULL,
@@ -470,7 +470,7 @@ ALTER TABLE t_organization ADD CONSTRAINT organization_candidate_fk
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
 
-INSERT INTO t_employement_type (id, employement_code, employement_name, created_by, created_at, is_active, ver) VALUES 
+INSERT INTO t_employment_type (id, employment_code, employment_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ET001', 'Internship', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET002', 'Contract', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET003', 'Full Time', uuid_generate_v4(), NOW(),TRUE,0),
@@ -506,3 +506,8 @@ INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, updated_
 	(uuid_generate_v4(), 'SK005', 'Time Management', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK006', 'Communication', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK007', 'Programming', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'JS001', 'Open', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS002', 'Closed', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS003', 'Draft', uuid_generate_v4(), NOW(), TRUE, 0);

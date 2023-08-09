@@ -15,7 +15,6 @@
 --DROP TABLE IF EXISTS t_job_candidate_status;
 --DROP TABLE IF EXISTS t_user_skill;
 --DROP TABLE IF EXISTS t_candidate;
-
 --DROP TABLE IF EXISTS t_candidate_profile;
 --DROP TABLE IF EXISTS t_job;
 --DROP TABLE IF EXISTS t_candidate;
@@ -27,6 +26,7 @@
 --DROP TABLE IF EXISTS t_job_position;
 --DROP TABLE IF EXISTS t_job_status;
 --DROP TABLE IF EXISTS t_company;
+--DROP TABLE IF EXISTS t_city;
 --DROP TABLE IF EXISTS t_industry;
 --DROP TABLE IF EXISTS t_person_type;
 --DROP TABLE IF EXISTS t_role;
@@ -113,10 +113,25 @@ CREATE TABLE t_industry(
 ALTER TABLE t_industry ADD CONSTRAINT industry_pk
 	PRIMARY KEY(id);
 
+CREATE TABLE t_city(
+	id VARCHAR(36) NOT NULL,
+	city_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_city ADD CONSTRAINT city_pk
+	PRIMARY KEY(id);
+
 CREATE TABLE t_company(
 	id VARCHAR(36) NOT NULL ,
 	company_code VARCHAR(5) NOT NULL,
 	company_name VARCHAR(30) NOT NULL,
+	city_id VARCHAR(36) NOT NULL,
 	file_id VARCHAR(36) NOT NULL,
 	industry_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
@@ -137,6 +152,9 @@ ALTER TABLE t_company ADD CONSTRAINT company_file_fk
 ALTER TABLE t_company ADD CONSTRAINT company_industry_fk
 	FOREIGN KEY(industry_id)
 	REFERENCES t_industry(id);
+ALTER TABLE t_company ADD CONSTRAINT company_city_fk
+	FOREIGN KEY(city_id)
+	REFERENCES t_city(id);
 
 CREATE TABLE t_job_status(
 	id VARCHAR(36) NOT NULL ,
@@ -771,7 +789,8 @@ INSERT INTO t_benefit(id, benefit_code, benefit_name, created_by, created_at, up
 INSERT INTO t_role(id, role_code, role_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'RL001', 'Admin', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'RL002', 'HR', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'RL003', 'Interviewer', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'RL003', 'Interviewer', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RL004', 'System', uuid_generate_v4(), NOW(), TRUE, 0);
 	
 INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'SP001', 'Application', uuid_generate_v4(), NOW(), TRUE, 0),
@@ -781,3 +800,9 @@ INSERT INTO t_status_process(id, process_code, process_name, created_by, created
 	(uuid_generate_v4(), 'SP005', 'Offering', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'JS001', 'Open', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS002', 'Closed', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS003', 'Draft', uuid_generate_v4(), NOW(), TRUE, 0);
+	
