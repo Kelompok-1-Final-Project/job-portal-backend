@@ -4,11 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-
+import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_person_type")
-public class PersonType {
+public class PersonType extends BaseEntity{
 	
 	
 	@Column(name = "type_code",length =5,unique=true,nullable = false)

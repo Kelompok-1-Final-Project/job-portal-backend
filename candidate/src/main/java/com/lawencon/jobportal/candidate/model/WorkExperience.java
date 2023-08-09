@@ -8,9 +8,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.lawencon.base.BaseEntity;
+
 @Entity
 @Table(name = "t_work_experience")
-public class WorkExperience {
+public class WorkExperience extends BaseEntity{
 	
 	@Column(name = "position_name",length =30,nullable = false)
 	private String positionName;

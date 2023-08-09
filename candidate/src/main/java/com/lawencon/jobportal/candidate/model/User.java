@@ -6,10 +6,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.lawencon.base.BaseEntity;
+
 
 @Entity
 @Table(name = "t_user")
-public class User {
+public class User extends BaseEntity{
 	
 	@Column(name = "email",length =30,unique=true,nullable = false)
 	private String email;

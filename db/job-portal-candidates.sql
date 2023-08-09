@@ -4,11 +4,12 @@
 --DROP TABLE IF EXISTS t_relationship;
 --DROP TABLE IF EXISTS t_blacklist;
 --DROP TABLE IF EXISTS t_save_job;
+--DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_work_experience;
 --DROP TABLE IF EXISTS t_education;
 --DROP TABLE IF EXISTS t_job_benefit;
 --DROP TABLE IF EXISTS t_job;
---DROP TABLE IF EXISTS t_employement_type;
+--DROP TABLE IF EXISTS t_employment_type;
 --DROP TABLE IF EXISTS t_job_status;
 --DROP TABLE IF EXISTS t_user_skill;
 --DROP TABLE IF EXISTS t_user;
@@ -18,6 +19,7 @@
 --DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_company;
 --DROP TABLE IF EXISTS t_industry;
+--DROP TABLE IF EXISTS t_city;
 --DROP TABLE IF EXISTS t_person_type;
 --DROP TABLE IF EXISTS t_gender;
 --DROP TABLE IF EXISTS t_marital_status;
@@ -66,6 +68,7 @@ ALTER TABLE t_gender ADD CONSTRAINT gender_pk
 CREATE TABLE t_marital_status(
 	id VARCHAR(36) NOT NULL,
 	status_name VARCHAR(30) NOT NULL,
+	status_code VARCHAR(5) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -76,6 +79,8 @@ CREATE TABLE t_marital_status(
 
 ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_code_bk
+	UNIQUE(status_code);
 
 
 CREATE TABLE t_level(
@@ -124,12 +129,26 @@ CREATE TABLE t_industry(
 ALTER TABLE t_industry ADD CONSTRAINT industry_pk
 	PRIMARY KEY(id);
 
+CREATE TABLE t_city(
+	id VARCHAR(36) NOT NULL,
+	city_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_city ADD CONSTRAINT city_pk
+	PRIMARY KEY(id);
 
 CREATE TABLE t_company(
 	id VARCHAR(36) NOT NULL,
 	company_code VARCHAR(5) NOT NULL,
 	company_name VARCHAR(30) NOT NULL,
 	file_id VARCHAR(36) NOT NULL,
+	city_id VARCHAR(36) NOT NULL,
 	industry_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -149,6 +168,9 @@ ALTER TABLE t_company ADD CONSTRAINT company_file_fk
 ALTER TABLE t_company ADD CONSTRAINT company_industry_fk
 	FOREIGN KEY(industry_id)
 	REFERENCES t_industry(id);
+ALTER TABLE t_company ADD CONSTRAINT company_city_fk
+	FOREIGN KEY(city_id)
+	REFERENCES t_city(id);
 
 CREATE TABLE t_skill(
 	id VARCHAR(36) NOT NULL,
@@ -234,6 +256,7 @@ CREATE TABLE t_user_skill(
 	id VARCHAR(36) NOT NULL,
 	candidate_id VARCHAR(36) NOT NULL,
 	skill_id VARCHAR(36) NOT NULL,
+	level_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -250,6 +273,9 @@ ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_candidate_fk
 ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_skill_fk
 	FOREIGN KEY(skill_id)
 	REFERENCES t_skill(id);
+ALTER TABLE t_user_skill ADD CONSTRAINT user_skill_level_fk
+	FOREIGN KEY(level_id)
+	REFERENCES t_level(id);
 
 CREATE TABLE t_job_status(
 	id VARCHAR(36) NOT NULL,
@@ -268,10 +294,10 @@ ALTER TABLE t_job_status ADD CONSTRAINT job_status_pk
 ALTER TABLE t_job_status ADD CONSTRAINT job_status_bk
 	UNIQUE(status_code);
 
-CREATE TABLE t_employement_type(
+CREATE TABLE t_employment_type(
 	id VARCHAR(36) NOT NULL,
-	employement_code VARCHAR(5) NOT NULL,
-	employement_name VARCHAR(30) NOT NULL,
+	employment_code VARCHAR(5) NOT NULL,
+	employment_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -280,10 +306,10 @@ CREATE TABLE t_employement_type(
 	ver int NOT NULL
 );
 
-ALTER TABLE t_employement_type ADD CONSTRAINT employement_pk
+ALTER TABLE t_employment_type ADD CONSTRAINT employment_pk
 	PRIMARY KEY(id);
-ALTER TABLE t_employement_type ADD CONSTRAINT employement_bk
-	UNIQUE(employement_code);
+ALTER TABLE t_employment_type ADD CONSTRAINT employment_bk
+	UNIQUE(employment_code);
 
 CREATE TABLE t_job(
 	id VARCHAR(36) NOT NULL,
@@ -294,7 +320,7 @@ CREATE TABLE t_job(
 	end_date DATE NOT NULL,
 	company_id VARCHAR(36) NOT NULL,
 	job_status_id VARCHAR(36) NOT NULL,
-	employement_type_id VARCHAR(36) NOT NULL,
+	employment_type_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -311,9 +337,9 @@ ALTER TABLE t_job ADD CONSTRAINT job_company_fk
 ALTER TABLE t_job ADD CONSTRAINT job_status_fk
 	FOREIGN KEY(job_status_id)
 	REFERENCES t_job_status(id);
-ALTER TABLE t_job ADD CONSTRAINT job_employement_fk
-	FOREIGN KEY(employement_type_id)
-	REFERENCES t_employement_type(id);
+ALTER TABLE t_job ADD CONSTRAINT job_employment_fk
+	FOREIGN KEY(employment_type_id)
+	REFERENCES t_employment_type(id);
 
 CREATE TABLE t_education(
 	id VARCHAR(36) NOT NULL,
@@ -481,35 +507,35 @@ ALTER TABLE t_organization ADD CONSTRAINT organization_candidate_fk
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
 
-INSERT INTO t_employement_type (id, employement_code, employement_name, created_by, created_at, is_active, ver) VALUES 
+INSERT INTO t_employment_type (id, employment_code, employment_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ET001', 'Internship', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET002', 'Contract', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET003', 'Full Time', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET004', 'Part Time', uuid_generate_v4(), NOW(),TRUE,0);
 
-INSERT INTO t_gender(id, gender_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_gender(id, gender_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'Male', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Female', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at,  is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ID001', 'Technology', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'ID002', 'Finance', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_level(id, level_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_level(id, level_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'Basic', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Intermediate', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Expert', uuid_generate_v4(), NOW(), TRUE, 0);
 	
-INSERT INTO t_marital_status(id, status_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_marital_status(id, status_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'Single', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Married', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Divorced', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES 
+INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'PT001', 'Candidate', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'PT002', 'Employee', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, updated_by, updated_at, is_active, ver) VALUES
+INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, is_active, ver) VALUES
 	(uuid_generate_v4(), 'SK001', 'Data Visualization', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK002', 'Microsoft Office', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK003', 'Graphic Design', uuid_generate_v4(), NOW(), TRUE, 0),
@@ -517,3 +543,9 @@ INSERT INTO t_skill(id, skill_code, skill_name, created_by, created_at, updated_
 	(uuid_generate_v4(), 'SK005', 'Time Management', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK006', 'Communication', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SK007', 'Programming', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'JS001', 'Open', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS002', 'Closed', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'JS003', 'Draft', uuid_generate_v4(), NOW(), TRUE, 0);
+

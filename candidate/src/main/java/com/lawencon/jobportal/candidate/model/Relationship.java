@@ -4,9 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.lawencon.base.BaseEntity;
+
 @Entity
 @Table(name = "t_relationship")
-public class Relationship {
+public class Relationship extends BaseEntity {
 	
 	@Column(name = "relationship_code",length =5,unique=true,nullable = false)
 	private String relationshipCode;
