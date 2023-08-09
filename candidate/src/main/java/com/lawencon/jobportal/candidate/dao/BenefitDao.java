@@ -11,5 +11,4 @@ import com.lawencon.base.ConnHandler;
 @Repository
 public class BenefitDao extends AbstractJpaDao{
 	private EntityManager em = ConnHandler.getManager();
-	
 }

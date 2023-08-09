@@ -39,6 +39,15 @@ CREATE TABLE t_file(
 ALTER TABLE t_file ADD CONSTRAINT file_pk
 	PRIMARY KEY(id);
 
+
+INSERT INTO t_file (id, ext, file, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'png', 'file1.png', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'jpg', 'file2.jpg', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'pdf', 'file3.pdf', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'png', 'file4.png', uuid_generate_v4(), NOW(),TRUE,0)
+;
+
+
 CREATE TABLE t_gender(
 	id VARCHAR(36) NOT NULL,
 	gender_name VARCHAR(30) NOT NULL,
@@ -53,6 +62,7 @@ CREATE TABLE t_gender(
 ALTER TABLE t_gender ADD CONSTRAINT gender_pk
 	PRIMARY KEY(id);
 
+
 CREATE TABLE t_marital_status(
 	id VARCHAR(36) NOT NULL,
 	status_name VARCHAR(30) NOT NULL,
@@ -66,6 +76,7 @@ CREATE TABLE t_marital_status(
 
 ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_pk
 	PRIMARY KEY(id);
+
 
 CREATE TABLE t_level(
 	id VARCHAR(36) NOT NULL,
