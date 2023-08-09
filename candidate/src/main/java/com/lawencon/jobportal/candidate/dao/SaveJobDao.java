@@ -11,4 +11,6 @@ import com.lawencon.base.ConnHandler;
 @Repository
 public class SaveJobDao extends AbstractJpaDao{
 	private EntityManager em = ConnHandler.getManager();
+
+	
 }
