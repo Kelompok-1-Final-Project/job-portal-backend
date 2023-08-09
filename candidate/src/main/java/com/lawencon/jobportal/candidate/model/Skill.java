@@ -4,10 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.lawencon.base.BaseEntity;
+
 
 @Entity
 @Table(name = "t_skill")
-public class Skill {
+public class Skill extends BaseEntity{
 	
 	@Column(name = "skill_code",length =5,unique=true,nullable = false)
 	private String skillCode;
