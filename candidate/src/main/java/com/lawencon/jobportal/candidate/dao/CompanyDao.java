@@ -6,11 +6,10 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
+import com.lawencon.base.ConnHandler;
 
 @Repository
 public class CompanyDao extends AbstractJpaDao{
-	@PersistenceContext
-	private EntityManager em;
-	
+	private EntityManager em = ConnHandler.getManager();
 	
 }
