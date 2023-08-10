@@ -42,7 +42,7 @@ public class Job extends BaseEntity {
 	private JobStatus jobStatus;
 	
 	@OneToOne
-	@JoinColumn(name = "employement_type_id")
+	@JoinColumn(name = "employment_type_id")
 	private EmploymentType employementType;
 	
 	@OneToOne

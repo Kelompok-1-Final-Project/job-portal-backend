@@ -7,12 +7,12 @@ import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.base.BaseEntity;
+import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.City;
 
 @Repository
-public class CityDao extends BaseEntity {
+public class CityDao extends AbstractJpaDao {
 
 	private EntityManager em() {
 		return ConnHandler.getManager();
