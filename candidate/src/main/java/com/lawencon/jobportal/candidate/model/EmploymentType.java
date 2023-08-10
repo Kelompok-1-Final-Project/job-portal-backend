@@ -15,20 +15,20 @@ public class EmploymentType extends BaseEntity{
 	
 	@Column(name = "employment_name",length =30,nullable = false)
 	private String employmentName;
-	
-	public String getemploymentName() {
-		return employmentName;
-	}
-	
-	public void setemploymentName(String employmentName) {
-		this.employmentName = employmentName;
-	}
-	
-	public String getemploymentCode() {
+
+	public String getEmploymentCode() {
 		return employmentCode;
 	}
-	
-	public void setemploymentCode(String employmentCode) {
+
+	public void setEmploymentCode(String employmentCode) {
 		this.employmentCode = employmentCode;
+	}
+
+	public String getEmploymentName() {
+		return employmentName;
+	}
+
+	public void setEmploymentName(String employmentName) {
+		this.employmentName = employmentName;
 	}
 }
