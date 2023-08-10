@@ -30,7 +30,7 @@ public class CandidateDao extends AbstractJpaDao{
 				+ "INNER JOIN "
 				+ "	t_gender tg ON tg.id = tcp.gender_id;   "
 				+ "WHERE  "
-				+ "	tcp.full_name = :candidateName ";
+				+ "	tcp.full_name ILIKE :candidateName || '%";
 		
 		final Object candidateObj = this.em().createNativeQuery(sql, Candidate.class)
 				.setParameter("candidateName", candidateName)

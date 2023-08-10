@@ -49,9 +49,9 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE  "
-				+ "	city_name = :location";
+				+ "city_name ILIKE :location || '%'";
 		
-		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql)
 				.setParameter("location", location)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -111,7 +111,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN   "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
-				+ "	company_name = :company ";
+				+ "	company_name ILIKE :company || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("company", companyName)
 				.getResultList();
@@ -171,7 +171,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN   "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
-				+ "	employment_name = :employment ";
+				+ "	employment_name ILIKE :employment || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("employment", employmentName)
 				.getResultList();
@@ -231,7 +231,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN   "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
-				+ "	position_name = :position ";
+				+ "	position_name ILIKE :position || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("position", positionName)
 				.getResultList();
@@ -291,7 +291,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN   "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
-				+ "	status_name = :status ";
+				+ "	status_name ILIKE :status  || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("status", status)
 				.getResultList();
