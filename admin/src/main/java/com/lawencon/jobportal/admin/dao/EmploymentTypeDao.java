@@ -10,7 +10,10 @@ import com.lawencon.jobportal.admin.model.EmploymentType;
 
 @Repository
 public class EmploymentTypeDao extends AbstractJpaDao {
-	private final EntityManager em = ConnHandler.getManager();
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public EmploymentType getByCode(String code) {
 		final String sql = "SELECT "
@@ -20,7 +23,7 @@ public class EmploymentTypeDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "employment_code = :code";
 
-		final Object employmentTypeObj = this.em.createNativeQuery(sql, EmploymentType.class)
+		final Object employmentTypeObj = this.em().createNativeQuery(sql, EmploymentType.class)
 				.setParameter("code", code)
 				.getSingleResult();
 

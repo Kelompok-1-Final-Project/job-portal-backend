@@ -14,7 +14,9 @@ import com.lawencon.jobportal.admin.model.JobPosition;
 @Repository
 public class JobPositionDao extends AbstractJpaDao{
 
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public List<JobPosition> getByPositionName(String positionName){
 		final List<JobPosition> jobPositions = new ArrayList<>();
@@ -26,7 +28,7 @@ public class JobPositionDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "position_name ILIKE ':positionName%'";
 		
-		final List<?> positionObjs = this.em.createNativeQuery(sql)
+		final List<?> positionObjs = this.em().createNativeQuery(sql)
 				.setParameter("positionName", positionName)
 				.getResultList();
 		
@@ -54,7 +56,7 @@ public class JobPositionDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "position_code = :positionCode";
 		
-		final Object jobPositionObj = this.em.createNativeQuery(sql, JobPosition.class)
+		final Object jobPositionObj = this.em().createNativeQuery(sql, JobPosition.class)
 				.setParameter("positionCode", positionCode)
 				.getSingleResult();
 		

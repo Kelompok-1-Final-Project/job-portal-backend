@@ -10,7 +10,9 @@ import com.lawencon.jobportal.admin.model.Gender;
 
 @Repository
 public class GenderDao extends AbstractJpaDao{
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public Gender getByCode(String code) {
 		final String sql = "SELECT "
@@ -20,7 +22,7 @@ public class GenderDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "gender_code = :code";
 		
-		final Object genderObj = this.em.createNativeQuery(sql, Gender.class)
+		final Object genderObj = this.em().createNativeQuery(sql, Gender.class)
 				.setParameter("code", code)
 				.getSingleResult();
 		

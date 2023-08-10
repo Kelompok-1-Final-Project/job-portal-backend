@@ -10,7 +10,9 @@ import com.lawencon.jobportal.admin.model.Benefit;
 
 @Repository
 public class BenefitDao extends AbstractJpaDao {
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public Benefit getByCode(String code) {
 		final String sql = "SELECT "
@@ -20,7 +22,7 @@ public class BenefitDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "benefit_code = :code";
 
-		final Object benefitObj = this.em.createNativeQuery(sql, Benefit.class)
+		final Object benefitObj = this.em().createNativeQuery(sql, Benefit.class)
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -47,7 +49,7 @@ public class BenefitDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "benefit_name = :benefitName";
 
-		final Object benefitObj = this.em.createNativeQuery(sql, Benefit.class)
+		final Object benefitObj = this.em().createNativeQuery(sql, Benefit.class)
 				.setParameter("benefitName", benefitName)
 				.getSingleResult();
 

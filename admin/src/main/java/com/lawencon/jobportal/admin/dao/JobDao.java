@@ -19,7 +19,9 @@ import com.lawencon.jobportal.admin.model.JobStatus;
 @Repository
 public class JobDao extends AbstractJpaDao{
 
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public List<Job> getByLocation(String location) {
 		final String sql = "SELECT  "
@@ -49,7 +51,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "WHERE  "
 				+ "	city_name = :location";
 		
-		final List<?> jobsObj = this.em.createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("location", location)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -110,7 +112,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
 				+ "	company_name = :company ";
-		final List<?> jobsObj = this.em.createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("company", companyName)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -170,7 +172,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
 				+ "	employment_name = :employment ";
-		final List<?> jobsObj = this.em.createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("employment", employmentName)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -230,7 +232,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
 				+ "	position_name = :position ";
-		final List<?> jobsObj = this.em.createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("position", positionName)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -290,7 +292,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "WHERE   "
 				+ "	status_name = :status ";
-		final List<?> jobsObj = this.em.createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("status", status)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();

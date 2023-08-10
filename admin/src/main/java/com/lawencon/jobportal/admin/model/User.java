@@ -1,11 +1,15 @@
 package com.lawencon.jobportal.admin.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
 
+@Entity
+@Table(name = "t_user")
 public class User extends BaseEntity {
 
 	@Column(name = "email", length = 30, nullable = false, unique = true)

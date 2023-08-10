@@ -10,7 +10,9 @@ import com.lawencon.jobportal.admin.model.MaritalStatus;
 
 @Repository
 public class MaritalStatusDao extends AbstractJpaDao{
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public MaritalStatus getByCode(String code) {
 		final String sql = "SELECT "
@@ -20,7 +22,7 @@ public class MaritalStatusDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "status_code = :code";
 
-		final Object maritalObj = this.em.createNativeQuery(sql, MaritalStatus.class)
+		final Object maritalObj = em().createNativeQuery(sql, MaritalStatus.class)
 				.setParameter("code", code)
 				.getSingleResult();
 

@@ -10,7 +10,9 @@ import com.lawencon.jobportal.admin.model.JobStatus;
 
 @Repository
 public class JobStatusDao extends AbstractJpaDao {
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public JobStatus getByCode(String statusCode) {
 		final String sql = "SELECT "
@@ -20,7 +22,7 @@ public class JobStatusDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "status_code = :statusCode ";
 
-		final Object jobStatusObj = this.em.createNativeQuery(sql, JobStatus.class)
+		final Object jobStatusObj = em().createNativeQuery(sql, JobStatus.class)
 				.setParameter("statusCode", statusCode)
 				.getSingleResult();
 

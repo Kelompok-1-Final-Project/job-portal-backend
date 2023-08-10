@@ -14,7 +14,9 @@ import com.lawencon.jobportal.admin.model.Industry;
 @Repository
 public class CompanyDao extends AbstractJpaDao{
 	
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public Company getByCode(String companyCode) {
 		final String sql = "SELECT "
@@ -30,7 +32,7 @@ public class CompanyDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "company_code = :companyCode";
 		
-		final Object companyObj = this.em.createNamedQuery(sql)
+		final Object companyObj = this.em().createNamedQuery(sql)
 				.setParameter("companyCode", companyCode)
 				.getSingleResult();
 		
