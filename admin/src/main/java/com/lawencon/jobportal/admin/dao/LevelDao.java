@@ -12,8 +12,10 @@ import com.lawencon.jobportal.admin.model.Level;
 @Repository
 public class LevelDao extends AbstractJpaDao {
 
-	private final EntityManager em = ConnHandler.getManager();
-
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
 	public Level getByCode(String code) {
 		final String sql = "SELECT "
 				+ "id, level_code, level_name, ver "
@@ -22,7 +24,7 @@ public class LevelDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "level_code = :code";
 
-		final Object levelObj = this.em.createNativeQuery(sql, Level.class)
+		final Object levelObj = em().createNativeQuery(sql, Level.class)
 				.setParameter("code", code)
 				.getSingleResult();
 

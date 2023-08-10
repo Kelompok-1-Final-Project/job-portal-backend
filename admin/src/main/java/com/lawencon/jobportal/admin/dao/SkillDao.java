@@ -10,7 +10,9 @@ import com.lawencon.jobportal.admin.model.Skill;
 
 @Repository
 public class SkillDao extends AbstractJpaDao {
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public Skill getByCode(String code) {
 		final String sql = "SELECT "
@@ -20,7 +22,7 @@ public class SkillDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "skill_code = :code";
 
-		final Object skillObj = this.em.createNativeQuery(sql, Skill.class)
+		final Object skillObj = em().createNativeQuery(sql, Skill.class)
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -47,7 +49,7 @@ public class SkillDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "skill_name = :skillName";
 
-		final Object skillObj = this.em.createNativeQuery(sql, Skill.class)
+		final Object skillObj = em().createNativeQuery(sql, Skill.class)
 				.setParameter("skillName", skillName)
 				.getSingleResult();
 

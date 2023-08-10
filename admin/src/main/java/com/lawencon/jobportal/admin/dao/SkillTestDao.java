@@ -12,7 +12,9 @@ import com.lawencon.jobportal.admin.model.SkillTest;
 
 @Repository
 public class SkillTestDao extends AbstractJpaDao{
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public SkillTest getByCandidateAndJob(String candidateId, String jobId) {
 		final String sql = "SELECT "
@@ -24,7 +26,7 @@ public class SkillTestDao extends AbstractJpaDao{
 				+ "AND "
 				+ "candidate_id = : candidateId";
 		
-		final Object skillTestObj = this.em.createNamedQuery(sql)
+		final Object skillTestObj = em().createNamedQuery(sql)
 				.setParameter("jobId", jobId)
 				.setParameter("candidateId", candidateId)
 				.getSingleResult();

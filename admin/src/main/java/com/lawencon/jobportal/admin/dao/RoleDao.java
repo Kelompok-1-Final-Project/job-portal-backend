@@ -11,7 +11,9 @@ import com.lawencon.jobportal.admin.model.Role;
 @Repository
 public class RoleDao extends AbstractJpaDao{
 
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public Role getByCode(String code) {
 		final String sql = "SELECT "
@@ -21,7 +23,7 @@ public class RoleDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "role_code = :code";
 		
-		final Object roleObj = this.em.createNativeQuery(sql, Role.class)
+		final Object roleObj = em().createNativeQuery(sql, Role.class)
 				.setParameter("code", code)
 				.getSingleResult();
 		

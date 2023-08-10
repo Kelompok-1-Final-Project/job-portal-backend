@@ -14,7 +14,9 @@ import com.lawencon.jobportal.admin.model.PersonType;
 @Repository
 public class CandidateDao extends AbstractJpaDao{
 
-	private final EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public Candidate getByName(String candidateName) {
 		final String sql = "SELECT "
@@ -30,7 +32,7 @@ public class CandidateDao extends AbstractJpaDao{
 				+ "WHERE  "
 				+ "	tcp.full_name = :candidateName ";
 		
-		final Object candidateObj = this.em.createNativeQuery(sql, Candidate.class)
+		final Object candidateObj = this.em().createNativeQuery(sql, Candidate.class)
 				.setParameter("candidateName", candidateName)
 				.getSingleResult();
 		
@@ -41,12 +43,15 @@ public class CandidateDao extends AbstractJpaDao{
 			candidate = new Candidate();
 			candidate.setId(candidateArr[0].toString());
 			candidate.setEmail(candidateArr[1].toString());
+			
 			final CandidateProfile candidateProfile = new CandidateProfile();
 			candidateProfile.setFullName(candidateArr[2].toString());
 			candidateProfile.setMobileNumber(candidateArr[3].toString());
+			
 			final PersonType personType = new PersonType();
 			personType.setTypeName(candidateArr[4].toString());
 			candidateProfile.setPersonType(personType);
+			
 			final Gender gender = new Gender();
 			gender.setGenderName(candidateArr[5].toString());
 			candidateProfile.setGender(gender);

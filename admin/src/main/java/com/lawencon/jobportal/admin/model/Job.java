@@ -17,7 +17,7 @@ public class Job extends BaseEntity {
 	@Column(name = "job_title", length=30, nullable=false)
 	private String jobTitle;
 	
-	@Column(name = "salary_end", nullable=false)
+	@Column(name = "salary_start", nullable=false)
 	private Integer salaryStart;
 	
 	@Column(name = "salary_end", nullable=false)
