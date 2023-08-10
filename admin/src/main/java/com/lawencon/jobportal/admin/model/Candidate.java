@@ -6,8 +6,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.context.annotation.Profile;
-
 import com.lawencon.base.BaseEntity;
 
 @Entity
@@ -22,7 +20,7 @@ public class Candidate extends BaseEntity{
 	
 	@OneToOne
 	@JoinColumn(name = "profile_id")
-	private Profile profile;
+	private CandidateProfile candidateProfile;
 
 	public String getEmail() {
 		return email;
@@ -40,12 +38,13 @@ public class Candidate extends BaseEntity{
 		this.password = password;
 	}
 
-	public Profile getProfile() {
-		return profile;
+	public CandidateProfile getCandidateProfile() {
+		return candidateProfile;
 	}
 
-	public void setProfile(Profile profile) {
-		this.profile = profile;
+	public void setCandidateProfile(CandidateProfile candidateProfile) {
+		this.candidateProfile = candidateProfile;
 	}
-	
+
+
 }
