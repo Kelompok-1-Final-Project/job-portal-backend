@@ -18,6 +18,8 @@ import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.user.UserGetResDto;
 import com.lawencon.jobportal.admin.dto.user.UserInsertReqDto;
+import com.lawencon.jobportal.admin.dto.user.UserLoginReqDto;
+import com.lawencon.jobportal.admin.dto.user.UserLoginResDto;
 import com.lawencon.jobportal.admin.model.Gender;
 import com.lawencon.jobportal.admin.model.Profile;
 import com.lawencon.jobportal.admin.model.Role;
@@ -99,6 +101,20 @@ public class UserService implements UserDetailsService{
 			insertResDto.setMessage("Insert Data Berhasil");
 		}
 		return insertResDto;
+	}
+	
+	public UserLoginResDto login(UserLoginReqDto userLoginReqDto)  {
+		final User user = userDao.getByEmail(userLoginReqDto.getUserEmail());
+
+		final UserLoginResDto userLoginResDto = new UserLoginResDto();
+		
+		userLoginResDto.setUserId(user.getId());
+		userLoginResDto.setRoleCode(user.getRole().getRoleCode());
+		userLoginResDto.setUserName(user.getProfile().getFullName());
+//		userLoginResDto.setPhotoId(user.getProfile());
+		
+		
+		return userLoginResDto;
 	}
 	
 	@Override

@@ -5,7 +5,7 @@
 		<artifactId>bootcamp</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>auth</artifactId>
+	<artifactId>token-manager</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
