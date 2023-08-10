@@ -47,24 +47,30 @@ public class IndustryDao extends AbstractJpaDao {
 				+ "FROM " 
 				+ "t_industry " 
 				+ "WHERE "
-				+ "industry_name = :industryName";
+				+ "industry_name ILIKE :industryName";
 
-		final Object industryObj = this.em().createNativeQuery(sql, Industry.class)
-				.setParameter("industryName", industryName)
-				.getSingleResult();
+		try {
+			final Object industryObj = this.em().createNativeQuery(sql)
+					.setParameter("industryName", industryName)
+					.getSingleResult();
 
-		final Object[] industryArr = (Object[]) industryObj;
+			final Object[] industryArr = (Object[]) industryObj;
 
-		Industry industry = null;
+			Industry industry = null;
 
-		if (industryArr.length > 0) {
-			industry = new Industry();
-			industry.setId(industryArr[0].toString());
-			industry.setIndustryName(industryArr[1].toString());
-			industry.setIndustryCode(industryArr[2].toString());
-			industry.setVersion(Integer.valueOf(industryArr[3].toString()));
+			if (industryArr.length > 0) {
+				industry = new Industry();
+				industry.setId(industryArr[0].toString());
+				industry.setIndustryName(industryArr[1].toString());
+				industry.setIndustryCode(industryArr[2].toString());
+				industry.setVersion(Integer.valueOf(industryArr[3].toString()));
+			}
+
+			return industry;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-
-		return industry;
+		
 	}
 }
