@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.jobportal.admin.dao.CityDao;
+import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.city.CityGetResDto;
@@ -61,5 +62,12 @@ public class CityService {
 		result.setVersion(cityResult.getVersion());
 		result.setMessage("Update City Successfully.");
 		return result;
+	}
+	
+	@Transactional
+	public boolean deleteCity(String cityCode) {
+		final City cityDb = cityDao.getByCode(cityCode);
+		final Boolean deleted = cityDao.deleteById(City.class, cityDb.getId());
+		return deleted;
 	}
 }

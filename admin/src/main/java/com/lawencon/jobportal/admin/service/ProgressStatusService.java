@@ -342,6 +342,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
+	@Transactional
 	public UpdateResDto updateCandidateProgress(CandidateProgressUpdateReqDto data) {
 		final JobCandidateStatus progress = jobCandidateStatusDao.getById(JobCandidateStatus.class, data.getCandidateProgressId());
 		final StatusProcess status = statusProcessDao.getByCode(data.getStatusProcessCode());
