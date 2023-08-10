@@ -7,10 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestGetResDto;
+import com.lawencon.jobportal.admin.dto.skilltest.SkillTestInsertReqDto;
 import com.lawencon.jobportal.admin.service.SkillTestService;
 
 @RestController
@@ -33,7 +37,11 @@ public class SkillTestController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
-	
+	@PostMapping
+	public ResponseEntity<InsertResDto> insertSkillTest(@RequestBody SkillTestInsertReqDto data){
+		final InsertResDto response = skillTestService.insertSkillTest(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
 	
 	
 }
