@@ -86,4 +86,15 @@ public class CompanyService {
 		result.setMessage("Update Company Successfully.");
 		return result;
 	}
+	
+	@Transactional
+	public boolean deleteCompany(String companyCode) {
+		final Company company = companyDao.getByCode(companyCode);
+		final Boolean result = companyDao.deleteById(Company.class, company.getId());
+		return result;
+	}
 }
+
+
+
+
