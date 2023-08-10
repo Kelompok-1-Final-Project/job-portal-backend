@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
@@ -18,6 +19,7 @@ import com.lawencon.jobportal.admin.model.Question;
 import com.lawencon.jobportal.admin.model.SkillTest;
 import com.lawencon.jobportal.admin.model.SkillTestQuestion;
 
+@Service
 public class SkillTestService {
 
 	@Autowired

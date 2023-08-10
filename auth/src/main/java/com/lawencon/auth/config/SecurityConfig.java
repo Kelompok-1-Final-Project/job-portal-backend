@@ -21,14 +21,6 @@ import com.lawencon.auth.filter.AuthorizationFilter;
 @Configuration
 public class SecurityConfig {
 
-//	@Bean
-//	public AuthenticationManager authManager(HttpSecurity http, UserService userService, BCryptPasswordEncoder encoder)
-//			throws Exception {
-//
-//		return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(userService)
-//				.passwordEncoder(encoder).and().build();
-//	}
-
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthorizationFilter authorizationFilter)
 			throws Exception {
@@ -44,8 +36,7 @@ public class SecurityConfig {
 	@Bean
 	public List<RequestMatcher> matchers() {
 		final List<RequestMatcher> matchers = new ArrayList<>();
-		matchers.add(new AntPathRequestMatcher("/login", HttpMethod.POST.toString()));
-		matchers.add(new AntPathRequestMatcher("/files/**", HttpMethod.GET.toString()));
+		matchers.add(new AntPathRequestMatcher("/token", HttpMethod.POST.toString()));
 		return matchers;
 	}
 
