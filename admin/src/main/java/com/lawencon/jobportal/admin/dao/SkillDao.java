@@ -22,7 +22,7 @@ public class SkillDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "skill_code = :code";
 
-		final Object skillObj = em().createNativeQuery(sql, Skill.class)
+		final Object skillObj = em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -49,7 +49,7 @@ public class SkillDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "skill_name = :skillName";
 
-		final Object skillObj = em().createNativeQuery(sql, Skill.class)
+		final Object skillObj = em().createNativeQuery(sql)
 				.setParameter("skillName", skillName)
 				.getSingleResult();
 

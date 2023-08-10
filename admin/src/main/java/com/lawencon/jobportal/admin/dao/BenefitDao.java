@@ -49,7 +49,7 @@ public class BenefitDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "benefit_name = :benefitName";
 
-		final Object benefitObj = this.em().createNativeQuery(sql, Benefit.class)
+		final Object benefitObj = this.em().createNativeQuery(sql)
 				.setParameter("benefitName", benefitName)
 				.getSingleResult();
 

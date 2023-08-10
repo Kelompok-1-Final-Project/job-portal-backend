@@ -1,16 +1,7 @@
 package com.lawencon.jobportal.admin.dto;
 
-public class InsertResDto {
-	private String id;
+public class DeleteResDto {
 	private String message;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getMessage() {
 		return message;
@@ -20,4 +11,5 @@ public class InsertResDto {
 		this.message = message;
 	}
 
+	
 }
