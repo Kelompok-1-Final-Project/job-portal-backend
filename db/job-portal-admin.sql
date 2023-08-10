@@ -956,4 +956,3 @@ INSERT INTO t_job_benefit(id,benefit_id, job_id, created_by, created_at, is_acti
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN001'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN002'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN003'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
-

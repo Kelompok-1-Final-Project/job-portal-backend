@@ -44,6 +44,7 @@ ALTER TABLE t_file ADD CONSTRAINT file_pk
 CREATE TABLE t_gender(
 	id VARCHAR(36) NOT NULL,
 	gender_name VARCHAR(30) NOT NULL,
+	gender_code VARCHAR(5) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -54,6 +55,8 @@ CREATE TABLE t_gender(
 
 ALTER TABLE t_gender ADD CONSTRAINT gender_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_gender ADD CONSTRAINT gender_bk
+	UNIQUE(gender_code);
 
 CREATE TABLE t_marital_status(
 	id VARCHAR(36) NOT NULL,
@@ -74,6 +77,7 @@ ALTER TABLE t_marital_status ADD CONSTRAINT marital_status_code_bk
 
 CREATE TABLE t_level(
 	id VARCHAR(36) NOT NULL,
+	level_code VARCHAR(5) NOT NULL,
 	level_name VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -85,6 +89,8 @@ CREATE TABLE t_level(
 
 ALTER TABLE t_level ADD CONSTRAINT level_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_level ADD CONSTRAINT level_bk
+	UNIQUE(level_code);
 
 CREATE TABLE t_person_type(
 	id VARCHAR(36) NOT NULL,
@@ -120,6 +126,7 @@ ALTER TABLE t_industry ADD CONSTRAINT industry_pk
 
 CREATE TABLE t_city(
 	id VARCHAR(36) NOT NULL,
+	city_code VARCHAR(5) NOT NULL,
 	city_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -131,6 +138,8 @@ CREATE TABLE t_city(
 
 ALTER TABLE t_city ADD CONSTRAINT city_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_city ADD CONSTRAINT city_bk
+	UNIQUE(city_code);
 
 CREATE TABLE t_company(
 	id VARCHAR(36) NOT NULL,
