@@ -11,15 +11,25 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "t_level")
 public class Level extends BaseEntity{
 	
+	@Column(name = "level_code",length =5,unique=true,nullable = false)
+	private String levelCode;
+	
 	@Column(name = "level_name",length =36,nullable = false)
-	private String genderName;
+	private String levelName;
 
-	public String getGenderName() {
-		return genderName;
+	public String getLevelName() {
+		return levelName;
 	}
 
-	public void setGenderName(String genderName) {
-		this.genderName = genderName;
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
 	}
 
+	public String getLevelCode() {
+		return levelCode;
+	}
+
+	public void setLevelCode(String levelCode) {
+		this.levelCode = levelCode;
+	}
 }

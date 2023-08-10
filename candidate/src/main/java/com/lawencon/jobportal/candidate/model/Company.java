@@ -16,7 +16,7 @@ public class Company extends BaseEntity{
 	private String companyCode;
 	
 	@Column(name = "company_name",length =30,nullable = false)
-	private String commpanyName;
+	private String companyName;
 	
 	@OneToOne
 	@JoinColumn(name = "file_id")
@@ -26,21 +26,25 @@ public class Company extends BaseEntity{
 	@JoinColumn(name = "industry_id")
 	private Industry industry;
 	
+	@OneToOne
+	@JoinColumn(name = "city_id")
+	private City city;
 	
+	
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
+	}
+
 	public String getCompanyCode() {
 		return companyCode;
 	}
 	
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
-	}
-	
-	public String getCommpanyName() {
-		return commpanyName;
-	}
-	
-	public void setCommpanyName(String commpanyName) {
-		this.commpanyName = commpanyName;
 	}
 	
 	public File getFile() {
@@ -57,5 +61,13 @@ public class Company extends BaseEntity{
 	
 	public void setIndustry(Industry industry) {
 		this.industry = industry;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 }
