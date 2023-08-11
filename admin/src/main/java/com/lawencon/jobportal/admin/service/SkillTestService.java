@@ -107,8 +107,6 @@ public class SkillTestService {
 		final UpdateResDto updateResDto = new UpdateResDto();
 		
 		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getId());
-		skillTest.setGrade(data.getGrade());
-		skillTest.setNotes(data.getNotes());
 		
 		final SkillTest result = skillTestDao.saveAndFlush(skillTest);
 		
@@ -131,15 +129,5 @@ public class SkillTestService {
 		return result;
 	}
 	
-	@Override
-	public CountScoreResDto countScore(CountScoreReqDto countScoreReqDto) {
-		final CountScoreResDto countScoreResDto = new CountScoreResDto();
-		if (countScoreReqDto != null) {
-			final double grade = (countScoreReqDto.getTotalTrue() / countScoreReqDto.getTotalMultiChoice()) * 100.0;
-			countScoreResDto.setGrade(grade);
-			countScoreResDto.setNotes("Kamu benar " + countScoreReqDto.getTotalTrue() + " dari total "
-					+ countScoreReqDto.getTotalMultiChoice() + " pertanyaan pilihan ganda");
-		}
-		return countScoreResDto;
-	}
+	
 }

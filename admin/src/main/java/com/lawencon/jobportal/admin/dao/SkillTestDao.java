@@ -18,7 +18,7 @@ public class SkillTestDao extends AbstractJpaDao{
 
 	public SkillTest getByCandidateAndJob(String candidateId, String jobId) {
 		final String sql = "SELECT "
-				+ "id, test_name, job_id, grade, notes, candidate_id, ver "
+				+ "id, test_name, job_id, ver "
 				+ "FROM "
 				+ "t_skill_test "
 				+ "WHERE "
@@ -44,14 +44,7 @@ public class SkillTestDao extends AbstractJpaDao{
 			job.setId(skillTestArr[2].toString());
 			skillTest.setJob(job);
 			
-			skillTest.setGrade(Double.valueOf(skillTestArr[3].toString()));
-			skillTest.setNotes(skillTestArr[4].toString());
-			
-			final Candidate candidate = new Candidate();
-			candidate.setId(skillTestArr[5].toString());
-			skillTest.setCandidate(candidate);
-			
-			skillTest.setVersion(Integer.valueOf(skillTestArr[6].toString()));
+			skillTest.setVersion(Integer.valueOf(skillTestArr[3].toString()));
 			
 		}
 		
