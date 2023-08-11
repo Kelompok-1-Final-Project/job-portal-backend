@@ -3,9 +3,12 @@ package com.lawencon.jobportal.admin.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.QuestionDao;
 import com.lawencon.jobportal.admin.dao.QuestionOptionDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -19,6 +22,10 @@ import com.lawencon.jobportal.admin.model.QuestionOption;
 @Service
 public class QuestionService {
 	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
 	@Autowired
 	private QuestionDao questionDao;
 	
@@ -26,32 +33,45 @@ public class QuestionService {
 	private QuestionOptionDao questionOptionDao;
 	
 	public InsertResDto insertQuestion(List<QuestionInsertReqDto> data) {
-		Question questionResult  = null;
-		for(QuestionInsertReqDto req:data) {
-			final Question question = new Question();
-			question.setQuestion(req.getQuestion());
-			questionResult = questionDao.save(question);
-			final List<QuestionOptionReqDto> listQuestionOption = req.getListQuestionOpion();
-			for(QuestionOptionReqDto q:listQuestionOption) {
-				final QuestionOption questionOption = new QuestionOption();
-				questionOption.setQuestion(questionResult);
-				questionOption.setLabels(q.getLabels());
-				questionOption.setIsAnswer(q.getIsAnswer());
-				questionOptionDao.save(questionOption);
+		em().getTransaction().begin();
+		
+		try {
+			Question questionResult  = null;
+			for(QuestionInsertReqDto req:data) {
+				final Question question = new Question();
+				question.setQuestion(req.getQuestion());
+				questionResult = questionDao.save(question);
+				final List<QuestionOptionReqDto> listQuestionOption = req.getListQuestionOpion();
+				for(QuestionOptionReqDto q:listQuestionOption) {
+					final QuestionOption questionOption = new QuestionOption();
+					questionOption.setQuestion(questionResult);
+					questionOption.setLabels(q.getLabels());
+					questionOption.setIsAnswer(q.getIsAnswer());
+					questionOptionDao.save(questionOption);
+				}
 			}
+			em().getTransaction().commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
 		}
+		
 		final InsertResDto result = new InsertResDto();
-		result.setId(questionResult.getId());
 		result.setMessage("Insert Question Successfully.");
+		
 		return result;
 	}
 	
 	public Boolean deleteQuestion(String questionId) {
+		em().getTransaction().begin();
+		
 		final List<QuestionOption> listQuestionOption = questionOptionDao.getByQuestion(questionId);
 		for(QuestionOption q:listQuestionOption) {
 			questionOptionDao.deleteById(QuestionOption.class, q.getId());
 		}
 		final Boolean result = questionDao.deleteById(Question.class, questionId);
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	

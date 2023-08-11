@@ -3,9 +3,12 @@ package com.lawencon.jobportal.admin.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.DegreeDao;
 import com.lawencon.jobportal.admin.dao.FamilyDao;
@@ -21,6 +24,10 @@ import com.lawencon.jobportal.admin.model.Relationship;
 
 @Service
 public class FamilyService {
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	@Autowired
 	private RelationshipDao relationshipDao;
@@ -63,25 +70,38 @@ public class FamilyService {
 	}
 	
 	public InsertResDto insertFamily(FamilyInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Family family = new Family();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		family.setCandidate(candidate);
 		family.setFamilyName(data.getFamilyName());
+		
 		final Relationship relationship = relationshipDao.getByCode(data.getRelationshipCode());
 		final Relationship relationshipResult = relationshipDao.getById(Relationship.class, relationship.getId());
 		family.setRelationship(relationshipResult);
+		
 		final Degree degree = degreeDao.getByCode(data.getDegreeCode());
 		final Degree degreeResult = degreeDao.getById(Degree.class, degree.getId());
 		family.setDegree(degreeResult);
+		
 		final Family familyResult = familyDao.save(family);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(familyResult.getId());
-		result.setMessage("Insert Family Successfully.");
+		result.setMessage("Family added successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	public Boolean deleteFamily(String familyId) {
+		em().getTransaction().begin();
+		
 		final Boolean result = familyDao.deleteById(Family.class, familyId);
+		
+		em().getTransaction().commit();
 		return result;
 	}
 }

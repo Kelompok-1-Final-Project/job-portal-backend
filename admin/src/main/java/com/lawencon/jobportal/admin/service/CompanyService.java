@@ -5,11 +5,12 @@ import static com.lawencon.jobportal.admin.util.GeneratorId.generateCode;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.CompanyDao;
 import com.lawencon.jobportal.admin.dao.FileDao;
 import com.lawencon.jobportal.admin.dao.IndustryDao;
@@ -25,20 +26,29 @@ import com.lawencon.jobportal.admin.model.Industry;
 @Service
 public class CompanyService {
 	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
 	@Autowired
 	private CompanyDao companyDao;
+	
 	@Autowired
 	private FileDao fileDao;
+	
 	@Autowired
 	private IndustryDao industryDao;
 	
 	
 	public InsertResDto insertCompany(CompanyInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final String companyCode = generateCode();
 		final File file = new File();
 		file.setExt(data.getExt());
 		file.setFile(data.getFile());
 		final File files = fileDao.save(file);
+		
 		final Industry industry = industryDao.getByCode(data.getIndustryCode());
 		final Company company = new Company();
 		company.setCompanyName(data.getCompanyName());
@@ -46,9 +56,12 @@ public class CompanyService {
 		company.setIndustry(industry);
 		company.setFile(files);
 		final Company companies = companyDao.save(company);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(companies.getId());
-		result.setMessage("Insert Company Successfully.");
+		result.setMessage("Company added successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
@@ -69,28 +82,38 @@ public class CompanyService {
 	
 	
 	public UpdateResDto updateCompany(CompanyUpdateReqDto data) {
+		em().getTransaction().begin();
+		
 		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
 		final Company company = companyDao.getById(Company.class, companyDb.getId());
 		final File file = new File();
 		file.setExt(data.getExt());
 		file.setFile(data.getFile());
 		final File files = fileDao.save(file);
+		
 		final Industry industryDb = industryDao.getByCode(data.getIndustryCode());
 		final Industry industry = industryDao.getById(Industry.class, industryDb.getId());
 		company.setCompanyName(data.getCompanyName());
 		company.setFile(files);
 		company.setIndustry(industry);
 		final Company companyResult = companyDao.save(company);
+		
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(companyResult.getVersion());
-		result.setMessage("Update Company Successfully.");
+		result.setMessage("Company updated successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public boolean deleteCompany(String companyCode) {
+		em().getTransaction().begin();
+		
 		final Company company = companyDao.getByCode(companyCode);
 		final Boolean result = companyDao.deleteById(Company.class, company.getId());
+		
+		em().getTransaction().commit();
 		return result;
 	}
 }

@@ -5,11 +5,12 @@ import static com.lawencon.jobportal.admin.util.GeneratorId.generateCode;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.BenefitDao;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -21,28 +22,36 @@ import com.lawencon.jobportal.admin.model.Benefit;
 
 @Service
 public class BenefitService {
-public String createdBy="0";
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	@Autowired
 	private BenefitDao benefitDao;
 	
 	
 	public InsertResDto insert(BenefitInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final String benefitCode = generateCode();
 		final Benefit benefit = new Benefit();
 		benefit.setBenefitCode(benefitCode);
 		benefit.setBenefitName(data.getBenefitName());
-		benefit.setCreatedBy(createdBy);
 		final Benefit benefits = benefitDao.save(benefit);
 		
 		final InsertResDto result = new InsertResDto();
 		result.setId(benefits.getId());
-		result.setMessage("successful  add benefit");
+		result.setMessage("Benefit added successfully");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public UpdateResDto update(BenefitUpdateReqDto dto) {
+		em().getTransaction().begin();
+		
 		Benefit benefitResult = new Benefit();
 		final Benefit benefitDb = benefitDao.getByCode(dto.getBenefitCode());
 		final Benefit benefitUpdate = benefitDao.getById(Benefit.class, benefitDb.getId());
@@ -52,21 +61,27 @@ public String createdBy="0";
 
 		final UpdateResDto response = new UpdateResDto();
 		response.setVersion(benefitResult.getVersion());
-		response.setMessage("Berhasil Update Benefit");
+		response.setMessage("Benefit updated successfully");
+		
+		em().getTransaction().commit();
 		return response;
 	}
 	
 	
 	public DeleteResDto deleteByCode(String code) {
+		em().getTransaction().begin();
+		
 		final Benefit benefitDb = benefitDao.getByCode(code);
 		final Benefit benefitDelete = benefitDao.getById(Benefit.class, benefitDb.getId());
 		final DeleteResDto response = new DeleteResDto();
 		
 		if(benefitDao.deleteById(Benefit.class, benefitDelete)) {
-			response.setMessage("Successful delete data");			
+			response.setMessage("Data deleted successfully");			
 		}else {
 			response.setMessage("Failed to delete data");
 		}
+		
+		em().getTransaction().commit();
 		return response;
 	}
 	

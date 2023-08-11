@@ -3,14 +3,16 @@ package com.lawencon.jobportal.admin.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.GenderDao;
 import com.lawencon.jobportal.admin.dao.ProfileDao;
 import com.lawencon.jobportal.admin.dao.RoleDao;
@@ -24,9 +26,14 @@ import com.lawencon.jobportal.admin.model.Gender;
 import com.lawencon.jobportal.admin.model.Profile;
 import com.lawencon.jobportal.admin.model.Role;
 import com.lawencon.jobportal.admin.model.User;
+import com.lawencon.jobportal.admin.util.GeneratorId;
 
 @Service
 public class UserService implements UserDetailsService{
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	@Autowired
 	private UserDao userDao;
@@ -39,12 +46,9 @@ public class UserService implements UserDetailsService{
 	
 	@Autowired
 	private RoleDao roleDao;
-	
-	
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
-	
-	private String createdBy = "0";
+		
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public List<UserGetResDto> getAll(){
 		final List<UserGetResDto> usersDto = new ArrayList<>();
@@ -64,6 +68,8 @@ public class UserService implements UserDetailsService{
 	
 	
 	public InsertResDto insert(UserInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		User userResult = null;
 		final InsertResDto insertResDto = new InsertResDto();
 		
@@ -76,20 +82,16 @@ public class UserService implements UserDetailsService{
 		final Gender gender = genderDao.getByCode(data.getGenderCode());
 		profile.setGender(gender);
 		
-		profile.setCreatedBy(createdBy);
-		
 		final Profile profileResult = profileDao.save(profile);
 		
 		final User user = new User();
 		user.setEmail(data.getUserEmail());
 		
-		final String pass = "12345";
+		final String pass = GeneratorId.generateCode();
 		
-//		final String passEncode = passwordEncoder.encode(pass);
-		user.setPass(pass);
+		final String passEncode = passwordEncoder.encode(pass);
+		user.setPass(passEncode);
 		user.setProfile(profileResult);
-		user.setCreatedBy(createdBy);
-
 		
 		final Role role = roleDao.getByCode(data.getRoleCode());
 		user.setRole(role);
@@ -100,6 +102,8 @@ public class UserService implements UserDetailsService{
 			insertResDto.setId(userResult.getId());
 			insertResDto.setMessage("Insert Data Berhasil");
 		}
+		
+		em().getTransaction().commit();
 		return insertResDto;
 	}
 	

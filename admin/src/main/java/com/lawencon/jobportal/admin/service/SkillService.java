@@ -5,11 +5,12 @@ import static com.lawencon.jobportal.admin.util.GeneratorId.generateCode;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.SkillDao;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -21,23 +22,29 @@ import com.lawencon.jobportal.admin.model.Skill;
 
 @Service
 public class SkillService {
-public String createdBy="0";
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	@Autowired
 	private SkillDao skillDao;
 	
 	
 	public InsertResDto insert(SkillInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final String skillCode = generateCode();
 		final Skill skill = new Skill();
 		skill.setSkillCode(skillCode);
 		skill.setSkillName(data.getSkillName());
-		skill.setCreatedBy(createdBy);
 		final Skill skills = skillDao.save(skill);
 		
 		final InsertResDto result = new InsertResDto();
 		result.setId(skills.getId());
 		result.setMessage("Success add Skill");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
@@ -64,6 +71,8 @@ public String createdBy="0";
 	
 	
 	public UpdateResDto update(SkillUpdateReqDto dto) {
+		em().getTransaction().begin();
+		
 		Skill skillResult = new Skill();
 		final Skill skillDb = skillDao.getByCode(dto.getSkillCode());
 		final Skill skillUpdate = skillDao.getById(Skill.class, skillDb.getId());
@@ -74,11 +83,15 @@ public String createdBy="0";
 		final UpdateResDto response = new UpdateResDto();
 		response.setVersion(skillResult.getVersion());
 		response.setMessage("Berhasil Update skill");
+		
+		em().getTransaction().commit();
 		return response;
 	}
 	
 	
 	public DeleteResDto deleteByCode(String code) {
+		em().getTransaction().begin();
+		
 		boolean checkUpdate;
 		final Skill skillDb = skillDao.getByCode(code);
 		final Skill skillDelete = skillDao.getById(Skill.class, skillDb.getId());
@@ -91,6 +104,8 @@ public String createdBy="0";
 		}else {
 			response.setMessage("Failed to delete data");
 		}
+		
+		em().getTransaction().commit();
 		return response;
 	}
 }
