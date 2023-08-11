@@ -26,7 +26,7 @@ public String createdBy="0";
 	@Autowired
 	private BenefitDao benefitDao;
 	
-	@Transactional
+	
 	public InsertResDto insert(BenefitInsertReqDto data) {
 		final String benefitCode = generateCode();
 		final Benefit benefit = new Benefit();
@@ -41,7 +41,7 @@ public String createdBy="0";
 		return result;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto update(BenefitUpdateReqDto dto) {
 		Benefit benefitResult = new Benefit();
 		final Benefit benefitDb = benefitDao.getByCode(dto.getBenefitCode());
@@ -56,7 +56,7 @@ public String createdBy="0";
 		return response;
 	}
 	
-	@Transactional
+	
 	public DeleteResDto deleteByCode(String code) {
 		final Benefit benefitDb = benefitDao.getByCode(code);
 		final Benefit benefitDelete = benefitDao.getById(Benefit.class, benefitDb.getId());

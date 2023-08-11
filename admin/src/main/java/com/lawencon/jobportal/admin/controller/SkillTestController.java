@@ -17,6 +17,7 @@ import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestGetResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestInsertReqDto;
+import com.lawencon.jobportal.admin.dto.skilltest.SkillTestUpdateReqDto;
 import com.lawencon.jobportal.admin.service.SkillTestService;
 
 @RestController

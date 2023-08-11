@@ -209,7 +209,7 @@ public class ProgressStatusService {
 		return listResult;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insertApplication(ApplicationInsertReqDto data) {
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
@@ -223,7 +223,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insertAssessment(AssessmentInsertReqDto data) {
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
@@ -240,7 +240,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insertMedicalCheckup(MedicalCheckupInsertReqDto data) {
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
@@ -259,7 +259,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insertInterview(InterviewInsertReqDto data) {
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
@@ -276,7 +276,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insertOffering(OfferingInsertReqDto data){
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
@@ -290,7 +290,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insertHired(HiredInsertReqDto data) {
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
@@ -304,7 +304,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insertProgressStatusCandidate(CandidateProgressInsertReqDto data) {
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
@@ -320,7 +320,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto updateNotesAssessment(AssessmentUpdateReqDto data) {
 		final Assessment assessment = assessmentDao.getById(Assessment.class, data.getAssessmentId());
 		assessment.setNotes(data.getNotes());
@@ -331,7 +331,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto updateInterviewNotes(InterviewUpdateReqDto data) {
 		final Interview interview = interviewDao.getById(Interview.class, data.getInterviewId());
 		interview.setNotes(data.getNotes());
@@ -342,7 +342,7 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto updateCandidateProgress(CandidateProgressUpdateReqDto data) {
 		final JobCandidateStatus progress = jobCandidateStatusDao.getById(JobCandidateStatus.class, data.getCandidateProgressId());
 		final StatusProcess status = statusProcessDao.getByCode(data.getStatusProcessCode());

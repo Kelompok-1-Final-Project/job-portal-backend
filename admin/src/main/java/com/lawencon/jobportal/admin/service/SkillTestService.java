@@ -3,7 +3,7 @@ package com.lawencon.jobportal.admin.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,10 @@ import com.lawencon.jobportal.admin.model.SkillTestQuestion;
 
 @Service
 public class SkillTestService {
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	@Autowired
 	private SkillTestDao skillTestDao;
@@ -98,9 +102,8 @@ public class SkillTestService {
 		return insertResDto;
 	}
 	
-	@Transactional
 	public UpdateResDto update(SkillTestUpdateReqDto data) {
-		ConnHandler.begin();
+		em().getTransaction().begin();
 		final UpdateResDto updateResDto = new UpdateResDto();
 		
 		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getId());
@@ -112,7 +115,7 @@ public class SkillTestService {
 		updateResDto.setMessage("Score Inputted");
 		updateResDto.setVersion(result.getVersion());		
 		
-		ConnHandler.commit();		
+		em().getTransaction().commit();		
 		return updateResDto;
 	}
   
