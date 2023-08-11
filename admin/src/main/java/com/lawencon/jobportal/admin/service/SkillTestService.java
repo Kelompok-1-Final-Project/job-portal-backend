@@ -78,27 +78,36 @@ public class SkillTestService {
 	}
 
 	public InsertResDto assignTest(List<SkillTestQuestionInsertReqDto> data) {
+		em().getTransaction().begin();
+		
 		final InsertResDto insertResDto = new InsertResDto();
 
-		if (data.size() != 0 && data != null) {
-			data.forEach(d -> {
-				final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
+		try {
+			if (data.size() != 0 && data != null) {
+				data.forEach(d -> {
+					final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
 
-				final Question question = new Question();
-				question.setId(d.getQuestionId());
-				skillTestQuestion.setQuestion(question);
+					final Question question = new Question();
+					question.setId(d.getQuestionId());
+					skillTestQuestion.setQuestion(question);
 
-				final SkillTest skillTest = new SkillTest();
-				skillTest.setId(d.getSkillTestId());
-				skillTestQuestion.setSkillTest(skillTest);
+					final SkillTest skillTest = new SkillTest();
+					skillTest.setId(d.getSkillTestId());
+					skillTestQuestion.setSkillTest(skillTest);
 
-				skillTestQuestionDao.save(skillTestQuestion);
-			});
-			insertResDto.setMessage("Assign Test Success");
+					skillTestQuestionDao.save(skillTestQuestion);
+				});
+				insertResDto.setMessage("Assign Test Success");
+			}
+			else {
+				insertResDto.setMessage("Assign Test Failed");
+			}
+			em().getTransaction().commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
 		}
-		else {
-			insertResDto.setMessage("Assign Test Failed");
-		}
+		
 		return insertResDto;
 	}
 	

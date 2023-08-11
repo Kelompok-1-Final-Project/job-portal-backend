@@ -17,12 +17,13 @@ import com.lawencon.jobportal.admin.model.MaritalStatus;
 import com.lawencon.jobportal.admin.model.Role;
 
 @Service
-public class ProfileService {
-	
+public class ProfileService {	
 	@Autowired
 	MaritalStatusDao maritalStatusDao;
+	
 	@Autowired
 	RoleDao roleDao;
+	
 	@Autowired
 	GenderDao genderDao;
 	

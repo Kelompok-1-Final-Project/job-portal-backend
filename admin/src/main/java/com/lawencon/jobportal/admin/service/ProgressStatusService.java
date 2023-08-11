@@ -4,11 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.ApplicationDao;
 import com.lawencon.jobportal.admin.dao.AssessmentDao;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
@@ -57,28 +58,43 @@ import com.lawencon.jobportal.admin.model.User;
 @Service
 public class ProgressStatusService {
 
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
 	@Autowired
 	private StatusProcessDao statusProcessDao;
+	
 	@Autowired
 	private JobCandidateStatusDao jobCandidateStatusDao;
+	
 	@Autowired
 	private ApplicationDao applicationDao;
+	
 	@Autowired
 	private AssessmentDao assessmentDao;
+	
 	@Autowired
 	private MedicalCheckupDao medicalCheckupDao;
+	
 	@Autowired
 	private InterviewDao interviewDao;
+	
 	@Autowired
 	private HiredDao hiredDao;
+	
 	@Autowired
 	private OfferingDao offeringDao;
+	
 	@Autowired
 	private CandidateDao candidateDao;
+	
 	@Autowired
 	private JobDao jobDao;
+	
 	@Autowired
 	private UserDao userDao;
+	
 	@Autowired
 	private FileDao fileDao;
 	
@@ -211,20 +227,27 @@ public class ProgressStatusService {
 	
 	
 	public InsertResDto insertApplication(ApplicationInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
 		final Application application = new Application();
 		application.setCandidate(candidate);
 		application.setJob(job);
 		final Application applications = applicationDao.save(application);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(applications.getId());
 		result.setMessage("Insert Application Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public InsertResDto insertAssessment(AssessmentInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
 		final User hr = userDao.getById(User.class, data.getHrId());
@@ -234,14 +257,19 @@ public class ProgressStatusService {
 		assessment.setHr(hr);
 		assessment.setSchedule(LocalDateTime.parse(data.getSchedule()));
 		final Assessment assessments = assessmentDao.save(assessment);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(assessments.getId());
 		result.setMessage("Insert Assessment Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public InsertResDto insertMedicalCheckup(MedicalCheckupInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
 		final File file = new File();
@@ -253,14 +281,19 @@ public class ProgressStatusService {
 		medicalCheckup.setJob(job);
 		medicalCheckup.setFile(files);
 		final MedicalCheckup medicalCheckups = medicalCheckupDao.save(medicalCheckup);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(medicalCheckups.getId());
 		result.setMessage("Insert Medical Checkup Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public InsertResDto insertInterview(InterviewInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
 		final User interviewer = userDao.getById(User.class, data.getInterviewerId());
@@ -270,42 +303,57 @@ public class ProgressStatusService {
 		interview.setInterviewer(interviewer);
 		interview.setSchedule(LocalDateTime.parse(data.getSchedule()));
 		final Interview interviews = interviewDao.save(interview);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(interviews.getId());
 		result.setMessage("Insert Interview Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public InsertResDto insertOffering(OfferingInsertReqDto data){
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
 		final Offering offering = new Offering();
 		offering.setCandidate(candidate);
 		offering.setJob(job);
 		final Offering offerings = offeringDao.save(offering);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(offerings.getId());
 		result.setMessage("Insert Offering Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public InsertResDto insertHired(HiredInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
 		final Hired hired = new Hired();
 		hired.setCandidate(candidate);
 		hired.setJob(job);
 		final Hired hiredDb = hiredDao.save(hired);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(hiredDb.getId());
 		result.setMessage("Insert Hired Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public InsertResDto insertProgressStatusCandidate(CandidateProgressInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final Job job = jobDao.getById(Job.class, data.getJobId());
 		final StatusProcess statusProcess = statusProcessDao.getById(StatusProcess.class, data.getStatusId());
@@ -314,44 +362,62 @@ public class ProgressStatusService {
 		jobCandidateStatus.setJob(job);
 		jobCandidateStatus.setStatus(statusProcess);
 		final JobCandidateStatus jobCandidateStatusDb = jobCandidateStatusDao.save(jobCandidateStatus);
+		
 		final InsertResDto result = new InsertResDto();
 		result.setId(jobCandidateStatusDb.getId());
 		result.setMessage("Insert Candidate Progress Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public UpdateResDto updateNotesAssessment(AssessmentUpdateReqDto data) {
+		em().getTransaction().begin();
+		
 		final Assessment assessment = assessmentDao.getById(Assessment.class, data.getAssessmentId());
 		assessment.setNotes(data.getNotes());
 		final Assessment assessmentResult = assessmentDao.saveAndFlush(assessment);
+		
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(assessmentResult.getVersion());
 		result.setMessage("Update Assessment Notes Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public UpdateResDto updateInterviewNotes(InterviewUpdateReqDto data) {
+		em().getTransaction().begin();
+		
 		final Interview interview = interviewDao.getById(Interview.class, data.getInterviewId());
 		interview.setNotes(data.getNotes());
 		final Interview interviewResult = interviewDao.saveAndFlush(interview);
+		
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(interviewResult.getVersion());
 		result.setMessage("Update Interview Notes Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
 	
 	public UpdateResDto updateCandidateProgress(CandidateProgressUpdateReqDto data) {
+		em().getTransaction().begin();
+		
 		final JobCandidateStatus progress = jobCandidateStatusDao.getById(JobCandidateStatus.class, data.getCandidateProgressId());
 		final StatusProcess status = statusProcessDao.getByCode(data.getStatusProcessCode());
 		final StatusProcess statusResult = statusProcessDao.getById(StatusProcess.class, status.getId());
 		progress.setStatus(statusResult);
 		final JobCandidateStatus progressResult = jobCandidateStatusDao.saveAndFlush(progress);
+		
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(progressResult.getVersion());
 		result.setMessage("Update Progress Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 }
