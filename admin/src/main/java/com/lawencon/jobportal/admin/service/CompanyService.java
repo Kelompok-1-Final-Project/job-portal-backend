@@ -32,7 +32,7 @@ public class CompanyService {
 	@Autowired
 	private IndustryDao industryDao;
 	
-	@Transactional
+	
 	public InsertResDto insertCompany(CompanyInsertReqDto data) {
 		final String companyCode = generateCode();
 		final File file = new File();
@@ -67,7 +67,7 @@ public class CompanyService {
 		return listResult;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto updateCompany(CompanyUpdateReqDto data) {
 		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
 		final Company company = companyDao.getById(Company.class, companyDb.getId());
@@ -87,7 +87,7 @@ public class CompanyService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public boolean deleteCompany(String companyCode) {
 		final Company company = companyDao.getByCode(companyCode);
 		final Boolean result = companyDao.deleteById(Company.class, company.getId());
