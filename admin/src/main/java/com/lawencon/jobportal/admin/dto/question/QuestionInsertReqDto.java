@@ -5,7 +5,7 @@ import java.util.List;
 public class QuestionInsertReqDto {
 
 	private String question;
-	private List<QuestionOptionReqDto> listQuestionOpion;
+	private List<QuestionOptionReqDto> listQuestionOption;
 
 	public String getQuestion() {
 		return question;
@@ -15,14 +15,12 @@ public class QuestionInsertReqDto {
 		this.question = question;
 	}
 
-	public List<QuestionOptionReqDto> getListQuestionOpion() {
-		return listQuestionOpion;
+	public List<QuestionOptionReqDto> getListQuestionOption() {
+		return listQuestionOption;
 	}
 
-	public void setListQuestionOpion(List<QuestionOptionReqDto> listQuestionOpion) {
-		this.listQuestionOpion = listQuestionOpion;
+	public void setListQuestionOption(List<QuestionOptionReqDto> listQuestionOption) {
+		this.listQuestionOption = listQuestionOption;
 	}
-
-
 
 }

@@ -107,4 +107,32 @@ public class FamilyService {
 		em().getTransaction().commit();
 		return result;
 	}
+	
+	public UpdateResDto updateFamily(FamilyUpdateReqDto data) {
+		em().getTransaction().begin();
+		
+		final Family family = familyDao.getById(Family.class, data.getFamilyId());
+		family.setFamilyName(data.getFamilyName());
+		family.setBirthdate(LocalDate.parse(data.getBirthdate()));
+		
+		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
+		family.setCandidate(candidate);
+		
+		final Degree degreeDb = degreeDao.getByCode(data.getDegreeCode());
+		final Degree degree = degreeDao.getById(Degree.class, degreeDb.getId());
+		family.setDegree(degree);
+		
+		final Relationship relationshipDb = relationshipDao.getByCode(data.getRelationshipCode());
+		final Relationship relationship = relationshipDao.getById(Relationship.class, relationshipDb.getId());
+		family.setRelationship(relationship);
+		final Family familyResult = familyDao.saveAndFlush(family);
+		
+		final UpdateResDto result = new UpdateResDto();
+		result.setVersion(familyResult.getVersion());
+		result.setMessage("Family Updated Successfully.");
+		
+		em().getTransaction().commit();
+		return result;
+		
+	}
 }

@@ -12,10 +12,12 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.QuestionDao;
 import com.lawencon.jobportal.admin.dao.QuestionOptionDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionGetResDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionInsertReqDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionOptionReqDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionOptionResDto;
+import com.lawencon.jobportal.admin.dto.question.QuestionUpdateReqDto;
 import com.lawencon.jobportal.admin.model.Question;
 import com.lawencon.jobportal.admin.model.QuestionOption;
 
@@ -41,7 +43,7 @@ public class QuestionService {
 				final Question question = new Question();
 				question.setQuestion(req.getQuestion());
 				questionResult = questionDao.save(question);
-				final List<QuestionOptionReqDto> listQuestionOption = req.getListQuestionOpion();
+				final List<QuestionOptionReqDto> listQuestionOption = req.getListQuestionOption();
 				for(QuestionOptionReqDto q:listQuestionOption) {
 					final QuestionOption questionOption = new QuestionOption();
 					questionOption.setQuestion(questionResult);
@@ -57,8 +59,28 @@ public class QuestionService {
 		}
 		
 		final InsertResDto result = new InsertResDto();
-		result.setMessage("Insert Question Successfully.");
+		result.setMessage("Question Successfully Inserted.");
 		
+		return result;
+	}
+	
+	public UpdateResDto updateQuestion(QuestionUpdateReqDto data) {
+		em().getTransaction().begin();
+		
+		final Question question = questionDao.getById(Question.class, data.getQuestionId());
+		question.setQuestion(data.getQuestion());
+		final Question questionResult = questionDao.saveAndFlush(question);
+		for(QuestionOptionResDto q:data.getListQuestionOption()) {
+			final QuestionOption questionOption = questionOptionDao.getById(QuestionOption.class, q.getQuestionOptionId());
+			questionOption.setLabels(q.getLabels());
+			questionOption.setIsAnswer(q.getIsAnswer());
+			questionOptionDao.saveAndFlush(questionOption);
+		}
+		final UpdateResDto result = new UpdateResDto();
+		result.setVersion(questionResult.getVersion());
+		result.setMessage("Question Updated Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
@@ -108,4 +130,5 @@ public class QuestionService {
 		}
 		return listResult;
 	}
+	
 }

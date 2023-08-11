@@ -96,7 +96,7 @@ public class CompanyService {
 		company.setCompanyName(data.getCompanyName());
 		company.setFile(files);
 		company.setIndustry(industry);
-		final Company companyResult = companyDao.save(company);
+		final Company companyResult = companyDao.saveAndFlush(company);
 		
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(companyResult.getVersion());
