@@ -16,6 +16,7 @@ import com.lawencon.jobportal.admin.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestGetResDto;
+import com.lawencon.jobportal.admin.dto.skilltest.SkillTestInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestQuestionInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestUpdateReqDto;
 import com.lawencon.jobportal.admin.model.Candidate;
@@ -120,4 +121,17 @@ public class SkillTestService {
 		ConnHandler.commit();		
 		return updateResDto;
 	}
+  
+	public InsertResDto insertSkillTest(SkillTestInsertReqDto data) {
+		final SkillTest skillTest = new SkillTest();
+		final Job job = jobDao.getById(Job.class, data.getJobId());
+		skillTest.setTestName(data.getTestName());
+		skillTest.setJob(job);
+		final SkillTest skillTestResult = skillTestDao.save(skillTest);
+		final InsertResDto result = new InsertResDto();
+		result.setId(skillTestResult.getId());
+		result.setMessage("Insert Skill Test Successfully.");
+		return result;
+	}
+	
 }
