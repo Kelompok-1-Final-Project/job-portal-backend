@@ -16,7 +16,6 @@ import com.lawencon.jobportal.admin.model.MaritalStatus;
 import com.lawencon.jobportal.admin.model.Role;
 
 public class ProfileService {
-	public String createdBy="0";
 	
 	@Autowired
 	MaritalStatusDao maritalStatusDao;
@@ -60,5 +59,7 @@ public class ProfileService {
 		});
 		return genderGetResDtos;
 	}
+	
+	
 	
 }

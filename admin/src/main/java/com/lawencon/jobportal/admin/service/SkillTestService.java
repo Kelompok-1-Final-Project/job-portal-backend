@@ -48,9 +48,6 @@ public class SkillTestService {
 			skillTestGetResDto.setId(st.getId());
 			skillTestGetResDto.setTestName(st.getTestName());
 			skillTestGetResDto.setJobName(st.getJob().getJobTitle());
-			skillTestGetResDto.setGrade(st.getGrade());
-			skillTestGetResDto.setNotes(st.getNotes());
-			skillTestGetResDto.setCandidateName(st.getCandidate().getCandidateProfile().getFullName());
 			skillTestGetResDto.setVer(st.getVersion());
 			skillTestGetResDtos.add(skillTestGetResDto);
 		});
@@ -67,9 +64,6 @@ public class SkillTestService {
 
 		final Job job = jobDao.getById(Job.class, jobId);
 		skillTestGetResDto.setJobName(job.getJobTitle());
-
-		skillTestGetResDto.setGrade(skillTest.getGrade());
-		skillTestGetResDto.setNotes(skillTest.getNotes());
 
 		final Candidate candidate = candidateDao.getById(Candidate.class, candidateId);
 		skillTestGetResDto.setCandidateName(candidate.getCandidateProfile().getFullName());
@@ -134,4 +128,15 @@ public class SkillTestService {
 		return result;
 	}
 	
+	@Override
+	public CountScoreResDto countScore(CountScoreReqDto countScoreReqDto) {
+		final CountScoreResDto countScoreResDto = new CountScoreResDto();
+		if (countScoreReqDto != null) {
+			final double grade = (countScoreReqDto.getTotalTrue() / countScoreReqDto.getTotalMultiChoice()) * 100.0;
+			countScoreResDto.setGrade(grade);
+			countScoreResDto.setNotes("Kamu benar " + countScoreReqDto.getTotalTrue() + " dari total "
+					+ countScoreReqDto.getTotalMultiChoice() + " pertanyaan pilihan ganda");
+		}
+		return countScoreResDto;
+	}
 }
