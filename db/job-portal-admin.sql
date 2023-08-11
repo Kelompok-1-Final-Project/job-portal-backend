@@ -282,9 +282,10 @@ ALTER TABLE t_gender ADD CONSTRAINT gender_bk
 CREATE TABLE t_profile(
 	id VARCHAR(36) NOT NULL ,
 	id_number VARCHAR(16),
-	full_name VARCHAR(30),
+	full_name VARCHAR(30) NOT NULL,
 	mobile_number VARCHAR(15),
 	gender_id VARCHAR(36),
+	file_id VARCHAR(36),
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -300,6 +301,9 @@ ALTER TABLE t_profile ADD CONSTRAINT profile_bk
 ALTER TABLE t_profile ADD CONSTRAINT profile_gender_fk
 	FOREIGN KEY(gender_id)
 	REFERENCES t_gender(id);
+ALTER TABLE t_profile ADD CONSTRAINT profile_file_fk	
+	FOREIGN KEY(file_id)
+	REFERENCES t_file(id);
 
 CREATE TABLE t_user(
 	id VARCHAR(36) NOT NULL ,
@@ -535,7 +539,7 @@ CREATE TABLE t_interview(
 	job_id VARCHAR(36) NOT NULL ,
 	interviewer_id VARCHAR(36) NOT NULL ,
 	schedule timestamp NOT NULL,
-	notes text NOT NULL,
+	notes text,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -762,6 +766,38 @@ ALTER TABLE t_job_benefit ADD CONSTRAINT job_benefit_job_fk
 	FOREIGN KEY(job_id)
 	REFERENCES t_job(id);
 	
+CREATE TABLE t_relationship(
+	id VARCHAR(36) NOT NULL,
+	relationship_code VARCHAR(5) NOT NULL,
+	relationship_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_relationship ADD CONSTRAINT relationship_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_relationship ADD CONSTRAINT relationship_bk
+	UNIQUE(relationship_code);
+	
+CREATE TABLE t_family(
+	id VARCHAR(36) NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	family_name VARCHAR(30) NOT NULL,
+	relationship_id VARCHAR(36) NOT NULL,
+	family_degree VARCHAR(36) NOT NULL,
+	family_birthdate VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
 
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
