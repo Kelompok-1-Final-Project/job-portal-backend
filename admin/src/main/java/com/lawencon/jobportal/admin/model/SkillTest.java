@@ -12,6 +12,14 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "t_skill_test")
 public class SkillTest extends BaseEntity{
 	
+	@Column(name = "test_name", length=30, nullable=false)
+	private String testName;
+	
+	@OneToOne
+	@JoinColumn(name = "job_id")
+	private Job job;
+	
+	
 	public String getTestName() {
 		return testName;
 	}
@@ -28,44 +36,4 @@ public class SkillTest extends BaseEntity{
 		this.job = job;
 	}
 
-	public String getNotes() {
-		return notes;
-	}
-
-	public void setNotes(String notes) {
-		this.notes = notes;
-	}
-
-	public Double getGrade() {
-		return grade;
-	}
-
-	public void setGrade(Double grade) {
-		this.grade = grade;
-	}
-
-	public Candidate getCandidate() {
-		return candidate;
-	}
-
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
-	}
-
-	@Column(name = "test_name", length=30, nullable=false)
-	private String testName;
-	
-	@OneToOne
-	@JoinColumn(name = "job_id")
-	private Job job;
-	
-	@Column(name = "grade", nullable=false)
-	private Double grade;
-	
-	@Column(name = "notes", nullable=false)
-	private String notes;
-	
-	@OneToOne
-	@JoinColumn(name = "candidate_id")
-	private Candidate candidate;
 }
