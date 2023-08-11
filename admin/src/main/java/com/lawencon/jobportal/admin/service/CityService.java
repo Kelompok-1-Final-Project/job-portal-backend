@@ -26,7 +26,7 @@ public class CityService {
 	private CityDao cityDao;
 	
 	
-	@Transactional
+	
 	public InsertResDto insertCity(CityInsertReqDto data) {
 		final String cityCode = generateCode();
 		final City city = new City();
@@ -52,7 +52,7 @@ public class CityService {
 		return listResult;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto updateCity(CityUpdateReqDto data) {
 		final City cityDb = cityDao.getByCode(data.getCityCode());
 		final City city = cityDao.getById(City.class,cityDb.getId());
@@ -64,7 +64,7 @@ public class CityService {
 		return result;
 	}
 	
-	@Transactional
+	
 	public boolean deleteCity(String cityCode) {
 		final City cityDb = cityDao.getByCode(cityCode);
 		final Boolean deleted = cityDao.deleteById(City.class, cityDb.getId());

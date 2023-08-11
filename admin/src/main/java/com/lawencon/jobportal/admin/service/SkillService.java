@@ -26,7 +26,7 @@ public String createdBy="0";
 	@Autowired
 	private SkillDao skillDao;
 	
-	@Transactional
+	
 	public InsertResDto insert(SkillInsertReqDto data) {
 		final String skillCode = generateCode();
 		final Skill skill = new Skill();
@@ -62,7 +62,7 @@ public String createdBy="0";
 			return industryGetResDto;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto update(SkillUpdateReqDto dto) {
 		Skill skillResult = new Skill();
 		final Skill skillDb = skillDao.getByCode(dto.getSkillCode());
@@ -77,7 +77,7 @@ public String createdBy="0";
 		return response;
 	}
 	
-	@Transactional
+	
 	public DeleteResDto deleteByCode(String code) {
 		boolean checkUpdate;
 		final Skill skillDb = skillDao.getByCode(code);

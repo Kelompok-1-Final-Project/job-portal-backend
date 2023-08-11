@@ -27,7 +27,7 @@ public class IndustryService{
 	@Autowired
 	private IndustryDao industryDao;
 	
-	@Transactional
+	
 	public InsertResDto insert(IndustryInsertReqDto data) {
 		final String industryCode = generateCode();
 		final Industry industry = new Industry();
@@ -63,7 +63,7 @@ public class IndustryService{
 			return industryGetResDto;
 	}
 	
-	@Transactional
+	
 	public UpdateResDto update(IndustryUpdateReqDto dto) {
 		Industry industryResult = new Industry();
 		final Industry industryDb = industryDao.getByCode(dto.getIndustryCode());
@@ -78,7 +78,7 @@ public class IndustryService{
 		return response;
 	}
 	
-	@Transactional
+	
 	public DeleteResDto deleteByCode(String code) {
 		boolean checkUpdate;
 		final Industry industryDb = industryDao.getByCode(code);

@@ -802,6 +802,18 @@ CREATE TABLE t_family(
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
 
+SELECT   	tj.id,   	tj.job_title,   	tj.salary_start,   	tj.salary_end,   	tj.description,   	tj.end_date,   	tc.company_name,   	tjp.position_name,  	tjs.status_name,  	tet.employment_name,   	tj.ver   FROM   	t_job tj 	  INNER JOIN   	t_company tc ON tc.id = tj.company_id   INNER JOIN   	t_city tci ON tci.id = tc.city_id   INNER JOIN   	t_job_position tjp ON tjp.id = tj.job_position_id   INNER JOIN   	t_job_status tjs ON tjs.id = tj.job_status_id   INNER JOIN   	t_employment_type tet ON tet.id = tj.employment_type_id  WHERE
+	tci.city_name ILIKE :city || '%' 
+	AND 
+	tjp.position_name ILIKE :position || '%'
+	AND 
+	tet.employment_name ILIKE :employment || '%'
+	AND
+	tj.salary_start >= :start  
+	AND 
+	tj.salary_end <= :end
+
+
 INSERT INTO t_profile(id, full_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'system', 0, NOW(), TRUE, 0);
 

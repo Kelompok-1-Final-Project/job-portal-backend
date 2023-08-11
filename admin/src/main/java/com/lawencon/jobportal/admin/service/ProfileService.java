@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawencon.jobportal.admin.dao.GenderDao;
 import com.lawencon.jobportal.admin.dao.MaritalStatusDao;
@@ -15,6 +16,7 @@ import com.lawencon.jobportal.admin.model.Gender;
 import com.lawencon.jobportal.admin.model.MaritalStatus;
 import com.lawencon.jobportal.admin.model.Role;
 
+@Service
 public class ProfileService {
 	public String createdBy="0";
 	

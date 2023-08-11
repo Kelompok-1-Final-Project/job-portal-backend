@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService{
 		return usersDto;
 	}
 	
-	@Transactional
+	
 	public InsertResDto insert(UserInsertReqDto data) {
 		User userResult = null;
 		final InsertResDto insertResDto = new InsertResDto();
