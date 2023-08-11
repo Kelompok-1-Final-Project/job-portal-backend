@@ -6,9 +6,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.lawencon.base.BaseEntity;
+
 @Entity
 @Table(name = "t_result")
-public class Result {
+public class Result extends BaseEntity {
 
 	@OneToOne
 	@JoinColumn(name = "candidate_id")
