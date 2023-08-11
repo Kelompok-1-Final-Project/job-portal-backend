@@ -154,6 +154,8 @@ CREATE TABLE t_company(
 	company_name VARCHAR(30) NOT NULL,
 	city_id VARCHAR(36) NOT NULL,
 	file_id VARCHAR(36) NOT NULL,
+	description TEXT,
+	address TEXT,
 	industry_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -395,6 +397,7 @@ ALTER TABLE t_candidate ADD CONSTRAINT candidate_profile_fk
 
 CREATE TABLE t_job(
 	id VARCHAR(36) NOT NULL ,
+	job_code VARCHAR(5) NULL,
 	job_title VARCHAR(30) NOT NULL,
 	salary_start BIGINT NOT NULL,
 	salary_end BIGINT NOT NULL,
@@ -416,6 +419,8 @@ CREATE TABLE t_job(
 
 ALTER TABLE t_job ADD CONSTRAINT job_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_job ADD CONSTRAINT job_bk
+	UNIQUE(job_code);
 ALTER TABLE t_job ADD CONSTRAINT job_company_fk
 	FOREIGN KEY(company_id)
 	REFERENCES t_company(id);
@@ -631,9 +636,6 @@ CREATE TABLE t_skill_test(
 	id VARCHAR(36) NOT NULL ,
 	test_name VARCHAR(30) NOT NULL,
 	job_id VARCHAR(36) NOT NULL,
-	grade float NOT NULL,
-	notes text NOT NULL,
-	candidate_id VARCHAR(36) NOT NULL ,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -647,9 +649,6 @@ ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_pk
 ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_job_fk
 	FOREIGN KEY(job_id)
 	REFERENCES t_job(id);
-ALTER TABLE t_skill_test ADD CONSTRAINT skill_candidate_fk
-	FOREIGN KEY(candidate_id)
-	REFERENCES t_candidate(id);
 
 
 CREATE TABLE t_question(
@@ -678,6 +677,15 @@ CREATE TABLE t_skill_test_question(
 	ver int NOT NULL
 );
 
+SELECT 
+	tq.id, tq.question
+FROM 
+	t_question tq 
+INNER JOIN 
+	t_skill_test_question tstq ON tstq.question_id = tq.id
+WHERE 
+	tstq.skill_test_id = :skillTestId
+
 ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_pk
 	PRIMARY KEY(id);
 ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_question_fk
@@ -686,6 +694,29 @@ ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_question_fk
 ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_skill_fk
 	FOREIGN KEY(question_id)
 	REFERENCES t_question(id);
+
+CREATE TABLE t_result(
+	id VARCHAR(36) NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	skill_test_id VARCHAR(36) NOT NULL,
+	grade DOUBLE NOT NULL,
+	notes TEXT,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_result ADD CONSTRAINT result_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_result ADD CONSTRAINT result_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_candidate(id);
+ALTER TABLE t_result ADD CONSTRAINT result_skill_test
+	FOREIGN KEY(skill_test_id)
+	REFERENCES t_skill_test(id);
 
 CREATE TABLE t_question_option(
 	id VARCHAR(36) NOT NULL ,
@@ -699,6 +730,13 @@ CREATE TABLE t_question_option(
 	is_active boolean NOT NULL,
 	ver int NOT NULL
 );
+
+SELECT 
+	id
+FROM 
+	t_question_option tqo 
+WHERE 
+	question_id = :questionId
 
 ALTER TABLE t_question_option ADD CONSTRAINT question_option_pk
 	PRIMARY KEY(id);
@@ -783,13 +821,10 @@ ALTER TABLE t_relationship ADD CONSTRAINT relationship_pk
 ALTER TABLE t_relationship ADD CONSTRAINT relationship_bk
 	UNIQUE(relationship_code);
 	
-CREATE TABLE t_family(
+CREATE TABLE t_degree(
 	id VARCHAR(36) NOT NULL,
-	candidate_id VARCHAR(36) NOT NULL,
-	family_name VARCHAR(30) NOT NULL,
-	relationship_id VARCHAR(36) NOT NULL,
-	family_degree VARCHAR(36) NOT NULL,
-	family_birthdate VARCHAR(36) NOT NULL,
+	degree_code VARCHAR(5) NOT NULL,
+	degree_name VARCHAR(10) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -798,21 +833,41 @@ CREATE TABLE t_family(
 	ver int NOT NULL
 );
 
+ALTER TABLE t_degree ADD CONSTRAINT degree_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_degree ADD CONSTRAINT degree_bk
+	UNIQUE(degree_code);
+
+CREATE TABLE t_family(
+	id VARCHAR(36) NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	family_name VARCHAR(30) NOT NULL,
+	relationship_id VARCHAR(36) NOT NULL,
+	degree_id VARCHAR(36) NOT NULL,
+	birthdate DATE NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_family ADD CONSTRAINT family_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_family ADD CONSTRAINT family_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_candidate(id);
+ALTER TABLE t_family ADD CONSTRAINT family_relationship_fk
+	FOREIGN KEY(relationship_id)
+	REFERENCES t_relationship(id);
+ALTER TABLE t_family ADD CONSTRAINT family_degree_fk
+	FOREIGN KEY(degree_id)
+	REFERENCES t_degree(id);
+
 
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
-
-SELECT   	tj.id,   	tj.job_title,   	tj.salary_start,   	tj.salary_end,   	tj.description,   	tj.end_date,   	tc.company_name,   	tjp.position_name,  	tjs.status_name,  	tet.employment_name,   	tj.ver   FROM   	t_job tj 	  INNER JOIN   	t_company tc ON tc.id = tj.company_id   INNER JOIN   	t_city tci ON tci.id = tc.city_id   INNER JOIN   	t_job_position tjp ON tjp.id = tj.job_position_id   INNER JOIN   	t_job_status tjs ON tjs.id = tj.job_status_id   INNER JOIN   	t_employment_type tet ON tet.id = tj.employment_type_id  WHERE
-	tci.city_name ILIKE :city || '%' 
-	AND 
-	tjp.position_name ILIKE :position || '%'
-	AND 
-	tet.employment_name ILIKE :employment || '%'
-	AND
-	tj.salary_start >= :start  
-	AND 
-	tj.salary_end <= :end
-
 
 INSERT INTO t_profile(id, full_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'system', 0, NOW(), TRUE, 0);
