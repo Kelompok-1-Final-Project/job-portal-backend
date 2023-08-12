@@ -10,7 +10,9 @@ import com.lawencon.jobportal.candidate.model.Relationship;
 
 @Repository
 public class RelationshipDao extends AbstractJpaDao{
-	private EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 
 	public Relationship getByCode(String code) {
 		final String sql = "SELECT "
@@ -20,7 +22,7 @@ public class RelationshipDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "relationship_code = :code";
 		
-		final Object relationshipObj = this.em.createNativeQuery(sql, Relationship.class)
+		final Object relationshipObj = em().createNativeQuery(sql, Relationship.class)
 				.setParameter("code", code)
 				.getSingleResult();
 		

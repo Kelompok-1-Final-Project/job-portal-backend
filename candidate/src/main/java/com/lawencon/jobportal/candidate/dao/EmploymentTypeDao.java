@@ -1,7 +1,6 @@
 package com.lawencon.jobportal.candidate.dao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +10,9 @@ import com.lawencon.jobportal.candidate.model.EmploymentType;
 
 @Repository
 public class EmploymentTypeDao extends AbstractJpaDao{
-	private EntityManager em = ConnHandler.getManager();
-	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public EmploymentType getByCode(String code) {
 		final String sql = "SELECT "
@@ -22,7 +22,7 @@ public class EmploymentTypeDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "employment_code = :code";
 
-		final Object employmentTypeObj = this.em.createNativeQuery(sql, EmploymentType.class)
+		final Object employmentTypeObj = em().createNativeQuery(sql, EmploymentType.class)
 				.setParameter("code", code)
 				.getSingleResult();
 
