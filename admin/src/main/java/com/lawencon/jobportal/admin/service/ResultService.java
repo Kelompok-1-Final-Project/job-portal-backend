@@ -2,9 +2,12 @@ package com.lawencon.jobportal.admin.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.ResultDao;
 import com.lawencon.jobportal.admin.dao.SkillTestDao;
@@ -17,6 +20,10 @@ import com.lawencon.jobportal.admin.model.SkillTest;
 @Service
 public class ResultService {
 	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
 	@Autowired
 	private CandidateDao candidateDao;
 	
@@ -27,6 +34,8 @@ public class ResultService {
 	private ResultDao resultDao;
 	
 	public InsertResDto insertResult(ResultInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
 		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getSkillTestId());
 		final List<Boolean> listAnswer = data.getAnswer();
@@ -46,12 +55,15 @@ public class ResultService {
 		final Result resultDb = resultDao.save(result);
 		final InsertResDto response = new InsertResDto();
 		response.setId(resultDb.getId());
-		response.setMessage("Insert Answer Successfully.");
+		response.setMessage("Answer Successfully Inserted.");
+		em().getTransaction().commit();
 		return response;
 	}
 	
 	public Boolean deleteResult(String resultId) {
+		em().getTransaction().begin();
 		final Boolean result = resultDao.deleteById(Result.class, resultId);
+		em().getTransaction().commit();
 		return result;
 	}
 }
