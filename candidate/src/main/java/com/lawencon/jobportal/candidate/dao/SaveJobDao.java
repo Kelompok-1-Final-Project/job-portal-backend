@@ -27,7 +27,7 @@ public class SaveJobDao extends AbstractJpaDao{
 	public List<SaveJob> getByCandidate(String candidateId) {
 		final String sql = "SELECT "
 				+ "j.id, j.job_title, j.salary_start, j.salary_end, j.description, j.end_date, "
-				+ "c.company_name, jp.position_name, js.status_name, et.employment_name "
+				+ "c.company_name, jp.position_name, js.status_name, et.employment_name sj.ver "
 				+ "FROM "
 				+ " t_save_job sj "
 				+ "INNER JOIN "

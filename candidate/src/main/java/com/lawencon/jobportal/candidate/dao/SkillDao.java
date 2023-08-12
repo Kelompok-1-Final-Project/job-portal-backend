@@ -1,7 +1,6 @@
 package com.lawencon.jobportal.candidate.dao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +10,10 @@ import com.lawencon.jobportal.candidate.model.Skill;
 
 @Repository
 public class SkillDao extends AbstractJpaDao{
-	private EntityManager em = ConnHandler.getManager();
-	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+
 	public Skill getByCode(String code) {
 		final String sql = "SELECT "
 				+ "id, skill_name, skill_code, ver " 
@@ -21,7 +22,7 @@ public class SkillDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "skill_code = :code";
 
-		final Object skillObj = this.em.createNativeQuery(sql, Skill.class)
+		final Object skillObj = em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -48,7 +49,7 @@ public class SkillDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "skill_name = :skillName";
 
-		final Object skillObj = this.em.createNativeQuery(sql, Skill.class)
+		final Object skillObj = em().createNativeQuery(sql)
 				.setParameter("skillName", skillName)
 				.getSingleResult();
 

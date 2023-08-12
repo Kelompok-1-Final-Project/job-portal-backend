@@ -1,7 +1,6 @@
 package com.lawencon.jobportal.candidate.dao;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +10,9 @@ import com.lawencon.jobportal.candidate.model.Industry;
 
 @Repository
 public class IndustryDao extends AbstractJpaDao{
-	private EntityManager em = ConnHandler.getManager();
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public Industry getByCode(String code) {
 		final String sql = "SELECT "
@@ -21,7 +22,7 @@ public class IndustryDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "industry_code = :code";
 
-		final Object industryObj = this.em.createNativeQuery(sql, Industry.class)
+		final Object industryObj = em().createNativeQuery(sql, Industry.class)
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -48,7 +49,7 @@ public class IndustryDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "industry_name = :industryName";
 
-		final Object industryObj = this.em.createNativeQuery(sql, Industry.class)
+		final Object industryObj = em().createNativeQuery(sql, Industry.class)
 				.setParameter("industryName", industryName)
 				.getSingleResult();
 

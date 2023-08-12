@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.PersonType;
-import com.lawencon.jobportal.admin.model.Role;
 
 @Repository
 public class PersonTypeDao extends AbstractJpaDao {
@@ -24,7 +23,7 @@ public class PersonTypeDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "type_code = :code";
 
-		final Object personTypeObj = em().createNativeQuery(sql, Role.class)
+		final Object personTypeObj = em().createNativeQuery(sql, PersonType.class)
 				.setParameter("code", code)
 				.getSingleResult();
 

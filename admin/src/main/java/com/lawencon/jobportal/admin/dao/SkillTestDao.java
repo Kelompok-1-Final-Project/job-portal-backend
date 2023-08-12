@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
-import com.lawencon.jobportal.admin.model.Candidate;
 import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.SkillTest;
 
