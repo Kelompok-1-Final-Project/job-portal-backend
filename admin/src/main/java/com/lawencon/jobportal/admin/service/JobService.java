@@ -18,6 +18,7 @@ import com.lawencon.jobportal.admin.dao.JobStatusDao;
 import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
@@ -279,6 +280,19 @@ public class JobService {
 		
 		em().getTransaction().commit();
 		return result;
+	}
+	
+	public List<EmploymentTypeGetResDto> getAllEmploymentType() {
+		final List<EmploymentTypeGetResDto> employmentTypeGetResDtos = new ArrayList<>();
+
+		employmentTypeDao.getAll(EmploymentType.class).forEach(j -> {
+			final EmploymentTypeGetResDto employmentTypeGetResDto = new EmploymentTypeGetResDto();
+			employmentTypeGetResDto.setId(j.getId());
+			employmentTypeGetResDto.setTypeName(j.getEmploymentName());
+			employmentTypeGetResDto.setTypeCode(j.getEmploymentName());
+			employmentTypeGetResDtos.add(employmentTypeGetResDto);
+		});
+		return employmentTypeGetResDtos;
 	}
 
 }

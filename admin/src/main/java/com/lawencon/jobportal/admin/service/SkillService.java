@@ -11,13 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.dao.LevelDao;
 import com.lawencon.jobportal.admin.dao.SkillDao;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.skill.LevelGetResDto;
 import com.lawencon.jobportal.admin.dto.skill.SkillGetResDto;
 import com.lawencon.jobportal.admin.dto.skill.SkillInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skill.SkillUpdateReqDto;
+import com.lawencon.jobportal.admin.model.Level;
 import com.lawencon.jobportal.admin.model.Skill;
 
 @Service
@@ -30,6 +33,8 @@ public class SkillService {
 	@Autowired
 	private SkillDao skillDao;
 	
+	@Autowired
+	private LevelDao levelDao;
 	
 	public InsertResDto insert(SkillInsertReqDto data) {
 		em().getTransaction().begin();
@@ -107,5 +112,17 @@ public class SkillService {
 		
 		em().getTransaction().commit();
 		return response;
+	}
+	
+	public List<LevelGetResDto> getAllLevel(){
+		final List<LevelGetResDto> listResult = new ArrayList<>();
+		levelDao.getAll(Level.class).forEach(l -> {
+			final LevelGetResDto result = new LevelGetResDto();
+			result.setId(l.getId());
+			result.setLevelCode(l.getLevelCode());
+			result.setLevelName(l.getLevelName());
+			listResult.add(result);
+		});
+		return listResult;
 	}
 }
