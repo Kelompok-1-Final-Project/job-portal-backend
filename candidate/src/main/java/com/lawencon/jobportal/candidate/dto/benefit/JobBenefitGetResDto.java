@@ -1,9 +1,9 @@
 package com.lawencon.jobportal.candidate.dto.benefit;
 
-public class BenefitGetResDto {
+public class JobBenefitGetResDto {
+
 	private String id;
 	private String benefitName;
-	private String benefitCode;
 
 	public String getId() {
 		return id;
@@ -21,11 +21,4 @@ public class BenefitGetResDto {
 		this.benefitName = benefitName;
 	}
 
-	public String getBenefitCode() {
-		return benefitCode;
-	}
-
-	public void setBenefitCode(String benefitCode) {
-		this.benefitCode = benefitCode;
-	}
 }
