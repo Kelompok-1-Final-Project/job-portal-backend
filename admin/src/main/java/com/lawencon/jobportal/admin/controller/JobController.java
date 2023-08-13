@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
@@ -95,5 +96,11 @@ public class JobController {
 			response.setMessage("Delete Job Failed");
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@GetMapping("employment-type")
+	public ResponseEntity<List<EmploymentTypeGetResDto>> getAllEmploymentType(){
+		final List<EmploymentTypeGetResDto> response = jobService.getAllEmploymentType();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

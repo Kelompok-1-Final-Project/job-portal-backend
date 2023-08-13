@@ -677,24 +677,6 @@ CREATE TABLE t_skill_test_question(
 	ver int NOT NULL
 );
 
-SELECT 
-	tq.id, tq.question
-FROM 
-	t_question tq 
-INNER JOIN 
-	t_skill_test_question tstq ON tstq.question_id = tq.id
-WHERE 
-	tstq.skill_test_id = :skillTestId
-
-ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_pk
-	PRIMARY KEY(id);
-ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_question_fk
-	FOREIGN KEY(skill_test_id)
-	REFERENCES t_skill_test(id);
-ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_skill_fk
-	FOREIGN KEY(question_id)
-	REFERENCES t_question(id);
-
 CREATE TABLE t_result(
 	id VARCHAR(36) NOT NULL,
 	candidate_id VARCHAR(36) NOT NULL,

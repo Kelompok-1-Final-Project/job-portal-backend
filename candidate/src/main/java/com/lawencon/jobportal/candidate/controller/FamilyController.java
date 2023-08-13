@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.controller;
+package com.lawencon.jobportal.candidate.controller;
 
 import java.util.List;
 
@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawencon.jobportal.admin.dto.DeleteResDto;
-import com.lawencon.jobportal.admin.dto.InsertResDto;
-import com.lawencon.jobportal.admin.dto.UpdateResDto;
-import com.lawencon.jobportal.admin.dto.family.FamilyGetResDto;
-import com.lawencon.jobportal.admin.dto.family.FamilyInsertReqDto;
-import com.lawencon.jobportal.admin.dto.family.FamilyUpdateReqDto;
-import com.lawencon.jobportal.admin.dto.relationship.RelationshipGetResDto;
-import com.lawencon.jobportal.admin.service.FamilyService;
+import com.lawencon.jobportal.candidate.dto.DeleteResDto;
+import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.family.FamilyGetResDto;
+import com.lawencon.jobportal.candidate.dto.family.FamilyInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.family.FamilyUpdateReqDto;
+import com.lawencon.jobportal.candidate.dto.relationship.RelationshipGetResDto;
+import com.lawencon.jobportal.candidate.service.FamilyService;
 
 @RestController
 @RequestMapping("families")
@@ -30,16 +30,16 @@ public class FamilyController {
 	@Autowired
 	private FamilyService familyService;
 	
-	@PostMapping
-	public ResponseEntity<InsertResDto> insertFamily(FamilyInsertReqDto data){
-		final InsertResDto response = familyService.insertFamily(data);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
-	}
-	
 	@GetMapping
 	public ResponseEntity<List<RelationshipGetResDto>> getAllRelationship(){
 		final List<RelationshipGetResDto> response = familyService.getAllRelationship();
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping
+	public ResponseEntity<InsertResDto> insertFamily(FamilyInsertReqDto data){
+		final InsertResDto response = familyService.insertFamily(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping
@@ -63,7 +63,7 @@ public class FamilyController {
 	
 	@GetMapping("/candidate")
 	public ResponseEntity<List<FamilyGetResDto>> getFamilyCandidate(@RequestParam String candidateId){
-		final List<FamilyGetResDto> response = familyService.getAllFamilyCandidate(candidateId);
+		final List<FamilyGetResDto> response = familyService.getByCandidate(candidateId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

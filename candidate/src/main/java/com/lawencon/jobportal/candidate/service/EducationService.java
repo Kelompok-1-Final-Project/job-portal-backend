@@ -1,16 +1,35 @@
 package com.lawencon.jobportal.candidate.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.candidate.dao.EducationDao;
+import com.lawencon.jobportal.candidate.dao.UserDao;
+import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.education.EducationGetResDto;
+import com.lawencon.jobportal.candidate.dto.education.EducationInsertReqDto;
+import com.lawencon.jobportal.candidate.model.Education;
+import com.lawencon.jobportal.candidate.model.User;
 
+@Service
 public class EducationService {
+	
 	@Autowired
 	private EducationDao educationDao;
+	
+	@Autowired
+	private UserDao userDao;
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
 	
 	public List<EducationGetResDto> getByCandidate(String candidateId) {
 		final List<EducationGetResDto> educationGetResDtos = new ArrayList<>();
@@ -25,5 +44,32 @@ public class EducationService {
 		});
 
 		return educationGetResDtos;
+	}
+	
+	public InsertResDto insertEducation(EducationInsertReqDto data ) {
+		em().getTransaction().begin();
+		
+		final Education education = new Education();
+		final User candidate = userDao.getById(User.class, data.getCandidateId());
+		education.setCandidate(candidate);
+		education.setEducationName(data.getEducationName());
+		education.setStartDate(LocalDate.parse(data.getStartDate()));
+		education.setEndDate(LocalDate.parse(data.getEndDate()));
+		final Education educationResult = educationDao.save(education);
+		final InsertResDto result = new InsertResDto();
+		result.setId(educationResult.getId());
+		result.setMessage("Education Successfully added.");
+		
+		em().getTransaction().commit();
+		return result;
+	}
+	
+	public boolean deleteEducation(String educationId) {
+		em().getTransaction().begin();
+		
+		final Boolean result = educationDao.deleteById(Education.class, educationId);
+		
+		em().getTransaction().commit();
+		return result;
 	}
 }

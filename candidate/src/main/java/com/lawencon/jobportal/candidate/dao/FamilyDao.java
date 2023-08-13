@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.candidate.dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.candidate.model.Degree;
 import com.lawencon.jobportal.candidate.model.Family;
 import com.lawencon.jobportal.candidate.model.Relationship;
 
@@ -42,14 +44,17 @@ public class FamilyDao extends AbstractJpaDao{
 
 				final Family family = new Family();
 				family.setId(familyArr[0].toString());
-				family.setFamilyname(familyArr[1].toString());
+				family.setFamilyName(familyArr[1].toString());
 				
 				final Relationship relationship = new Relationship();
 				relationship.setRelationshipName(familyArr[2].toString());
 				family.setRelationship(relationship);
 				
-				family.setFamilyDegree(familyArr[3].toString());
-				family.setFamilyBirtdate(familyArr[4].toString());
+				final Degree degree = new Degree();
+				degree.setDegreeName(familyArr[3].toString());
+				family.setFamilyDegree(degree);
+				
+				family.setFamilyBirthdate(LocalDate.parse(familyArr[4].toString()));
 				family.setVersion(Integer.valueOf(familyArr[5].toString()));
 				
 				families.add(family);

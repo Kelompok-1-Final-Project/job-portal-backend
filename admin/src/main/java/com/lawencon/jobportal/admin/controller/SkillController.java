@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.skill.LevelGetResDto;
 import com.lawencon.jobportal.admin.dto.skill.SkillGetResDto;
 import com.lawencon.jobportal.admin.dto.skill.SkillInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skill.SkillUpdateReqDto;
@@ -58,5 +59,11 @@ public class SkillController {
 	public ResponseEntity<DeleteResDto> delete(@PathVariable("code") String code) {
 		final DeleteResDto result = skillService.deleteByCode(code);
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("level")
+	public ResponseEntity<List<LevelGetResDto>> getAllLevel(){
+		final List<LevelGetResDto> response = skillService.getAllLevel();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

@@ -467,12 +467,30 @@ ALTER TABLE t_relationship ADD CONSTRAINT relationship_pk
 ALTER TABLE t_relationship ADD CONSTRAINT relationship_bk
 	UNIQUE(relationship_code);
 	
+CREATE TABLE t_degree(
+	id VARCHAR(36) NOT NULL,
+	degree_code VARCHAR(5) NOT NULL,
+	degree_name VARCHAR(10) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_degree ADD CONSTRAINT degree_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_degree ADD CONSTRAINT degree_bk
+	UNIQUE(degree_code);
+
+
 CREATE TABLE t_family(
 	id VARCHAR(36) NOT NULL,
 	candidate_id VARCHAR(36) NOT NULL,
 	family_name VARCHAR(30) NOT NULL,
 	relationship_id VARCHAR(36) NOT NULL,
-	family_degree VARCHAR(36) NOT NULL,
+	degree_id VARCHAR(36) NOT NULL,
 	family_birthdate VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -490,6 +508,9 @@ ALTER TABLE t_family ADD CONSTRAINT family_relationship_fk
 ALTER TABLE t_family ADD CONSTRAINT family_candidate_fk
 	FOREIGN KEY(candidate_id)
 	REFERENCES t_user(id);
+ALTER TABLE t_family ADD CONSTRAINT family_degree_fk
+	FOREIGN KEY(degree_id)
+	REFERENCES t_degree(id);
 	
 CREATE TABLE t_organization(
 	id VARCHAR(36) NOT NULL,

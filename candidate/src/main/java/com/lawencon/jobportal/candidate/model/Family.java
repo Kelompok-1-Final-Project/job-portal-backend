@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.candidate.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -10,64 +12,66 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_family")
-public class Family extends BaseEntity{
-	
-	
+public class Family extends BaseEntity {
+
 	@OneToOne
 	@JoinColumn(name = "candidate_id")
 	private User candidate;
-	
-	@Column(name = "family_name",length =30,nullable = false)
-	private String familyname;
-	
+
+	@Column(name = "family_name", length = 30, nullable = false)
+	private String familyName;
+
 	@OneToOne
 	@JoinColumn(name = "relationship_id")
 	private Relationship relationship;
+
+	@Column(name = "family_birthdate", length = 36, nullable = false)
+	private LocalDate familyBirthdate;
 	
-	@Column(name = "family_degree",length =36,nullable = false)
-	private String familyDegree;
-	
-	@Column(name = "family_birthdate",length =36,nullable = false)
-	private String familyBirtdate;
-	
-	
+	@OneToOne
+	@JoinColumn(name = "degree_id")
+	private Degree familyDegree;
+
 	public User getCandidate() {
 		return candidate;
 	}
-	
+
 	public void setCandidate(User candidate) {
 		this.candidate = candidate;
 	}
-	
-	public String getFamilyname() {
-		return familyname;
-	}
-	
-	public void setFamilyname(String familyname) {
-		this.familyname = familyname;
-	}
-	
+
 	public Relationship getRelationship() {
 		return relationship;
 	}
-	
+
 	public void setRelationship(Relationship relationship) {
 		this.relationship = relationship;
 	}
-	
-	public String getFamilyDegree() {
+
+
+	public Degree getFamilyDegree() {
 		return familyDegree;
 	}
-	
-	public void setFamilyDegree(String familyDegree) {
+
+	public void setFamilyDegree(Degree familyDegree) {
 		this.familyDegree = familyDegree;
 	}
-	
-	public String getFamilyBirtdate() {
-		return familyBirtdate;
+
+	public String getFamilyName() {
+		return familyName;
 	}
-	
-	public void setFamilyBirtdate(String familyBirtdate) {
-		this.familyBirtdate = familyBirtdate;
+
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
 	}
+
+	public LocalDate getFamilyBirthdate() {
+		return familyBirthdate;
+	}
+
+	public void setFamilyBirthdate(LocalDate familyBirthdate) {
+		this.familyBirthdate = familyBirthdate;
+	}
+
+
 }
