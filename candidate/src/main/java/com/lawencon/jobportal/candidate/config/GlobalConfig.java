@@ -1,9 +1,7 @@
-package com.lawencon.jobportal.admin.config;
+package com.lawencon.jobportal.candidate.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
@@ -21,11 +19,7 @@ public class GlobalConfig {
 		return new RestTemplate();
 	}
 	
-	@Bean
-	public JavaMailSender javaMailSender() {
-		return new JavaMailSenderImpl();
-	}
-	
+
 //	@Bean(name = "initTable")
 //	public SpringLiquibase initTable(DataSource dataSource) {
 //		final SpringLiquibase springLiquibase = new SpringLiquibase();

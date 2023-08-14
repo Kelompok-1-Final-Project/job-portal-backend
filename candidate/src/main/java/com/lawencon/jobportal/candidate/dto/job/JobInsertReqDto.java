@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.job;
+package com.lawencon.jobportal.candidate.dto.job;
 
 public class JobInsertReqDto {
 

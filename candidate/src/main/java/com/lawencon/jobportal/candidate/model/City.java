@@ -1,8 +1,14 @@
 package com.lawencon.jobportal.candidate.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-public class City {
+import com.lawencon.base.BaseEntity;
+
+@Entity
+@Table(name = "t_city")
+public class City extends BaseEntity {
 
 	@Column(name = "city_code",length =5,unique=true,nullable = false)
 	private String cityCode;

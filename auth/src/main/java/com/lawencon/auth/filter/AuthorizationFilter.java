@@ -45,6 +45,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 					final Map<String, Object> map = jwtService.parseJwt(jwt);
 					
 					final Authentication auth = new UsernamePasswordAuthenticationToken(map.get("id"), null);
+					
 					SecurityContextHolder.getContext().setAuthentication(auth);
 					
 				} catch (Exception e) {

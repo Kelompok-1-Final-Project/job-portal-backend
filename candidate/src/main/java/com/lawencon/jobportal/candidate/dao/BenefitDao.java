@@ -10,6 +10,7 @@ import com.lawencon.jobportal.candidate.model.Benefit;
 
 @Repository
 public class BenefitDao extends AbstractJpaDao{
+	
 	private EntityManager em() {
 		return ConnHandler.getManager();
 	}

@@ -56,6 +56,14 @@ public class Job extends BaseEntity {
 	@JoinColumn(name = "interviewer_id")
 	private User interviewer;
 
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
+	}
+
 	public String getJobTitle() {
 		return jobTitle;
 	}
