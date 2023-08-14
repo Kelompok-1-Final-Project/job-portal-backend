@@ -3,7 +3,6 @@ package com.lawencon.jobportal.admin.dto.benefit;
 public class BenefitUpdateReqDto {
 	
 	private String benefitCode;
-	
 	private String benefitName;
 
 	public String getBenefitName() {
