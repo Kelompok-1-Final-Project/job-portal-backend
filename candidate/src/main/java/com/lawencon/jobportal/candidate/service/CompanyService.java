@@ -58,28 +58,34 @@ public class CompanyService {
 	}
 
 	public InsertResDto insertCompany(CompanyInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final File file = new File();
-		file.setExt(data.getExt());
-		file.setFile(data.getFile());
-		final File files = fileDao.save(file);
-
-		final Industry industry = industryDao.getByCode(data.getIndustryCode());
-		final City city = cityDao.getByCode(data.getCityCode());
-		final Company company = new Company();
-		company.setCompanyName(data.getCompanyName());
-		company.setCompanyCode(data.getCompanyCode());
-		company.setIndustry(industry);
-		company.setCity(city);
-		company.setFile(files);
-		final Company companies = companyDao.save(company);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(companies.getId());
-		result.setMessage("Company added successfully.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final File file = new File();
+			file.setExt(data.getExt());
+			file.setFile(data.getFile());
+			final File files = fileDao.save(file);
+
+			final Industry industry = industryDao.getByCode(data.getIndustryCode());
+			final City city = cityDao.getByCode(data.getCityCode());
+			final Company company = new Company();
+			company.setCompanyName(data.getCompanyName());
+			company.setCompanyCode(data.getCompanyCode());
+			company.setIndustry(industry);
+			company.setCity(city);
+			company.setFile(files);
+			final Company companies = companyDao.save(company);
+
+			result.setId(companies.getId());
+			result.setMessage("Company added successfully.");
+
+			em().getTransaction().commit();
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 

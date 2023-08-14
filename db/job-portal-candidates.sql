@@ -1,28 +1,29 @@
---
---DROP TABLE IF EXISTS t_organization;
---DROP TABLE IF EXISTS t_family;
---DROP TABLE IF EXISTS t_relationship;
---DROP TABLE IF EXISTS t_blacklist;
---DROP TABLE IF EXISTS t_save_job;
---DROP TABLE IF EXISTS t_work_experience;
---DROP TABLE IF EXISTS t_education;
---DROP TABLE IF EXISTS t_job_benefit;
---DROP TABLE IF EXISTS t_job;
---DROP TABLE IF EXISTS t_employment_type;
---DROP TABLE IF EXISTS t_job_status;
---DROP TABLE IF EXISTS t_user_skill;
---DROP TABLE IF EXISTS t_user;
---DROP TABLE IF EXISTS t_benefit;
---DROP TABLE IF EXISTS t_profile;
---DROP TABLE IF EXISTS t_skill;
---DROP TABLE IF EXISTS t_level;
---DROP TABLE IF EXISTS t_company;
---DROP TABLE IF EXISTS t_industry;
---DROP TABLE IF EXISTS t_city;
---DROP TABLE IF EXISTS t_person_type;
---DROP TABLE IF EXISTS t_gender;
---DROP TABLE IF EXISTS t_marital_status;
---DROP TABLE IF EXISTS t_file;
+
+DROP TABLE IF EXISTS t_organization;
+DROP TABLE IF EXISTS t_family;
+DROP TABLE IF EXISTS t_relationship;
+DROP TABLE IF EXISTS t_blacklist;
+DROP TABLE IF EXISTS t_save_job;
+DROP TABLE IF EXISTS t_work_experience;
+DROP TABLE IF EXISTS t_education;
+DROP TABLE IF EXISTS t_job_benefit;
+DROP TABLE IF EXISTS t_job;
+DROP TABLE IF EXISTS t_degree;
+DROP TABLE IF EXISTS t_employment_type;
+DROP TABLE IF EXISTS t_job_status;
+DROP TABLE IF EXISTS t_user_skill;
+DROP TABLE IF EXISTS t_user;
+DROP TABLE IF EXISTS t_benefit;
+DROP TABLE IF EXISTS t_profile;
+DROP TABLE IF EXISTS t_skill;
+DROP TABLE IF EXISTS t_level;
+DROP TABLE IF EXISTS t_company;
+DROP TABLE IF EXISTS t_industry;
+DROP TABLE IF EXISTS t_city;
+DROP TABLE IF EXISTS t_person_type;
+DROP TABLE IF EXISTS t_gender;
+DROP TABLE IF EXISTS t_marital_status;
+DROP TABLE IF EXISTS t_file;
 
 
 CREATE TABLE t_file(
@@ -150,6 +151,8 @@ CREATE TABLE t_company(
 	file_id VARCHAR(36) NOT NULL,
 	city_id VARCHAR(36) NOT NULL,
 	industry_id VARCHAR(36) NOT NULL,
+	description TEXT,
+	address TEXT,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
