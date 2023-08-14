@@ -322,6 +322,7 @@ ALTER TABLE t_employment_type ADD CONSTRAINT employment_bk
 
 CREATE TABLE t_job(
 	id VARCHAR(36) NOT NULL,
+	job_code VARCHAR(5) NOT NULL,
 	job_title VARCHAR(30) NOT NULL,
 	salary_start BIGINT NOT NULL,
 	salary_end BIGINT NOT NULL,
@@ -349,6 +350,8 @@ ALTER TABLE t_job ADD CONSTRAINT job_status_fk
 ALTER TABLE t_job ADD CONSTRAINT job_employment_fk
 	FOREIGN KEY(employment_type_id)
 	REFERENCES t_employment_type(id);
+ALTER TABLE t_job ADD CONSTRAINT job_fk 
+	UNIQUE(job_code);
 
 CREATE TABLE t_education(
 	id VARCHAR(36) NOT NULL,
