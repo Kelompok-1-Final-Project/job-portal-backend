@@ -945,9 +945,9 @@ INSERT INTO t_profile(id, id_number, full_name, mobile_number, gender_id, create
 	(uuid_generate_v4(),'1029384756', 'Torang','082219823926', (SELECT id FROM t_gender WHERE gender_code='G002'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0);
 
 INSERT INTO t_user(id, email, pass, profile_id, role_id, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'anggi@gmail.com', 'anggi', (SELECT id FROM t_profile WHERE full_name='Anggi'), (SELECT id FROM t_role WHERE role_code='RL001'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'firman@gmail.com', 'firman', (SELECT id FROM t_profile WHERE full_name='Firman'), (SELECT id FROM t_role WHERE role_code='RL002'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'torang@gmail.com', 'torang', (SELECT id FROM t_profile WHERE full_name='Torang'), (SELECT id FROM t_role WHERE role_code='RL003'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'anggi@gmail.com', '$2a$12$XmaBtl7ZpZKzMsKJLOdO8.fPjI6dLE71.IFTxxEekUUXDeIMoiuhW', (SELECT id FROM t_profile WHERE full_name='Anggi'), (SELECT id FROM t_role WHERE role_code='RL001'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'firman@gmail.com', '$2a$12$AYQDm9hj1/TG7bXss7FWCuBjHeToBci.eBPK3PXRTnCToDIMefTri', (SELECT id FROM t_profile WHERE full_name='Firman'), (SELECT id FROM t_role WHERE role_code='RL002'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'torang@gmail.com', '$2a$12$PVotaC404YdmWPQzS73xDudVq90e2DgWTvv7Yqf9mGMLG1K0XOW32', (SELECT id FROM t_profile WHERE full_name='Torang'), (SELECT id FROM t_role WHERE role_code='RL003'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0);
 
 INSERT INTO t_job(id, job_title, salary_start , salary_end, description, end_date, company_id , job_position_id , job_status_id , employment_type_id , hr_id ,interviewer_id , created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'Fullstack Developer', 8000000, 10000000, 'Looking for Fullstack Developer','2023-08-10',(SELECT id FROM t_company WHERE company_code='CP001'), (SELECT id FROM t_job_position WHERE position_code='JP001'),(SELECT id FROM t_job_status WHERE status_code='JS001'),(SELECT id FROM t_employment_type WHERE employment_code='ET001'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
