@@ -1,29 +1,36 @@
 
-DROP TABLE IF EXISTS t_organization;
-DROP TABLE IF EXISTS t_family;
-DROP TABLE IF EXISTS t_relationship;
-DROP TABLE IF EXISTS t_blacklist;
-DROP TABLE IF EXISTS t_save_job;
-DROP TABLE IF EXISTS t_work_experience;
-DROP TABLE IF EXISTS t_education;
-DROP TABLE IF EXISTS t_job_benefit;
-DROP TABLE IF EXISTS t_job;
-DROP TABLE IF EXISTS t_degree;
-DROP TABLE IF EXISTS t_employment_type;
-DROP TABLE IF EXISTS t_job_status;
-DROP TABLE IF EXISTS t_user_skill;
-DROP TABLE IF EXISTS t_user;
-DROP TABLE IF EXISTS t_benefit;
-DROP TABLE IF EXISTS t_profile;
-DROP TABLE IF EXISTS t_skill;
-DROP TABLE IF EXISTS t_level;
-DROP TABLE IF EXISTS t_company;
-DROP TABLE IF EXISTS t_industry;
-DROP TABLE IF EXISTS t_city;
-DROP TABLE IF EXISTS t_person_type;
-DROP TABLE IF EXISTS t_gender;
-DROP TABLE IF EXISTS t_marital_status;
-DROP TABLE IF EXISTS t_file;
+--DROP TABLE IF EXISTS t_organization;
+--DROP TABLE IF EXISTS t_family;
+--DROP TABLE IF EXISTS t_relationship;
+--DROP TABLE IF EXISTS t_blacklist;
+--DROP TABLE IF EXISTS t_save_job;
+--DROP TABLE IF EXISTS t_work_experience;
+--DROP TABLE IF EXISTS t_education;
+--DROP TABLE IF EXISTS t_job_benefit;
+--DROP TABLE IF EXISTS t_job_candidate_status;
+--DROP TABLE IF EXISTS t_skill_test_question;
+--DROP TABLE IF EXISTS t_question_option;
+--DROP TABLE IF EXISTS t_question;
+--DROP TABLE IF EXISTS t_skill_test;
+--DROP TABLE IF EXISTS t_job;
+--DROP TABLE IF EXISTS t_employment_type;
+--DROP TABLE IF EXISTS t_job_status;
+--DROP TABLE IF EXISTS t_user_skill;
+--DROP TABLE IF EXISTS t_user;
+--DROP TABLE IF EXISTS t_benefit;
+--DROP TABLE IF EXISTS t_profile;
+--DROP TABLE IF EXISTS t_skill;
+--DROP TABLE IF EXISTS t_level;
+--DROP TABLE IF EXISTS t_company;
+--DROP TABLE IF EXISTS t_industry;
+--DROP TABLE IF EXISTS t_city;
+--DROP TABLE IF EXISTS t_person_type;
+--DROP TABLE IF EXISTS t_gender;
+--DROP TABLE IF EXISTS t_degree;
+--DROP TABLE IF EXISTS t_job_position;
+--DROP TABLE IF EXISTS t_marital_status;
+--DROP TABLE IF EXISTS t_status_process;
+--DROP TABLE IF EXISTS t_file;
 
 
 CREATE TABLE t_file(
@@ -192,6 +199,24 @@ ALTER TABLE t_skill ADD CONSTRAINT skill_pk
 ALTER TABLE t_skill ADD CONSTRAINT skill_bk
 	UNIQUE(skill_code);
 
+CREATE TABLE t_status_process(
+	id VARCHAR(36) NOT NULL ,
+	process_code VARCHAR(5) NOT NULL,
+	process_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_status_process ADD CONSTRAINT status_process_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_status_process ADD CONSTRAINT status_process_bk
+	UNIQUE(process_code);
+
+
 CREATE TABLE t_profile(
 	id VARCHAR(36) NOT NULL,
 	id_number VARCHAR(16),
@@ -297,6 +322,56 @@ ALTER TABLE t_job_status ADD CONSTRAINT job_status_pk
 ALTER TABLE t_job_status ADD CONSTRAINT job_status_bk
 	UNIQUE(status_code);
 
+CREATE TABLE t_job_position(
+	id VARCHAR(36) NOT NULL ,
+	position_code VARCHAR(5) NOT NULL,
+	position_name VARCHAR(30) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_job_position ADD CONSTRAINT job_position_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_job_position ADD CONSTRAINT job_position_bk
+	UNIQUE(position_code);
+
+CREATE TABLE t_question(
+	id VARCHAR(36) NOT NULL ,
+	question text NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_question ADD CONSTRAINT question_pk
+	PRIMARY KEY(id);
+
+CREATE TABLE t_question_option(
+	id VARCHAR(36) NOT NULL ,
+	labels VARCHAR(30) NOT NULL,
+	is_answer boolean NOT NULL,
+	question_id VARCHAR(36) NOT NULL ,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_question_option ADD CONSTRAINT question_option_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_question_option ADD CONSTRAINT question_option_question_fk
+	FOREIGN KEY(question_id)
+	REFERENCES t_question(id);
+
 CREATE TABLE t_employment_type(
 	id VARCHAR(36) NOT NULL,
 	employment_code VARCHAR(5) NOT NULL,
@@ -346,6 +421,47 @@ ALTER TABLE t_job ADD CONSTRAINT job_employment_fk
 	REFERENCES t_employment_type(id);
 ALTER TABLE t_job ADD CONSTRAINT job_fk 
 	UNIQUE(job_code);
+
+CREATE TABLE t_skill_test(
+	id VARCHAR(36) NOT NULL ,
+	test_name VARCHAR(30) NOT NULL,
+	job_id VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+	
+ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_job_fk
+	FOREIGN KEY(job_id)
+	REFERENCES t_job(id);
+
+
+CREATE TABLE t_skill_test_question(
+	id VARCHAR(36) NOT NULL,
+	question_id VARCHAR(36) NOT NULL,
+	skill_test_id VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_question_fk
+	FOREIGN KEY(question_id)
+	REFERENCES t_question(id);
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_skill_test_fk
+	FOREIGN KEY(skill_test_id)
+	REFERENCES t_skill_test(id);
+
 
 CREATE TABLE t_education(
 	id VARCHAR(36) NOT NULL,
@@ -406,6 +522,31 @@ ALTER TABLE t_save_job ADD CONSTRAINT save_job_candidate_fk
 	FOREIGN KEY(candidate_id)
 	REFERENCES t_user(id);
 ALTER TABLE t_save_job ADD CONSTRAINT save_job_job_fk
+	FOREIGN KEY(job_id)
+	REFERENCES t_job(id);
+
+CREATE TABLE t_job_candidate_status(
+	id VARCHAR(36) NOT NULL ,
+	candidate_id VARCHAR(36) NOT NULL ,
+	job_id VARCHAR(36) NOT NULL ,
+	status_id VARCHAR(36) NOT NULL ,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_job_candidate_status ADD CONSTRAINT job_candidate_status_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_job_candidate_status ADD CONSTRAINT job_candidate_status_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_user(id);
+ALTER TABLE t_job_candidate_status ADD CONSTRAINT job_candidate_status_job_fk
+	FOREIGN KEY(status_id)
+	REFERENCES t_status_process(id);
+ALTER TABLE t_job_candidate_status ADD CONSTRAINT job_candidate_status_job_status_fk
 	FOREIGN KEY(job_id)
 	REFERENCES t_job(id);
 
@@ -488,7 +629,7 @@ CREATE TABLE t_family(
 	family_name VARCHAR(30) NOT NULL,
 	relationship_id VARCHAR(36) NOT NULL,
 	degree_id VARCHAR(36) NOT NULL,
-	family_birthdate VARCHAR(36) NOT NULL,
+	birthdate VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
