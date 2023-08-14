@@ -18,6 +18,7 @@ import com.lawencon.jobportal.admin.model.Role;
 
 @Service
 public class ProfileService {	
+	
 	@Autowired
 	MaritalStatusDao maritalStatusDao;
 	

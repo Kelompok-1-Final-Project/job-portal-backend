@@ -26,9 +26,9 @@ import com.lawencon.jobportal.candidate.model.Skill;
 import com.lawencon.jobportal.candidate.model.User;
 import com.lawencon.jobportal.candidate.model.UserSkill;
 
-
 @Service
 public class UserSkillService {
+	
 	@Autowired
 	private UserSkillDao userSkillDao;
 	
@@ -101,6 +101,8 @@ public class UserSkillService {
 	}
 	
 	public InsertResDto insertUserSkill(UserSkillInsertReqDto data) {
+		em().getTransaction().begin();
+		
 		final UserSkill userSkill = new UserSkill();
 		final User user = userDao.getById(User.class, data.getCandidateId());
 		userSkill.setCandidate(user);
@@ -112,6 +114,8 @@ public class UserSkillService {
 		final InsertResDto result = new InsertResDto();
 		result.setId(userSkillResult.getId());
 		result.setMessage("Skill Successfully Assigned.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	
