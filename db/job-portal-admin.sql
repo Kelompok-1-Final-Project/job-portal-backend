@@ -4,6 +4,7 @@
 --DROP TABLE IF EXISTS t_question_option;
 --DROP TABLE IF EXISTS t_skill_test_question;
 --DROP TABLE IF EXISTS t_question;
+--DROP TABLE IF EXISTS t_result;
 --DROP TABLE IF EXISTS t_skill_test;
 --DROP TABLE IF EXISTS t_hired;
 --DROP TABLE IF EXISTS t_offering;
@@ -14,6 +15,9 @@
 --DROP TABLE IF EXISTS t_job_candidate_status;
 --DROP TABLE IF EXISTS t_user_skill;
 --DROP TABLE IF EXISTS t_level;
+--DROP TABLE IF EXISTS t_family;
+--DROP TABLE IF EXISTS t_relationship;
+--DROP TABLE IF EXISTS t_degree;
 --DROP TABLE IF EXISTS t_candidate;
 --DROP TABLE IF EXISTS t_candidate_profile;
 --DROP TABLE IF EXISTS t_job;
@@ -681,7 +685,7 @@ CREATE TABLE t_result(
 	id VARCHAR(36) NOT NULL,
 	candidate_id VARCHAR(36) NOT NULL,
 	skill_test_id VARCHAR(36) NOT NULL,
-	grade DOUBLE NOT NULL,
+	grade FLOAT NOT NULL,
 	notes TEXT,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -712,13 +716,6 @@ CREATE TABLE t_question_option(
 	is_active boolean NOT NULL,
 	ver int NOT NULL
 );
-
-SELECT 
-	id
-FROM 
-	t_question_option tqo 
-WHERE 
-	question_id = :questionId
 
 ALTER TABLE t_question_option ADD CONSTRAINT question_option_pk
 	PRIMARY KEY(id);
@@ -1011,10 +1008,10 @@ INSERT INTO t_hired(id, candidate_id, job_id, created_by, created_at, is_active,
 	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
 	
-INSERT INTO t_skill_test(id, test_name, job_id, grade, notes, candidate_id, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Test Fullstack Developer',(SELECT id FROM t_job WHERE job_title='Fullstack Developer'), 90, 'Good Job',(SELECT id FROM t_candidate WHERE email='anggi@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'Test Backend Developer',(SELECT id FROM t_job WHERE job_title='Backend Developer'), 80, 'Good Job',(SELECT id FROM t_candidate WHERE email='firman@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'Test Frontend Developer',(SELECT id FROM t_job WHERE job_title='Frontend Developer'), 70, 'Good Job',(SELECT id FROM t_candidate WHERE email='torang@gmail.com'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+INSERT INTO t_skill_test(id, test_name, job_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Test Fullstack Developer',(SELECT id FROM t_job WHERE job_title='Fullstack Developer'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'Test Backend Developer',(SELECT id FROM t_job WHERE job_title='Backend Developer'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'Test Frontend Developer',(SELECT id FROM t_job WHERE job_title='Frontend Developer'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
 
 INSERT INTO t_question(id, question, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(),'1+1=?',(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),

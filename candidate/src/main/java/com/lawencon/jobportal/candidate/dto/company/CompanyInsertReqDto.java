@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.company;
+package com.lawencon.jobportal.candidate.dto.company;
 
 public class CompanyInsertReqDto {
 

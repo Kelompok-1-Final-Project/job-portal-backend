@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.config;
+package com.lawencon.jobportal.candidate.config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.lawencon.jobportal.admin.filter.AuthorizationFilter;
-import com.lawencon.jobportal.admin.service.UserService;
+import com.lawencon.jobportal.candidate.filter.AuthorizationFilter;
+import com.lawencon.jobportal.candidate.service.UserService;
 
 @Configuration
 public class SecurityConfig {

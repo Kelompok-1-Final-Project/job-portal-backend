@@ -1,10 +1,9 @@
-
+--
 --DROP TABLE IF EXISTS t_organization;
 --DROP TABLE IF EXISTS t_family;
 --DROP TABLE IF EXISTS t_relationship;
 --DROP TABLE IF EXISTS t_blacklist;
 --DROP TABLE IF EXISTS t_save_job;
---DROP TABLE IF EXISTS t_level;
 --DROP TABLE IF EXISTS t_work_experience;
 --DROP TABLE IF EXISTS t_education;
 --DROP TABLE IF EXISTS t_job_benefit;
@@ -40,14 +39,6 @@ CREATE TABLE t_file(
 
 ALTER TABLE t_file ADD CONSTRAINT file_pk
 	PRIMARY KEY(id);
-
-
-INSERT INTO t_file (id, ext, file, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'png', 'file1.png', uuid_generate_v4(), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'jpg', 'file2.jpg', uuid_generate_v4(), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'pdf', 'file3.pdf', uuid_generate_v4(), NOW(),TRUE,0),
-	(uuid_generate_v4(), 'png', 'file4.png', uuid_generate_v4(), NOW(),TRUE,0)
-;
 
 
 CREATE TABLE t_gender(
@@ -540,29 +531,41 @@ ALTER TABLE t_organization ADD CONSTRAINT organization_candidate_fk
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --SELECT uuid_generate_v4();
 
+INSERT INTO t_file (id, ext, file, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'png', 'file1.png', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'jpg', 'file2.jpg', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'pdf', 'file3.pdf', uuid_generate_v4(), NOW(),TRUE,0),
+	(uuid_generate_v4(), 'png', 'file4.png', uuid_generate_v4(), NOW(),TRUE,0);
+
 INSERT INTO t_employment_type (id, employment_code, employment_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ET001', 'Internship', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET002', 'Contract', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET003', 'Full Time', uuid_generate_v4(), NOW(),TRUE,0),
 	(uuid_generate_v4(), 'ET004', 'Part Time', uuid_generate_v4(), NOW(),TRUE,0);
 
-INSERT INTO t_gender(id, gender_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Male', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Female', uuid_generate_v4(), NOW(), TRUE, 0);
+INSERT INTO t_gender(id, gender_name, gender_code, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Male', 'G001', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Female', 'G002', uuid_generate_v4(), NOW(), TRUE, 0);
 
 INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at,  is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ID001', 'Technology', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'ID002', 'Finance', uuid_generate_v4(), NOW(), TRUE, 0);
 
-INSERT INTO t_level(id, level_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Basic', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Intermediate', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Expert', uuid_generate_v4(), NOW(), TRUE, 0);
+INSERT INTO t_city(id, city_code, city_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(),'CT001', 'Jakarta', uuid_generate_v4(), NOW(), TRUE, 0 ),
+	(uuid_generate_v4(),'CT002', 'Bandung', uuid_generate_v4(), NOW(), TRUE, 0 ),
+	(uuid_generate_v4(),'CT003', 'Surabaya', uuid_generate_v4(), NOW(), TRUE, 0 );
+
+
+INSERT INTO t_level(id, level_name,level_code, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Basic', 'LV001',uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Intermediate', 'LV002', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Expert', 'LV003',uuid_generate_v4(), NOW(), TRUE, 0);
 	
-INSERT INTO t_marital_status(id, status_name, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Single', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Married', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Divorced', uuid_generate_v4(), NOW(), TRUE, 0);
+INSERT INTO t_marital_status(id, status_name, status_code, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Single', 'MS001', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Married', 'MS002', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Divorced', 'MS003', uuid_generate_v4(), NOW(), TRUE, 0);
 
 INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'PT001', 'Candidate', uuid_generate_v4(), NOW(), TRUE, 0),

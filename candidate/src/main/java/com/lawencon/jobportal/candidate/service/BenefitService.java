@@ -3,9 +3,12 @@ package com.lawencon.jobportal.candidate.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.candidate.dao.BenefitDao;
 import com.lawencon.jobportal.candidate.dao.JobBenefitDao;
 import com.lawencon.jobportal.candidate.dto.benefit.BenefitGetResDto;
@@ -16,9 +19,14 @@ import com.lawencon.jobportal.candidate.model.JobBenefit;
 @Service
 public class BenefitService {
 
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
 	@Autowired
 	private BenefitDao benefitDao;
 	
+	@Autowired
 	private JobBenefitDao jobBenefitDao;
 	
 	public List<BenefitGetResDto> getAllBenefit(){

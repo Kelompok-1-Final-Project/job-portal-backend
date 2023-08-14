@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.filter;
+package com.lawencon.jobportal.candidate.filter;
 
 import java.io.IOException;
 import java.util.List;
