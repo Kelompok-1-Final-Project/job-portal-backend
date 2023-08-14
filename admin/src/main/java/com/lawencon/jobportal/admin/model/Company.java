@@ -18,10 +18,16 @@ public class Company extends BaseEntity {
 	@Column(name = "company_name", length = 30, nullable = false)
 	private String companyName;
 
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "address")
+	private String address;
+
 	@OneToOne
 	@JoinColumn(name = "file_id", nullable = false)
 	private File file;
-	
+
 	@OneToOne
 	@JoinColumn(name = "city_id", nullable = false)
 	private City city;
@@ -44,6 +50,22 @@ public class Company extends BaseEntity {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public File getFile() {

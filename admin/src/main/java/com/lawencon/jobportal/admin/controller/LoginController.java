@@ -51,7 +51,6 @@ public class LoginController {
 		final RequestEntity<TokenReqDto> token = RequestEntity.post(tokenURl).headers(headers).body(tokenReqDto);
 		
 		final ResponseEntity<String> response = restTemplate.exchange(token,String.class);
-		System.out.println(response.getBody());
 
 		final UserLoginResDto loginRes = new UserLoginResDto();
 		loginRes.setUserId(userGet.getUserId());

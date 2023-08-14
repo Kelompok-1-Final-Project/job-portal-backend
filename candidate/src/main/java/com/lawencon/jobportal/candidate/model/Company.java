@@ -10,27 +10,32 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_company")
-public class Company extends BaseEntity{
-	
-	@Column(name = "company_code",length =5,unique=true,nullable = false)
+public class Company extends BaseEntity {
+
+	@Column(name = "company_code", length = 5, unique = true, nullable = false)
 	private String companyCode;
-	
-	@Column(name = "company_name",length =30,nullable = false)
+
+	@Column(name = "company_name", length = 30, nullable = false)
 	private String companyName;
-	
+
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "address")
+	private String address;
+
 	@OneToOne
 	@JoinColumn(name = "file_id")
 	private File file;
-	
+
 	@OneToOne
 	@JoinColumn(name = "industry_id")
 	private Industry industry;
-	
+
 	@OneToOne
 	@JoinColumn(name = "city_id")
 	private City city;
-	
-	
+
 	public City getCity() {
 		return city;
 	}
@@ -42,23 +47,39 @@ public class Company extends BaseEntity{
 	public String getCompanyCode() {
 		return companyCode;
 	}
-	
+
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
 	}
-	
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public File getFile() {
 		return file;
 	}
-	
+
 	public void setFile(File file) {
 		this.file = file;
 	}
-	
+
 	public Industry getIndustry() {
 		return industry;
 	}
-	
+
 	public void setIndustry(Industry industry) {
 		this.industry = industry;
 	}
