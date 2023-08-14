@@ -8,9 +8,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.dao.BenefitDao;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -30,20 +37,49 @@ public class BenefitService {
 	@Autowired
 	private BenefitDao benefitDao;
 
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	public InsertResDto insert(BenefitInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final String benefitCode = generateCode();
-		final Benefit benefit = new Benefit();
-		benefit.setBenefitCode(benefitCode);
-		benefit.setBenefitName(data.getBenefitName());
-		final Benefit benefits = benefitDao.save(benefit);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(benefits.getId());
-		result.setMessage("Benefit added successfully");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final String benefitCode = generateCode();
+			data.setBenefitCode(benefitCode);
+			final Benefit benefit = new Benefit();
+			benefit.setBenefitCode(benefitCode);
+			benefit.setBenefitName(data.getBenefitName());
+			final Benefit benefits = benefitDao.save(benefit);
+
+			
+			result.setId(benefits.getId());
+			result.setMessage("Benefit added successfully");
+
+			final String benefitInsertCandidateAPI = "http://localhost:8081/benefits";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<BenefitInsertReqDto> companyInsert = RequestEntity.post(benefitInsertCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(companyInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(benefits.getId());
+				result.setMessage("City added successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
+		
 		return result;
 	}
 

@@ -17,8 +17,8 @@ import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
-import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
+import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
@@ -84,6 +84,7 @@ public class JobService {
 		job.setSalaryEnd(data.getSalaryEnd());
 		job.setDescription(data.getDescription());
 		job.setEndDate(LocalDate.parse(data.getEndDate()));
+		job.setJobCode(data.getJobCode());
 		
 		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
 		final Company companyResult = companyDao.getById(Company.class, companyDb.getId());

@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.benefit;
+package com.lawencon.jobportal.candidate.dto.benefit;
 
 public class BenefitInsertReqDto {
 	private String benefitName;
