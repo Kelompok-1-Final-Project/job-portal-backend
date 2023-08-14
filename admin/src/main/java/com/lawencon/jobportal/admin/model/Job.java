@@ -14,45 +14,48 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "t_job")
 public class Job extends BaseEntity {
 
-	@Column(name = "job_title", length=30, nullable=false)
+	@Column(name = "job_code", length = 5, nullable = false)
+	private String jobCode;
+
+	@Column(name = "job_title", length = 30, nullable = false)
 	private String jobTitle;
-	
-	@Column(name = "salary_start", nullable=false)
+
+	@Column(name = "salary_start", nullable = false)
 	private Integer salaryStart;
-	
-	@Column(name = "salary_end", nullable=false)
+
+	@Column(name = "salary_end", nullable = false)
 	private Integer salaryEnd;
-	
-	@Column(name = "description", nullable=false)
+
+	@Column(name = "description", nullable = false)
 	private String description;
-	
-	@Column(name = "end_date", nullable=false)
+
+	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
-	
+
 	@OneToOne
 	@JoinColumn(name = "company_id")
 	private Company company;
-	
+
 	@OneToOne
 	@JoinColumn(name = "job_position_id")
 	private JobPosition jobPosition;
-	
+
 	@OneToOne
 	@JoinColumn(name = "job_status_id")
 	private JobStatus jobStatus;
-	
+
 	@OneToOne
 	@JoinColumn(name = "employment_type_id")
 	private EmploymentType employementType;
-	
+
 	@OneToOne
 	@JoinColumn(name = "hr_id")
 	private User hr;
-	
+
 	@OneToOne
 	@JoinColumn(name = "interviewer_id")
 	private User interviewer;
-	
+
 	public String getJobTitle() {
 		return jobTitle;
 	}
@@ -140,5 +143,5 @@ public class Job extends BaseEntity {
 	public void setInterviewer(User interviewer) {
 		this.interviewer = interviewer;
 	}
-	
+
 }
