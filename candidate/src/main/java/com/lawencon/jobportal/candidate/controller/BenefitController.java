@@ -6,10 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.benefit.BenefitInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.benefit.JobBenefitGetResDto;
 import com.lawencon.jobportal.candidate.service.BenefitService;
 
@@ -25,4 +29,11 @@ public class BenefitController {
 		final List<JobBenefitGetResDto> data = benefitService.getByJob(jobId);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
+	
+	@PostMapping
+	public ResponseEntity<InsertResDto> insert(@RequestBody BenefitInsertReqDto data) {
+		final InsertResDto response = benefitService.insert(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
 }

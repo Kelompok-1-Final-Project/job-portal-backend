@@ -8,9 +8,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.dao.CityDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
@@ -29,20 +36,48 @@ public class CityService {
 	@Autowired
 	private CityDao cityDao;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	public InsertResDto insertCity(CityInsertReqDto data) {
-		em().getTransaction().begin();
-		
-		final String cityCode = generateCode();
-		final City city = new City();
-		city.setCityCode(cityCode);
-		city.setCityName(data.getCityName());
-		final City cities = cityDao.save(city);
-		
 		final InsertResDto result = new InsertResDto();
-		result.setId(cities.getId());
-		result.setMessage("City added successfully.");
+		try {
+			em().getTransaction().begin();
+			
+			final String cityCode = generateCode();
+			data.setCityCode(cityCode);
+			final City city = new City();
+			city.setCityCode(cityCode);
+			city.setCityName(data.getCityName());
+			final City cities = cityDao.save(city);
+			
+			result.setId(cities.getId());
+			result.setMessage("City added successfully.");
+			
+			final String cityInsertCandidateAPI = "http://localhost:8081/cities";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<CityInsertReqDto> cityInsert = RequestEntity.post(cityInsertCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(cityInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(cities.getId());
+				result.setMessage("City added successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
 		
-		em().getTransaction().commit();
 		return result;
 	}
 	

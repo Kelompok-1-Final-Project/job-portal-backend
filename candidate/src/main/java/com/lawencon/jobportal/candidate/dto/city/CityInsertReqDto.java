@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.city;
+package com.lawencon.jobportal.candidate.dto.city;
 
 public class CityInsertReqDto {
 
