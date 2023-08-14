@@ -1,4 +1,4 @@
---
+
 --DROP TABLE IF EXISTS t_organization;
 --DROP TABLE IF EXISTS t_family;
 --DROP TABLE IF EXISTS t_relationship;
@@ -150,6 +150,8 @@ CREATE TABLE t_company(
 	file_id VARCHAR(36) NOT NULL,
 	city_id VARCHAR(36) NOT NULL,
 	industry_id VARCHAR(36) NOT NULL,
+	description TEXT,
+	address TEXT,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
