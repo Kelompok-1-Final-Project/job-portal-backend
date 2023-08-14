@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.profile.GenderGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.MaritalGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.PersonTypeGetResDto;
+import com.lawencon.jobportal.candidate.dto.profile.ProfileUpdateReqDto;
 import com.lawencon.jobportal.candidate.service.ProfileService;
 
 @RestController
@@ -36,6 +40,12 @@ public class ProfileController {
 	@GetMapping("/person-type")
 	public ResponseEntity<List<PersonTypeGetResDto>> getPersonType() {
 		final List<PersonTypeGetResDto> response = profileService.getAllPersonType();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping
+	public ResponseEntity<UpdateResDto> updateProfile(@RequestBody ProfileUpdateReqDto data){
+		final UpdateResDto response = profileService.updateProfile(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

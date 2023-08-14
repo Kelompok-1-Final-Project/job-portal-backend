@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.candidate.dto.DeleteResDto;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.workexperience.WorkExperienceGetResDto;
 import com.lawencon.jobportal.candidate.dto.workexperience.WorkExperienceInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.workexperience.WorkExperienceUpdateReqDto;
 import com.lawencon.jobportal.candidate.service.WorkExperienceService;
 
 @RestController
@@ -49,5 +52,11 @@ public class WorkExperienceController {
 			response.setMessage("Delete Experience Failed.");
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@PatchMapping
+	public ResponseEntity<UpdateResDto> updateExperience(@RequestBody WorkExperienceUpdateReqDto data){
+		final UpdateResDto response = workExperienceService.updateWorkExperience(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
