@@ -2,6 +2,7 @@ package com.lawencon.jobportal.candidate.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
@@ -16,7 +17,7 @@ public class GlobalConfig {
 	
 	@Bean
 	public RestTemplate restTemplate() {
-		return new RestTemplate();
+		return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 	}
 	
 

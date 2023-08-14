@@ -81,7 +81,6 @@ public class CompanyService {
 			final HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setBearerAuth(JwtConfig.get());
-			System.out.println(JwtConfig.get());
 			
 			final RequestEntity<CompanyInsertReqDto> companyInsert = RequestEntity.post(companyInsertCandidateAPI).headers(headers)
 					.body(data);
@@ -118,27 +117,58 @@ public class CompanyService {
 	}
 
 	public UpdateResDto updateCompany(CompanyUpdateReqDto data) {
-		em().getTransaction().begin();
-
-		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
-		final Company company = companyDao.getById(Company.class, companyDb.getId());
-		final File file = new File();
-		file.setExt(data.getExt());
-		file.setFile(data.getFile());
-		final File files = fileDao.save(file);
-
-		final Industry industryDb = industryDao.getByCode(data.getIndustryCode());
-		final Industry industry = industryDao.getById(Industry.class, industryDb.getId());
-		company.setCompanyName(data.getCompanyName());
-		company.setFile(files);
-		company.setIndustry(industry);
-		final Company companyResult = companyDao.saveAndFlush(company);
-
 		final UpdateResDto result = new UpdateResDto();
-		result.setVersion(companyResult.getVersion());
-		result.setMessage("Company updated successfully.");
+		System.out.println("=================================================");
+		try {
+			System.out.println("======================TRY===================");
+			em().getTransaction().begin();
+			
+			System.out.println("======================BEGAL===================");
 
-		em().getTransaction().commit();
+			final Company companyDb = companyDao.getByCode(data.getCompanyCode());
+			System.out.println(companyDb.getId() + "ID ");
+			final Company company = companyDao.getById(Company.class, companyDb.getId());
+
+			final File file = new File();
+			file.setExt(data.getExt());
+			file.setFile(data.getFile());
+			final File files = fileDao.save(file);
+			System.out.println("======================FILE===================");
+			
+			final Industry industryDb = industryDao.getByCode(data.getIndustryCode());
+			final Industry industry = industryDao.getById(Industry.class, industryDb.getId());
+			company.setCompanyName(data.getCompanyName());
+			company.setAddress(data.getAddress());
+			company.setDescription(data.getDescription());
+			company.setFile(files);
+			company.setIndustry(industry);
+			
+			final Company companyResult = companyDao.saveAndFlush(company);
+			
+			final String companyInsertCandidateAPI = "http://localhost:8081/companies";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<CompanyUpdateReqDto> companyUpdate = RequestEntity.patch(companyInsertCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(companyUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				result.setVersion(companyResult.getVersion());
+				result.setMessage("Company updated successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
+		
 		return result;
 	}
 

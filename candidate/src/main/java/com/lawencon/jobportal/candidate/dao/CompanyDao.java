@@ -20,15 +20,15 @@ public class CompanyDao extends AbstractJpaDao{
 	
 	public Company getByCode(String companyCode) {
 		final String sql = "SELECT "
-				+ "c.id, c.company_name, c.company_code, c.ver, ci.city_name, c.file_id, i.industry_name "
+				+ "c.id, c.company_name, c.company_code, c.address, c.description, c.ver, ci.city_name, c.file_id, i.industry_name "
 				+ "FROM "
-				+ "t_company co "
+				+ "t_company c "
 				+ "INNER JOIN "
 				+ "t_city ci "
-				+ "ON ci.id = co.city_id "
+				+ "ON ci.id = c.city_id "
 				+ "INNER JOIN "
 				+ "t_industry i "
-				+ "ON i.id = co.industry_id "
+				+ "ON i.id = c.industry_id "
 				+ "WHERE "
 				+ "company_code = :companyCode";
 		
