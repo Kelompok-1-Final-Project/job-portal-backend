@@ -18,6 +18,9 @@
 --DROP TABLE IF EXISTS t_family;
 --DROP TABLE IF EXISTS t_relationship;
 --DROP TABLE IF EXISTS t_degree;
+--DROP TABLE IF EXISTS t_education;
+--DROP TABLE IF EXISTS t_organization;
+--DROP TABLE IF EXISTS t_work_experience;
 --DROP TABLE IF EXISTS t_candidate;
 --DROP TABLE IF EXISTS t_candidate_profile;
 --DROP TABLE IF EXISTS t_job;
@@ -444,6 +447,27 @@ ALTER TABLE t_job ADD CONSTRAINT job_position_id
 	FOREIGN KEY(job_position_id)
 	REFERENCES t_job_position(id);
 
+CREATE TABLE t_education(
+	id VARCHAR(36) NOT NULL,
+	education_name VARCHAR(30) NOT NULL,
+	start_date DATE NOT NULL,
+	end_date DATE,
+	candidate_id VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_education ADD CONSTRAINT education_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_education ADD CONSTRAINT education_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_candidate(id);
+
+
 CREATE TABLE t_user_skill(
 	id VARCHAR(36) NOT NULL ,
 	candidate_id VARCHAR(36) NOT NULL ,
@@ -654,7 +678,6 @@ ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_job_fk
 	FOREIGN KEY(job_id)
 	REFERENCES t_job(id);
 
-
 CREATE TABLE t_question(
 	id VARCHAR(36) NOT NULL ,
 	question text NOT NULL,
@@ -680,6 +703,15 @@ CREATE TABLE t_skill_test_question(
 	is_active boolean NOT NULL,
 	ver int NOT NULL
 );
+
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_question_fk
+	FOREIGN KEY(question_id)
+	REFERENCES t_question(id);
+ALTER TABLE t_skill_test_question ADD CONSTRAINT skill_test_question_skill_test_fk
+	FOREIGN KEY(skill_test_id)
+	REFERENCES t_skill_test(id);
 
 CREATE TABLE t_result(
 	id VARCHAR(36) NOT NULL,
@@ -843,6 +875,49 @@ ALTER TABLE t_family ADD CONSTRAINT family_relationship_fk
 ALTER TABLE t_family ADD CONSTRAINT family_degree_fk
 	FOREIGN KEY(degree_id)
 	REFERENCES t_degree(id);
+
+CREATE TABLE t_organization(
+	id VARCHAR(36) NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	organization_name VARCHAR(30) NOT NULL,
+	position_name VARCHAR(30) NOT NULL,
+	start_date DATE NOT NULL,
+	end_date DATE,
+	description TEXT,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_organization ADD CONSTRAINT organization_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_organization ADD CONSTRAINT organization_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_candidate(id);
+
+CREATE TABLE t_work_experience(
+	id VARCHAR(36) NOT NULL,
+	position_name VARCHAR(30) NOT NULL,
+	company_name VARCHAR(30) NOT NULL,
+	start_date DATE NOT NULL,
+	end_date DATE NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_work_experience ADD CONSTRAINT work_experience_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_work_experience ADD CONSTRAINT work_experience_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_candidate(id);
 
 
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
