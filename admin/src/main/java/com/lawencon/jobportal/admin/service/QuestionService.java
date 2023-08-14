@@ -17,6 +17,7 @@ import com.lawencon.jobportal.admin.dto.question.QuestionGetResDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionInsertReqDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionOptionReqDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionOptionResDto;
+import com.lawencon.jobportal.admin.dto.question.QuestionOptionUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionUpdateReqDto;
 import com.lawencon.jobportal.admin.model.Question;
 import com.lawencon.jobportal.admin.model.QuestionOption;
@@ -70,15 +71,24 @@ public class QuestionService {
 		final Question question = questionDao.getById(Question.class, data.getQuestionId());
 		question.setQuestion(data.getQuestion());
 		final Question questionResult = questionDao.saveAndFlush(question);
-		for(QuestionOptionResDto q:data.getListQuestionOption()) {
-			final QuestionOption questionOption = questionOptionDao.getById(QuestionOption.class, q.getQuestionOptionId());
-			questionOption.setLabels(q.getLabels());
-			questionOption.setIsAnswer(q.getIsAnswer());
-			questionOptionDao.saveAndFlush(questionOption);
-		}
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(questionResult.getVersion());
-		result.setMessage("Question Updated Successfully.");
+		result.setMessage("Question Successfully Updated.");
+		
+		em().getTransaction().commit();
+		return result;
+	}
+	
+	public UpdateResDto updateQuestionOption(QuestionOptionUpdateReqDto data) {
+		em().getTransaction().begin();
+		
+		final QuestionOption option = questionOptionDao.getById(QuestionOption.class, data.getOptionId());
+		option.setLabels(data.getLabels());
+		option.setIsAnswer(data.getIsAnswer());
+		final QuestionOption optionResult = questionOptionDao.save(option);
+		final UpdateResDto result = new UpdateResDto();
+		result.setVersion(optionResult.getVersion());
+		result.setMessage("Option Successfully Updated.");
 		
 		em().getTransaction().commit();
 		return result;
