@@ -19,7 +19,14 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	private UserDao userDao;
 	
-	public UserLoginResDto login(UserLoginReqDto userLoginReqDto)  {
+	@Autowired
+	private ProfileDao profileDao;
+	
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
+  public UserLoginResDto login(UserLoginReqDto userLoginReqDto)  {
 		final User user = userDao.getByEmail(userLoginReqDto.getUserEmail());
 
 		final UserLoginResDto userLoginResDto = new UserLoginResDto();
@@ -40,4 +47,25 @@ public class UserService implements UserDetailsService{
 		}
 		throw new UsernameNotFoundException("Email tidak ditemukan");
 	}
+  
+	public InsertResDto registerUser(UserInsertReqDto data) {
+		em().getTransaction().begin();
+		
+		final Profile profile = new Profile();
+		profile.setFullName(data.getFullname());
+		final Profile profiles = profileDao.save(profile);
+		
+		final User candidate = new User();
+		candidate.setEmail(data.getEmail());
+		candidate.setPass(data.getPass());
+		candidate.setProfile(profiles);
+		final User candidates = userDao.save(candidate);
+		
+		final InsertResDto result = new InsertResDto();
+		result.setId(candidates.getId());
+		result.setMessage("Register Successfully.");
+		em().getTransaction().commit();
+		return result;
+	}
+	
 }

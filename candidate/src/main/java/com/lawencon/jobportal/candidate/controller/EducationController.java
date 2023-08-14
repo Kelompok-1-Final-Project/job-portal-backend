@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.candidate.dto.DeleteResDto;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.education.EducationGetResDto;
 import com.lawencon.jobportal.candidate.dto.education.EducationInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.education.EducationUpdateReqDto;
 import com.lawencon.jobportal.candidate.service.EducationService;
 
 @RestController
@@ -49,5 +52,11 @@ public class EducationController {
 			response.setMessage("Delete Education Failed.");
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	@PatchMapping
+	public ResponseEntity<UpdateResDto> updateEducation(@RequestBody EducationUpdateReqDto data){
+		final UpdateResDto response = educationService.updateEducation(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

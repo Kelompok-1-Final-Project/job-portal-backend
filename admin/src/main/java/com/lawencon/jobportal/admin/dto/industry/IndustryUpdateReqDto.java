@@ -3,7 +3,6 @@ package com.lawencon.jobportal.admin.dto.industry;
 public class IndustryUpdateReqDto {
 	
 	private String industryCode;
-	
 	private String industryName;
 	
 	public String getIndustryCode() {
