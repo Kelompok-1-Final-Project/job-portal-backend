@@ -41,19 +41,19 @@ public class UserSkillController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("level")
+	@GetMapping("/level")
 	public ResponseEntity<List<LevelGetResDto>> getAllLevel() {
 		final List<LevelGetResDto> data = userSkillService.getAllLevel();
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
-	@PostMapping("user")
+	@PostMapping("/user")
 	public ResponseEntity<InsertResDto> insertUserSkill(@RequestBody UserSkillInsertReqDto data){
 		final InsertResDto response = userSkillService.insertUserSkill(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 
-	@GetMapping("user")
+	@GetMapping("/user")
 	public ResponseEntity<List<UserSkillGetResDto>> getSkillByCandidate(@RequestParam String candidateId) {
 		final List<UserSkillGetResDto> data = userSkillService.getByCandidate(candidateId);
 		return new ResponseEntity<>(data, HttpStatus.OK);

@@ -1,7 +1,5 @@
 package com.lawencon.jobportal.candidate.service;
 
-import static com.lawencon.jobportal.candidate.util.GeneratorId.generateCode;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,9 +84,8 @@ public class UserSkillService {
 	public InsertResDto insertSkill(SkillInsertReqDto data) {
 		em().getTransaction().begin();
 		
-		final String skillCode = generateCode();
 		final Skill skill = new Skill();
-		skill.setSkillCode(skillCode);
+		skill.setSkillCode(data.getSkillCode());
 		skill.setSkillName(data.getSkillName());
 		final Skill skills = skillDao.save(skill);
 		

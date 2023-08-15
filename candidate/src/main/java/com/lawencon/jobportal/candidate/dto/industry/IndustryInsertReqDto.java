@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.industry;
+package com.lawencon.jobportal.candidate.dto.industry;
 
 public class IndustryInsertReqDto {
 	private String industryName;

@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.skilltest;
+package com.lawencon.jobportal.candidate.dto.skilltest;
 
 public class SkillTestInsertReqDto {
 
