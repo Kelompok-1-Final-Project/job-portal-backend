@@ -290,7 +290,6 @@ ALTER TABLE t_gender ADD CONSTRAINT gender_bk
 
 CREATE TABLE t_profile(
 	id VARCHAR(36) NOT NULL ,
-	id_number VARCHAR(16),
 	full_name VARCHAR(30) NOT NULL,
 	mobile_number VARCHAR(15),
 	gender_id VARCHAR(36),
@@ -305,8 +304,6 @@ CREATE TABLE t_profile(
 
 ALTER TABLE t_profile ADD CONSTRAINT profile_pk
 	PRIMARY KEY(id);
-ALTER TABLE t_profile ADD CONSTRAINT profile_bk
-	UNIQUE(id_number);
 ALTER TABLE t_profile ADD CONSTRAINT profile_gender_fk
 	FOREIGN KEY(gender_id)
 	REFERENCES t_gender(id);
@@ -384,7 +381,6 @@ ALTER TABLE t_candidate_profile ADD CONSTRAINT profile_person_type_fk
 CREATE TABLE t_candidate(
 	id VARCHAR(36) NOT NULL ,
 	email VARCHAR(30) NOT NULL,
-	pass text NOT NULL,
 	profile_id VARCHAR(36) NOT NULL ,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -1014,10 +1010,10 @@ INSERT INTO t_job_position(id,position_code, position_name, created_by, created_
 	(uuid_generate_v4(), 'JP002', 'Backend Developer', (SELECT id FROM t_user WHERE email='system'),NOW(),TRUE, 0),
 	(uuid_generate_v4(), 'JP003', 'Frontend Developer', (SELECT id FROM t_user WHERE email='system'),NOW(),TRUE, 0);
 
-INSERT INTO t_profile(id, id_number, full_name, mobile_number, gender_id, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(),'1234567890','Anggi', '082219823926', (SELECT id FROM t_gender WHERE gender_code='G001'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0),
-	(uuid_generate_v4(), '0987654321','Firman','082219823926', (SELECT id FROM t_gender WHERE gender_code='G001'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0),
-	(uuid_generate_v4(),'1029384756', 'Torang','082219823926', (SELECT id FROM t_gender WHERE gender_code='G002'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0);
+INSERT INTO t_profile(id, full_name, mobile_number, gender_id, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'Anggi', '082219823926', (SELECT id FROM t_gender WHERE gender_code='G001'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Firman','082219823926', (SELECT id FROM t_gender WHERE gender_code='G001'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Torang','082219823926', (SELECT id FROM t_gender WHERE gender_code='G002'), (SELECT id FROM t_user WHERE email='system'),NOW(), TRUE, 0);
 
 INSERT INTO t_user(id, email, pass, profile_id, role_id, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'anggi@gmail.com', '$2a$12$XmaBtl7ZpZKzMsKJLOdO8.fPjI6dLE71.IFTxxEekUUXDeIMoiuhW', (SELECT id FROM t_profile WHERE full_name='Anggi'), (SELECT id FROM t_role WHERE role_code='RL001'),(SELECT id FROM t_user WHERE email='system'), NOW(), TRUE, 0),
@@ -1034,10 +1030,10 @@ INSERT INTO t_candidate_profile(id, id_number, full_name, summary, birthdate, mo
 	(uuid_generate_v4(), '0987654321', 'Firman', 'Im a Backend Developer', '2000-12-20' ,'082219823926', (SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_file WHERE file='system'),9000000,(SELECT id FROM t_gender WHERE gender_code='GD002'),(SELECT id FROM t_marital_status WHERE status_code='MS002'),(SELECT id FROM t_person_type WHERE type_code='PT002'), (SELECT id FROM t_user WHERE email='firman@gmail.com'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), '9809876567', 'Torang', 'Im a Frontend Developer','2000-12-20' ,'082219823926', (SELECT id FROM t_file WHERE file='system'),(SELECT id FROM t_file WHERE file='system'),8000000,(SELECT id FROM t_gender WHERE gender_code='GD001'),(SELECT id FROM t_marital_status WHERE status_code='MS003'),(SELECT id FROM t_person_type WHERE type_code='PT001'), (SELECT id FROM t_user WHERE email='torang@gmail.com'), NOW(), TRUE, 0);
 
-INSERT INTO t_candidate(id, email, pass, profile_id, created_by, created_at, is_active, ver) VALUES
-	(uuid_generate_v4(), 'anggi@gmail.com', 'anggi', (SELECT id FROM t_candidate_profile WHERE full_name='Anggi'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'firman@gmail.com', 'firman', (SELECT id FROM t_candidate_profile WHERE full_name='Firman'), (SELECT id FROM t_user WHERE email='firman@gmail.com'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'torang@gmail.com', 'torang', (SELECT id FROM t_candidate_profile WHERE full_name='Torang'), (SELECT id FROM t_user WHERE email='torang@gmail.com'), NOW(), TRUE, 0);
+INSERT INTO t_candidate(id, email, profile_id, created_by, created_at, is_active, ver) VALUES
+	(uuid_generate_v4(), 'anggi@gmail.com', (SELECT id FROM t_candidate_profile WHERE full_name='Anggi'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'firman@gmail.com', (SELECT id FROM t_candidate_profile WHERE full_name='Firman'), (SELECT id FROM t_user WHERE email='firman@gmail.com'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'torang@gmail.com', (SELECT id FROM t_candidate_profile WHERE full_name='Torang'), (SELECT id FROM t_user WHERE email='torang@gmail.com'), NOW(), TRUE, 0);
 
 INSERT INTO t_user_skill(id, candidate_id, skill_id , level_id , created_by , created_at , is_active , ver ) VALUES 
 	(uuid_generate_v4(), (SELECT id FROM t_candidate WHERE email='anggi@gmail.com'), (SELECT id FROM t_skill WHERE skill_code='SK001'),(SELECT id FROM t_level WHERE level_code='LV001'), (SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(), TRUE, 0),

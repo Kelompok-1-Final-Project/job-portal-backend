@@ -48,13 +48,13 @@ public class Job extends BaseEntity {
 	@JoinColumn(name = "employment_type_id")
 	private EmploymentType employementType;
 
-	@OneToOne
-	@JoinColumn(name = "hr_id")
-	private User hr;
-
-	@OneToOne
-	@JoinColumn(name = "interviewer_id")
-	private User interviewer;
+//	@OneToOne
+//	@JoinColumn(name = "hr_id")
+//	private User hr;
+//
+//	@OneToOne
+//	@JoinColumn(name = "interviewer_id")
+//	private User interviewer;
 
 	public String getJobCode() {
 		return jobCode;
@@ -136,19 +136,19 @@ public class Job extends BaseEntity {
 		this.employementType = employementType;
 	}
 
-	public User getHr() {
-		return hr;
-	}
-
-	public void setHr(User hr) {
-		this.hr = hr;
-	}
-
-	public User getInterviewer() {
-		return interviewer;
-	}
-
-	public void setInterviewer(User interviewer) {
-		this.interviewer = interviewer;
-	}
+//	public User getHr() {
+//		return hr;
+//	}
+//
+//	public void setHr(User hr) {
+//		this.hr = hr;
+//	}
+//
+//	public User getInterviewer() {
+//		return interviewer;
+//	}
+//
+//	public void setInterviewer(User interviewer) {
+//		this.interviewer = interviewer;
+//	}
 }

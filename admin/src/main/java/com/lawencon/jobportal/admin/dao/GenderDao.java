@@ -22,7 +22,7 @@ public class GenderDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "gender_code = :code";
 		
-		final Object genderObj = this.em().createNativeQuery(sql, Gender.class)
+		final Object genderObj = this.em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 		

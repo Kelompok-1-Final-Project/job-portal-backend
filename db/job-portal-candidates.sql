@@ -390,14 +390,15 @@ ALTER TABLE t_employment_type ADD CONSTRAINT employment_bk
 	UNIQUE(employment_code);
 
 CREATE TABLE t_job(
-	id VARCHAR(36) NOT NULL,
-	job_code VARCHAR(5) NOT NULL,
+	id VARCHAR(36) NOT NULL ,
+	job_code VARCHAR(5) NULL,
 	job_title VARCHAR(30) NOT NULL,
 	salary_start BIGINT NOT NULL,
 	salary_end BIGINT NOT NULL,
 	description text NOT NULL,
 	end_date DATE NOT NULL,
 	company_id VARCHAR(36) NOT NULL,
+	job_position_id VARCHAR(36) NOT NULL,
 	job_status_id VARCHAR(36) NOT NULL,
 	employment_type_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
@@ -410,6 +411,8 @@ CREATE TABLE t_job(
 
 ALTER TABLE t_job ADD CONSTRAINT job_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_job ADD CONSTRAINT job_bk
+	UNIQUE(job_code);
 ALTER TABLE t_job ADD CONSTRAINT job_company_fk
 	FOREIGN KEY(company_id)
 	REFERENCES t_company(id);
@@ -419,8 +422,9 @@ ALTER TABLE t_job ADD CONSTRAINT job_status_fk
 ALTER TABLE t_job ADD CONSTRAINT job_employment_fk
 	FOREIGN KEY(employment_type_id)
 	REFERENCES t_employment_type(id);
-ALTER TABLE t_job ADD CONSTRAINT job_fk 
-	UNIQUE(job_code);
+ALTER TABLE t_job ADD CONSTRAINT job_position_id
+	FOREIGN KEY(job_position_id)
+	REFERENCES t_job_position(id);
 
 CREATE TABLE t_skill_test(
 	id VARCHAR(36) NOT NULL ,
@@ -728,4 +732,9 @@ INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, i
 	(uuid_generate_v4(), 'JS001', 'Open', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS002', 'Closed', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS003', 'Draft', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_job_position(id,position_code, position_name, created_by, created_at,is_active,ver) VALUES 
+	(uuid_generate_v4(), 'JP001', 'Fullstack Developer', uuid_generate_v4(),NOW(),TRUE, 0),
+	(uuid_generate_v4(), 'JP002', 'Backend Developer', uuid_generate_v4(),NOW(),TRUE, 0),
+	(uuid_generate_v4(), 'JP003', 'Frontend Developer', uuid_generate_v4(),NOW(),TRUE, 0);
 
