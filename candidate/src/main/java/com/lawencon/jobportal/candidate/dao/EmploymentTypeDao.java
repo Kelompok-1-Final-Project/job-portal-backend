@@ -22,7 +22,7 @@ public class EmploymentTypeDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "employment_code = :code";
 
-		final Object employmentTypeObj = em().createNativeQuery(sql, EmploymentType.class)
+		final Object employmentTypeObj = em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 

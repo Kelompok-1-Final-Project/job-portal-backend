@@ -3,6 +3,7 @@ package com.lawencon.jobportal.admin.dto.candidate;
 public class CandidateInsertReqDto {
 
 	private String fullName;
+	private String password;
 	private String email;
 	private String idNumber;
 	private String summary;
@@ -111,6 +112,14 @@ public class CandidateInsertReqDto {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {

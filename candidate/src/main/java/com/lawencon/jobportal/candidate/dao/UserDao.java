@@ -21,8 +21,6 @@ public class UserDao extends AbstractJpaDao{
 				+ "FROM "
 				+ "t_user u "
 				+ "INNER JOIN "
-				+ "t_role r ON r.id = u.role_id "
-				+ "INNER JOIN "
 				+ "t_profile p ON p.id = u.profile_id "
 				+ "WHERE "
 				+ "u.email = :userEmail ";

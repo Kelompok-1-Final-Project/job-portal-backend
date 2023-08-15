@@ -12,9 +12,6 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "t_profile")
 public class Profile extends BaseEntity {
 
-	@Column(name = "id_number", length = 16, unique = true)
-	private String idNumber;
-
 	@Column(name = "full_name", length = 30)
 	private String fullName;
 
@@ -24,14 +21,6 @@ public class Profile extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "gender_id")
 	private Gender gender;
-
-	public String getIdNumber() {
-		return idNumber;
-	}
-
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
-	}
 
 	public String getFullName() {
 		return fullName;

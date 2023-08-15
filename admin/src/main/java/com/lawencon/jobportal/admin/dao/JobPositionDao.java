@@ -56,7 +56,7 @@ public class JobPositionDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "position_code = :positionCode";
 		
-		final Object jobPositionObj = this.em().createNativeQuery(sql, JobPosition.class)
+		final Object jobPositionObj = this.em().createNativeQuery(sql)
 				.setParameter("positionCode", positionCode)
 				.getSingleResult();
 		

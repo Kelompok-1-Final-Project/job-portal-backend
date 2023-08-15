@@ -22,7 +22,7 @@ public class JobStatusDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "status_code = :statusCode ";
 
-		final Object jobStatusObj = em().createNativeQuery(sql, JobStatus.class)
+		final Object jobStatusObj = em().createNativeQuery(sql)
 				.setParameter("statusCode", statusCode)
 				.getSingleResult();
 

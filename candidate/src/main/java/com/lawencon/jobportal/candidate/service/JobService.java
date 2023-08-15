@@ -25,7 +25,6 @@ import com.lawencon.jobportal.candidate.model.EmploymentType;
 import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
-import com.lawencon.jobportal.candidate.model.User;
 
 @Service
 public class JobService {
@@ -101,14 +100,6 @@ public class JobService {
 		final EmploymentType employmentType = employmentTypeDao.getByCode(data.getEmploymentCode());
 		final EmploymentType employmentTypeResult = employmentTypeDao.getById(EmploymentType.class, employmentType.getId());
 		job.setEmployementType(employmentTypeResult);
-		
-		final User hr = new User();
-		hr.setId(data.getHrId());
-		job.setHr(hr);
-		
-		final User interviewer = new User();
-		interviewer.setId(data.getInterviewerId());
-		job.setInterviewer(interviewer);
 		
 		final Job jobResult = jobDao.save(job);
 		
@@ -274,4 +265,6 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
+	
+	
 }

@@ -22,7 +22,7 @@ public class PersonTypeDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "type_code = :code";
 
-		final Object personTypeObj = em().createNativeQuery(sql, PersonType.class)
+		final Object personTypeObj = em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 
