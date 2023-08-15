@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.service;
+package com.lawencon.jobportal.candidate.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,33 +6,24 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
-import com.lawencon.config.JwtConfig;
-import com.lawencon.jobportal.admin.dao.CandidateDao;
-import com.lawencon.jobportal.admin.dao.JobDao;
-import com.lawencon.jobportal.admin.dao.SkillTestDao;
-import com.lawencon.jobportal.admin.dao.SkillTestQuestionDao;
-import com.lawencon.jobportal.admin.dto.InsertResDto;
-import com.lawencon.jobportal.admin.dto.UpdateResDto;
-import com.lawencon.jobportal.admin.dto.skilltest.SkillTestGetResDto;
-import com.lawencon.jobportal.admin.dto.skilltest.SkillTestInsertReqDto;
-import com.lawencon.jobportal.admin.dto.skilltest.SkillTestQuestionInsertReqDto;
-import com.lawencon.jobportal.admin.dto.skilltest.SkillTestUpdateReqDto;
-import com.lawencon.jobportal.admin.model.Candidate;
-import com.lawencon.jobportal.admin.model.Job;
-import com.lawencon.jobportal.admin.model.Question;
-import com.lawencon.jobportal.admin.model.SkillTest;
-import com.lawencon.jobportal.admin.model.SkillTestQuestion;
-import com.lawencon.jobportal.admin.util.GeneratorId;
-
+import com.lawencon.jobportal.candidate.dao.JobDao;
+import com.lawencon.jobportal.candidate.dao.SkillTestDao;
+import com.lawencon.jobportal.candidate.dao.SkillTestQuestionDao;
+import com.lawencon.jobportal.candidate.dao.UserDao;
+import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.skilltest.SkillTestGetResDto;
+import com.lawencon.jobportal.candidate.dto.skilltest.SkillTestInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.skilltest.SkillTestQuestionInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.skilltest.SkillTestUpdateReqDto;
+import com.lawencon.jobportal.candidate.model.Job;
+import com.lawencon.jobportal.candidate.model.Question;
+import com.lawencon.jobportal.candidate.model.SkillTest;
+import com.lawencon.jobportal.candidate.model.SkillTestQuestion;
+import com.lawencon.jobportal.candidate.model.User;
 @Service
 public class SkillTestService {
 	
@@ -50,10 +41,7 @@ public class SkillTestService {
 	private JobDao jobDao;
 
 	@Autowired
-	private CandidateDao candidateDao;
-	
-	@Autowired
-	private RestTemplate restTemplate;
+	private UserDao candidateDao;
 
 	public List<SkillTestGetResDto> getAll() {
 		final List<SkillTestGetResDto> skillTestGetResDtos = new ArrayList<>();
@@ -80,8 +68,8 @@ public class SkillTestService {
 		final Job job = jobDao.getById(Job.class, jobId);
 		skillTestGetResDto.setJobName(job.getJobTitle());
 
-		final Candidate candidate = candidateDao.getById(Candidate.class, candidateId);
-		skillTestGetResDto.setCandidateName(candidate.getCandidateProfile().getFullName());
+		final User candidate = candidateDao.getById(User.class, candidateId);
+		skillTestGetResDto.setCandidateName(candidate.getProfile().getFullName());
 
 		skillTestGetResDto.setVer(skillTest.getVersion());
 
@@ -138,47 +126,20 @@ public class SkillTestService {
 	}
   
 	public InsertResDto insertSkillTest(SkillTestInsertReqDto data) {
+		em().getTransaction().begin();
+		
+		final SkillTest skillTest = new SkillTest();
+		final Job job = jobDao.getByCode(data.getJobCode());
+		skillTest.setTestName(data.getTestName());
+		skillTest.setTestCode(data.getTestCode());
+		skillTest.setJob(job);
+		final SkillTest skillTestResult = skillTestDao.save(skillTest);
+		
 		final InsertResDto result = new InsertResDto();
-		try {
-			em().getTransaction().begin();
-			final SkillTest skillTest = new SkillTest();
-			final Job job = jobDao.getByCode(data.getJobCode());
-			final String skillTestCode = GeneratorId.generateCode();
-			data.setTestCode(skillTestCode);
-			skillTest.setTestCode(skillTestCode);
-			skillTest.setTestName(data.getTestName());
-			skillTest.setJob(job);
-			final SkillTest skillTestResult = skillTestDao.save(skillTest);
-			
-			final String skillTestInsertCandidateAPI = "http://localhost:8081/skilltests";
-
-			final HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			headers.setBearerAuth(JwtConfig.get());
-			
-			final RequestEntity<SkillTestInsertReqDto> companyInsert = RequestEntity.post(skillTestInsertCandidateAPI).headers(headers)
-					.body(data);
-
-			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(companyInsert, InsertResDto.class);
-
-			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
-				result.setId(skillTestResult.getId());
-				result.setMessage("Insert Skill Test Successfully.");
-				em().getTransaction().commit();
-			} else {
-				em().getTransaction().rollback();
-				throw new RuntimeException("Insert Failed");
-			}
-			
-			
-		} catch (Exception e) {
-			em().getTransaction().rollback();
-			e.printStackTrace();
-		}
+		result.setId(skillTestResult.getId());
+		result.setMessage("Insert Skill Test Successfully.");
 		
-		
-		
-		
+		em().getTransaction().commit();
 		return result;
 	}
 	

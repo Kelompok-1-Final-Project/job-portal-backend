@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.industry.IndustryGetResDto;
+import com.lawencon.jobportal.candidate.dto.industry.IndustryInsertReqDto;
 import com.lawencon.jobportal.candidate.service.IndustryService;
 
 @RestController
@@ -31,5 +35,11 @@ public class IndustryController {
 		final IndustryGetResDto response = industryService.getByName(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
    }
+	
+	@PostMapping
+	public ResponseEntity<InsertResDto> insert(@RequestBody IndustryInsertReqDto data) {
+		final InsertResDto response = industryService.insert(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
 
 }

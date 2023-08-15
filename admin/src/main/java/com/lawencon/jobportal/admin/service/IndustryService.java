@@ -8,9 +8,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.dao.IndustryDao;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -31,21 +38,45 @@ public class IndustryService{
 	@Autowired
 	private IndustryDao industryDao;
 	
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	public InsertResDto insert(IndustryInsertReqDto data) {
-		em().getTransaction().begin();
-		
-		final String industryCode = generateCode();
-		final Industry industry = new Industry();
-		industry.setIndustryCode(industryCode);
-		industry.setIndustryName(data.getIndustryName());
-		final Industry industries = industryDao.save(industry);
-		
 		final InsertResDto result = new InsertResDto();
-		result.setId(industries.getId());
-		result.setMessage("Industry added successfully");
-		
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			final String industryCode = generateCode();
+			final Industry industry = new Industry();
+			data.setIndustryCode(industryCode);
+			industry.setIndustryCode(industryCode);
+			industry.setIndustryName(data.getIndustryName());
+			final Industry industries = industryDao.save(industry);
+			
+			final String industryInseryCandidateAPI = "http://localhost:8081/industries";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<IndustryInsertReqDto> industryInsert = RequestEntity.post(industryInseryCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(industryInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(industries.getId());
+				result.setMessage("Industry added successfully");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+			
 		return result;
 	}
 	

@@ -340,7 +340,8 @@ ALTER TABLE t_job_position ADD CONSTRAINT job_position_bk
 	UNIQUE(position_code);
 
 CREATE TABLE t_question(
-	id VARCHAR(36) NOT NULL ,
+	id VARCHAR(36) NOT NULL,
+	question_code VARCHAR(5) NOT NULL,
 	question text NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -352,6 +353,8 @@ CREATE TABLE t_question(
 
 ALTER TABLE t_question ADD CONSTRAINT question_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_question ADD CONSTRAINT question_bk
+	UNIQUE(question_code);
 
 CREATE TABLE t_question_option(
 	id VARCHAR(36) NOT NULL ,
@@ -428,6 +431,7 @@ ALTER TABLE t_job ADD CONSTRAINT job_position_id
 
 CREATE TABLE t_skill_test(
 	id VARCHAR(36) NOT NULL ,
+	test_code VARCHAR(5) NOT NULL,
 	test_name VARCHAR(30) NOT NULL,
 	job_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
@@ -443,7 +447,8 @@ ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_pk
 ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_job_fk
 	FOREIGN KEY(job_id)
 	REFERENCES t_job(id);
-
+ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_bk
+	UNIQUE(test_code);
 
 CREATE TABLE t_skill_test_question(
 	id VARCHAR(36) NOT NULL,
