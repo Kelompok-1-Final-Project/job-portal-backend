@@ -44,4 +44,19 @@ public class QuestionDao extends AbstractJpaDao{
 		
 		return listQuestion;
 	}
+	
+	public Question getByCode(String questionCode) {
+		final String sql = "SELECT "
+				+ "q "
+				+ "FROM "
+				+ "Question q "
+				+ "WHERE "
+				+ "q.questionCode = :questionCode";
+		
+		final Question question = em().createQuery(sql, Question.class)
+				.setParameter("questionCode", questionCode)
+				.getSingleResult();
+		
+		return question;
+	}
 }

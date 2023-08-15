@@ -18,6 +18,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
+import com.lawencon.jobportal.admin.dao.QuestionDao;
 import com.lawencon.jobportal.admin.dao.SkillTestDao;
 import com.lawencon.jobportal.admin.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -51,6 +52,9 @@ public class SkillTestService {
 
 	@Autowired
 	private CandidateDao candidateDao;
+	
+	@Autowired
+	private QuestionDao questionDao;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -88,32 +92,46 @@ public class SkillTestService {
 		return skillTestGetResDto;
 	}
 
-	public InsertResDto assignTest(List<SkillTestQuestionInsertReqDto> data) {
-		em().getTransaction().begin();
-		
+	public InsertResDto assignTest(SkillTestQuestionInsertReqDto data) {		
 		final InsertResDto insertResDto = new InsertResDto();
-
 		try {
-			if (data.size() != 0 && data != null) {
-				data.forEach(d -> {
-					final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
-
-					final Question question = new Question();
-					question.setId(d.getQuestionId());
+			em().getTransaction().begin();
+			if (data != null) {
+				SkillTestQuestion skillTestQuestion = null;
+				for (String code : data.getQuestionCode()) {
+					skillTestQuestion = new SkillTestQuestion();
+					
+					final Question question = questionDao.getByCode(code);
 					skillTestQuestion.setQuestion(question);
-
-					final SkillTest skillTest = new SkillTest();
-					skillTest.setId(d.getSkillTestId());
+					
+					SkillTest skillTest = skillTestDao.getByCode(data.getSkillTestCode());
 					skillTestQuestion.setSkillTest(skillTest);
 
 					skillTestQuestionDao.save(skillTestQuestion);
-				});
-				insertResDto.setMessage("Assign Test Success");
+				}
+				
+				final String skillTestInsertCandidateAPI = "http://localhost:8081/skilltests/question";
+
+				final HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				headers.setBearerAuth(JwtConfig.get());
+				
+				final RequestEntity<SkillTestQuestionInsertReqDto> skillTestInsert = RequestEntity.post(skillTestInsertCandidateAPI).headers(headers)
+						.body(data);
+
+				final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(skillTestInsert, InsertResDto.class);
+
+				if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+					insertResDto.setMessage("Assign Test Success");
+					em().getTransaction().commit();
+				} else {
+					em().getTransaction().rollback();
+					throw new RuntimeException("Insert Failed");
+				}
 			}
 			else {
 				insertResDto.setMessage("Assign Test Failed");
 			}
-			em().getTransaction().commit();
 		}catch (Exception e) {
 			e.printStackTrace();
 			em().getTransaction().rollback();
@@ -175,9 +193,6 @@ public class SkillTestService {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
-		
-		
-		
 		
 		return result;
 	}

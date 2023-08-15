@@ -49,4 +49,19 @@ public class SkillTestDao extends AbstractJpaDao{
 		
 		return skillTest;
 	}
+	
+	public SkillTest getByCode(String testCode) {
+		final String sql = "SELECT "
+				+ "st "
+				+ "FROM "
+				+ "SkillTest st "
+				+ "WHERE "
+				+ "st.testCode = :testCode";
+		
+		final SkillTest skillTest = em().createQuery(sql, SkillTest.class)
+				.setParameter("testCode", testCode)
+				.getSingleResult();
+		
+		return skillTest;
+	}
 }
