@@ -18,7 +18,9 @@ import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.StatusProcessDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.jobstatus.CandidateProgressInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.jobstatus.CandidateProgressUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobCandidateStatus;
 import com.lawencon.jobportal.candidate.model.StatusProcess;
@@ -85,6 +87,23 @@ public class ProgressStatusService {
 			e.printStackTrace();
 		}
 		
+		return result;
+	}
+	
+	public UpdateResDto updateCandidateProgress(CandidateProgressUpdateReqDto data) {
+		em().getTransaction().begin();
+		
+		final JobCandidateStatus progress = jobCandidateStatusDao.getByCandidateAndJob(data.getCandidateEmail(), data.getJobCode());
+		final JobCandidateStatus getId = jobCandidateStatusDao.getById(JobCandidateStatus.class, progress.getId());
+		final StatusProcess status = statusProcessDao.getByCode(data.getStatusCode());
+		getId.setStatus(status);
+		final JobCandidateStatus progressResult = jobCandidateStatusDao.saveAndFlush(getId);
+		
+		final UpdateResDto result = new UpdateResDto();
+		result.setVersion(progressResult.getVersion());
+		result.setMessage("Update Progress Successfully.");
+		
+		em().getTransaction().commit();
 		return result;
 	}
 	

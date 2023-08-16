@@ -1,9 +1,8 @@
 package com.lawencon.jobportal.admin.dto.candidateprogress;
 
-public class CandidateProgressUpdateReqDto {
-
+public class CandidateRejectReqDto {
 	private String candidateProgressId;
-	private String statusProcessCode;
+	private String StatusProcessCode;
 
 	public String getCandidateProgressId() {
 		return candidateProgressId;
@@ -14,11 +13,11 @@ public class CandidateProgressUpdateReqDto {
 	}
 
 	public String getStatusProcessCode() {
-		return statusProcessCode;
+		return StatusProcessCode;
 	}
 
 	public void setStatusProcessCode(String statusProcessCode) {
-		this.statusProcessCode = statusProcessCode;
+		StatusProcessCode = statusProcessCode;
 	}
 
 }
