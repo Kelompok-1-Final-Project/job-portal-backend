@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.candidate.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
@@ -19,6 +20,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.candidate.constant.PersonTypeEnum;
+import com.lawencon.jobportal.candidate.dao.FileDao;
+import com.lawencon.jobportal.candidate.dao.GenderDao;
+import com.lawencon.jobportal.candidate.dao.MaritalStatusDao;
 import com.lawencon.jobportal.candidate.dao.PersonTypeDao;
 import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
@@ -26,6 +30,10 @@ import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserRegisterByAdminReqDto;
+import com.lawencon.jobportal.candidate.model.File;
+import com.lawencon.jobportal.candidate.model.Gender;
+import com.lawencon.jobportal.candidate.model.MaritalStatus;
 import com.lawencon.jobportal.candidate.model.PersonType;
 import com.lawencon.jobportal.candidate.model.Profile;
 import com.lawencon.jobportal.candidate.model.User;
@@ -41,7 +49,16 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private PersonTypeDao personTypeDao;
+	
+	@Autowired
+	private FileDao fileDao;
 
+	@Autowired
+	private GenderDao genderDao;
+	
+	@Autowired
+	private MaritalStatusDao maritalStatusDao;
+	
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -117,6 +134,64 @@ public class UserService implements UserDetailsService {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
+		return result;
+	}
+	
+	public InsertResDto insertCandidate(UserRegisterByAdminReqDto data) {
+		final InsertResDto result = new InsertResDto();
+		try {
+			em().getTransaction().begin();
+
+			final Profile candidateProfile = new Profile();
+			candidateProfile.setFullName(data.getFullName());
+			candidateProfile.setIdNumber(data.getIdNumber());
+			candidateProfile.setSummary(data.getSummary());
+			candidateProfile.setBirthdate(LocalDate.parse(data.getBirthdate()));
+			candidateProfile.setMobileNumber(data.getMobileNumber());
+
+			final File photo = new File();
+			photo.setExt(data.getPhotoExt());
+			photo.setFile(data.getPhotoFiles());
+			final File photoResult = fileDao.save(photo);
+			candidateProfile.setPhoto(photoResult);
+
+			final File cv = new File();
+			cv.setExt(data.getCvExt());
+			cv.setFile(data.getCvFiles());
+			final File cvResult = fileDao.save(cv);
+			candidateProfile.setCv(cvResult);
+
+			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
+
+			final Gender gender = genderDao.getByCode(data.getGenderCode());
+			final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
+			candidateProfile.setGender(genderResult);
+
+			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
+			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
+			candidateProfile.setMaritalStatus(maritalResult);
+
+			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
+			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
+			candidateProfile.setPersonType(personType);
+			final Profile profileResult = profileDao.save(candidateProfile);
+
+			final User candidate = new User();
+			candidate.setEmail(data.getEmail());
+			candidate.setProfile(profileResult);
+			candidate.setPass(data.getPassword());
+			
+			final User candidateResult = userDao.save(candidate);
+
+			result.setId(candidateResult.getId());
+			result.setMessage("Candidate inserted successfully");
+
+			em().getTransaction().commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
+		
 		return result;
 	}
 

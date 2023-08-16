@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dao;
+package com.lawencon.jobportal.candidate.dao;
 
 import javax.persistence.EntityManager;
 
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
-import com.lawencon.jobportal.admin.model.StatusProcess;
+import com.lawencon.jobportal.candidate.model.StatusProcess;
 
 @Repository
 public class StatusProcessDao extends AbstractJpaDao{

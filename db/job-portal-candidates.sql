@@ -32,6 +32,8 @@
 --DROP TABLE IF EXISTS t_status_process;
 --DROP TABLE IF EXISTS t_file;
 
+DELETE FROM t_user WHERE id = '0ac8856a-e1d0-4fbf-9fcc-00fc9d600872';
+DELETE FROM t_profile WHERE id = '5da0c8ce-ade7-4c5b-a3b9-b632bc5b4361';
 
 CREATE TABLE t_file(
 	id VARCHAR(36) NOT NULL,
@@ -697,8 +699,8 @@ INSERT INTO t_employment_type (id, employment_code, employment_name, created_by,
 	(uuid_generate_v4(), 'ET004', 'Part Time', uuid_generate_v4(), NOW(),TRUE,0);
 
 INSERT INTO t_gender(id, gender_name, gender_code, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Male', 'G001', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Female', 'G002', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'Male', 'GD001', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Female', 'GD002', uuid_generate_v4(), NOW(), TRUE, 0);
 
 INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at,  is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ID001', 'Technology', uuid_generate_v4(), NOW(), TRUE, 0),
@@ -743,3 +745,11 @@ INSERT INTO t_job_position(id,position_code, position_name, created_by, created_
 	(uuid_generate_v4(), 'JP002', 'Backend Developer', uuid_generate_v4(),NOW(),TRUE, 0),
 	(uuid_generate_v4(), 'JP003', 'Frontend Developer', uuid_generate_v4(),NOW(),TRUE, 0);
 
+INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'SP001', 'Application', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP002', 'Assessment', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP003', 'Interview', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP004', 'Medical Check Up', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP005', 'Offering', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);

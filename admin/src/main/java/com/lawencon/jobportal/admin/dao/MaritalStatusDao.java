@@ -22,7 +22,7 @@ public class MaritalStatusDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "status_code = :code";
 
-		final Object maritalObj = em().createNativeQuery(sql, MaritalStatus.class)
+		final Object maritalObj = em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 
