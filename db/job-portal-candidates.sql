@@ -32,8 +32,8 @@
 --DROP TABLE IF EXISTS t_status_process;
 --DROP TABLE IF EXISTS t_file;
 
-DELETE FROM t_user WHERE id = '0ac8856a-e1d0-4fbf-9fcc-00fc9d600872';
-DELETE FROM t_profile WHERE id = '5da0c8ce-ade7-4c5b-a3b9-b632bc5b4361';
+--DELETE FROM t_user WHERE id = '0ac8856a-e1d0-4fbf-9fcc-00fc9d600872';
+--DELETE FROM t_profile WHERE id = '5da0c8ce-ade7-4c5b-a3b9-b632bc5b4361';
 
 CREATE TABLE t_file(
 	id VARCHAR(36) NOT NULL,
