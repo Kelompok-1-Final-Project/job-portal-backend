@@ -9,8 +9,8 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.Company;
 
 @Repository
-public class CompanyDao extends AbstractJpaDao{
-	
+public class CompanyDao extends AbstractJpaDao {
+
 	private EntityManager em() {
 		return ConnHandler.getManager();
 	}

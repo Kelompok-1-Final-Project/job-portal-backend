@@ -22,7 +22,7 @@ public class IndustryDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "industry_code = :code";
 
-		final Object industryObj = em().createNativeQuery(sql)
+		final Object industryObj = em().createNativeQuery(sql, Industry.class)
 				.setParameter("code", code)
 				.getSingleResult();
 

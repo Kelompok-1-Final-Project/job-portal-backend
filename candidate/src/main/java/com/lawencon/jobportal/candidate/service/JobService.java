@@ -46,7 +46,7 @@ public class JobService {
 	private JobPositionDao jobPositionDao;
 
 	@Autowired
-	private EmploymentTypeDao employmentTypeDao;
+	private EmploymentTypeDao employmentTypeDao
 	
 	public List<JobStatusGetResDto> getAllJobStatus() {
 		final List<JobStatusGetResDto> jobStatusGetResDtos = new ArrayList<>();

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.Industry;
 
 @Repository

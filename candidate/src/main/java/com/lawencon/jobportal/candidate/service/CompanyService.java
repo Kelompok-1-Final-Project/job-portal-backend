@@ -60,6 +60,7 @@ public class CompanyService {
 	public InsertResDto insertCompany(CompanyInsertReqDto data) {
 		final InsertResDto result = new InsertResDto();
 		try {
+
 			em().getTransaction().begin();
 
 			final File file = new File();
@@ -85,7 +86,6 @@ public class CompanyService {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
-		
 		return result;
 	}
 
@@ -108,7 +108,7 @@ public class CompanyService {
 		company.setFile(files);
 		company.setIndustry(industry);
 		final Company companyResult = companyDao.saveAndFlush(company);
-		
+
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(companyResult.getVersion());
 		result.setMessage("Company updated successfully.");
