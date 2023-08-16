@@ -752,4 +752,5 @@ INSERT INTO t_status_process(id, process_code, process_name, created_by, created
 	(uuid_generate_v4(), 'SP004', 'Medical Check Up', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP005', 'Offering', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP008', 'Blacklist', uuid_generate_v4(), NOW(), TRUE, 0);
