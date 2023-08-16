@@ -119,12 +119,8 @@ public class CompanyService {
 
 	public UpdateResDto updateCompany(CompanyUpdateReqDto data) {
 		final UpdateResDto result = new UpdateResDto();
-		System.out.println("=================================================");
 		try {
-			System.out.println("======================TRY===================");
 			em().getTransaction().begin();
-			
-			System.out.println("======================BEGAL===================");
 
 			final Company companyDb = companyDao.getByCode(data.getCompanyCode());
 			System.out.println(companyDb+ "Company ");
@@ -135,8 +131,7 @@ public class CompanyService {
 			file.setExt(data.getExt());
 			file.setFile(data.getFile());
 			final File files = fileDao.save(file);
-			System.out.println("======================FILE===================");
-			
+
 			final Industry industryDb = industryDao.getByCode(data.getIndustryCode());
 			final Industry industry = industryDao.getById(Industry.class, industryDb.getId());
 			company.setCompanyName(data.getCompanyName());

@@ -1,9 +1,9 @@
-package com.lawencon.jobportal.admin.dto.application;
+package com.lawencon.jobportal.candidate.dto.jobstatus;
 
-public class ApplicationInsertReqDto {
-
+public class CandidateProgressUpdateReqDto {
 	private String candidateEmail;
 	private String jobCode;
+	private String statusCode;
 
 	public String getCandidateEmail() {
 		return candidateEmail;
@@ -19,6 +19,14 @@ public class ApplicationInsertReqDto {
 
 	public void setJobCode(String jobCode) {
 		this.jobCode = jobCode;
+	}
+
+	public String getStatusCode() {
+		return statusCode;
+	}
+
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
 	}
 
 }
