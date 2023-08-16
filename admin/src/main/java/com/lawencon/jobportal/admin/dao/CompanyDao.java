@@ -16,17 +16,17 @@ public class CompanyDao extends AbstractJpaDao {
 	}
 
 	public Company getByCode(String companyCode) {
-			final String sql = "SELECT "
-					+ "c "
-					+ "FROM "
-					+ "Company c "
-					+ "WHERE "
-					+ "c.companyCode = :companyCode";
-			
-			final Company company = em().createQuery(sql, Company.class)
-					.setParameter("companyCode", companyCode)
-					.getSingleResult();
-			
-			return company;
-		}
+		final String sql = "SELECT "
+				+ "c "
+				+ "FROM "
+				+ "Company c "
+				+ "WHERE "
+				+ "c.companyCode = :companyCode";
+		
+		final Company company = em().createQuery(sql, Company.class)
+				.setParameter("companyCode", companyCode)
+				.getSingleResult();
+		
+		return company;
+	}
 }

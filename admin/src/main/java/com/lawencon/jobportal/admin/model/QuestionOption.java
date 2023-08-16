@@ -19,7 +19,7 @@ public class QuestionOption extends BaseEntity{
 	private Boolean isAnswer;
 	
 	@OneToOne
-	@JoinColumn(name = "t_question")
+	@JoinColumn(name = "question_id")
 	private Question question;
 
 	public String getLabels() {

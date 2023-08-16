@@ -3,7 +3,6 @@ package com.lawencon.jobportal.candidate.dto.user;
 public class UserLoginResDto {
 	private String token;
 	private String userId;
-	private String roleCode;
 	private String userName;
 	private String message;
 	private String photoId;
@@ -22,14 +21,6 @@ public class UserLoginResDto {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-
-	public String getRoleCode() {
-		return roleCode;
-	}
-
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
 	}
 
 	public String getUserName() {

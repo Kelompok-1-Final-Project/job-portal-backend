@@ -23,7 +23,7 @@ public class RoleDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "role_code = :code";
 		
-		final Object roleObj = em().createNativeQuery(sql, Role.class)
+		final Object roleObj = em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 		

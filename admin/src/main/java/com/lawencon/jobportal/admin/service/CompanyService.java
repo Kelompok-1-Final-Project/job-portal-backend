@@ -97,6 +97,7 @@ public class CompanyService {
 			}
 		} catch (Exception e) {
 			em().getTransaction().rollback();
+			e.printStackTrace();
 		}
 		return result;
 	}
@@ -126,6 +127,7 @@ public class CompanyService {
 			System.out.println("======================BEGAL===================");
 
 			final Company companyDb = companyDao.getByCode(data.getCompanyCode());
+			System.out.println(companyDb+ "Company ");
 			System.out.println(companyDb.getId() + "ID ");
 			final Company company = companyDao.getById(Company.class, companyDb.getId());
 

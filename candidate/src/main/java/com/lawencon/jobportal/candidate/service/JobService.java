@@ -17,15 +17,14 @@ import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
-import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
+import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
 import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
-import com.lawencon.jobportal.candidate.model.User;
 
 @Service
 public class JobService {
@@ -47,8 +46,7 @@ public class JobService {
 	private JobPositionDao jobPositionDao;
 
 	@Autowired
-	private EmploymentTypeDao employmentTypeDao;
-
+	private EmploymentTypeDao employmentTypeDao
 	
 	public List<JobStatusGetResDto> getAllJobStatus() {
 		final List<JobStatusGetResDto> jobStatusGetResDtos = new ArrayList<>();
@@ -85,6 +83,7 @@ public class JobService {
 		job.setSalaryEnd(data.getSalaryEnd());
 		job.setDescription(data.getDescription());
 		job.setEndDate(LocalDate.parse(data.getEndDate()));
+		job.setJobCode(data.getJobCode());
 		
 		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
 		final Company companyResult = companyDao.getById(Company.class, companyDb.getId());
@@ -101,14 +100,6 @@ public class JobService {
 		final EmploymentType employmentType = employmentTypeDao.getByCode(data.getEmploymentCode());
 		final EmploymentType employmentTypeResult = employmentTypeDao.getById(EmploymentType.class, employmentType.getId());
 		job.setEmployementType(employmentTypeResult);
-		
-		final User hr = new User();
-		hr.setId(data.getHrId());
-		job.setHr(hr);
-		
-		final User interviewer = new User();
-		interviewer.setId(data.getInterviewerId());
-		job.setInterviewer(interviewer);
 		
 		final Job jobResult = jobDao.save(job);
 		
@@ -274,4 +265,6 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
+	
+	
 }

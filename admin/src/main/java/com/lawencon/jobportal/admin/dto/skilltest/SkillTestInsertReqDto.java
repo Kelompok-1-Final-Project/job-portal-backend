@@ -3,7 +3,8 @@ package com.lawencon.jobportal.admin.dto.skilltest;
 public class SkillTestInsertReqDto {
 
 	private String testName;
-	private String jobId;
+	private String testCode;
+	private String jobCode;
 
 	public String getTestName() {
 		return testName;
@@ -13,12 +14,20 @@ public class SkillTestInsertReqDto {
 		this.testName = testName;
 	}
 
-	public String getJobId() {
-		return jobId;
+	public String getTestCode() {
+		return testCode;
 	}
 
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setTestCode(String testCode) {
+		this.testCode = testCode;
+	}
+
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
 	}
 
 }

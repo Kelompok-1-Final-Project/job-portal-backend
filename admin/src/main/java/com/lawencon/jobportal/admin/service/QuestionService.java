@@ -6,9 +6,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.dao.QuestionDao;
 import com.lawencon.jobportal.admin.dao.QuestionOptionDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -21,6 +28,7 @@ import com.lawencon.jobportal.admin.dto.question.QuestionOptionUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionUpdateReqDto;
 import com.lawencon.jobportal.admin.model.Question;
 import com.lawencon.jobportal.admin.model.QuestionOption;
+import com.lawencon.jobportal.admin.util.GeneratorId;
 
 @Service
 public class QuestionService {
@@ -35,16 +43,23 @@ public class QuestionService {
 	@Autowired
 	private QuestionOptionDao questionOptionDao;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	public InsertResDto insertQuestion(List<QuestionInsertReqDto> data) {
-		em().getTransaction().begin();
-		
+		final InsertResDto result = new InsertResDto();
 		try {
+			em().getTransaction().begin();
 			Question questionResult  = null;
-			for(QuestionInsertReqDto req:data) {
+			for(int i = 0; i < data.size(); i++) {
 				final Question question = new Question();
-				question.setQuestion(req.getQuestion());
+				question.setQuestion(data.get(i).getQuestion());
+				final String questionCode = GeneratorId.generateCode();
+				question.setQuestionCode(questionCode);
+				data.get(i).setQuestionCode(questionCode);
+				
 				questionResult = questionDao.save(question);
-				final List<QuestionOptionReqDto> listQuestionOption = req.getListQuestionOption();
+				final List<QuestionOptionReqDto> listQuestionOption = data.get(i).getListQuestionOption();
 				for(QuestionOptionReqDto q:listQuestionOption) {
 					final QuestionOption questionOption = new QuestionOption();
 					questionOption.setQuestion(questionResult);
@@ -53,14 +68,28 @@ public class QuestionService {
 					questionOptionDao.save(questionOption);
 				}
 			}
-			em().getTransaction().commit();
-		}catch (Exception e) {
-			e.printStackTrace();
+			final String questionCandidateAPI = "http://localhost:8081/questions";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+
+			final RequestEntity<List<QuestionInsertReqDto>> questionInsert = RequestEntity.post(questionCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(questionInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setMessage("Question Successfully Inserted.");
+				
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
 			em().getTransaction().rollback();
 		}
-		
-		final InsertResDto result = new InsertResDto();
-		result.setMessage("Question Successfully Inserted.");
 		
 		return result;
 	}

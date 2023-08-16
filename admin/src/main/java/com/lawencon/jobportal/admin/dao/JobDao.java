@@ -23,6 +23,7 @@ public class JobDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
+	
 	public List<Job> getByLocation(String location) {
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
@@ -83,6 +84,21 @@ public class JobDao extends AbstractJpaDao{
 		}
 		
 		return listJob;
+	}
+	
+	public Job getByCode(String jobCode) {
+		final String sql = "SELECT "
+				+ "j "
+				+ "FROM "
+				+ "Job j "
+				+ "WHERE "
+				+ "j.jobCode = :jobCode";
+		
+		final Job job = em().createQuery(sql, Job.class)
+				.setParameter("jobCode", jobCode)
+				.getSingleResult();
+		
+		return job;
 	}
 	
 	public List<Job> getByCompany(String companyName){

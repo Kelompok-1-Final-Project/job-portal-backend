@@ -29,28 +29,31 @@ import com.lawencon.jobportal.admin.model.User;
 import com.lawencon.jobportal.admin.util.GeneratorId;
 
 @Service
-public class UserService implements UserDetailsService{
-	
+public class UserService implements UserDetailsService {
+
 	private EntityManager em() {
 		return ConnHandler.getManager();
 	}
-	
+
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private GenderDao genderDao;
-	
+
 	@Autowired
 	private ProfileDao profileDao;
-	
+
 	@Autowired
 	private RoleDao roleDao;
-		
+
+	@Autowired
+	private EmailService emailService;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
-	public List<UserGetResDto> getAll(){
+
+	public List<UserGetResDto> getAll() {
 		final List<UserGetResDto> usersDto = new ArrayList<>();
 		userDao.getAll(User.class).forEach(u -> {
 			final UserGetResDto userGetResDto = new UserGetResDto();
@@ -65,69 +68,70 @@ public class UserService implements UserDetailsService{
 
 		return usersDto;
 	}
-	
-	
+
 	public InsertResDto insert(UserInsertReqDto data) {
 		em().getTransaction().begin();
-		
+
 		User userResult = null;
 		final InsertResDto insertResDto = new InsertResDto();
-		
+
 		final Profile profile = new Profile();
 
 		profile.setFullName(data.getFullName());
 		profile.setMobileNumber(data.getUserPhone());
-		profile.setIdNumber(data.getIdNumber());
-		
+
 		final Gender gender = genderDao.getByCode(data.getGenderCode());
 		profile.setGender(gender);
-		
+
 		final Profile profileResult = profileDao.save(profile);
-		
+
 		final User user = new User();
 		user.setEmail(data.getUserEmail());
-		
+
 		final String pass = GeneratorId.generateCode();
+
+		final String message = "Email: " + data.getUserEmail() + "\nPassword: " + pass;
 		
+		emailService.sendEmail(data.getUserEmail(), "Registrasi User", message);
+
 		final String passEncode = passwordEncoder.encode(pass);
 		user.setPass(passEncode);
 		user.setProfile(profileResult);
-		
+
 		final Role role = roleDao.getByCode(data.getRoleCode());
 		user.setRole(role);
-		
+
 		userResult = userDao.save(user);
-			
-		if(userResult != null) {
+
+		if (userResult != null) {
 			insertResDto.setId(userResult.getId());
 			insertResDto.setMessage("Insert Data Berhasil");
 		}
-		
+
 		em().getTransaction().commit();
 		return insertResDto;
 	}
-	
-	public UserLoginResDto login(UserLoginReqDto userLoginReqDto)  {
+
+	public UserLoginResDto login(UserLoginReqDto userLoginReqDto) {
 		final User user = userDao.getByEmail(userLoginReqDto.getUserEmail());
 
 		final UserLoginResDto userLoginResDto = new UserLoginResDto();
-		
+
 		userLoginResDto.setUserId(user.getId());
 		userLoginResDto.setRoleCode(user.getRole().getRoleCode());
 		userLoginResDto.setUserName(user.getProfile().getFullName());
 //		userLoginResDto.setPhotoId(user.getProfile());
-		
-		
+
 		return userLoginResDto;
 	}
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		final User user =  userDao.getByEmail(username);
-		if(user != null) {
+		final User user = userDao.getByEmail(username);
+		if (user != null) {
 			return new org.springframework.security.core.userdetails.User(username, user.getPass(), new ArrayList<>());
 		}
 		throw new UsernameNotFoundException("Email tidak ditemukan");
 	}
-	
+
 }

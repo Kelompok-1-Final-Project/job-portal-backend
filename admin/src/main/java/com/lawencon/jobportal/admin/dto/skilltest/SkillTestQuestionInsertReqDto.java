@@ -1,23 +1,25 @@
 package com.lawencon.jobportal.admin.dto.skilltest;
 
+import java.util.List;
+
 public class SkillTestQuestionInsertReqDto {
-	private String questionId;
-	private String skillTestId;
+	private List<String> questionCode;
+	private String skillTestCode;
 
-	public String getQuestionId() {
-		return questionId;
+	public List<String> getQuestionCode() {
+		return questionCode;
 	}
 
-	public void setQuestionId(String questionId) {
-		this.questionId = questionId;
+	public void setQuestionCode(List<String> questionCode) {
+		this.questionCode = questionCode;
 	}
 
-	public String getSkillTestId() {
-		return skillTestId;
+	public String getSkillTestCode() {
+		return skillTestCode;
 	}
 
-	public void setSkillTestId(String skillTestId) {
-		this.skillTestId = skillTestId;
+	public void setSkillTestCode(String skillTestCode) {
+		this.skillTestCode = skillTestCode;
 	}
 
 }

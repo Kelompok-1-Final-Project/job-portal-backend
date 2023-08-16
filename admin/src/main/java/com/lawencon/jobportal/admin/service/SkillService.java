@@ -8,9 +8,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.dao.LevelDao;
 import com.lawencon.jobportal.admin.dao.SkillDao;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
@@ -36,20 +43,45 @@ public class SkillService {
 	@Autowired
 	private LevelDao levelDao;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	public InsertResDto insert(SkillInsertReqDto data) {
-		em().getTransaction().begin();
-		
-		final String skillCode = generateCode();
-		final Skill skill = new Skill();
-		skill.setSkillCode(skillCode);
-		skill.setSkillName(data.getSkillName());
-		final Skill skills = skillDao.save(skill);
-		
 		final InsertResDto result = new InsertResDto();
-		result.setId(skills.getId());
-		result.setMessage("Success add Skill");
 		
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			final String skillCode = generateCode();
+			final Skill skill = new Skill();
+			data.setSkillCode(skillCode);
+			skill.setSkillCode(skillCode);
+			skill.setSkillName(data.getSkillName());
+			final Skill skills = skillDao.save(skill);
+
+			final String skillInserCandidateAPI = "http://localhost:8081/skills";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<SkillInsertReqDto> skillInsert = RequestEntity.post(skillInserCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(skillInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(skills.getId());
+				result.setMessage("Success add Skill");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
 		return result;
 	}
 	

@@ -23,7 +23,7 @@ public class StatusProcessDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "process_code = :code";
 
-		final Object statusObj = this.em().createNativeQuery(sql, StatusProcess.class)
+		final Object statusObj = this.em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 

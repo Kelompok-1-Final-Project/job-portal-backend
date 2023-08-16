@@ -59,7 +59,6 @@ public class CompanyService {
 
 	public InsertResDto insertCompany(CompanyInsertReqDto data) {
 		final InsertResDto result = new InsertResDto();
-
 		try {
 
 			em().getTransaction().begin();
@@ -85,6 +84,7 @@ public class CompanyService {
 			em().getTransaction().commit();
 		} catch (Exception e) {
 			em().getTransaction().rollback();
+			e.printStackTrace();
 		}
 		return result;
 	}

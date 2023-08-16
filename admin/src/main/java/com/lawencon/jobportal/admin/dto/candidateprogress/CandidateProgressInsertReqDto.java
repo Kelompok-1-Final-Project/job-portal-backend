@@ -2,32 +2,32 @@ package com.lawencon.jobportal.admin.dto.candidateprogress;
 
 public class CandidateProgressInsertReqDto {
 
-	private String candidateId;
-	private String jobId;
-	private String statusId;
+	private String candidateEmail;
+	private String jobCode;
+	private String statusCode;
 
-	public String getCandidateId() {
-		return candidateId;
+	public String getCandidateEmail() {
+		return candidateEmail;
 	}
 
-	public void setCandidateId(String candidateId) {
-		this.candidateId = candidateId;
+	public void setCandidateEmail(String candidateEmail) {
+		this.candidateEmail = candidateEmail;
 	}
 
-	public String getJobId() {
-		return jobId;
+	public String getJobCode() {
+		return jobCode;
 	}
 
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
 	}
 
-	public String getStatusId() {
-		return statusId;
+	public String getStatusCode() {
+		return statusCode;
 	}
 
-	public void setStatusId(String statusId) {
-		this.statusId = statusId;
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
 	}
 
 }

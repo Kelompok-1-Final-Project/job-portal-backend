@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
 import com.lawencon.jobportal.admin.service.CandidateService;
 
 @RestController
@@ -30,7 +31,7 @@ public class CandidateController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
-	@GetMapping("filter/name")
+	@GetMapping("/filter/name")
 	public ResponseEntity<CandidateGetResDto> getByName(
 			@RequestParam("n") String name) {
 		final CandidateGetResDto data = candidateService.getByName(name);
@@ -40,6 +41,12 @@ public class CandidateController {
 	@PostMapping
 	public ResponseEntity<InsertResDto> insertCandidate(@RequestBody CandidateInsertReqDto data){
 		final InsertResDto response = candidateService.insertCandidate(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/self")
+	public ResponseEntity<InsertResDto> selfRegister(@RequestBody CandidateSelfRegisterReqDto data){
+		final InsertResDto response = candidateService.selfRegister(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 }

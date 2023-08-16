@@ -32,6 +32,8 @@
 --DROP TABLE IF EXISTS t_status_process;
 --DROP TABLE IF EXISTS t_file;
 
+DELETE FROM t_user WHERE id = '0ac8856a-e1d0-4fbf-9fcc-00fc9d600872';
+DELETE FROM t_profile WHERE id = '5da0c8ce-ade7-4c5b-a3b9-b632bc5b4361';
 
 CREATE TABLE t_file(
 	id VARCHAR(36) NOT NULL,
@@ -340,7 +342,8 @@ ALTER TABLE t_job_position ADD CONSTRAINT job_position_bk
 	UNIQUE(position_code);
 
 CREATE TABLE t_question(
-	id VARCHAR(36) NOT NULL ,
+	id VARCHAR(36) NOT NULL,
+	question_code VARCHAR(5) NOT NULL,
 	question text NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
@@ -352,6 +355,8 @@ CREATE TABLE t_question(
 
 ALTER TABLE t_question ADD CONSTRAINT question_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_question ADD CONSTRAINT question_bk
+	UNIQUE(question_code);
 
 CREATE TABLE t_question_option(
 	id VARCHAR(36) NOT NULL ,
@@ -390,14 +395,15 @@ ALTER TABLE t_employment_type ADD CONSTRAINT employment_bk
 	UNIQUE(employment_code);
 
 CREATE TABLE t_job(
-	id VARCHAR(36) NOT NULL,
-	job_code VARCHAR(5) NOT NULL,
+	id VARCHAR(36) NOT NULL ,
+	job_code VARCHAR(5) NULL,
 	job_title VARCHAR(30) NOT NULL,
 	salary_start BIGINT NOT NULL,
 	salary_end BIGINT NOT NULL,
 	description text NOT NULL,
 	end_date DATE NOT NULL,
 	company_id VARCHAR(36) NOT NULL,
+	job_position_id VARCHAR(36) NOT NULL,
 	job_status_id VARCHAR(36) NOT NULL,
 	employment_type_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
@@ -410,6 +416,8 @@ CREATE TABLE t_job(
 
 ALTER TABLE t_job ADD CONSTRAINT job_pk
 	PRIMARY KEY(id);
+ALTER TABLE t_job ADD CONSTRAINT job_bk
+	UNIQUE(job_code);
 ALTER TABLE t_job ADD CONSTRAINT job_company_fk
 	FOREIGN KEY(company_id)
 	REFERENCES t_company(id);
@@ -419,11 +427,13 @@ ALTER TABLE t_job ADD CONSTRAINT job_status_fk
 ALTER TABLE t_job ADD CONSTRAINT job_employment_fk
 	FOREIGN KEY(employment_type_id)
 	REFERENCES t_employment_type(id);
-ALTER TABLE t_job ADD CONSTRAINT job_fk 
-	UNIQUE(job_code);
+ALTER TABLE t_job ADD CONSTRAINT job_position_id
+	FOREIGN KEY(job_position_id)
+	REFERENCES t_job_position(id);
 
 CREATE TABLE t_skill_test(
 	id VARCHAR(36) NOT NULL ,
+	test_code VARCHAR(5) NOT NULL,
 	test_name VARCHAR(30) NOT NULL,
 	job_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
@@ -439,7 +449,8 @@ ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_pk
 ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_job_fk
 	FOREIGN KEY(job_id)
 	REFERENCES t_job(id);
-
+ALTER TABLE t_skill_test ADD CONSTRAINT skill_test_bk
+	UNIQUE(test_code);
 
 CREATE TABLE t_skill_test_question(
 	id VARCHAR(36) NOT NULL,
@@ -688,8 +699,8 @@ INSERT INTO t_employment_type (id, employment_code, employment_name, created_by,
 	(uuid_generate_v4(), 'ET004', 'Part Time', uuid_generate_v4(), NOW(),TRUE,0);
 
 INSERT INTO t_gender(id, gender_name, gender_code, created_by, created_at, is_active, ver) VALUES 
-	(uuid_generate_v4(), 'Male', 'G001', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'Female', 'G002', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'Male', 'GD001', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'Female', 'GD002', uuid_generate_v4(), NOW(), TRUE, 0);
 
 INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at,  is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ID001', 'Technology', uuid_generate_v4(), NOW(), TRUE, 0),
@@ -729,3 +740,16 @@ INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, i
 	(uuid_generate_v4(), 'JS002', 'Closed', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'JS003', 'Draft', uuid_generate_v4(), NOW(), TRUE, 0);
 
+INSERT INTO t_job_position(id,position_code, position_name, created_by, created_at,is_active,ver) VALUES 
+	(uuid_generate_v4(), 'JP001', 'Fullstack Developer', uuid_generate_v4(),NOW(),TRUE, 0),
+	(uuid_generate_v4(), 'JP002', 'Backend Developer', uuid_generate_v4(),NOW(),TRUE, 0),
+	(uuid_generate_v4(), 'JP003', 'Frontend Developer', uuid_generate_v4(),NOW(),TRUE, 0);
+
+INSERT INTO t_status_process(id, process_code, process_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'SP001', 'Application', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP002', 'Assessment', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP003', 'Interview', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP004', 'Medical Check Up', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP005', 'Offering', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);

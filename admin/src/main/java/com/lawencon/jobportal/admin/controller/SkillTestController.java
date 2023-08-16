@@ -17,6 +17,7 @@ import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestGetResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestInsertReqDto;
+import com.lawencon.jobportal.admin.dto.skilltest.SkillTestQuestionInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestUpdateReqDto;
 import com.lawencon.jobportal.admin.service.SkillTestService;
 
@@ -53,4 +54,9 @@ public class SkillTestController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
+	@PostMapping("/question")
+	public ResponseEntity<InsertResDto> assignTest(@RequestBody SkillTestQuestionInsertReqDto data){
+		final InsertResDto response = skillTestService.assignTest(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
 }

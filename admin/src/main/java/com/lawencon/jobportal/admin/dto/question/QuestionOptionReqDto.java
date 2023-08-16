@@ -4,7 +4,6 @@ public class QuestionOptionReqDto {
 
 	private String labels;
 	private Boolean isAnswer;
-	private String questionId;
 
 	public String getLabels() {
 		return labels;
@@ -20,14 +19,6 @@ public class QuestionOptionReqDto {
 
 	public void setIsAnswer(Boolean isAnswer) {
 		this.isAnswer = isAnswer;
-	}
-
-	public String getQuestionId() {
-		return questionId;
-	}
-
-	public void setQuestionId(String questionId) {
-		this.questionId = questionId;
 	}
 
 }
