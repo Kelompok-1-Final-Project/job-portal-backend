@@ -29,7 +29,7 @@ public class Interview extends BaseEntity{
 	@Column(name = "schedule", nullable=false)
 	private LocalDateTime schedule;
 	
-	@Column(name = "notes", nullable=false)
+	@Column(name = "notes")
 	private String notes;
 
 	public Candidate getCandidate() {

@@ -596,7 +596,7 @@ CREATE TABLE t_medical_checkup(
 	id VARCHAR(36) NOT NULL ,
 	candidate_id VARCHAR(36) NOT NULL ,
 	job_id VARCHAR(36) NOT NULL ,
-	file_id VARCHAR(36) NOT NULL ,
+	file_id VARCHAR(36),
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
