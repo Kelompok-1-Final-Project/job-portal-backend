@@ -49,8 +49,6 @@ public class JobService {
 	@Autowired
 	private EmploymentTypeDao employmentTypeDao;
 
-	@Autowired
-	private JobDao jobDao;
 	
 	public List<JobStatusGetResDto> getAllJobStatus() {
 		final List<JobStatusGetResDto> jobStatusGetResDtos = new ArrayList<>();
@@ -120,6 +118,7 @@ public class JobService {
 		
 		em().getTransaction().commit();
 		return result;
+	}
 
 	public List<JobGetResDto> getByLocation(String location) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();

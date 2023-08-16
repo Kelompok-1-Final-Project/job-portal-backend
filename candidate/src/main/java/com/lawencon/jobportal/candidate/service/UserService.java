@@ -2,15 +2,22 @@ package com.lawencon.jobportal.candidate.service;
 
 import java.util.ArrayList;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
+import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginResDto;
+import com.lawencon.jobportal.candidate.model.Profile;
 import com.lawencon.jobportal.candidate.model.User;
 
 @Service
