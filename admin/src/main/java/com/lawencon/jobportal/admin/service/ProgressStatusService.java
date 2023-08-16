@@ -456,7 +456,6 @@ public class ProgressStatusService {
 	}
 
 	public UpdateResDto updateCandidateProgress(CandidateProgressUpdateReqDto data) {
-		System.out.println("Masuk Update Candidate================================");
 		final UpdateResDto result = new UpdateResDto();
 		try {
 			em().getTransaction().begin();

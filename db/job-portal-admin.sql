@@ -1120,4 +1120,4 @@ INSERT INTO t_job_benefit(id,benefit_id, job_id, created_by, created_at, is_acti
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN002'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN003'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
 	
-DELETE FROM t_blacklist WHERE id = '3db98e68-be62-4cf6-b439-bf6a589975bb';
+DELETE FROM t_blacklist WHERE id = 'e89075b2-09b3-4bbe-a024-ab87d3f779e7';
