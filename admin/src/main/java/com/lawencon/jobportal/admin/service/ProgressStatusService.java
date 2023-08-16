@@ -354,9 +354,9 @@ public class ProgressStatusService {
 	public InsertResDto insertProgressStatusCandidate(CandidateProgressInsertReqDto data) {
 		em().getTransaction().begin();
 		
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		final StatusProcess statusProcess = statusProcessDao.getById(StatusProcess.class, data.getStatusId());
+		final Candidate candidate = candidateDao.getByEmail(data.getCandidateEmail());
+		final Job job = jobDao.getByCode(data.getJobCode());
+		final StatusProcess statusProcess = statusProcessDao.getByCode(data.getStatusCode());
 		final JobCandidateStatus jobCandidateStatus = new JobCandidateStatus();
 		jobCandidateStatus.setCandidate(candidate);
 		jobCandidateStatus.setJob(job);

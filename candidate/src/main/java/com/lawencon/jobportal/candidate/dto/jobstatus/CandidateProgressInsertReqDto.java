@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.candidateprogress;
+package com.lawencon.jobportal.candidate.dto.jobstatus;
 
 public class CandidateProgressInsertReqDto {
 

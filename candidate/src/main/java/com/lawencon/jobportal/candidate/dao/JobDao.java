@@ -436,7 +436,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id "
 				+ "WHERE"
-				+ "	tci.city_name ILIKE :city || '%' "
+				+ "	tci.city_name ILIKE  '%' || :city || '%' "
 				+ "	AND "
 				+ "	tjp.position_name ILIKE :position || '%' "
 				+ "	AND "

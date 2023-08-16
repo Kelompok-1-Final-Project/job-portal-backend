@@ -91,8 +91,6 @@ public class UserService implements UserDetailsService {
 		final String pass = GeneratorId.generateCode();
 
 		final String message = "Email: " + data.getUserEmail() + "\nPassword: " + pass;
-
-		System.out.println(pass);
 		
 		emailService.sendEmail(data.getUserEmail(), "Registrasi User", message);
 

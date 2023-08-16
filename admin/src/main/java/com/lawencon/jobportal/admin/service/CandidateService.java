@@ -1,6 +1,5 @@
 package com.lawencon.jobportal.admin.service;
 
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +7,17 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.constant.PersonTypeEnum;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.CandidateProfileDao;
@@ -55,9 +61,12 @@ public class CandidateService {
 
 	@Autowired
 	private MaritalStatusDao maritalStatusDao;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Autowired
-	private MailService mailService;
+	private EmailService emailService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -96,57 +105,81 @@ public class CandidateService {
 	}
 
 	public InsertResDto insertCandidate(CandidateInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final CandidateProfile candidateProfile = new CandidateProfile();
-		candidateProfile.setFullName(data.getFullName());
-		candidateProfile.setIdNumber(data.getIdNumber());
-		candidateProfile.setSummary(data.getSummary());
-		candidateProfile.setBirthDate(LocalDate.parse(data.getBirthdate()));
-		candidateProfile.setMobileNumber(data.getMobileNumber());
-
-		final File photo = new File();
-		photo.setExt(data.getPhotoExt());
-		photo.setFile(data.getPhotoFiles());
-		final File photoResult = fileDao.save(photo);
-		candidateProfile.setPhoto(photoResult);
-
-		final File cv = new File();
-		cv.setExt(data.getCvExt());
-		cv.setFile(data.getCvFiles());
-		final File cvResult = fileDao.save(cv);
-		candidateProfile.setCv(cvResult);
-
-		candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
-
-		final Gender gender = genderDao.getByCode(data.getGenderCode());
-		final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
-		candidateProfile.setGender(genderResult);
-
-		final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
-		final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
-		candidateProfile.setMaritalStatus(maritalResult);
-
-		final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
-		final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
-		candidateProfile.setPersonType(personType);
-		final CandidateProfile profileResult = candidateProfileDao.save(candidateProfile);
-
-		final Candidate candidate = new Candidate();
-		candidate.setEmail(data.getEmail());
-		candidate.setCandidateProfile(profileResult);
-
-		final String pass = GeneratorId.generateCode();
-		mailService.sendMail("Password Candidate", "Your Password " + pass, data.getEmail());
-		final String password = passwordEncoder.encode(pass);
-		data.setPassword(password);
-		final Candidate candidateResult = candidateDao.save(candidate);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(candidateResult.getId());
-		result.setMessage("Candidate inserted successfully");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final CandidateProfile candidateProfile = new CandidateProfile();
+			candidateProfile.setFullName(data.getFullName());
+			candidateProfile.setIdNumber(data.getIdNumber());
+			candidateProfile.setSummary(data.getSummary());
+			candidateProfile.setBirthDate(LocalDate.parse(data.getBirthdate()));
+			candidateProfile.setMobileNumber(data.getMobileNumber());
+
+			final File photo = new File();
+			photo.setExt(data.getPhotoExt());
+			photo.setFile(data.getPhotoFiles());
+			final File photoResult = fileDao.save(photo);
+			candidateProfile.setPhoto(photoResult);
+
+			final File cv = new File();
+			cv.setExt(data.getCvExt());
+			cv.setFile(data.getCvFiles());
+			final File cvResult = fileDao.save(cv);
+			candidateProfile.setCv(cvResult);
+
+			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
+
+			final Gender gender = genderDao.getByCode(data.getGenderCode());
+			final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
+			candidateProfile.setGender(genderResult);
+
+			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
+			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
+			candidateProfile.setMaritalStatus(maritalResult);
+
+			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
+			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
+			candidateProfile.setPersonType(personType);
+			final CandidateProfile profileResult = candidateProfileDao.save(candidateProfile);
+
+			final Candidate candidate = new Candidate();
+			candidate.setEmail(data.getEmail());
+			candidate.setCandidateProfile(profileResult);
+
+			final String pass = GeneratorId.generateCode();
+			final String message = "Email: " + data.getEmail() + "\nPassword: " + pass;
+			
+			emailService.sendEmail(data.getEmail(), "Registrasi User", message);
+			
+			final String password = passwordEncoder.encode(pass);
+			data.setPassword(password);
+			final Candidate candidateResult = candidateDao.save(candidate);
+
+			final String candidateInsertAPI = "http://localhost:8081/users/byadmin";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<CandidateInsertReqDto> candidateInsert = RequestEntity.post(candidateInsertAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(candidateInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(candidateResult.getId());
+				result.setMessage("Candidate inserted successfully");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 

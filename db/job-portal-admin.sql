@@ -40,6 +40,9 @@
 --DROP TABLE IF EXISTS t_gender;
 --DROP TABLE IF EXISTS t_marital_status;
 
+DELETE FROM t_candidate WHERE id = '79329cf4-dba2-4c6a-b753-028332f93718';
+DELETE FROM t_candidate_profile WHERE id = '527df06a-1d2d-429f-93fe-448f95c9650b';
+
 CREATE TABLE t_file(
 	id VARCHAR(36) NOT NULL ,
 	ext VARCHAR(5) NOT NULL,

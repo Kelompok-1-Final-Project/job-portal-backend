@@ -61,4 +61,41 @@ public class CandidateDao extends AbstractJpaDao{
 		
 		return candidate;
 	}
+	
+	public Candidate getByEmail(String userEmail) {
+		final String sql = "SELECT "
+				+ "	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tc.ver "
+				+ "FROM  "
+				+ "	t_candidate_profile tcp  "
+				+ "INNER JOIN  "
+				+ "	t_candidate tc ON tcp.id = tc.profile_id  "
+				+ "WHERE "
+				+ "tc.email = :userEmail ";
+		try {
+			final Object userObj = em().createNativeQuery(sql)
+					.setParameter("userEmail", userEmail)
+					.getSingleResult();
+			
+			final Object[] candidateArr = (Object[]) userObj;
+			
+			Candidate candidate = null;
+
+			if(candidateArr.length > 0) {
+				candidate = new Candidate();
+				candidate.setId(candidateArr[0].toString());
+				candidate.setEmail(candidateArr[1].toString());
+				
+				final CandidateProfile candidateProfile = new CandidateProfile();
+				candidateProfile.setFullName(candidateArr[2].toString());
+				candidateProfile.setMobileNumber(candidateArr[3].toString());
+				
+				candidate.setVersion(Integer.valueOf(candidateArr[4].toString()));
+
+			}
+			return candidate;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
