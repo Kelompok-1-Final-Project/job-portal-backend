@@ -137,6 +137,12 @@ public class StatusProgressController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
+	@PatchMapping("/rejected")
+	public ResponseEntity<UpdateResDto> insertRejected(@RequestBody CandidateProgressUpdateReqDto data){
+		final UpdateResDto response = progressStatusService.updateCandidateProgress(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	@PatchMapping("/assessment")
 	public ResponseEntity<UpdateResDto> updateAssessmentNotes(@RequestBody AssessmentUpdateReqDto data){
 		final UpdateResDto response = progressStatusService.updateNotesAssessment(data);
@@ -148,5 +154,7 @@ public class StatusProgressController {
 		final UpdateResDto response = progressStatusService.updateInterviewNotes(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
+	
 	
 }	

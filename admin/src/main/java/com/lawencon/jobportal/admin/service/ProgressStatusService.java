@@ -386,6 +386,16 @@ public class ProgressStatusService {
 		result.setMessage("Insert Hired Successfully.");
 
 		em().getTransaction().commit();
+		
+		final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
+				job.getJobCode());
+		
+		final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
+		dataSend.setStatusProcessCode(StatusCodeEnum.HIRED.processCode);
+		dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+
+		updateCandidateProgress(dataSend);
+		
 		return result;
 	}
 
