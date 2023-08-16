@@ -2,22 +2,23 @@ package com.lawencon.jobportal.admin.dto.application;
 
 public class ApplicationInsertReqDto {
 
-	private String candidateId;
-	private String jobId;
+	private String candidateEmail;
+	private String jobCode;
 
-	public String getCandidateId() {
-		return candidateId;
+	public String getCandidateEmail() {
+		return candidateEmail;
 	}
 
-	public void setCandidateId(String candidateId) {
-		this.candidateId = candidateId;
+	public void setCandidateEmail(String candidateEmail) {
+		this.candidateEmail = candidateEmail;
 	}
 
-	public String getJobId() {
-		return jobId;
+	public String getJobCode() {
+		return jobCode;
 	}
 
-	public void setJobId(String jobId) {
-		this.jobId = jobId;
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
 	}
+
 }

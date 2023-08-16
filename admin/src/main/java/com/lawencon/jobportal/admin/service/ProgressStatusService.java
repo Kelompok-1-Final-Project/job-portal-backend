@@ -227,10 +227,9 @@ public class ProgressStatusService {
 	
 	
 	public InsertResDto insertApplication(ApplicationInsertReqDto data) {
-		em().getTransaction().begin();
 		
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final Job job = jobDao.getById(Job.class, data.getJobId());
+		final Candidate candidate = candidateDao.getByEmail(data.getCandidateEmail());
+		final Job job = jobDao.getByCode(data.getJobCode());
 		final Application application = new Application();
 		application.setCandidate(candidate);
 		application.setJob(job);
@@ -240,7 +239,6 @@ public class ProgressStatusService {
 		result.setId(applications.getId());
 		result.setMessage("Insert Application Successfully.");
 		
-		em().getTransaction().commit();
 		return result;
 	}
 	
@@ -362,6 +360,12 @@ public class ProgressStatusService {
 		jobCandidateStatus.setJob(job);
 		jobCandidateStatus.setStatus(statusProcess);
 		final JobCandidateStatus jobCandidateStatusDb = jobCandidateStatusDao.save(jobCandidateStatus);
+		
+		final ApplicationInsertReqDto applicationInsertReqDto = new ApplicationInsertReqDto();
+		applicationInsertReqDto.setCandidateEmail(data.getCandidateEmail());
+		applicationInsertReqDto.setJobCode(data.getJobCode());
+		
+		insertApplication(applicationInsertReqDto);
 		
 		final InsertResDto result = new InsertResDto();
 		result.setId(jobCandidateStatusDb.getId());
