@@ -15,19 +15,16 @@ public class SkillTestDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 
-	public SkillTest getByCandidateAndJob(String candidateId, String jobId) {
+	public SkillTest getByJob(String jobId) {
 		final String sql = "SELECT "
-				+ "id, test_name, job_id, ver "
+				+ "id, test_name, test_code, job_id, ver "
 				+ "FROM "
 				+ "t_skill_test "
 				+ "WHERE "
-				+ "job_id = :jobId "
-				+ "AND "
-				+ "candidate_id = : candidateId";
+				+ "job_id = :jobId ";
 		
 		final Object skillTestObj = em().createNamedQuery(sql)
 				.setParameter("jobId", jobId)
-				.setParameter("candidateId", candidateId)
 				.getSingleResult();
 		
 		final Object[] skillTestArr = (Object[]) skillTestObj;
@@ -38,12 +35,13 @@ public class SkillTestDao extends AbstractJpaDao{
 			skillTest = new SkillTest();
 			skillTest.setId(skillTestArr[0].toString());
 			skillTest.setTestName(skillTestArr[1].toString());
+			skillTest.setTestCode(skillTestArr[2].toString());
 			
 			final Job job = new Job();
-			job.setId(skillTestArr[2].toString());
+			job.setId(skillTestArr[3].toString());
 			skillTest.setJob(job);
 			
-			skillTest.setVersion(Integer.valueOf(skillTestArr[3].toString()));
+			skillTest.setVersion(Integer.valueOf(skillTestArr[4].toString()));
 			
 		}
 		

@@ -994,7 +994,8 @@ INSERT INTO t_status_process(id, process_code, process_name, created_by, created
 	(uuid_generate_v4(), 'SP004', 'Medical Check Up', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP005', 'Offering', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP006', 'Hired', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP007', 'Rejected', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'SP007', 'Rejected', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP008', 'Blacklist', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'JS001', 'Open', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
@@ -1118,3 +1119,5 @@ INSERT INTO t_job_benefit(id,benefit_id, job_id, created_by, created_at, is_acti
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN001'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN002'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN003'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+	
+DELETE FROM t_blacklist WHERE id = 'e89075b2-09b3-4bbe-a024-ab87d3f779e7';

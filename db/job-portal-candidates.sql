@@ -752,4 +752,20 @@ INSERT INTO t_status_process(id, process_code, process_name, created_by, created
 	(uuid_generate_v4(), 'SP004', 'Medical Check Up', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP005', 'Offering', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP006', 'Hired', uuid_generate_v4(), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'SP007', 'Rejected', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP008', 'Blacklist', uuid_generate_v4(), NOW(), TRUE, 0);
+
+DELETE FROM t_skill_test_question  WHERE id = '9bcd3ece-14e9-42c1-9c6f-09ee250a7cb8';
+
+SELECT tst.id, tst.test_name, tst.test_code, tst.job_id, tst.ver FROM t_skill_test tst INNER JOIN
+t_skill_test_question tstq ON tstq.skill_test_id = tst.id 
+INNER JOIN 
+t_question tq 
+WHERE job_id = 'c720d9b5-3218-43bc-8f47-8e82d0ee6da6'
+
+
+SELECT tstq.id, tq.id, tq.question , tstq.ver FROM t_skill_test_question tstq
+INNER JOIN
+t_question tq ON tstq.question_id = tq.id  
+WHERE
+tstq.skill_test_id = '47cc1a8c-57da-43e0-a710-071f249b564e'
