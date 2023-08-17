@@ -66,6 +66,28 @@ public class JobService {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	public List<JobGetResDto> getAll() {
+		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+
+		jobDao.getAll(Job.class).forEach(j -> {
+			final JobGetResDto jobGetResDto = new JobGetResDto();
+			jobGetResDto.setId(j.getId());
+			jobGetResDto.setJobTitle(j.getJobTitle());
+			jobGetResDto.setSalaryStart(j.getSalaryStart());
+			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+			jobGetResDto.setDescription(j.getDescription());
+			jobGetResDto.setEndDate(j.getEndDate().toString());
+			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setVer(j.getVersion());
+			jobGetResDtos.add(jobGetResDto);
+		});
+
+		return jobGetResDtos;
+	}
+	
 	public List<JobGetResDto> getByLocation(String location) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 

@@ -16,6 +16,8 @@ import com.lawencon.jobportal.candidate.dto.profile.GenderGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.MaritalGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.PersonTypeGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.ProfileUpdateReqDto;
+import com.lawencon.jobportal.candidate.dto.profile.UpdateCvReqDto;
+import com.lawencon.jobportal.candidate.dto.profile.UpdateSummaryReqDto;
 import com.lawencon.jobportal.candidate.service.ProfileService;
 
 @RestController
@@ -46,6 +48,18 @@ public class ProfileController {
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> updateProfile(@RequestBody ProfileUpdateReqDto data){
 		final UpdateResDto response = profileService.updateProfile(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/cvUpdate")
+	public ResponseEntity<UpdateResDto> updateCV(@RequestBody UpdateCvReqDto data){
+		final UpdateResDto response = profileService.updateCv(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/summaryUpdate")
+	public ResponseEntity<UpdateResDto> updateCV(@RequestBody UpdateSummaryReqDto data){
+		final UpdateResDto response = profileService.updateSummary(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
