@@ -73,6 +73,8 @@ public class CompanyService {
 			company.setCompanyCode(companyCode);
 			company.setIndustry(industry);
 			company.setCity(city);
+			company.setAddress(data.getAddress());
+			company.setDescription(data.getDescription());
 			company.setFile(files);
 			final Company companies = companyDao.save(company);
 
