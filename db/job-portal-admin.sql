@@ -1121,3 +1121,5 @@ INSERT INTO t_job_benefit(id,benefit_id, job_id, created_by, created_at, is_acti
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN003'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
 	
 DELETE FROM t_blacklist WHERE id = 'e89075b2-09b3-4bbe-a024-ab87d3f779e7';
+
+DELETE FROM t_result WHERE grade = 0;

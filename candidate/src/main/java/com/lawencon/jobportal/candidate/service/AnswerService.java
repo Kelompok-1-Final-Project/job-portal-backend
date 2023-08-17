@@ -6,25 +6,40 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.candidate.dao.QuestionDao;
 import com.lawencon.jobportal.candidate.dao.QuestionOptionDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestQuestionDao;
+import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.answer.AnswerCandidateReqDto;
 import com.lawencon.jobportal.candidate.dto.answer.AnswerInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.answer.QuestionGetResDto;
 import com.lawencon.jobportal.candidate.dto.answer.QuestionOptionGetResDto;
+import com.lawencon.jobportal.candidate.dto.answer.ScoreInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.answer.TestGetResDto;
+import com.lawencon.jobportal.candidate.model.QuestionOption;
 import com.lawencon.jobportal.candidate.model.SkillTest;
+import com.lawencon.jobportal.candidate.model.User;
 
 @Service
 public class AnswerService {
 	private EntityManager em() {
 		return ConnHandler.getManager();
 	}
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@Autowired
 	private SkillTestDao skillTestDao;
@@ -37,6 +52,9 @@ public class AnswerService {
 	
 	@Autowired
 	private QuestionOptionDao questionOptionDao;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	public TestGetResDto getAllQuestion(String jobId){
 		final TestGetResDto testGetResDto = new TestGetResDto();
@@ -71,7 +89,55 @@ public class AnswerService {
 	}
 	
 	
-	public InsertResDto answerInsert(List<AnswerInsertReqDto> data) {
-		
+	public InsertResDto answerInsert(AnswerInsertReqDto data) {
+		final InsertResDto insertResDto = new InsertResDto();
+		try {
+			int totalCorrectAnswer = 0;
+			final List<AnswerCandidateReqDto> answerCandidateReqDto = data.getAnswerCandidateReqDtos();
+			final int totalMultiChoice = answerCandidateReqDto.size();
+			for(AnswerCandidateReqDto answer : answerCandidateReqDto) {
+				final QuestionOption questionOption = questionOptionDao.getById(QuestionOption.class, answer.getOptionId());
+				if (questionOption.getIsAnswer()) {
+					totalCorrectAnswer++;
+				}
+			}
+			if(totalMultiChoice != 0) {
+				final double score = ((double)totalCorrectAnswer / (double)totalMultiChoice) * 100.0;
+				final String notes = ("You answered " +totalCorrectAnswer+" out of "+ totalMultiChoice +" questions correctly. The final score is" + score);
+				
+				final ScoreInsertReqDto dataSend = new ScoreInsertReqDto();
+				
+				final User candidate = userDao.getById(User.class, data.getCandidateId());
+				dataSend.setCandidateEmail(candidate.getEmail());
+				
+				final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getSkillTestId());		
+				dataSend.setSkillTestCode(skillTest.getTestCode());
+				dataSend.setScore(score);
+				dataSend.setNotes(notes);	
+				
+				final String resultCandidateAPI = "http://localhost:8080/results";
+
+				final HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				headers.setBearerAuth(JwtConfig.get());
+
+				final RequestEntity<ScoreInsertReqDto> progressUpdate = RequestEntity
+						.post(resultCandidateAPI).headers(headers).body(dataSend);
+
+				final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(progressUpdate,
+						InsertResDto.class);
+
+				if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+					insertResDto.setMessage("Insert Data Successfully.");
+					em().getTransaction().commit();
+				} else {
+					em().getTransaction().rollback();
+					throw new RuntimeException("Insert Failed");
+				}
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
+		return insertResDto;
 	}
 }

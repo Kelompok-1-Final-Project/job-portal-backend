@@ -1,7 +1,5 @@
 package com.lawencon.jobportal.admin.service;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,27 +34,22 @@ public class ResultService {
 	public InsertResDto insertResult(ResultInsertReqDto data) {
 		em().getTransaction().begin();
 		
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getSkillTestId());
-		final List<Boolean> listAnswer = data.getAnswer();
-		Integer correct = 0;
-		for(Boolean a:listAnswer) {
-			if(a){
-				correct = correct + 1;
-			}
-		}
-		final Double grade = correct / listAnswer.size() * 100.0;
-		final String notes = "You answered " +correct+" out of "+listAnswer.size()+" questions correctly. The final score is"+grade;
+		final Candidate candidate = candidateDao.getByEmail(data.getCandidateEmail());
+		final SkillTest skillTest = skillTestDao.getByCode(data.getSkillTestCode());
+		
 		final Result result = new Result();
 		result.setCandidate(candidate);
 		result.setSkillTest(skillTest);
-		result.setGrade(grade);
-		result.setNotes(notes);
+		result.setGrade(data.getScore());
+		result.setNotes(data.getNotes());
 		final Result resultDb = resultDao.save(result);
+		
 		final InsertResDto response = new InsertResDto();
 		response.setId(resultDb.getId());
 		response.setMessage("Answer Successfully Inserted.");
+		
 		em().getTransaction().commit();
+		
 		return response;
 	}
 	

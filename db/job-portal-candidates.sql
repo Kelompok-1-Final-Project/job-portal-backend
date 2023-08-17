@@ -769,3 +769,7 @@ INNER JOIN
 t_question tq ON tstq.question_id = tq.id  
 WHERE
 tstq.skill_test_id = '47cc1a8c-57da-43e0-a710-071f249b564e'
+
+SELECT id, test_name, test_code, job_id, ver FROM t_skill_test WHERE job_id = 'c720d9b5-3218-43bc-8f47-8e82d0ee6da6'
+
+SELECT tstq.id, tq.id, tq.question, tq.question_code, tstq.ver FROM t_skill_test_question tstq INNER JOIN t_question tq ON tstq.question_id = tq.id WHERE tstq.skill_test_id = '47cc1a8c-57da-43e0-a710-071f249b564e'
