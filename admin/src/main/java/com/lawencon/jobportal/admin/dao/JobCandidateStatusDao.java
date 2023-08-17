@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.admin.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -12,6 +14,21 @@ import com.lawencon.jobportal.admin.model.JobCandidateStatus;
 public class JobCandidateStatusDao extends AbstractJpaDao{
 	private EntityManager em() {
 		return ConnHandler.getManager();
+	}
+	
+	public List<JobCandidateStatus> getByJob(String jobCode) {
+		final String sql = "SELECT "
+				+ "jcs "
+				+ "FROM "
+				+ "JobCandidateStatus jcs "
+				+ "WHERE "
+				+ "jcs.job.jobCode = :jobCode ";
+		
+		final List<JobCandidateStatus> jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
+				.setParameter("jobCode", jobCode)
+				.getResultList();
+		
+		return jobCandidateStatus;
 	}
 	
 	public JobCandidateStatus getByCandidateAndJob(String candidateEmail, String jobCode) {
