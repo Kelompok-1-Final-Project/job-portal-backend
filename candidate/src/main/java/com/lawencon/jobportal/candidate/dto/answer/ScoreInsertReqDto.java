@@ -3,8 +3,8 @@ package com.lawencon.jobportal.candidate.dto.answer;
 public class ScoreInsertReqDto {
 	private Double score;
 	private String notes;
-	private String candidateId;
-	private String skillTestId;
+	private String candidateEmail;
+	private String skillTestCode;
 
 	public Double getScore() {
 		return score;
@@ -22,20 +22,20 @@ public class ScoreInsertReqDto {
 		this.notes = notes;
 	}
 
-	public String getCandidateId() {
-		return candidateId;
+	public String getCandidateEmail() {
+		return candidateEmail;
 	}
 
-	public void setCandidateId(String candidateId) {
-		this.candidateId = candidateId;
+	public void setCandidateEmail(String candidateEmail) {
+		this.candidateEmail = candidateEmail;
 	}
 
-	public String getSkillTestId() {
-		return skillTestId;
+	public String getSkillTestCode() {
+		return skillTestCode;
 	}
 
-	public void setSkillTestId(String skillTestId) {
-		this.skillTestId = skillTestId;
+	public void setSkillTestCode(String skillTestCode) {
+		this.skillTestCode = skillTestCode;
 	}
 
 }

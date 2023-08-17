@@ -22,7 +22,7 @@ public class SkillTestQuestionDao extends AbstractJpaDao{
 		final List<SkillTestQuestion> skillTestQuestions = new ArrayList<>();
 		
 		final String sql = "SELECT "
-				+ "tstq.id, tq.id, tq.question, tq.question_code, tstq.ver "
+				+ "tstq.id as stq_id, tq.id, tq.question, tq.question_code, tstq.ver "
 				+ "FROM "
 				+ "t_skill_test_question tstq "
 				+ "INNER JOIN "
@@ -44,9 +44,10 @@ public class SkillTestQuestionDao extends AbstractJpaDao{
 				final Question question = new Question();
 				question.setId(skillTestQuestionArr[1].toString());
 				question.setQuestion(skillTestQuestionArr[2].toString());
+				question.setQuestionCode(skillTestQuestionArr[3].toString());
 				skillTestQuestion.setQuestion(question);
 				
-				skillTestQuestion.setVersion(Integer.valueOf(skillTestQuestionArr[3].toString()));
+				skillTestQuestion.setVersion(Integer.valueOf(skillTestQuestionArr[4].toString()));
 				skillTestQuestions.add(skillTestQuestion);
 			}
 		}

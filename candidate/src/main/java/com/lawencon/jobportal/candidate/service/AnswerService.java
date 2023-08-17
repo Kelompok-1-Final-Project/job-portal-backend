@@ -20,6 +20,7 @@ import com.lawencon.jobportal.candidate.dao.QuestionDao;
 import com.lawencon.jobportal.candidate.dao.QuestionOptionDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestQuestionDao;
+import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.answer.AnswerCandidateReqDto;
 import com.lawencon.jobportal.candidate.dto.answer.AnswerInsertReqDto;
@@ -29,12 +30,16 @@ import com.lawencon.jobportal.candidate.dto.answer.ScoreInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.answer.TestGetResDto;
 import com.lawencon.jobportal.candidate.model.QuestionOption;
 import com.lawencon.jobportal.candidate.model.SkillTest;
+import com.lawencon.jobportal.candidate.model.User;
 
 @Service
 public class AnswerService {
 	private EntityManager em() {
 		return ConnHandler.getManager();
 	}
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@Autowired
 	private SkillTestDao skillTestDao;
@@ -97,16 +102,20 @@ public class AnswerService {
 				}
 			}
 			if(totalMultiChoice != 0) {
-				final double score = (totalCorrectAnswer/totalMultiChoice) * 100.0;
+				final double score = ((double)totalCorrectAnswer / (double)totalMultiChoice) * 100.0;
 				final String notes = ("You answered " +totalCorrectAnswer+" out of "+ totalMultiChoice +" questions correctly. The final score is" + score);
 				
 				final ScoreInsertReqDto dataSend = new ScoreInsertReqDto();
-				dataSend.setCandidateId(data.getCandidateId());
-				dataSend.setSkillTestId(data.getSkillTestId());
+				
+				final User candidate = userDao.getById(User.class, data.getCandidateId());
+				dataSend.setCandidateEmail(candidate.getEmail());
+				
+				final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getSkillTestId());		
+				dataSend.setSkillTestCode(skillTest.getTestCode());
 				dataSend.setScore(score);
 				dataSend.setNotes(notes);	
 				
-				final String resultCandidateAPI = "http://localhost:8081/results";
+				final String resultCandidateAPI = "http://localhost:8080/results";
 
 				final HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.APPLICATION_JSON);
@@ -118,7 +127,7 @@ public class AnswerService {
 				final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(progressUpdate,
 						InsertResDto.class);
 
-				if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
 					insertResDto.setMessage("Insert Data Successfully.");
 					em().getTransaction().commit();
 				} else {

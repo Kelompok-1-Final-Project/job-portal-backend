@@ -34,8 +34,8 @@ public class ResultService {
 	public InsertResDto insertResult(ResultInsertReqDto data) {
 		em().getTransaction().begin();
 		
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getSkillTestId());
+		final Candidate candidate = candidateDao.getByEmail(data.getCandidateEmail());
+		final SkillTest skillTest = skillTestDao.getByCode(data.getSkillTestCode());
 		
 		final Result result = new Result();
 		result.setCandidate(candidate);

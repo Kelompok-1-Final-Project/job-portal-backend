@@ -23,7 +23,7 @@ public class SkillTestDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "job_id = :jobId ";
 		
-		final Object skillTestObj = em().createNamedQuery(sql)
+		final Object skillTestObj = em().createNativeQuery(sql)
 				.setParameter("jobId", jobId)
 				.getSingleResult();
 		
