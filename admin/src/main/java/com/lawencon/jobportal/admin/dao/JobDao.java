@@ -23,6 +23,132 @@ public class JobDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
+	public List<Job> getByIndustry(String industry) {
+		final String sql = "SELECT "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
+				+ "WHERE  "
+				+ "ti.industry_name  ILIKE '%' || :industry || '%'";
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql)
+				.setParameter("industry", industry)
+				.getResultList();
+		final List<Job> listJob = new ArrayList<>();
+		if(jobsObj.size() > 0) {
+			for(Object jobObj:jobsObj) {
+				final Object[] jobArr = (Object[]) jobObj;
+				final Job job = new Job();
+				job.setId(jobArr[0].toString());
+				job.setJobTitle(jobArr[1].toString());
+				job.setSalaryStart(Integer.valueOf(jobArr[2].toString()));
+				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
+				job.setDescription(jobArr[4].toString());
+				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				final Company company = new Company();
+				company.setCompanyName(jobArr[6].toString());
+				job.setCompany(company);
+				final JobPosition jobPosition = new JobPosition();
+				jobPosition.setPositionName(jobArr[7].toString());
+				job.setJobPosition(jobPosition);
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(jobArr[8].toString());
+				job.setJobStatus(jobStatus);
+				final EmploymentType employmentType = new EmploymentType();
+				employmentType.setEmploymentName(jobArr[9].toString());
+				job.setEmployementType(employmentType);
+				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				listJob.add(job);
+			}
+		}
+		
+		return listJob;
+	}
+	
+	public List<Job> getByName(String jobName) {
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ "	tc.company_name,  "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name,  "
+				+ "	tj.ver  "
+				+ "FROM  "
+				+ "	t_job tj 	 "
+				+ "INNER JOIN  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
+				+ "INNER JOIN  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "WHERE  "
+				+ "tj.job_title ILIKE '%' || :jobName || '%'";
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql)
+				.setParameter("jobName", jobName)
+				.getResultList();
+		final List<Job> listJob = new ArrayList<>();
+		if(jobsObj.size() > 0) {
+			for(Object jobObj:jobsObj) {
+				final Object[] jobArr = (Object[]) jobObj;
+				final Job job = new Job();
+				job.setId(jobArr[0].toString());
+				job.setJobTitle(jobArr[1].toString());
+				job.setSalaryStart(Integer.valueOf(jobArr[2].toString()));
+				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
+				job.setDescription(jobArr[4].toString());
+				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				final Company company = new Company();
+				company.setCompanyName(jobArr[6].toString());
+				job.setCompany(company);
+				final JobPosition jobPosition = new JobPosition();
+				jobPosition.setPositionName(jobArr[7].toString());
+				job.setJobPosition(jobPosition);
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(jobArr[8].toString());
+				job.setJobStatus(jobStatus);
+				final EmploymentType employmentType = new EmploymentType();
+				employmentType.setEmploymentName(jobArr[9].toString());
+				job.setEmployementType(employmentType);
+				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				listJob.add(job);
+			}
+		}
+		
+		return listJob;
+	}
 	
 	public List<Job> getByLocation(String location) {
 		final String sql = "SELECT  "

@@ -994,7 +994,8 @@ INSERT INTO t_status_process(id, process_code, process_name, created_by, created
 	(uuid_generate_v4(), 'SP004', 'Medical Check Up', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP005', 'Offering', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'SP006', 'Hired', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'SP007', 'Rejected', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'SP007', 'Rejected', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'SP008', 'Blacklist', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_job_status(id, status_code, status_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'JS001', 'Open', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
@@ -1118,3 +1119,10 @@ INSERT INTO t_job_benefit(id,benefit_id, job_id, created_by, created_at, is_acti
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN001'),(SELECT id FROM t_job WHERE job_title='Fullstack Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN002'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN003'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
+	
+DELETE FROM t_blacklist WHERE id = 'e89075b2-09b3-4bbe-a024-ab87d3f779e7';
+
+DELETE FROM t_result WHERE grade = 0;
+
+SELECT  	tj.id,  	tj.job_title,  	tj.salary_start,  	tj.salary_end,  	tj.description,  	tj.end_date,  	tc.company_name,  
+	ti.industry_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name,  	tj.ver  FROM  	t_job tj 	 INNER JOIN  	t_company tc ON tc.id = tj.company_id  INNER JOIN  	t_city tci ON tci.id = tc.city_id  INNER JOIN  	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN t_industry ti ON tc.industry_id = ti.id WHERE  tj.job_title ILIKE '%' || :jobName || '%'

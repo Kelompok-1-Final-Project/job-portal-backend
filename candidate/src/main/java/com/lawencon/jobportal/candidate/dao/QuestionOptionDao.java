@@ -20,7 +20,7 @@ public class QuestionOptionDao extends AbstractJpaDao{
 	
 	public List<QuestionOption> getByQuestion(String questionId){
 		final String sql = "SELECT  "
-				+ "	id, labels, is_answer "
+				+ "id, labels, is_answer "
 				+ "FROM  "
 				+ "	t_question_option tqo  "
 				+ "WHERE  "
