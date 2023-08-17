@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.UpdateCvReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.UpdateSummaryReqDto;
 import com.lawencon.jobportal.admin.service.CandidateService;
 
 @RestController
@@ -48,5 +52,17 @@ public class CandidateController {
 	public ResponseEntity<InsertResDto> selfRegister(@RequestBody CandidateSelfRegisterReqDto data){
 		final InsertResDto response = candidateService.selfRegister(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
+	@PatchMapping("/cvUpdate")
+	public ResponseEntity<UpdateResDto> updateCV(@RequestBody UpdateCvReqDto data){
+		final UpdateResDto response = candidateService.updateCv(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/summaryUpdate")
+	public ResponseEntity<UpdateResDto> updateSummary(@RequestBody UpdateSummaryReqDto data){
+		final UpdateResDto response = candidateService.updateSummary(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
