@@ -1,7 +1,6 @@
-package com.lawencon.jobportal.admin.dto.result;
+package com.lawencon.jobportal.candidate.dto.answer;
 
-public class ResultInsertReqDto {
-
+public class ScoreInsertReqDto {
 	private Double score;
 	private String notes;
 	private String candidateId;

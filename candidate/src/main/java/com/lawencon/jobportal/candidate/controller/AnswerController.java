@@ -1,7 +1,5 @@
 package com.lawencon.jobportal.candidate.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +29,7 @@ public class AnswerController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<InsertResDto> insert(@RequestBody List<AnswerInsertReqDto> data) {
+	public ResponseEntity<InsertResDto> insert(@RequestBody AnswerInsertReqDto data) {
 		final InsertResDto response = answerService.answerInsert(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
