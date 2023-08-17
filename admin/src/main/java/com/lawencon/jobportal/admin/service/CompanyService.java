@@ -112,6 +112,9 @@ public class CompanyService {
 			result.setCompanyName(c.getCompanyName());
 			result.setFileId(c.getFile().getId());
 			result.setIndustryName(c.getIndustry().getIndustryName());
+			result.setAddress(c.getAddress());
+			result.setDescription(c.getDescription());
+			result.setCityName(c.getCity().getCityName());
 			listResult.add(result);
 		}
 		return listResult;
