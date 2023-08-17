@@ -87,6 +87,50 @@ public class JobService {
 
 		return jobGetResDtos;
 	}
+	
+	public List<JobGetResDto> getByName(String jobName) {
+		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+
+		jobDao.getByName(jobName).forEach(j -> {
+			final JobGetResDto jobGetResDto = new JobGetResDto();
+			jobGetResDto.setId(j.getId());
+			jobGetResDto.setJobTitle(j.getJobTitle());
+			jobGetResDto.setSalaryStart(j.getSalaryStart());
+			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+			jobGetResDto.setDescription(j.getDescription());
+			jobGetResDto.setEndDate(j.getEndDate().toString());
+			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setVer(j.getVersion());
+			jobGetResDtos.add(jobGetResDto);
+		});
+
+		return jobGetResDtos;
+	}
+	
+	public List<JobGetResDto> getByIdustry(String jobName) {
+		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+
+		jobDao.getByName(jobName).forEach(j -> {
+			final JobGetResDto jobGetResDto = new JobGetResDto();
+			jobGetResDto.setId(j.getId());
+			jobGetResDto.setJobTitle(j.getJobTitle());
+			jobGetResDto.setSalaryStart(j.getSalaryStart());
+			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+			jobGetResDto.setDescription(j.getDescription());
+			jobGetResDto.setEndDate(j.getEndDate().toString());
+			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setVer(j.getVersion());
+			jobGetResDtos.add(jobGetResDto);
+		});
+
+		return jobGetResDtos;
+	}
 
 	public List<JobGetResDto> getByCompany(String company) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
