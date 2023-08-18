@@ -1,7 +1,6 @@
 package com.lawencon.jobportal.admin.dao;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +11,9 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.Application;
-import com.lawencon.jobportal.admin.model.City;
 import com.lawencon.jobportal.admin.model.Company;
-import com.lawencon.jobportal.admin.model.EmploymentType;
-import com.lawencon.jobportal.admin.model.Industry;
 import com.lawencon.jobportal.admin.model.Job;
-import com.lawencon.jobportal.admin.model.JobCandidateStatus;
-import com.lawencon.jobportal.admin.model.JobPosition;
 import com.lawencon.jobportal.admin.model.JobStatus;
-import com.lawencon.jobportal.admin.util.DateConvert;
 
 @Repository
 public class ApplicationDao extends AbstractJpaDao {
