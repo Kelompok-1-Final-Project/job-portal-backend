@@ -244,6 +244,7 @@ public class JobService {
 	}
 	
 	public List<JobGetResDto> getFilter(String name, String city, String position, String employment, Integer salaryStart, Integer salaryEnd) {
+		System.out.println(name);
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
 		jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).forEach(j -> {
@@ -262,7 +263,7 @@ public class JobService {
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
-			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
+//			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
