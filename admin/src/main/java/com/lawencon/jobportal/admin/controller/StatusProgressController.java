@@ -156,40 +156,40 @@ public class StatusProgressController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/application-id")
-//	public ResponseEntity<List<ApplicationGetResDto>> getAllApplicationByCandidate(@RequestParam String candidateEmail){
-//		final List<ApplicationGetResDto> response = progressStatusService.
-//		return new ResponseEntity<>(response, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/assessment-id")
-//	public ResponseEntity<List<AssessmentGetResDto>> getAllAssessmentByCandidate(@RequestParam String candidateEmail){
-//		final List<AssessmentGetResDto> response = progressStatusService.
-//		return new ResponseEntity<>(response, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/medical-checkup-id")
-//	public ResponseEntity<List<MedicalCheckupGetResDto>> getAllMedicalCheckupByCandidate(@RequestParam String candidateEmail){
-//		final List<MedicalCheckupGetResDto> response = progressStatusService
-//		return new ResponseEntity<>(response, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/interview-id")
-//	public ResponseEntity<List<InterviewGetResDto>> getAllInterviewByCandidate(@RequestParam String candidateEmail){
-//		final List<InterviewGetResDto> response = progressStatusService
-//		return new ResponseEntity<>(response, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/hired-id")
-//	public ResponseEntity<List<HiredGetResDto>> getAllHiredByCandidate(@RequestParam String candidateEmail){
-//		final List<HiredGetResDto> response = progressStatusService
-//		return new ResponseEntity<>(response, HttpStatus.OK);
-//	}
-//	
-//	@GetMapping("/offering-id")
-//	public ResponseEntity<List<OfferingGetResDto>> getAllOfferingByCandidate(@RequestParam String candidateEmail){
-//		final List<OfferingGetResDto> response = progressStatusService
-//		return new ResponseEntity<>(response, HttpStatus.OK);
-//	}
+	@GetMapping("/application-id")
+	public ResponseEntity<List<ApplicationGetResDto>> getAllApplicationByCandidate(@RequestParam String candidateEmail){
+		final List<ApplicationGetResDto> response = progressStatusService.
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/assessment-id")
+	public ResponseEntity<List<AssessmentGetResDto>> getAllAssessmentByCandidate(@RequestParam String candidateEmail){
+		final List<AssessmentGetResDto> response = progressStatusService.
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/medical-checkup-id")
+	public ResponseEntity<List<MedicalCheckupGetResDto>> getAllMedicalCheckupByCandidate(@RequestParam String candidateEmail){
+		final List<MedicalCheckupGetResDto> response = progressStatusService
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/interview-id")
+	public ResponseEntity<List<InterviewGetResDto>> getAllInterviewByCandidate(@RequestParam String candidateEmail){
+		final List<InterviewGetResDto> response = progressStatusService
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/hired-id")
+	public ResponseEntity<List<HiredGetResDto>> getAllHiredByCandidate(@RequestParam String candidateEmail){
+		final List<HiredGetResDto> response = progressStatusService
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/offering-id")
+	public ResponseEntity<List<OfferingGetResDto>> getAllOfferingByCandidate(@RequestParam String candidateEmail){
+		final List<OfferingGetResDto> response = progressStatusService
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 	
 }	

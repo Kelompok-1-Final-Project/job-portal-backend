@@ -1148,4 +1148,6 @@ SELECT
 	t_application ta 
 INNER JOIN	t_job tj ON ta.job_id = tj.id INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id
 WHERE  
-	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
+	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
+	
+SELECT * FROM t_result tr ;
