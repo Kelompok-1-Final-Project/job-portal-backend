@@ -88,7 +88,7 @@ public class JobService {
 
 		return jobGetResDtos;
 	}
-	
+
 	public List<JobGetResDto> getByLocation(String location) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public class JobService {
 
 		return jobGetResDtos;
 	}
-	
+
 	public List<JobGetResDto> getByName(String jobName) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
@@ -139,7 +139,7 @@ public class JobService {
 
 		return jobGetResDtos;
 	}
-	
+
 	public List<JobGetResDto> getByIdustry(String jobName) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
@@ -348,7 +348,7 @@ public class JobService {
 			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
 				result.setId(jobResult.getId());
 				result.setMessage("Job added successfully");
-				
+
 				em().getTransaction().commit();
 			} else {
 				em().getTransaction().rollback();
@@ -425,10 +425,10 @@ public class JobService {
 		});
 		return employmentTypeGetResDtos;
 	}
-	
-	public List<JobPositionGetResDto> getAllJobPosition(){
+
+	public List<JobPositionGetResDto> getAllJobPosition() {
 		final List<JobPositionGetResDto> jobPositionGetResDtos = new ArrayList<>();
-		
+
 		jobPositionDao.getAll(JobPosition.class).forEach(jp -> {
 			final JobPositionGetResDto jobPositionGetResDto = new JobPositionGetResDto();
 			jobPositionGetResDto.setId(jp.getId());
@@ -436,9 +436,31 @@ public class JobService {
 			jobPositionGetResDto.setPositionCode(jp.getPositionCode());
 			jobPositionGetResDtos.add(jobPositionGetResDto);
 		});
-		
+
 		return jobPositionGetResDtos;
 	}
-	
+
+	public JobGetResDto getById(String jobId) {
+		final Job job = jobDao.getById(Job.class, jobId);
+
+		final JobGetResDto jobGetResDto = new JobGetResDto();
+		jobGetResDto.setId(job.getId());
+		jobGetResDto.setJobTitle(job.getJobTitle());
+		jobGetResDto.setSalaryStart(job.getSalaryStart());
+		jobGetResDto.setSalaryEnd(job.getSalaryEnd());
+		jobGetResDto.setDescription(job.getDescription());
+		jobGetResDto.setEndDate(job.getEndDate().toString());
+		jobGetResDto.setCompanyName(job.getCompany().getCompanyName());
+		jobGetResDto.setIndustryName(job.getCompany().getIndustry().getIndustryName());
+		jobGetResDto.setCityName(job.getCompany().getCity().getCityName());
+		jobGetResDto.setPositionName(job.getJobPosition().getPositionName());
+		jobGetResDto.setStatusName(job.getJobStatus().getStatusName());
+		jobGetResDto.setEmploymentName(job.getEmployementType().getEmploymentName());
+		jobGetResDto.setCreatedAt(job.getCreatedAt().toString());
+		jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());
+		jobGetResDto.setVer(job.getVersion());
+
+		return jobGetResDto;
+	}
 
 }

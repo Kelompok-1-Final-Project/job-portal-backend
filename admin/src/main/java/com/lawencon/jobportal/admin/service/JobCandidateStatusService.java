@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.jobportal.admin.dao.JobCandidateStatusDao;
-import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
+import com.lawencon.jobportal.admin.dto.jobcandidatestatus.JobCandidateStatusGetResDto;
 
 @Service
 public class JobCandidateStatusService {
@@ -15,29 +15,19 @@ public class JobCandidateStatusService {
 	@Autowired
 	private JobCandidateStatusDao jobCandidateStatusDao;
 	
-	public List<JobGetResDto> getByJob(String jobCode){
-		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+	public List<JobCandidateStatusGetResDto> getByJob(String jobCode){
+		final List<JobCandidateStatusGetResDto> data = new ArrayList<>();
 		
 		jobCandidateStatusDao.getByJob(jobCode).forEach(j -> {
-			final JobGetResDto jobGetResDto = new JobGetResDto();
-			jobGetResDto.setId(j.getJob().getId());
-			jobGetResDto.setJobTitle(j.getJob().getJobTitle());
-			jobGetResDto.setSalaryStart(j.getJob().getSalaryStart());
-			jobGetResDto.setSalaryEnd(j.getJob().getSalaryEnd());
-			jobGetResDto.setDescription(j.getJob().getDescription());
-			jobGetResDto.setEndDate(j.getJob().getEndDate().toString());
-			jobGetResDto.setCompanyName(j.getJob().getCompany().getCompanyName());
-			jobGetResDto.setIndustryName(j.getJob().getCompany().getIndustry().getIndustryName());
-			jobGetResDto.setCityName(j.getJob().getCompany().getCity().getCityName());
-			jobGetResDto.setPositionName(j.getJob().getJobPosition().getPositionName());
-			jobGetResDto.setStatusName(j.getJob().getJobStatus().getStatusName());
-			jobGetResDto.setEmploymentName(j.getJob().getEmployementType().getEmploymentName());
-			jobGetResDto.setCreatedAt(j.getJob().getCreatedAt().toString());
-			jobGetResDto.setUpdatedAt(j.getJob().getUpdatedAt().toString());
-			jobGetResDto.setVer(j.getVersion());
-			jobGetResDtos.add(jobGetResDto);
+			final JobCandidateStatusGetResDto candidateStatusGetResDto = new JobCandidateStatusGetResDto();
+			candidateStatusGetResDto.setJobCandidateStatusId(j.getId());
+			candidateStatusGetResDto.setCandidateName(j.getCandidate().getCandidateProfile().getFullName());
+			candidateStatusGetResDto.setStatusCode(j.getStatus().getProcessCode());
+			candidateStatusGetResDto.setStatusName(j.getStatus().getProcessName());
+			data.add(candidateStatusGetResDto);
 		});
 		
-		return jobGetResDtos;
+		return data;
 	}
+	
 }

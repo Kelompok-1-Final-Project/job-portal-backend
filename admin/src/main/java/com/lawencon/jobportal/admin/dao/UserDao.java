@@ -67,7 +67,7 @@ public class UserDao extends AbstractJpaDao{
 				+ "FROM "
 				+ "User u "
 				+ "WHERE "
-				+ "c.role.roleCode = :roleCode";
+				+ "u.role.roleCode = :roleCode";
 		
 		final List<User> user = em().createQuery(sql, User.class)
 				.setParameter("roleCode", roleCode)
