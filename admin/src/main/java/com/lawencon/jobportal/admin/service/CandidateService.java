@@ -38,6 +38,7 @@ import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Gender;
 import com.lawencon.jobportal.admin.model.MaritalStatus;
 import com.lawencon.jobportal.admin.model.PersonType;
+import com.lawencon.jobportal.admin.util.DateConvert;
 import com.lawencon.jobportal.admin.util.GeneratorId;
 
 @Service
@@ -116,7 +117,7 @@ public class CandidateService {
 			candidateProfile.setFullName(data.getFullName());
 			candidateProfile.setIdNumber(data.getIdNumber());
 			candidateProfile.setSummary(data.getSummary());
-			candidateProfile.setBirthDate(LocalDate.parse(data.getBirthdate()));
+			candidateProfile.setBirthDate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
 			final File photo = new File();
