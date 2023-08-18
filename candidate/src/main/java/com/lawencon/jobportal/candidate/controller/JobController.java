@@ -57,4 +57,11 @@ public class JobController {
 		final List<JobGetResDto> data = jobService.getFilter(name, city, position, employment, salaryStart, salaryEnd);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
+	
+	@GetMapping("/filter/id")
+	public ResponseEntity<JobGetResDto> getById(@RequestParam("id") String jobId){
+		final JobGetResDto response = jobService.getById(jobId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 }

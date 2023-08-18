@@ -46,6 +46,7 @@ import com.lawencon.jobportal.admin.dto.hired.HiredInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewGetResDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupInsertReqDto;
 import com.lawencon.jobportal.admin.dto.offering.OfferingGetResDto;
@@ -498,4 +499,32 @@ public class ProgressStatusService {
 
 		return result;
 	}
+	
+//	public List<JobGetResDto> getApplicationByCandidate(String candidateEmail) {
+//		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+//		
+//		final 
+//		
+//		jobDao.getByStatus(status).forEach(j -> {
+//			final JobGetResDto jobGetResDto = new JobGetResDto();
+//			jobGetResDto.setId(j.getId());
+//			jobGetResDto.setJobTitle(j.getJobTitle());
+//			jobGetResDto.setSalaryStart(j.getSalaryStart());
+//			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+//			jobGetResDto.setDescription(j.getDescription());
+//			jobGetResDto.setEndDate(j.getEndDate().toString());
+//			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+//			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+//			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
+//			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+//			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+//			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+//			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+//			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
+//			jobGetResDto.setVer(j.getVersion());
+//			jobGetResDtos.add(jobGetResDto);
+//		});
+//
+//		return jobGetResDtos;
+//	}
 }
