@@ -66,10 +66,10 @@ public class JobService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public List<JobGetResDto> getByLocation(String location) {
+	public List<JobGetResDto> getAll() {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByLocation(location).forEach(j -> {
+		jobDao.getAll(Job.class).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -88,6 +88,31 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
+	public List<JobGetResDto> getByLocation(String location) {
+		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+
+		jobDao.getByLocation(location).forEach(j -> {
+			final JobGetResDto jobGetResDto = new JobGetResDto();
+			jobGetResDto.setId(j.getId());
+			jobGetResDto.setJobTitle(j.getJobTitle());
+			jobGetResDto.setSalaryStart(j.getSalaryStart());
+			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+			jobGetResDto.setDescription(j.getDescription());
+			jobGetResDto.setEndDate(j.getEndDate().toString());
+			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
+			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
+			jobGetResDto.setVer(j.getVersion());
+		});
+
+		return jobGetResDtos;
+	}
+	
 	public List<JobGetResDto> getByName(String jobName) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
@@ -100,9 +125,13 @@ public class JobService {
 			jobGetResDto.setDescription(j.getDescription());
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
@@ -122,9 +151,13 @@ public class JobService {
 			jobGetResDto.setDescription(j.getDescription());
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
@@ -144,9 +177,13 @@ public class JobService {
 			jobGetResDto.setDescription(j.getDescription());
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
@@ -166,9 +203,13 @@ public class JobService {
 			jobGetResDto.setDescription(j.getDescription());
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
@@ -188,9 +229,13 @@ public class JobService {
 			jobGetResDto.setDescription(j.getDescription());
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
@@ -210,9 +255,13 @@ public class JobService {
 			jobGetResDto.setDescription(j.getDescription());
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
