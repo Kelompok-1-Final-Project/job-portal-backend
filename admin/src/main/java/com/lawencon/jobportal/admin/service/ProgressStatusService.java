@@ -511,6 +511,7 @@ public class ProgressStatusService {
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
 			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listApplication.size());
 
 			listResult.add(result);
 		}
@@ -532,6 +533,7 @@ public class ProgressStatusService {
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
 			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listAssessment.size());
 
 			listResult.add(result);
 		}
@@ -553,6 +555,7 @@ public class ProgressStatusService {
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
 			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listInterview.size());
 
 			listResult.add(result);
 		}
@@ -574,6 +577,7 @@ public class ProgressStatusService {
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
 			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listHired.size());
 
 			listResult.add(result);
 		}
@@ -595,6 +599,7 @@ public class ProgressStatusService {
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
 			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listOffering.size());
 
 			listResult.add(result);
 		}
