@@ -116,4 +116,17 @@ public class CompanyService {
 
 		return result;
 	}
+
+	public CompanyGetResDto getById(String companyId) {
+		final Company company = companyDao.getById(Company.class, companyId);
+		
+		final CompanyGetResDto result = new CompanyGetResDto();
+		result.setCompanyId(company.getId());
+		result.setCompanyCode(company.getCompanyCode());
+		result.setCompanyName(company.getCompanyName());
+		result.setFileId(company.getFile().getId());
+		result.setIndustryName(company.getIndustry().getIndustryName());
+		
+		return result;
+	}
 }

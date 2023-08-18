@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.constant.RoleEnum;
 import com.lawencon.jobportal.admin.dao.GenderDao;
 import com.lawencon.jobportal.admin.dao.ProfileDao;
 import com.lawencon.jobportal.admin.dao.RoleDao;
@@ -133,5 +134,38 @@ public class UserService implements UserDetailsService {
 		}
 		throw new UsernameNotFoundException("Email tidak ditemukan");
 	}
+	
+	public List<UserGetResDto> getAllHr() {
+		final List<UserGetResDto> usersDto = new ArrayList<>();
+		
+		userDao.getByRoleCode(RoleEnum.HR.roleCode).forEach(u -> {
+			final UserGetResDto userGetResDto = new UserGetResDto();
+			userGetResDto.setUserId(u.getId());
+			userGetResDto.setUserEmail(u.getEmail());
+			userGetResDto.setRoleName(u.getRole().getRoleName());
+			userGetResDto.setFullName(u.getProfile().getFullName());
+			userGetResDto.setUserPhone(u.getProfile().getMobileNumber());
+			userGetResDto.setIsActive(u.getIsActive());
+			usersDto.add(userGetResDto);
+		});
 
+		return usersDto;
+	}
+	
+	public List<UserGetResDto> getAllInterviewer() {
+		final List<UserGetResDto> usersDto = new ArrayList<>();
+		
+		userDao.getByRoleCode(RoleEnum.INTERVIEWER.roleCode).forEach(u -> {
+			final UserGetResDto userGetResDto = new UserGetResDto();
+			userGetResDto.setUserId(u.getId());
+			userGetResDto.setUserEmail(u.getEmail());
+			userGetResDto.setRoleName(u.getRole().getRoleName());
+			userGetResDto.setFullName(u.getProfile().getFullName());
+			userGetResDto.setUserPhone(u.getProfile().getMobileNumber());
+			userGetResDto.setIsActive(u.getIsActive());
+			usersDto.add(userGetResDto);
+		});
+
+		return usersDto;
+	}
 }

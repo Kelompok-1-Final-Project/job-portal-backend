@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
@@ -41,6 +42,12 @@ public class CompanyController {
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> updateCompany(@RequestBody CompanyUpdateReqDto data){
 		final UpdateResDto response = companyService.updateCompany(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/detail")
+	public ResponseEntity<CompanyGetResDto> getById(@RequestParam("id") String companyId){
+		final CompanyGetResDto response = companyService.getById(companyId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
