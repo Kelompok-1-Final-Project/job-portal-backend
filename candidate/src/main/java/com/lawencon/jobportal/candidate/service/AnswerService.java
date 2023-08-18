@@ -78,7 +78,7 @@ public class AnswerService {
 			});
 			
 			questionGetResDto.setQuestion(stq.getQuestion().getQuestion());
-			questionGetResDto.setQuestionCode(stq.getQuestion().getQuestionCode());
+			questionGetResDto.setQuestionId(stq.getQuestion().getId());
 			questionGetResDto.setOptionGetResDtos(questionOptionGetResDtos);
 			questionGetResDtos.add(questionGetResDto);
 		});
