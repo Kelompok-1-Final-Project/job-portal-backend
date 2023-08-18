@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.candidate.dao;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -498,8 +499,9 @@ public class JobDao extends AbstractJpaDao{
 			}
 		}
 		
+		System.out.println(nameParam + cityParam + positionParam + employmentParam + salaryStartParam + salaryEndParam);
 		
-		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql)
 				.setParameter("name", nameParam)
 				.setParameter("city", cityParam)
 				.setParameter("position", positionParam)
@@ -551,8 +553,8 @@ public class JobDao extends AbstractJpaDao{
 				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setCreatedAt(Timestamp.valueOf(jobArr[13].toString()).toLocalDateTime());
+//				job.setUpdatedAt(Timestamp.valueOf(jobArr[14].toString()).toLocalDateTime());
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
