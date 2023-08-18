@@ -68,7 +68,7 @@ public class JobService {
 			final EmploymentTypeGetResDto employmentTypeGetResDto = new EmploymentTypeGetResDto();
 			employmentTypeGetResDto.setId(j.getId());
 			employmentTypeGetResDto.setTypeName(j.getEmploymentName());
-			employmentTypeGetResDto.setTypeCode(j.getEmploymentName());
+			employmentTypeGetResDto.setTypeCode(j.getEmploymentCode());
 			employmentTypeGetResDtos.add(employmentTypeGetResDto);
 		});
 		return employmentTypeGetResDtos;
@@ -243,10 +243,10 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
-	public List<JobGetResDto> getFilter(String city, String position, String employment, Integer salaryStart, Integer salaryEnd) {
+	public List<JobGetResDto> getFilter(String name, String city, String position, String employment, Integer salaryStart, Integer salaryEnd) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.filterSearch(city, position, employment, salaryStart, salaryEnd).forEach(j -> {
+		jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -255,9 +255,14 @@ public class JobService {
 			jobGetResDto.setDescription(j.getDescription());
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setCompanyPhoto(j.getCompany().getFile().getId());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});

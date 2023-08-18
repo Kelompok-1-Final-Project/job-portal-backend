@@ -49,4 +49,12 @@ public class JobController {
 		final InsertResDto response = jobService.insertJob(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/filter")
+	public ResponseEntity<List<JobGetResDto>> getByStatus(@RequestParam("n") String name, 
+			@RequestParam("c") String city, @RequestParam("p") String position, @RequestParam("e") String employment, 
+			@RequestParam("ss") Integer salaryStart, @RequestParam("se") Integer salaryEnd) {
+		final List<JobGetResDto> data = jobService.getFilter(name, city, position, employment, salaryStart, salaryEnd);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
 }
