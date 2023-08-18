@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.admin.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -57,5 +59,20 @@ public class UserDao extends AbstractJpaDao{
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public List<User> getByRoleCode(String roleCode) {
+		final String sql = "SELECT "
+				+ "u "
+				+ "FROM "
+				+ "User u "
+				+ "WHERE "
+				+ "c.role.roleCode = :roleCode";
+		
+		final List<User> user = em().createQuery(sql, User.class)
+				.setParameter("roleCode", roleCode)
+				.getResultList();
+		
+		return user;	
 	}
 }

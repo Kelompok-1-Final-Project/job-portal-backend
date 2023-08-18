@@ -244,7 +244,7 @@ public class JobService {
 	}
 	
 	public List<JobGetResDto> getFilter(String name, String city, String position, String employment, Integer salaryStart, Integer salaryEnd) {
-		System.out.println(name);
+
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
 		jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).forEach(j -> {
