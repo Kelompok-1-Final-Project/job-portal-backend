@@ -7,6 +7,7 @@ public class JobGetResDto {
 	private Integer salaryEnd;
 	private String description;
 	private String endDate;
+	private String companyId;
 	private String companyName;
 	private String industryName;
 	private String cityName;
@@ -63,6 +64,14 @@ public class JobGetResDto {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
 	}
 
 	public String getCompanyName() {
