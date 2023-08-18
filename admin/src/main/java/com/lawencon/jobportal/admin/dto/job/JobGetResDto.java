@@ -8,9 +8,13 @@ public class JobGetResDto {
 	private String description;
 	private String endDate;
 	private String companyName;
+	private String industryName;
+	private String cityName;
 	private String positionName;
 	private String statusName;
 	private String employmentName;
+	private String createdAt;
+	private String updatedAt;
 	private Integer ver;
 
 	public String getId() {
@@ -69,6 +73,22 @@ public class JobGetResDto {
 		this.companyName = companyName;
 	}
 
+	public String getIndustryName() {
+		return industryName;
+	}
+
+	public void setIndustryName(String industryName) {
+		this.industryName = industryName;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
 	public String getPositionName() {
 		return positionName;
 	}
@@ -91,6 +111,22 @@ public class JobGetResDto {
 
 	public void setEmploymentName(String employmentName) {
 		this.employmentName = employmentName;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public Integer getVer() {
