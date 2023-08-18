@@ -23,6 +23,7 @@ import com.lawencon.jobportal.admin.dto.assessment.AssessmentUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateProgressGetResDto;
 import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateProgressInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateProgressUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateStageProcessResDto;
 import com.lawencon.jobportal.admin.dto.hired.HiredGetResDto;
 import com.lawencon.jobportal.admin.dto.hired.HiredInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewGetResDto;
@@ -157,12 +158,19 @@ public class StatusProgressController {
 	}
 	
 	@GetMapping("/application-id")
+<<<<<<< HEAD
 	public ResponseEntity<List<ApplicationGetResDto>> getAllApplicationByCandidate(@RequestParam String candidateEmail){
 		final List<ApplicationGetResDto> response = progressStatusService.
+=======
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllApplicationByCandidate(
+			@RequestParam("email") String candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getApplicationByCandidate(candidateEmail);
+>>>>>>> 4841ad8069607f4572c4ea41fec7d920a07e12d6
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/assessment-id")
+<<<<<<< HEAD
 	public ResponseEntity<List<AssessmentGetResDto>> getAllAssessmentByCandidate(@RequestParam String candidateEmail){
 		final List<AssessmentGetResDto> response = progressStatusService.
 		return new ResponseEntity<>(response, HttpStatus.OK);
@@ -171,24 +179,43 @@ public class StatusProgressController {
 	@GetMapping("/medical-checkup-id")
 	public ResponseEntity<List<MedicalCheckupGetResDto>> getAllMedicalCheckupByCandidate(@RequestParam String candidateEmail){
 		final List<MedicalCheckupGetResDto> response = progressStatusService
+=======
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllAssessmentByCandidate(@RequestParam String candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getAssessmentByCandidate(candidateEmail);
+>>>>>>> 4841ad8069607f4572c4ea41fec7d920a07e12d6
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/interview-id")
+<<<<<<< HEAD
 	public ResponseEntity<List<InterviewGetResDto>> getAllInterviewByCandidate(@RequestParam String candidateEmail){
 		final List<InterviewGetResDto> response = progressStatusService
+=======
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllInterviewByCandidate(@RequestParam String candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getInterviewByCandidate(candidateEmail);
+>>>>>>> 4841ad8069607f4572c4ea41fec7d920a07e12d6
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/hired-id")
+<<<<<<< HEAD
 	public ResponseEntity<List<HiredGetResDto>> getAllHiredByCandidate(@RequestParam String candidateEmail){
 		final List<HiredGetResDto> response = progressStatusService
+=======
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllHiredByCandidate(@RequestParam String candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getHiredByCandidate(candidateEmail);
+>>>>>>> 4841ad8069607f4572c4ea41fec7d920a07e12d6
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/offering-id")
+<<<<<<< HEAD
 	public ResponseEntity<List<OfferingGetResDto>> getAllOfferingByCandidate(@RequestParam String candidateEmail){
 		final List<OfferingGetResDto> response = progressStatusService
+=======
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllOfferingByCandidate(@RequestParam String candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getOfferingByCandidate(candidateEmail);
+>>>>>>> 4841ad8069607f4572c4ea41fec7d920a07e12d6
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

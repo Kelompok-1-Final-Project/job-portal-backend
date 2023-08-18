@@ -34,6 +34,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -77,33 +78,34 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
@@ -119,6 +121,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -162,33 +165,34 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
@@ -204,6 +208,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -247,33 +252,34 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
@@ -304,6 +310,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -346,36 +353,38 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
+		
 		return listJob;
 	}
 	
@@ -387,6 +396,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -429,36 +439,38 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
+		
 		return listJob;
 	}
 	
@@ -470,6 +482,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -512,36 +525,38 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
+		
 		return listJob;
 	}
 	
@@ -553,6 +568,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -595,36 +611,38 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
+		
 		return listJob;
 	}
 	
@@ -636,6 +654,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -683,36 +702,38 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[8].toString());
+				city.setCityName(jobArr[9].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
+		
 		return listJob;
 	}
 	
@@ -724,6 +745,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
+				+ " tc.id AS company_id "
 				+ "	tc.company_name, "
 				+ "	ti.industry_name, "
 				+ "	tci.city_name, "
@@ -816,36 +838,38 @@ public class JobDao extends AbstractJpaDao{
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
 				
 				final Company company = new Company();
-				company.setCompanyName(jobArr[6].toString());
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
 				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[7].toString());
+				industrySet.setIndustryName(jobArr[8].toString());
 				company.setIndustry(industrySet);
 				
 				final City citySet = new City();
-				citySet.setCityName(jobArr[8].toString());
+				citySet.setCityName(jobArr[9].toString());
 				company.setCity(citySet);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[9].toString());
+				jobPosition.setPositionName(jobArr[10].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[10].toString());
+				jobStatus.setStatusName(jobArr[11].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[11].toString());
+				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 				listJob.add(job);
 			}
 		}
+		
 		return listJob;
 	}
 }
