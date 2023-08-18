@@ -4,7 +4,7 @@ import java.util.List;
 
 public class QuestionGetResDto {
 	private String question;
-	private String questionCode;
+	private String questionId;
 	private List<QuestionOptionGetResDto> optionGetResDtos;
 
 	public String getQuestion() {
@@ -15,12 +15,12 @@ public class QuestionGetResDto {
 		this.question = question;
 	}
 
-	public String getQuestionCode() {
-		return questionCode;
+	public String getQuestionId() {
+		return questionId;
 	}
 
-	public void setQuestionCode(String questionCode) {
-		this.questionCode = questionCode;
+	public void setQuestionId(String questionId) {
+		this.questionId = questionId;
 	}
 
 	public List<QuestionOptionGetResDto> getOptionGetResDtos() {
