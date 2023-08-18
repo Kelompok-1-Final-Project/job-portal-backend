@@ -270,6 +270,29 @@ public class JobService {
 
 		return jobGetResDtos;
 	}
+	
+	public JobGetResDto getById(String jobId) {
+		final Job job = jobDao.getById(Job.class, jobId);
+
+		final JobGetResDto jobGetResDto = new JobGetResDto();
+		jobGetResDto.setId(job.getId());
+		jobGetResDto.setJobTitle(job.getJobTitle());
+		jobGetResDto.setSalaryStart(job.getSalaryStart());
+		jobGetResDto.setSalaryEnd(job.getSalaryEnd());
+		jobGetResDto.setDescription(job.getDescription());
+		jobGetResDto.setEndDate(job.getEndDate().toString());
+		jobGetResDto.setCompanyName(job.getCompany().getCompanyName());
+		jobGetResDto.setIndustryName(job.getCompany().getIndustry().getIndustryName());
+		jobGetResDto.setCityName(job.getCompany().getCity().getCityName());
+		jobGetResDto.setPositionName(job.getJobPosition().getPositionName());
+		jobGetResDto.setStatusName(job.getJobStatus().getStatusName());
+		jobGetResDto.setEmploymentName(job.getEmployementType().getEmploymentName());
+		jobGetResDto.setCreatedAt(job.getCreatedAt().toString());
+		jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());
+		jobGetResDto.setVer(job.getVersion());
+
+		return jobGetResDto;
+	}
 
 	
 	
