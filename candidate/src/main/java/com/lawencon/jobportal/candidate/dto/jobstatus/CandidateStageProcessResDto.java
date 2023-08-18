@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.candidateprogress;
+package com.lawencon.jobportal.candidate.dto.jobstatus;
 
 public class CandidateStageProcessResDto {
 	private String applicationId;
@@ -8,7 +8,6 @@ public class CandidateStageProcessResDto {
 	private String companyId;
 	private String companyName;
 	private String createdAt;
-	private Integer totalStage;
 
 	public String getApplicationId() {
 		return applicationId;
@@ -64,14 +63,6 @@ public class CandidateStageProcessResDto {
 
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
-	}
-
-	public Integer getTotalStage() {
-		return totalStage;
-	}
-
-	public void setTotalStage(Integer totalStage) {
-		this.totalStage = totalStage;
 	}
 
 }

@@ -1124,8 +1124,35 @@ DELETE FROM t_blacklist WHERE id = 'e89075b2-09b3-4bbe-a024-ab87d3f779e7';
 
 DELETE FROM t_result WHERE grade = 0;
 
-SELECT  	tj.id,  	tj.job_title,  	tj.salary_start,  	tj.salary_end,  	tj.description,  	tj.end_date,  	tc.company_name,  
-	ti.industry_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name,  	tj.ver  FROM  	t_job tj 	 INNER JOIN  	t_company tc ON tc.id = tj.company_id  INNER JOIN  	t_city tci ON tci.id = tc.city_id  INNER JOIN  	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN t_industry ti ON tc.industry_id = tc.industry_idWHERE  ti.industry_name  ILIKE '%' || :industry || '%'
+SELECT  
+	tj.id,  
+	tj.job_title,  
+	tj.salary_start,  
+	tj.salary_end,  
+	tj.description,  
+	tj.end_date,  
+	tc.company_name,  
+	ti.industry_name, 
+	tjp.position_name, 
+	tjs.status_name, 
+	tet.employment_name,  
+	tj.ver  
+FROM  
+	t_job tj 	 
+INNER JOIN  
+	t_company tc ON tc.id = tj.company_id  
+INNER JOIN  
+	t_city tci ON tci.id = tc.city_id  
+INNER JOIN  
+	t_job_position tjp ON tjp.id = tj.job_position_id  
+INNER JOIN  
+	t_job_status tjs ON tjs.id = tj.job_status_id  
+INNER JOIN  
+	t_employment_type tet ON tet.id = tj.employment_type_id  
+INNER JOIN 
+t_industry ti ON tc.industry_id = tc.industry_id
+WHERE  
+ti.industry_name  ILIKE '%' || :industry || '%'
 
 
 SELECT
@@ -1142,12 +1169,45 @@ WHERE
 ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05';
 
 SELECT 
-	ta.id AS application_id,	tj.id AS job_id, 	tj.job_title,  
+	ta.id AS application_id,
+	tj.id AS job_id, 
+	tj.job_title,  
 	tjs.status_name, 
-	tc.id AS company_id,	tc.company_name, 	ta.created_at, 	tj.verFROM 
+	tc.id AS company_id,
+	tc.company_name, 
+	ta.created_at, 
+	tj.ver
+FROM 
 	t_application ta 
-INNER JOIN	t_job tj ON ta.job_id = tj.id INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id
+INNER JOIN
+	t_job tj ON ta.job_id = tj.id 
+INNER JOIN 
+	t_company tc ON tc.id = tj.company_id 
+INNER JOIN 
+	t_city tci ON tci.id = tc.city_id 
+INNER JOIN  
+	t_job_status tjs ON tjs.id = tj.job_status_id
 WHERE  
 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
 	
-SELECT * FROM t_result tr ;
+SELECT 
+	ta.id AS application_id, 
+	tj.id AS job_id, 
+	tj.job_title, 
+	tjs.status_name, 
+	tc.id AS company_id, 
+	tc.company_name, 
+	ta.created_at, 
+	ta.ver 
+FROM 
+	t_assessment ta 
+INNER JOIN 
+	t_job tj ON ta.job_id = tj.id 
+INNER JOIN 
+	t_company tc ON tc.id = tj.company_id 
+INNER JOIN 
+	t_city tci ON tci.id = tc.city_id 
+INNER JOIN  
+	t_job_status tjs ON tjs.id = tj.job_status_id 
+WHERE 
+	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'

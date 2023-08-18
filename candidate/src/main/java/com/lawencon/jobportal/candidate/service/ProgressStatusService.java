@@ -106,24 +106,5 @@ public class ProgressStatusService {
 		em().getTransaction().commit();
 		return result;
 	}
-	
-//	public InsertResDto insertApplication(ApplicationInsertReqDto data) {
-//		em().getTransaction().begin();
-//		
-//		final User candidate = userDao.getByEmail(data.getCandidateEmail());
-//		final Job job = jobDao.getByCode(data.getJobCode());
-//		final Application application = new Application();
-//		application.setCandidate(candidate);
-//		application.setJob(job);
-//		final Application applications = applicationDao.save(application);
-//		
-//		final InsertResDto result = new InsertResDto();
-//		result.setId(applications.getId());
-//		result.setMessage("Insert Application Successfully.");
-//		
-//		em().getTransaction().commit();
-//		return result;
-//	}
-	
 
 }
