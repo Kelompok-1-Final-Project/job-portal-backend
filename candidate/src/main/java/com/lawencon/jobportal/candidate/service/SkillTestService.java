@@ -64,7 +64,7 @@ public class SkillTestService {
 	}
 
 	public SkillTestGetResDto getByCandidateAndJob(String candidateId, String jobId) {
-		final SkillTest skillTest = skillTestDao.getByCandidateAndJob(candidateId, jobId);
+		final SkillTest skillTest = skillTestDao.getByJob(jobId);
 
 		final SkillTestGetResDto skillTestGetResDto = new SkillTestGetResDto();
 		skillTestGetResDto.setId(skillTest.getId());

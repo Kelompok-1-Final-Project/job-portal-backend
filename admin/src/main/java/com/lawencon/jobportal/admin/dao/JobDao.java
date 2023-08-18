@@ -10,11 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.model.City;
 import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.EmploymentType;
+import com.lawencon.jobportal.admin.model.Industry;
 import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.JobPosition;
 import com.lawencon.jobportal.admin.model.JobStatus;
+import com.lawencon.jobportal.admin.util.DateConvert;
 
 @Repository
 public class JobDao extends AbstractJpaDao{
@@ -23,32 +26,207 @@ public class JobDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
-	
-	public List<Job> getByLocation(String location) {
-		final String sql = "SELECT  "
-				+ "	tj.id,  "
-				+ "	tj.job_title,  "
-				+ "	tj.salary_start,  "
-				+ "	tj.salary_end,  "
-				+ "	tj.description,  "
-				+ "	tj.end_date,  "
-				+ "	tc.company_name,  "
+	public List<Job> getByIndustry(String industry) {
+		final String sql = "SELECT "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
 				+ "	tjp.position_name, "
 				+ "	tjs.status_name, "
-				+ "	tet.employment_name,  "
-				+ "	tj.ver  "
-				+ "FROM  "
-				+ "	t_job tj 	 "
-				+ "INNER JOIN  "
-				+ "	t_company tc ON tc.id = tj.company_id  "
-				+ "INNER JOIN  "
-				+ "	t_city tci ON tci.id = tc.city_id  "
-				+ "INNER JOIN  "
+				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
 				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
 				+ "INNER JOIN  "
 				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
+				+ "WHERE  "
+				+ "ti.industry_name  ILIKE '%' || :industry || '%'";
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql)
+				.setParameter("industry", industry)
+				.getResultList();
+		final List<Job> listJob = new ArrayList<>();
+		if(jobsObj.size() > 0) {
+			for(Object jobObj:jobsObj) {
+				final Object[] jobArr = (Object[]) jobObj;
+				
+				final Job job = new Job();
+				job.setId(jobArr[0].toString());
+				job.setJobTitle(jobArr[1].toString());
+				job.setSalaryStart(Integer.valueOf(jobArr[2].toString()));
+				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
+				job.setDescription(jobArr[4].toString());
+				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
+				final Company company = new Company();
+				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
+				job.setCompany(company);
+				
+				final JobPosition jobPosition = new JobPosition();
+				jobPosition.setPositionName(jobArr[9].toString());
+				job.setJobPosition(jobPosition);
+				
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(jobArr[10].toString());
+				job.setJobStatus(jobStatus);
+				
+				final EmploymentType employmentType = new EmploymentType();
+				employmentType.setEmploymentName(jobArr[11].toString());
+				job.setEmployementType(employmentType);
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				listJob.add(job);
+			}
+		}
+		
+		return listJob;
+	}
+	
+	public List<Job> getByName(String jobName) {
+		final String sql = "SELECT  "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
+				+ "WHERE  "
+				+ "tj.job_title ILIKE '%' || :jobName || '%'";
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql)
+				.setParameter("jobName", jobName)
+				.getResultList();
+		final List<Job> listJob = new ArrayList<>();
+		if(jobsObj.size() > 0) {
+			for(Object jobObj:jobsObj) {
+				final Object[] jobArr = (Object[]) jobObj;
+				
+				final Job job = new Job();
+				job.setId(jobArr[0].toString());
+				job.setJobTitle(jobArr[1].toString());
+				job.setSalaryStart(Integer.valueOf(jobArr[2].toString()));
+				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
+				job.setDescription(jobArr[4].toString());
+				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
+				final Company company = new Company();
+				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
+				job.setCompany(company);
+				
+				final JobPosition jobPosition = new JobPosition();
+				jobPosition.setPositionName(jobArr[9].toString());
+				job.setJobPosition(jobPosition);
+				
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(jobArr[10].toString());
+				job.setJobStatus(jobStatus);
+				
+				final EmploymentType employmentType = new EmploymentType();
+				employmentType.setEmploymentName(jobArr[11].toString());
+				job.setEmployementType(employmentType);
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
+				listJob.add(job);
+			}
+		}
+		
+		return listJob;
+	}
+	
+	public List<Job> getByLocation(String location) {
+		final String sql = "SELECT  "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
 				+ "WHERE  "
 				+ "city_name ILIKE :location || '%'";
 		
@@ -59,6 +237,7 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
+				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -66,19 +245,35 @@ public class JobDao extends AbstractJpaDao{
 				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
 				job.setDescription(jobArr[4].toString());
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
 				final Company company = new Company();
 				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
 				job.setCompany(company);
+				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[7].toString());
+				jobPosition.setPositionName(jobArr[9].toString());
 				job.setJobPosition(jobPosition);
+				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[8].toString());
+				jobStatus.setStatusName(jobArr[10].toString());
 				job.setJobStatus(jobStatus);
+				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[9].toString());
+				employmentType.setEmploymentName(jobArr[11].toString());
 				job.setEmployementType(employmentType);
-				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
 				listJob.add(job);
 			}
 		}
@@ -103,29 +298,35 @@ public class JobDao extends AbstractJpaDao{
 	
 	public List<Job> getByCompany(String companyName){
 		final String sql = "SELECT   "
-				+ "	tj.id,   "
-				+ "	tj.job_title,   "
-				+ "	tj.salary_start,   "
-				+ "	tj.salary_end,   "
-				+ "	tj.description,   "
-				+ "	tj.end_date,   "
-				+ "	tc.company_name,   "
-				+ "	tjp.position_name,  "
-				+ "	tjs.status_name,  "
-				+ "	tet.employment_name,   "
-				+ "	tj.ver   "
-				+ "FROM   "
-				+ "	t_job tj 	  "
-				+ "INNER JOIN   "
-				+ "	t_company tc ON tc.id = tj.company_id   "
-				+ "INNER JOIN   "
-				+ "	t_city tci ON tci.id = tc.city_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
-				+ "INNER JOIN   "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
 				+ "WHERE   "
 				+ "	company_name ILIKE :company || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -135,6 +336,7 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
+				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -142,19 +344,35 @@ public class JobDao extends AbstractJpaDao{
 				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
 				job.setDescription(jobArr[4].toString());
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
 				final Company company = new Company();
 				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
 				job.setCompany(company);
+				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[7].toString());
+				jobPosition.setPositionName(jobArr[9].toString());
 				job.setJobPosition(jobPosition);
+				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[8].toString());
+				jobStatus.setStatusName(jobArr[10].toString());
 				job.setJobStatus(jobStatus);
+				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[9].toString());
+				employmentType.setEmploymentName(jobArr[11].toString());
 				job.setEmployementType(employmentType);
-				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
 				listJob.add(job);
 			}
 		}
@@ -163,29 +381,35 @@ public class JobDao extends AbstractJpaDao{
 	
 	public List<Job> getByEmploymentType(String employmentName){
 		final String sql = "SELECT   "
-				+ "	tj.id,   "
-				+ "	tj.job_title,   "
-				+ "	tj.salary_start,   "
-				+ "	tj.salary_end,   "
-				+ "	tj.description,   "
-				+ "	tj.end_date,   "
-				+ "	tc.company_name,   "
-				+ "	tjp.position_name,  "
-				+ "	tjs.status_name,  "
-				+ "	tet.employment_name,   "
-				+ "	tj.ver   "
-				+ "FROM   "
-				+ "	t_job tj 	  "
-				+ "INNER JOIN   "
-				+ "	t_company tc ON tc.id = tj.company_id   "
-				+ "INNER JOIN   "
-				+ "	t_city tci ON tci.id = tc.city_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
-				+ "INNER JOIN   "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
 				+ "WHERE   "
 				+ "	employment_name ILIKE :employment || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -195,6 +419,7 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
+				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -202,19 +427,35 @@ public class JobDao extends AbstractJpaDao{
 				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
 				job.setDescription(jobArr[4].toString());
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
 				final Company company = new Company();
 				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
 				job.setCompany(company);
+				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[7].toString());
+				jobPosition.setPositionName(jobArr[9].toString());
 				job.setJobPosition(jobPosition);
+				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[8].toString());
+				jobStatus.setStatusName(jobArr[10].toString());
 				job.setJobStatus(jobStatus);
+				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[9].toString());
+				employmentType.setEmploymentName(jobArr[11].toString());
 				job.setEmployementType(employmentType);
-				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
 				listJob.add(job);
 			}
 		}
@@ -223,29 +464,35 @@ public class JobDao extends AbstractJpaDao{
 	
 	public List<Job> getByPosition(String positionName){
 		final String sql = "SELECT   "
-				+ "	tj.id,   "
-				+ "	tj.job_title,   "
-				+ "	tj.salary_start,   "
-				+ "	tj.salary_end,   "
-				+ "	tj.description,   "
-				+ "	tj.end_date,   "
-				+ "	tc.company_name,   "
-				+ "	tjp.position_name,  "
-				+ "	tjs.status_name,  "
-				+ "	tet.employment_name,   "
-				+ "	tj.ver   "
-				+ "FROM   "
-				+ "	t_job tj 	  "
-				+ "INNER JOIN   "
-				+ "	t_company tc ON tc.id = tj.company_id   "
-				+ "INNER JOIN   "
-				+ "	t_city tci ON tci.id = tc.city_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
-				+ "INNER JOIN   "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
 				+ "WHERE   "
 				+ "	position_name ILIKE :position || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -255,6 +502,7 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
+				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -262,19 +510,35 @@ public class JobDao extends AbstractJpaDao{
 				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
 				job.setDescription(jobArr[4].toString());
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
 				final Company company = new Company();
 				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
 				job.setCompany(company);
+				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[7].toString());
+				jobPosition.setPositionName(jobArr[9].toString());
 				job.setJobPosition(jobPosition);
+				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[8].toString());
+				jobStatus.setStatusName(jobArr[10].toString());
 				job.setJobStatus(jobStatus);
+				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[9].toString());
+				employmentType.setEmploymentName(jobArr[11].toString());
 				job.setEmployementType(employmentType);
-				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
 				listJob.add(job);
 			}
 		}
@@ -283,29 +547,35 @@ public class JobDao extends AbstractJpaDao{
 	
 	public List<Job> getByStatus(String status){
 		final String sql = "SELECT   "
-				+ "	tj.id,   "
-				+ "	tj.job_title,   "
-				+ "	tj.salary_start,   "
-				+ "	tj.salary_end,   "
-				+ "	tj.description,   "
-				+ "	tj.end_date,   "
-				+ "	tc.company_name,   "
-				+ "	tjp.position_name,  "
-				+ "	tjs.status_name,  "
-				+ "	tet.employment_name,   "
-				+ "	tj.ver   "
-				+ "FROM   "
-				+ "	t_job tj 	  "
-				+ "INNER JOIN   "
-				+ "	t_company tc ON tc.id = tj.company_id   "
-				+ "INNER JOIN   "
-				+ "	t_city tci ON tci.id = tc.city_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
-				+ "INNER JOIN   "
+				+ "	tj.id, "
+				+ "	tj.job_title, "
+				+ "	tj.salary_start, "
+				+ "	tj.salary_end, "
+				+ "	tj.description, "
+				+ "	tj.end_date, "
+				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
+				+ "	tjp.position_name, "
+				+ "	tjs.status_name, "
+				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
+				+ "	tj.ver "
+				+ "FROM "
+				+ "t_job tj "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "INNER JOIN "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
 				+ "WHERE   "
 				+ "	status_name ILIKE :status  || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -315,6 +585,7 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
+				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -322,19 +593,35 @@ public class JobDao extends AbstractJpaDao{
 				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
 				job.setDescription(jobArr[4].toString());
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
 				final Company company = new Company();
 				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
 				job.setCompany(company);
+				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[7].toString());
+				jobPosition.setPositionName(jobArr[9].toString());
 				job.setJobPosition(jobPosition);
+				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[8].toString());
+				jobStatus.setStatusName(jobArr[10].toString());
 				job.setJobStatus(jobStatus);
+				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[9].toString());
+				employmentType.setEmploymentName(jobArr[11].toString());
 				job.setEmployementType(employmentType);
-				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
 				listJob.add(job);
 			}
 		}
@@ -350,29 +637,29 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.description, "
 				+ "	tj.end_date, "
 				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
 				+ "	tjp.position_name, "
 				+ "	tjs.status_name, "
 				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
 				+ "	tj.ver "
 				+ "FROM "
-				+ "	t_job tj "
+				+ "t_job tj "
 				+ "INNER JOIN "
 				+ "	t_company tc ON tc.id = tj.company_id "
 				+ "INNER JOIN "
 				+ "	t_city tci ON tci.id = tc.city_id "
 				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
 				+ "WHERE"
-				+ "	tci.city_name ILIKE :city || '%' "
-				+ "	AND "
-				+ "	tjp.position_name ILIKE :position || '%' "
-				+ "	AND "
-				+ "	tet.employment_name ILIKE :employment || '%' "
-				+ "	AND"
 				+ "	tj.salary_start >= :start "
 				+ "	AND "
 				+ "	tj.salary_end <= :end ";
@@ -386,6 +673,7 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
+				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -393,19 +681,35 @@ public class JobDao extends AbstractJpaDao{
 				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
 				job.setDescription(jobArr[4].toString());
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
 				final Company company = new Company();
 				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[8].toString());
+				company.setCity(city);
+				
 				job.setCompany(company);
+				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[7].toString());
+				jobPosition.setPositionName(jobArr[9].toString());
 				job.setJobPosition(jobPosition);
+				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[8].toString());
+				jobStatus.setStatusName(jobArr[10].toString());
 				job.setJobStatus(jobStatus);
+				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[9].toString());
+				employmentType.setEmploymentName(jobArr[11].toString());
 				job.setEmployementType(employmentType);
-				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
 				listJob.add(job);
 			}
 		}
@@ -421,22 +725,28 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.description, "
 				+ "	tj.end_date, "
 				+ "	tc.company_name, "
+				+ "	ti.industry_name, "
+				+ "	tci.city_name, "
 				+ "	tjp.position_name, "
 				+ "	tjs.status_name, "
 				+ "	tet.employment_name, "
+				+ "	tj.created_at, "
+				+ " tj.updated_at, "
 				+ "	tj.ver "
 				+ "FROM "
-				+ "	t_job tj "
+				+ "t_job tj "
 				+ "INNER JOIN "
 				+ "	t_company tc ON tc.id = tj.company_id "
 				+ "INNER JOIN "
 				+ "	t_city tci ON tci.id = tc.city_id "
 				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "INNER JOIN  "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id "
+				+ "t_industry ti ON tc.industry_id = tc.industry_id"
 				+ "WHERE"
 				+ "	tci.city_name ILIKE :city || '%' "
 				+ "	AND "
@@ -496,6 +806,7 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
+				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -503,19 +814,35 @@ public class JobDao extends AbstractJpaDao{
 				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
 				job.setDescription(jobArr[4].toString());
 				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
 				final Company company = new Company();
 				company.setCompanyName(jobArr[6].toString());
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[7].toString());
+				company.setIndustry(industrySet);
+				
+				final City citySet = new City();
+				citySet.setCityName(jobArr[8].toString());
+				company.setCity(citySet);
+				
 				job.setCompany(company);
+				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[7].toString());
+				jobPosition.setPositionName(jobArr[9].toString());
 				job.setJobPosition(jobPosition);
+				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[8].toString());
+				jobStatus.setStatusName(jobArr[10].toString());
 				job.setJobStatus(jobStatus);
+				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[9].toString());
+				employmentType.setEmploymentName(jobArr[11].toString());
 				job.setEmployementType(employmentType);
-				job.setVersion(Integer.valueOf(jobArr[10].toString()));
+				
+				job.setCreatedAt(DateConvert.convertDate(jobArr[12].toString()));
+				job.setUpdatedAt(DateConvert.convertDate(jobArr[13].toString()));
+				job.setVersion(Integer.valueOf(jobArr[14].toString()));
 				listJob.add(job);
 			}
 		}

@@ -1,4 +1,4 @@
-	package com.lawencon.jobportal.admin.service;
+package com.lawencon.jobportal.admin.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,9 +26,12 @@ import com.lawencon.jobportal.admin.dao.GenderDao;
 import com.lawencon.jobportal.admin.dao.MaritalStatusDao;
 import com.lawencon.jobportal.admin.dao.PersonTypeDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.UpdateCvReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.UpdateSummaryReqDto;
 import com.lawencon.jobportal.admin.model.Candidate;
 import com.lawencon.jobportal.admin.model.CandidateProfile;
 import com.lawencon.jobportal.admin.model.File;
@@ -61,7 +64,7 @@ public class CandidateService {
 
 	@Autowired
 	private MaritalStatusDao maritalStatusDao;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -149,9 +152,9 @@ public class CandidateService {
 
 			final String pass = GeneratorId.generateCode();
 			final String message = "Email: " + data.getEmail() + "\nPassword: " + pass;
-			
+
 			emailService.sendEmail(data.getEmail(), "Registrasi User", message);
-			
+
 			final String password = passwordEncoder.encode(pass);
 			data.setPassword(password);
 			final Candidate candidateResult = candidateDao.save(candidate);
@@ -161,11 +164,12 @@ public class CandidateService {
 			final HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setBearerAuth(JwtConfig.get());
-			
-			final RequestEntity<CandidateInsertReqDto> candidateInsert = RequestEntity.post(candidateInsertAPI).headers(headers)
-					.body(data);
 
-			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(candidateInsert, InsertResDto.class);
+			final RequestEntity<CandidateInsertReqDto> candidateInsert = RequestEntity.post(candidateInsertAPI)
+					.headers(headers).body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(candidateInsert,
+					InsertResDto.class);
 
 			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
 				result.setId(candidateResult.getId());
@@ -179,7 +183,7 @@ public class CandidateService {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
@@ -202,6 +206,63 @@ public class CandidateService {
 		result.setId(candidates.getId());
 		result.setMessage("Register Successfully.");
 		em().getTransaction().commit();
+
+		return result;
+	}
+
+	public UpdateResDto updateCv(UpdateCvReqDto data) {
+		final UpdateResDto result = new UpdateResDto();
+
+		try {
+			em().getTransaction().begin();
+			final Candidate candidateDb = candidateDao.getByEmail(data.getCandidateEmail());
+			final Candidate candidate = candidateDao.getById(Candidate.class, candidateDb.getId());
+			final CandidateProfile profile = candidateProfileDao.getById(CandidateProfile.class,
+					candidate.getCandidateProfile().getId());
+			final String oldFileId = profile.getCv().getId();
+
+			final File file = new File();
+			file.setFile(data.getFile());
+			file.setExt(data.getExt());
+			final File newFile = fileDao.save(file);
+
+			profile.setCv(newFile);
+			final CandidateProfile newProfile = candidateProfileDao.saveAndFlush(profile);
+
+			fileDao.deleteById(File.class, oldFileId);
+
+			result.setVersion(newProfile.getVersion());
+			result.setMessage("CV updated successfully.");
+			em().getTransaction().commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
+
+		return result;
+	}
+
+	public UpdateResDto updateSummary(UpdateSummaryReqDto data) {
+		final UpdateResDto result = new UpdateResDto();
+
+		try {
+			em().getTransaction().begin();
+			final Candidate candidateDb = candidateDao.getByEmail(data.getCandidateEmail());
+			final Candidate candidate = candidateDao.getById(Candidate.class, candidateDb.getId());
+			final CandidateProfile profile = candidateProfileDao.getById(CandidateProfile.class,
+					candidate.getCandidateProfile().getId());
+
+			profile.setSummary(data.getSummary());
+			final CandidateProfile newProfile = candidateProfileDao.saveAndFlush(profile);
+
+			result.setVersion(newProfile.getVersion());
+			result.setMessage("Summary updated successfully.");
+			em().getTransaction().commit();
+
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 
 		return result;
 	}

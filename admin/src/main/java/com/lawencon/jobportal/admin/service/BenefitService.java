@@ -69,7 +69,7 @@ public class BenefitService {
 
 			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
 				result.setId(benefits.getId());
-				result.setMessage("City added successfully.");
+				result.setMessage("Benefit added successfully.");
 				em().getTransaction().commit();
 			} else {
 				em().getTransaction().rollback();

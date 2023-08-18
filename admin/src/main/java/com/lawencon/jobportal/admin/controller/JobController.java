@@ -31,6 +31,18 @@ public class JobController {
 	@Autowired
 	private JobService jobService;
 	
+	@GetMapping
+	public ResponseEntity<List<JobGetResDto>> getAll() {
+		final List<JobGetResDto> data = jobService.getAll();
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
+	@GetMapping("filter/name")
+	public ResponseEntity<List<JobGetResDto>> getByName(@RequestParam("n") String jobName) {
+		final List<JobGetResDto> data = jobService.getByName(jobName);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
 	@GetMapping("filter/location")
 	public ResponseEntity<List<JobGetResDto>> getByLocation(@RequestParam("loc") String location) {
 		final List<JobGetResDto> data = jobService.getByLocation(location);

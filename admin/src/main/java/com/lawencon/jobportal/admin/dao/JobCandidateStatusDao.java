@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.admin.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,21 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
+	public List<JobCandidateStatus> getByJob(String jobCode) {
+		final String sql = "SELECT "
+				+ "jcs "
+				+ "FROM "
+				+ "JobCandidateStatus jcs "
+				+ "WHERE "
+				+ "jcs.job.jobCode = :jobCode ";
+		
+		final List<JobCandidateStatus> jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
+				.setParameter("jobCode", jobCode)
+				.getResultList();
+		
+		return jobCandidateStatus;
+	}
+	
 	public JobCandidateStatus getByCandidateAndJob(String candidateEmail, String jobCode) {
 		final String sql = "SELECT "
 				+ "jcs "
@@ -24,6 +41,22 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 		
 		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
 				.setParameter("jobCode", jobCode)
+				.setParameter("candidateEmail", candidateEmail)
+				.getSingleResult();
+		
+		return jobCandidateStatus;
+	}
+	
+	public JobCandidateStatus getByCandidateAndCompany(String candidateEmail, String companyCode) {
+		final String sql = "SELECT "
+				+ "jcs "
+				+ "FROM "
+				+ "JobCandidateStatus jcs "
+				+ "WHERE "
+				+ "jcs.job.company.companyCode = :companyCode AND jcs.candidate.email = :candidateEmail ";
+		
+		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
+				.setParameter("companyCode", companyCode)
 				.setParameter("candidateEmail", candidateEmail)
 				.getSingleResult();
 		
