@@ -50,4 +50,5 @@ public class UserDao extends AbstractJpaDao{
 			return null;
 		}
 	}
+	
 }

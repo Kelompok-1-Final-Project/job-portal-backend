@@ -29,6 +29,18 @@ public class UserController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
+	@GetMapping("/hr")
+	public ResponseEntity<List<UserGetResDto>> getAllHr() {
+		final List<UserGetResDto> data = userService.getAllHr();
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
+	@GetMapping("/interviewer")
+	public ResponseEntity<List<UserGetResDto>> getAllInterviewer() {
+		final List<UserGetResDto> data = userService.getAllInterviewer();
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
 	@PostMapping
 	public ResponseEntity<InsertResDto> insert(
 			@RequestBody UserInsertReqDto data) {

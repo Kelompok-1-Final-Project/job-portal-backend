@@ -30,6 +30,7 @@ import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.jobposition.JobPositionGetResDto;
 import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.EmploymentType;
 import com.lawencon.jobportal.admin.model.Job;
@@ -424,5 +425,20 @@ public class JobService {
 		});
 		return employmentTypeGetResDtos;
 	}
+	
+	public List<JobPositionGetResDto> getAllJobPosition(){
+		final List<JobPositionGetResDto> jobPositionGetResDtos = new ArrayList<>();
+		
+		jobPositionDao.getAll(JobPosition.class).forEach(jp -> {
+			final JobPositionGetResDto jobPositionGetResDto = new JobPositionGetResDto();
+			jobPositionGetResDto.setId(jp.getId());
+			jobPositionGetResDto.setPositionName(jp.getPositionName());
+			jobPositionGetResDto.setPositionCode(jp.getPositionCode());
+			jobPositionGetResDtos.add(jobPositionGetResDto);
+		});
+		
+		return jobPositionGetResDtos;
+	}
+	
 
 }
