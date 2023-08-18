@@ -43,7 +43,7 @@ public class JobController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
-	@GetMapping("filter/location")
+	@GetMapping("filter/location/")
 	public ResponseEntity<List<JobGetResDto>> getByLocation(@RequestParam("loc") String location) {
 		final List<JobGetResDto> data = jobService.getByLocation(location);
 		return new ResponseEntity<>(data, HttpStatus.OK);

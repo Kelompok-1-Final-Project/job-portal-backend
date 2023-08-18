@@ -68,7 +68,7 @@ public class JobService {
 			final EmploymentTypeGetResDto employmentTypeGetResDto = new EmploymentTypeGetResDto();
 			employmentTypeGetResDto.setId(j.getId());
 			employmentTypeGetResDto.setTypeName(j.getEmploymentName());
-			employmentTypeGetResDto.setTypeCode(j.getEmploymentName());
+			employmentTypeGetResDto.setTypeCode(j.getEmploymentCode());
 			employmentTypeGetResDtos.add(employmentTypeGetResDto);
 		});
 		return employmentTypeGetResDtos;

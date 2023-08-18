@@ -773,3 +773,6 @@ tstq.skill_test_id = '47cc1a8c-57da-43e0-a710-071f249b564e'
 SELECT id, test_name, test_code, job_id, ver FROM t_skill_test WHERE job_id = 'c720d9b5-3218-43bc-8f47-8e82d0ee6da6'
 
 SELECT tstq.id, tq.id, tq.question, tq.question_code, tstq.ver FROM t_skill_test_question tstq INNER JOIN t_question tq ON tstq.question_id = tq.id WHERE tstq.skill_test_id = '47cc1a8c-57da-43e0-a710-071f249b564e'
+
+
+SELECT 	tj.id, 	tj.job_title, 	tj.salary_start, 	tj.salary_end, 	tj.description, 	tj.end_date, 	tc.company_name, 	ti.industry_name, 	tci.city_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name, 	tj.created_at,  tj.updated_at, 	tj.ver FROM t_job tj INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN 	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN t_industry ti ON tc.industry_id = tc.industry_idWHERE tj.job_title ILIKE :name || '%'  AND 	tci.id ILIKE :city || '%' 	AND 	tjp.id ILIKE :position || '%' 	AND 	tet.id ILIKE :employment || '%' 	AND	tj.salary_start >= :start 	AND 	tj.salary_end <= :end 
