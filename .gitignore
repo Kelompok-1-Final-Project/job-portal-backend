@@ -2,3 +2,4 @@
 /admin/target
 /candidate/target
 /admin/src/main/resources/application.properties
+/candidate/src/main/resources/application.properties
