@@ -1211,3 +1211,16 @@ INNER JOIN
 	t_job_status tjs ON tjs.id = tj.job_status_id 
 WHERE 
 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
+	
+	
+SELECT 	tj.id, 	tj.job_title, 	tj.salary_start, 	tj.salary_end, 	tj.description, 	tj.end_date,  	tc.id AS company_id ,	tc.company_name, 	ti.industry_name, 	tci.city_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name, 	tj.created_at,  	tj.updated_at, 	tj.ver,
+	tpi.full_name AS interviewer,
+	tph.full_name AS hrFROM 	t_job tj INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN 	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN 	t_industry ti ON tc.industry_id = tc.industry_id 
+INNER JOIN 
+	t_user tuh ON tj.hr_id = tuh.id 
+INNER JOIN
+	t_user tui ON tj.interviewer_id = tui.id 
+INNER JOIN 
+	t_profile tph ON tuh.profile_id = tph.id 
+INNER JOIN
+	t_profile tpi ON tui.profile_id = tpi.id 

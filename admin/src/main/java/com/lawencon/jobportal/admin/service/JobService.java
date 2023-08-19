@@ -88,6 +88,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -115,6 +118,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -142,6 +148,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -169,6 +178,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -196,6 +208,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -223,6 +238,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -250,6 +268,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -277,6 +298,9 @@ public class JobService {
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
 			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+			jobGetResDto.setJobCode(j.getJobCode());
 			jobGetResDtos.add(jobGetResDto);
 		});
 
@@ -473,6 +497,9 @@ public class JobService {
 		jobGetResDto.setCreatedAt(job.getCreatedAt().toString());
 		jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());
 		jobGetResDto.setVer(job.getVersion());
+		jobGetResDto.setInterviewerName(job.getInterviewer().getProfile().getFullName());
+		jobGetResDto.setHrName(job.getHr().getProfile().getFullName());
+		jobGetResDto.setJobCode(job.getJobCode());
 
 		return jobGetResDto;
 	}

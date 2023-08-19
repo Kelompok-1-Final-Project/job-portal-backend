@@ -17,6 +17,8 @@ import com.lawencon.jobportal.admin.model.Industry;
 import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.JobPosition;
 import com.lawencon.jobportal.admin.model.JobStatus;
+import com.lawencon.jobportal.admin.model.Profile;
+import com.lawencon.jobportal.admin.model.User;
 import com.lawencon.jobportal.admin.util.DateConvert;
 
 @Repository
@@ -27,37 +29,48 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByIndustry(String industry) {
-		final String sql = "SELECT "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE  "
 				+ "ti.industry_name  ILIKE '%' || :industry || '%'";
 		
@@ -106,6 +119,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+				
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -115,36 +142,47 @@ public class JobDao extends AbstractJpaDao{
 	
 	public List<Job> getByName(String jobName) {
 		final String sql = "SELECT  "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE  "
 				+ "tj.job_title ILIKE '%' || :jobName || '%'";
 		
@@ -193,6 +231,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -202,36 +254,47 @@ public class JobDao extends AbstractJpaDao{
 	
 	public List<Job> getByLocation(String location) {
 		final String sql = "SELECT  "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE  "
 				+ "city_name ILIKE :location || '%'";
 		
@@ -280,6 +343,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -303,37 +380,48 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByCompany(String companyName){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE   "
 				+ "	company_name ILIKE :company || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -381,6 +469,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+				
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -389,37 +491,48 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByEmploymentType(String employmentName){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE   "
 				+ "	employment_name ILIKE :employment || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -467,6 +580,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -475,37 +602,48 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByPosition(String positionName){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE   "
 				+ "	position_name ILIKE :position || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -553,6 +691,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -561,37 +713,48 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByStatus(String status){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE   "
 				+ "	status_name ILIKE :status  || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -639,6 +802,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -647,37 +824,48 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getBySalary(Integer salaryStart, Integer salaryEnd){
-		final String sql = "SELECT "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE"
 				+ "	tj.salary_start >= :start "
 				+ "	AND "
@@ -730,6 +918,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
@@ -738,37 +940,48 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> filterSearch(String city, String position, String employment, Integer salaryStart, Integer salaryEnd){
-		final String sql = "SELECT "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
+		final String sql = "SELECT  "
+				+ "	tj.id,  "
+				+ "	tj.job_title,  "
+				+ "	tj.salary_start,  "
+				+ "	tj.salary_end,  "
+				+ "	tj.description,  "
+				+ "	tj.end_date,  "
+				+ " tc.id AS company_id , "
+				+ "	tc.company_name,  "
+				+ "	ti.industry_name,  "
+				+ "	tci.city_name,  "
+				+ "	tjp.position_name,  "
+				+ "	tjs.status_name,  "
+				+ "	tet.employment_name,  "
+				+ "	tj.created_at,  "
+				+ " tj.updated_at,  "
+				+ "	tj.ver, "
+				+ "	tpi.full_name AS interviewer, "
+				+ "	tph.full_name AS hr "
+				+ " tj.job_code "
+				+ "FROM  "
+				+ "	t_job tj  "
 				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
+				+ "	t_company tc ON tc.id = tj.company_id  "
 				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
+				+ "	t_city tci ON tci.id = tc.city_id  "
+				+ "INNER JOIN  "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
+				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
+				+ "INNER JOIN  "
+				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "INNER JOIN  "
+				+ "	t_user tuh ON tj.hr_id = tuh.id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "	t_user tui ON tj.interviewer_id = tui.id  "
+				+ "INNER JOIN  "
+				+ "	t_profile tph ON tuh.profile_id = tph.id  "
+				+ "INNER JOIN "
+				+ "	t_profile tpi ON tui.profile_id = tpi.id "
 				+ "WHERE"
 				+ "	tci.city_name ILIKE :city || '%' "
 				+ "	AND "
@@ -866,6 +1079,20 @@ public class JobDao extends AbstractJpaDao{
 				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
 				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+
+				final Profile profileHr = new Profile();
+				profileHr.setFullName(jobArr[16].toString());
+				final User userHr = new User();
+				userHr.setProfile(profileHr);
+				job.setHr(userHr);
+				
+				final Profile profileInterviewer = new Profile();
+				profileInterviewer.setFullName(jobArr[17].toString());
+				final User userInterviewer = new User();
+				userInterviewer.setProfile(profileInterviewer);
+				job.setHr(userInterviewer);
+				
+				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);
 			}
 		}
