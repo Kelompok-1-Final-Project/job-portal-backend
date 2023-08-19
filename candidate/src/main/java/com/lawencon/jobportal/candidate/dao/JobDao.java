@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.candidate.dao;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.candidate.model.City;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
+import com.lawencon.jobportal.candidate.model.File;
 import com.lawencon.jobportal.candidate.model.Industry;
 import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobPosition;
@@ -744,7 +746,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.salary_end, "
 				+ "	tj.description, "
 				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
+				+ " tc.id AS company_id, "
 				+ "	tc.company_name, "
 				+ " tc.file_id, "
 				+ "	ti.industry_name, "
@@ -850,31 +852,35 @@ public class JobDao extends AbstractJpaDao{
 				company.setId(jobArr[6].toString());
 				company.setCompanyName(jobArr[7].toString());
 				
+				final File file = new File();
+				file.setId(jobArr[8].toString());
+				company.setFile(file);
+				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[8].toString());
+				industrySet.setIndustryName(jobArr[9].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[9].toString());
+				city.setCityName(jobArr[10].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[10].toString());
+				jobPosition.setPositionName(jobArr[11].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[11].toString());
+				jobStatus.setStatusName(jobArr[12].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[12].toString());
+				employmentType.setEmploymentName(jobArr[13].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
-				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+				job.setCreatedAt(Timestamp.valueOf(jobArr[14].toString()).toLocalDateTime());
+//				job.setUpdatedAt(Timestamp.valueOf(jobArr[15].toString()).toLocalDateTime());
+				job.setVersion(Integer.valueOf(jobArr[16].toString()));
 				listJob.add(job);
 			}
 		}
