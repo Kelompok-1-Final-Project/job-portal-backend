@@ -514,7 +514,9 @@ public class JobService {
 		jobGetResDto.setStatusName(job.getJobStatus().getStatusName());
 		jobGetResDto.setEmploymentName(job.getEmployementType().getEmploymentName());
 		jobGetResDto.setCreatedAt(job.getCreatedAt().toString());
-		jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());
+		if(job.getUpdatedAt()!=null) {
+			jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());			
+		}
 		jobGetResDto.setVer(job.getVersion());
 		jobGetResDto.setInterviewerName(job.getInterviewer().getProfile().getFullName());
 		jobGetResDto.setHrName(job.getHr().getProfile().getFullName());
