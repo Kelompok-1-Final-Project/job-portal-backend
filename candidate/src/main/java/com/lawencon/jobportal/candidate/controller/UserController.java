@@ -37,7 +37,7 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
-	@GetMapping
+	@GetMapping("/{candidateId}")
 	public ResponseEntity<UserGetResDto> getByCandidate(@PathVariable String candidateId){
 		final UserGetResDto response = userService.getByCandidate(candidateId);
 		return new ResponseEntity<>(response, HttpStatus.OK);

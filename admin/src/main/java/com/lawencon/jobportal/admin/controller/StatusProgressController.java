@@ -188,4 +188,16 @@ public class StatusProgressController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@GetMapping("/medical-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllMedicalByCandidate(@RequestParam String candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getMCUbyCandidate(candidateEmail);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/reject-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllRejectByCandidate(@RequestParam String candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getRejectbyCandidate(candidateEmail);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 }	

@@ -7,6 +7,7 @@ public class CandidateStageProcessResDto {
 	private String statusName;
 	private String companyId;
 	private String companyName;
+	private String photoId;
 	private String createdAt;
 	private Integer totalStage;
 
@@ -56,6 +57,14 @@ public class CandidateStageProcessResDto {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	public String getPhotoId() {
+		return photoId;
+	}
+
+	public void setPhotoId(String photoId) {
+		this.photoId = photoId;
 	}
 
 	public String getCreatedAt() {

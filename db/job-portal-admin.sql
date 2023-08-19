@@ -1275,3 +1275,12 @@ INNER JOIN
 	t_profile tph ON tuh.profile_id = tph.id 
 INNER JOIN
 	t_profile tpi ON tui.profile_id = tpi.id 
+
+	
+SELECT 
+	tjcs.id AS status_job_id,	tj.id AS job_id, 	tj.job_title, 	tjs.status_name, 	tc.id AS company_id, 	tc.company_name,  	tc.file_id,	tjcs.created_at, 
+	tsp.id AS status_stage_id,
+	tsp.process_name,	tjcs.ver FROM 	t_job_candidate_status tjcs INNER JOIN 	t_job tj ON tjcs.job_id = tj.id INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id 
+INNER JOIN
+	t_status_process tsp ON tjcs.status_id = tsp.id 
+	
