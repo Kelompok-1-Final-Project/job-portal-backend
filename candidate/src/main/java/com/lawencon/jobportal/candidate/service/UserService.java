@@ -1,6 +1,7 @@
 package com.lawencon.jobportal.candidate.service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
@@ -27,6 +28,7 @@ import com.lawencon.jobportal.candidate.dao.PersonTypeDao;
 import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginResDto;
@@ -194,6 +196,33 @@ public class UserService implements UserDetailsService {
 		}
 		
 		return result;
+	}
+	
+	public UserGetResDto getByCandidate(String candidateId) {
+		final User user = userDao.getById(User.class, candidateId);
+		
+		final UserGetResDto userGetResDto = new UserGetResDto();
+		userGetResDto.setFullName(user.getProfile().getFullName());
+		userGetResDto.setIdNumber(user.getProfile().getIdNumber());
+		userGetResDto.setEmail(user.getEmail());
+		userGetResDto.setPhone(user.getProfile().getMobileNumber());
+		userGetResDto.setMaritalStatusId(user.getProfile().getMaritalStatus().getId());
+		userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
+		userGetResDto.setGender(user.getProfile().getGender().getGenderName());
+		userGetResDto.setExpectedSalary(user.getProfile().getExpectedSalary());
+		
+		final LocalDate curDate = LocalDate.now();  
+		final LocalDate getBirth = user.getProfile().getBirthdate();
+		final int age = Period.between(getBirth, curDate).getYears();
+		final String ageText = age + " years old";
+		userGetResDto.setAge(ageText);
+		
+		userGetResDto.setCvId(user.getProfile().getCv().getId());
+		userGetResDto.setPhotoId(user.getProfile().getPhoto().getId());
+		userGetResDto.setSummary(user.getProfile().getSummary());
+		
+		return userGetResDto;
+		
 	}
 
 }

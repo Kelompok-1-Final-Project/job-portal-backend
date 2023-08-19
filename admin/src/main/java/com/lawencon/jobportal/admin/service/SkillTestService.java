@@ -19,14 +19,18 @@ import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
 import com.lawencon.jobportal.admin.dao.QuestionDao;
+import com.lawencon.jobportal.admin.dao.QuestionOptionDao;
 import com.lawencon.jobportal.admin.dao.SkillTestDao;
 import com.lawencon.jobportal.admin.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.skilltest.QuestionGetResDto;
+import com.lawencon.jobportal.admin.dto.skilltest.QuestionOptionGetResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestGetResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestQuestionInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.skilltest.TestGetResDto;
 import com.lawencon.jobportal.admin.model.Candidate;
 import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.Question;
@@ -55,6 +59,9 @@ public class SkillTestService {
 	
 	@Autowired
 	private QuestionDao questionDao;
+	
+	@Autowired
+	private QuestionOptionDao questionOptionDao;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -92,6 +99,39 @@ public class SkillTestService {
 		return skillTestGetResDto;
 	}
 
+	public TestGetResDto getAllQuestion(String jobId){
+		final TestGetResDto testGetResDto = new TestGetResDto();
+		
+		final SkillTest skillTest = skillTestDao.getByJob(jobId);
+		testGetResDto.setTestId(skillTest.getId());
+		testGetResDto.setTestName(skillTest.getTestName());
+		testGetResDto.setTestCode(skillTest.getTestCode());
+		final List<QuestionGetResDto> questionGetResDtos = new ArrayList<>();
+		
+		skillTestQuestionDao.getBySkillTest(skillTest.getId()).forEach(stq -> {
+			final QuestionGetResDto questionGetResDto = new QuestionGetResDto();
+			final List<QuestionOptionGetResDto> questionOptionGetResDtos = new ArrayList<>();
+			
+			questionOptionDao.getByQuestion(stq.getQuestion().getId()).forEach(qo -> {
+				final QuestionOptionGetResDto questionOptionGetResDto = new QuestionOptionGetResDto();
+				questionOptionGetResDto.setOptionId(qo.getId());
+				questionOptionGetResDto.setLabel(qo.getLabels());
+				questionOptionGetResDto.setIsAnswer(qo.getIsAnswer());
+				questionOptionGetResDtos.add(questionOptionGetResDto);
+			});
+			
+			questionGetResDto.setQuestion(stq.getQuestion().getQuestion());
+			questionGetResDto.setQuestionId(stq.getQuestion().getId());
+			questionGetResDto.setOptionGetResDtos(questionOptionGetResDtos);
+			questionGetResDtos.add(questionGetResDto);
+		});
+		
+		testGetResDto.setQuestionGetResDtos(questionGetResDtos);
+		
+		return testGetResDto;
+	}
+	
+	
 	public InsertResDto assignTest(SkillTestQuestionInsertReqDto data) {		
 		final InsertResDto insertResDto = new InsertResDto();
 		try {
