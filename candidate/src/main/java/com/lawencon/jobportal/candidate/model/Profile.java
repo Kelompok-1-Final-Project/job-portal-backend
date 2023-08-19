@@ -17,39 +17,39 @@ public class Profile extends BaseEntity{
 	@Column(name = "id_number",length =16,unique=true)
 	private String idNumber;
 	
-	@Column(name = "full_name",length =30,nullable = false)
+	@Column(name = "full_name",length =30, nullable = false)
 	private String fullName;
 	
-	@Column(name = "summary")
+	@Column(name = "summary", nullable = true)
 	private String summary;
 	
-	@Column(name = "birthdate")
+	@Column(name = "birthdate", nullable = true)
 	private LocalDate birthdate;
 	
-	@Column(name = "mobile_number",length =15)
+	@Column(name = "mobile_number",length =15, nullable = true)
 	private String mobileNumber;
 	
-	@Column(name="expected_salary")
+	@Column(name="expected_salary", nullable = true)
 	private Integer expectedSalary;
 	
 	@OneToOne
-	@JoinColumn(name = "photo_id")
+	@JoinColumn(name = "photo_id", nullable = true)
 	private File photo;
 	
 	@OneToOne
-	@JoinColumn(name = "cv_id")
+	@JoinColumn(name = "cv_id", nullable = true)
 	private File cv;
 	
 	@OneToOne
-	@JoinColumn(name = "gender_id")
+	@JoinColumn(name = "gender_id", nullable = true)
 	private Gender gender;
 	
 	@OneToOne
-	@JoinColumn(name = "marital_status_id")
+	@JoinColumn(name = "marital_status_id", nullable = true)
 	private MaritalStatus maritalStatus;
 	
 	@OneToOne
-	@JoinColumn(name = "person_type_id")
+	@JoinColumn(name = "person_type_id", nullable = true)
 	private PersonType personType;
 	
 	
