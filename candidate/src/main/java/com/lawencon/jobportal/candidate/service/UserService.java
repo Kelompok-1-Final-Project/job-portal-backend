@@ -28,6 +28,7 @@ import com.lawencon.jobportal.candidate.dao.PersonTypeDao;
 import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserEmailGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginReqDto;
@@ -223,6 +224,15 @@ public class UserService implements UserDetailsService {
 		
 		return userGetResDto;
 		
+	}
+	
+	public UserEmailGetResDto getEmail(String userId) {
+		final User user = userDao.getById(User.class, userId);
+		
+		final UserEmailGetResDto response = new UserEmailGetResDto();
+		response.setEmail(user.getEmail());
+		
+		return response;
 	}
 
 }
