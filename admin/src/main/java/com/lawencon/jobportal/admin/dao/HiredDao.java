@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.Company;
+import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Hired;
 import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.JobStatus;
@@ -29,6 +30,7 @@ public class HiredDao extends AbstractJpaDao{
 				+ "	tjs.status_name, "
 				+ "	tc.id AS company_id, "
 				+ "	tc.company_name, "
+				+ " tc.file_id, "
 				+ "	th.created_at, "
 				+ "	th.ver "
 				+ "FROM "
@@ -66,11 +68,15 @@ public class HiredDao extends AbstractJpaDao{
 				final Company company = new Company();
 				company.setId(hiredArr[4].toString());
 				company.setCompanyName(hiredArr[5].toString());
+
+				final File file = new File();
+				file.setId(hiredArr[6].toString());
+				company.setFile(file);
 				job.setCompany(company);
 				
 				hired.setJob(job);
-				hired.setCreatedAt(Timestamp.valueOf(hiredArr[6].toString()).toLocalDateTime());
-				hired.setVersion(Integer.valueOf(hiredArr[7].toString()));
+				hired.setCreatedAt(Timestamp.valueOf(hiredArr[7].toString()).toLocalDateTime());
+				hired.setVersion(Integer.valueOf(hiredArr[8].toString()));
 				
 				listHired.add(hired);
 			}

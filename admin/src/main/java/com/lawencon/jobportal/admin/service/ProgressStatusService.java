@@ -510,6 +510,7 @@ public class ProgressStatusService {
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
 			result.setTotalStage(listApplication.size());
 
@@ -532,6 +533,7 @@ public class ProgressStatusService {
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
 			result.setTotalStage(listAssessment.size());
 
@@ -554,6 +556,7 @@ public class ProgressStatusService {
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
 			result.setTotalStage(listInterview.size());
 
@@ -576,6 +579,7 @@ public class ProgressStatusService {
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
 			result.setTotalStage(listHired.size());
 
@@ -598,6 +602,7 @@ public class ProgressStatusService {
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
 			result.setTotalStage(listOffering.size());
 
@@ -620,6 +625,7 @@ public class ProgressStatusService {
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
 			result.setTotalStage(listMedical.size());
 
@@ -643,6 +649,7 @@ public class ProgressStatusService {
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
 			result.setTotalStage(listJobCandidateStatus.size());
 
