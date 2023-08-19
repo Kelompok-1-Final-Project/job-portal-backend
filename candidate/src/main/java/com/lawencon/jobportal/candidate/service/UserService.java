@@ -204,23 +204,48 @@ public class UserService implements UserDetailsService {
 		
 		final UserGetResDto userGetResDto = new UserGetResDto();
 		userGetResDto.setFullName(user.getProfile().getFullName());
-		userGetResDto.setIdNumber(user.getProfile().getIdNumber());
+		if(user.getProfile().getIdNumber() != null) {
+			userGetResDto.setIdNumber(user.getProfile().getIdNumber());
+		}
+		
 		userGetResDto.setEmail(user.getEmail());
-		userGetResDto.setPhone(user.getProfile().getMobileNumber());
-		userGetResDto.setMaritalStatusId(user.getProfile().getMaritalStatus().getId());
-		userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
-		userGetResDto.setGender(user.getProfile().getGender().getGenderName());
-		userGetResDto.setExpectedSalary(user.getProfile().getExpectedSalary());
 		
-		final LocalDate curDate = LocalDate.now();  
-		final LocalDate getBirth = user.getProfile().getBirthdate();
-		final int age = Period.between(getBirth, curDate).getYears();
-		final String ageText = age + " years old";
-		userGetResDto.setAge(ageText);
+		if(user.getProfile().getMobileNumber() != null) {
+			userGetResDto.setIdNumber(user.getProfile().getMobileNumber());
+		}
 		
-		userGetResDto.setCvId(user.getProfile().getCv().getId());
-		userGetResDto.setPhotoId(user.getProfile().getPhoto().getId());
-		userGetResDto.setSummary(user.getProfile().getSummary());
+		if(user.getProfile().getMaritalStatus() != null) {
+			userGetResDto.setMaritalStatusId(user.getProfile().getMaritalStatus().getId());
+			userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
+		}
+		
+		if(user.getProfile().getGender() != null) {
+			userGetResDto.setGender(user.getProfile().getGender().getGenderName());
+		}
+		
+		if(user.getProfile().getExpectedSalary() != null) {
+			userGetResDto.setExpectedSalary(user.getProfile().getExpectedSalary());
+		}
+		
+		if(user.getProfile().getBirthdate() != null) {
+			final LocalDate curDate = LocalDate.now();  
+			final LocalDate getBirth = user.getProfile().getBirthdate();
+			final int age = Period.between(getBirth, curDate).getYears();
+			final String ageText = age + " years old";
+			userGetResDto.setAge(ageText);
+		}
+		
+		if(user.getProfile().getCv() != null) {
+			userGetResDto.setCvId(user.getProfile().getCv().getId());
+		}
+		
+		if(user.getProfile().getPhoto() != null) {
+			userGetResDto.setPhotoId(user.getProfile().getPhoto().getId());
+		}
+		
+		if(user.getProfile().getSummary() != null) {			
+			userGetResDto.setSummary(user.getProfile().getSummary());
+		}
 		
 		return userGetResDto;
 		
