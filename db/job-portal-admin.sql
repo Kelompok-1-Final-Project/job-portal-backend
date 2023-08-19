@@ -1283,4 +1283,5 @@ SELECT
 	tsp.process_name,	tjcs.ver FROM 	t_job_candidate_status tjcs INNER JOIN 	t_job tj ON tjcs.job_id = tj.id INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id 
 INNER JOIN
 	t_status_process tsp ON tjcs.status_id = tsp.id 
-	
+WHERE 
+	tsp.id = '28f71d17-70ae-4ebd-83e5-24143d497777' 

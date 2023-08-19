@@ -12,6 +12,7 @@ import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.Application;
 import com.lawencon.jobportal.admin.model.Company;
+import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.JobStatus;
 
@@ -29,6 +30,7 @@ public class ApplicationDao extends AbstractJpaDao {
 				+ "	tjs.status_name, "
 				+ "	tc.id AS company_id, "
 				+ "	tc.company_name, "
+				+ " tc.file_id, "
 				+ "	ta.created_at, "
 				+ "	ta.ver "
 				+ "FROM "
@@ -66,11 +68,15 @@ public class ApplicationDao extends AbstractJpaDao {
 				final Company company = new Company();
 				company.setId(applicationArr[4].toString());
 				company.setCompanyName(applicationArr[5].toString());
+
+				final File file = new File();
+				file.setId(applicationArr[6].toString());
+				company.setFile(file);
 				job.setCompany(company);
 				
 				application.setJob(job);
-				application.setCreatedAt(Timestamp.valueOf(applicationArr[6].toString()).toLocalDateTime());
-				application.setVersion(Integer.valueOf(applicationArr[7].toString()));
+				application.setCreatedAt(Timestamp.valueOf(applicationArr[7].toString()).toLocalDateTime());
+				application.setVersion(Integer.valueOf(applicationArr[8].toString()));
 				
 				listApplication.add(application);
 			}
