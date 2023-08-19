@@ -21,7 +21,6 @@ import com.lawencon.jobportal.admin.constant.StatusCodeEnum;
 import com.lawencon.jobportal.admin.dao.ApplicationDao;
 import com.lawencon.jobportal.admin.dao.AssessmentDao;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
-import com.lawencon.jobportal.admin.dao.FileDao;
 import com.lawencon.jobportal.admin.dao.HiredDao;
 import com.lawencon.jobportal.admin.dao.InterviewDao;
 import com.lawencon.jobportal.admin.dao.JobCandidateStatusDao;
@@ -41,12 +40,12 @@ import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateProgressGetRe
 import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateProgressInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateProgressUpdateByCodeReqDto;
 import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateProgressUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.candidateprogress.CandidateStageProcessResDto;
 import com.lawencon.jobportal.admin.dto.hired.HiredGetResDto;
 import com.lawencon.jobportal.admin.dto.hired.HiredInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewGetResDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewUpdateReqDto;
-import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupInsertReqDto;
 import com.lawencon.jobportal.admin.dto.offering.OfferingGetResDto;
@@ -104,9 +103,6 @@ public class ProgressStatusService {
 
 	@Autowired
 	private UserDao userDao;
-
-	@Autowired
-	private FileDao fileDao;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -500,31 +496,113 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-//	public List<JobGetResDto> getApplicationByCandidate(String candidateEmail) {
-//		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
-//		
-//		final 
-//		
-//		jobDao.getByStatus(status).forEach(j -> {
-//			final JobGetResDto jobGetResDto = new JobGetResDto();
-//			jobGetResDto.setId(j.getId());
-//			jobGetResDto.setJobTitle(j.getJobTitle());
-//			jobGetResDto.setSalaryStart(j.getSalaryStart());
-//			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
-//			jobGetResDto.setDescription(j.getDescription());
-//			jobGetResDto.setEndDate(j.getEndDate().toString());
-//			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
-//			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
-//			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
-//			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
-//			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
-//			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
-//			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
-//			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
-//			jobGetResDto.setVer(j.getVersion());
-//			jobGetResDtos.add(jobGetResDto);
-//		});
-//
-//		return jobGetResDtos;
-//	}
+	public List<CandidateStageProcessResDto> getApplicationByCandidate(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Application> listApplication = applicationDao.getByCandidate(candidateId.getId());
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Application a : listApplication) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listApplication.size());
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getAssessmentByCandidate(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Assessment> listAssessment = assessmentDao.getByCandidate(candidateId.getId());
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Assessment a : listAssessment) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listAssessment.size());
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getInterviewByCandidate(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Interview> listInterview = interviewDao.getByCandidate(candidateId.getId());
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Interview a : listInterview) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listInterview.size());
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getHiredByCandidate(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Hired> listHired = hiredDao.getByCandidate(candidateId.getId());
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Hired a : listHired) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listHired.size());
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getOfferingByCandidate(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Offering> listOffering= offeringDao.getByCandidate(candidateId.getId());
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Offering a : listOffering) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listOffering.size());
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
 }
