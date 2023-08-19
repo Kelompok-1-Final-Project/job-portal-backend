@@ -17,7 +17,7 @@ public class Profile extends BaseEntity{
 	@Column(name = "id_number",length =16,unique=true, nullable = true)
 	private String idNumber;
 	
-	@Column(name = "full_name",length =30)
+	@Column(name = "full_name",length =30, nullable = false)
 	private String fullName;
 	
 	@Column(name = "summary", nullable = true)
