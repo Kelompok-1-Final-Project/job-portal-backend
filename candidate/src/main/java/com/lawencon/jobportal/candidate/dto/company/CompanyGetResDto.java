@@ -9,6 +9,15 @@ public class CompanyGetResDto {
 	private String industryName;
 	private String description;
 	private String address;
+	private String cityName;
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
 
 	public String getIndustryName() {
 		return industryName;

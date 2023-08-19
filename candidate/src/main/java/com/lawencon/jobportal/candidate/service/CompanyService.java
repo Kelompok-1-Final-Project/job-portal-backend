@@ -54,6 +54,7 @@ public class CompanyService {
 			result.setIndustryName(c.getIndustry().getIndustryName());
 			result.setDescription(c.getDescription());
 			result.setAddress(c.getAddress());
+			result.setCityName(c.getCity().getCityName());
 			listResult.add(result);
 		}
 		return listResult;
@@ -130,6 +131,7 @@ public class CompanyService {
 		result.setIndustryName(company.getIndustry().getIndustryName());
 		result.setDescription(company.getDescription());
 		result.setAddress(company.getAddress());
+		result.setCityName(company.getCity().getCityName());
 		
 		return result;
 	}
