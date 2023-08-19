@@ -52,6 +52,8 @@ public class CompanyService {
 			result.setCompanyName(c.getCompanyName());
 			result.setFileId(c.getFile().getId());
 			result.setIndustryName(c.getIndustry().getIndustryName());
+			result.setDescription(c.getDescription());
+			result.setAddress(c.getAddress());
 			listResult.add(result);
 		}
 		return listResult;
@@ -126,6 +128,8 @@ public class CompanyService {
 		result.setCompanyName(company.getCompanyName());
 		result.setFileId(company.getFile().getId());
 		result.setIndustryName(company.getIndustry().getIndustryName());
+		result.setDescription(company.getDescription());
+		result.setAddress(company.getAddress());
 		
 		return result;
 	}

@@ -21,7 +21,7 @@ public class JobCandidateStatusController {
 	private JobCandidateStatusService jobCandidateStatusService;
 	
 	@GetMapping
-	public ResponseEntity<List<JobCandidateStatusGetResDto>> getAllIndustry(@RequestParam String jobCode) {
+	public ResponseEntity<List<JobCandidateStatusGetResDto>> getByJob(@RequestParam String jobCode) {
 		final List<JobCandidateStatusGetResDto>data = jobCandidateStatusService.getByJob(jobCode);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
