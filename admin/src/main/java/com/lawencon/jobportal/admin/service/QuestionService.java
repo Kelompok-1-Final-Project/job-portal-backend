@@ -170,4 +170,24 @@ public class QuestionService {
 		return listResult;
 	}
 	
+	public QuestionGetResDto getDetailByQuestion(String questionId){
+		final Question question = questionDao.getById(Question.class, questionId);
+		final QuestionGetResDto questionGetResDto = new QuestionGetResDto();
+		questionGetResDto.setQuestionId(question.getId());
+		questionGetResDto.setQuestion(question.getQuestion());
+		
+		final List<QuestionOption> listQuestionOption = questionOptionDao.getByQuestion(question.getId());
+		final List<QuestionOptionResDto> listQuestionOptionResult = new ArrayList<>();
+		for(QuestionOption qo:listQuestionOption) {
+			final QuestionOptionResDto resultOption = new QuestionOptionResDto();
+			resultOption.setQuestionOptionId(qo.getId());
+			resultOption.setLabels(qo.getLabels());
+			resultOption.setIsAnswer(qo.getIsAnswer());
+			listQuestionOptionResult.add(resultOption);
+		}
+		questionGetResDto.setListQuestionOption(listQuestionOptionResult);
+
+		return questionGetResDto;
+	}
+	
 }

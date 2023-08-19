@@ -63,4 +63,10 @@ public class QuestionController {
 		final UpdateResDto response = questionService.updateQuestion(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
+	@GetMapping("/detail")
+	public ResponseEntity<QuestionGetResDto> getDetailByQuestion(@RequestParam("i") String questionId){
+		final QuestionGetResDto response = questionService.getDetailByQuestion(questionId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }

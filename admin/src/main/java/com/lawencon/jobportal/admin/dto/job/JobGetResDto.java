@@ -17,6 +17,9 @@ public class JobGetResDto {
 	private String createdAt;
 	private String updatedAt;
 	private Integer ver;
+	private String hrName;
+	private String interviewerName;
+	private String jobCode;
 
 	public String getId() {
 		return id;
@@ -144,6 +147,30 @@ public class JobGetResDto {
 
 	public void setVer(Integer ver) {
 		this.ver = ver;
+	}
+
+	public String getHrName() {
+		return hrName;
+	}
+
+	public void setHrName(String hrName) {
+		this.hrName = hrName;
+	}
+
+	public String getInterviewerName() {
+		return interviewerName;
+	}
+
+	public void setInterviewerName(String interviewerName) {
+		this.interviewerName = interviewerName;
+	}
+
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
 	}
 
 }
