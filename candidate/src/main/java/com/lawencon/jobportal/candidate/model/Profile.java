@@ -14,10 +14,10 @@ import com.lawencon.base.BaseEntity;
 @Table(name = "t_profile")
 public class Profile extends BaseEntity{
 	
-	@Column(name = "id_number",length =16,unique=true)
+	@Column(name = "id_number",length =16,unique=true, nullable = true)
 	private String idNumber;
 	
-	@Column(name = "full_name",length =30, nullable = false)
+	@Column(name = "full_name",length =30)
 	private String fullName;
 	
 	@Column(name = "summary", nullable = true)
