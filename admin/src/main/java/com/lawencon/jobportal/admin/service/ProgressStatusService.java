@@ -605,4 +605,49 @@ public class ProgressStatusService {
 		}
 		return listResult;
 	}
+	
+	public List<CandidateStageProcessResDto> getMCUbyCandidate(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<MedicalCheckup> listMedical= medicalCheckupDao.getByCandidate(candidateId.getId());
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (MedicalCheckup a : listMedical) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listMedical.size());
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getRejectbyCandidate(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		final StatusProcess statusProcess = statusProcessDao.getByCode(StatusCodeEnum.REJECTED.processCode);
+		
+		final List<JobCandidateStatus> listJobCandidateStatus = jobCandidateStatusDao.getByStatus(candidateId.getId(), statusProcess.getId());
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (JobCandidateStatus a : listJobCandidateStatus) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(listJobCandidateStatus.size());
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
 }
