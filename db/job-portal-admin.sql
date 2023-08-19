@@ -1190,6 +1190,13 @@ INNER JOIN
 WHERE  
 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
 	
+<<<<<<< HEAD
+<<<<<<< HEAD
+SELECT * FROM t_result tr ;
+=======
+SELECT 	ta.id AS application_id, 	tj.id AS job_id, 	tj.job_title, 	tjs.status_name, 	tc.id AS company_id, 	tc.company_name, 	ta.created_at, 	ta.ver FROM 	t_assessment ta INNER JOIN 	t_job tj ON ta.job_id = tj.id INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id WHERE 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
+>>>>>>> 4841ad8069607f4572c4ea41fec7d920a07e12d6
+=======
 SELECT 
 	ta.id AS application_id, 
 	tj.id AS job_id, 
@@ -1211,3 +1218,4 @@ INNER JOIN
 	t_job_status tjs ON tjs.id = tj.job_status_id 
 WHERE 
 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
+>>>>>>> 632cfbe7b9f4be51586997a2657bccd067f9c94d
