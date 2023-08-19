@@ -17,8 +17,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.config.JwtConfig;
+import com.lawencon.jobportal.admin.dao.BenefitDao;
 import com.lawencon.jobportal.admin.dao.CompanyDao;
 import com.lawencon.jobportal.admin.dao.EmploymentTypeDao;
+import com.lawencon.jobportal.admin.dao.JobBenefitDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
 import com.lawencon.jobportal.admin.dao.JobPositionDao;
 import com.lawencon.jobportal.admin.dao.JobStatusDao;
@@ -31,9 +33,11 @@ import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.jobposition.JobPositionGetResDto;
+import com.lawencon.jobportal.admin.model.Benefit;
 import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.EmploymentType;
 import com.lawencon.jobportal.admin.model.Job;
+import com.lawencon.jobportal.admin.model.JobBenefit;
 import com.lawencon.jobportal.admin.model.JobPosition;
 import com.lawencon.jobportal.admin.model.JobStatus;
 import com.lawencon.jobportal.admin.model.User;
@@ -63,6 +67,12 @@ public class JobService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private BenefitDao benefitDao;
+	
+	@Autowired
+	private JobBenefitDao jobBenefitDao;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -370,6 +380,15 @@ public class JobService {
 			job.setInterviewer(interviewer);
 
 			final Job jobResult = jobDao.save(job);
+			
+			for (String b : data.getBenefitCode()) {
+				final Benefit benefit = benefitDao.getByCode(b);
+				
+				final JobBenefit jobBenefit = new JobBenefit();
+				jobBenefit.setBenefit(benefit);
+				jobBenefit.setJob(jobResult);
+				jobBenefitDao.save(jobBenefit);
+			}
 
 			final String jobInsertCandidateAPI = "http://localhost:8081/jobs";
 
