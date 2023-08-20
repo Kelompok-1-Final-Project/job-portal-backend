@@ -24,6 +24,7 @@ import com.lawencon.jobportal.candidate.model.Degree;
 import com.lawencon.jobportal.candidate.model.Family;
 import com.lawencon.jobportal.candidate.model.Relationship;
 import com.lawencon.jobportal.candidate.model.User;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 
 @Service
 public class FamilyService {
@@ -115,7 +116,7 @@ public class FamilyService {
 		
 		final Family family = familyDao.getById(Family.class, data.getFamilyId());
 		family.setFamilyName(data.getFamilyName());
-		family.setFamilyBirthdate(LocalDate.parse(data.getBirthdate()));
+		family.setFamilyBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
 		
 		final User candidate = userDao.getById(User.class, data.getCandidateId());
 		family.setCandidate(candidate);

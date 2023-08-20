@@ -722,6 +722,18 @@ INSERT INTO t_marital_status(id, status_name, status_code, created_by, created_a
 	(uuid_generate_v4(), 'Married', 'MS002', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'Divorced', 'MS003', uuid_generate_v4(), NOW(), TRUE, 0);
 
+INSERT INTO t_relationship(id, relationship_code,relationship_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'RLS01', 'Father', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RLS02', 'Mother', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RLS03', 'Sister', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RLS04', 'Brother', uuid_generate_v4(), NOW(), TRUE, 0);
+
+INSERT INTO t_degree(id, degree_code ,degree_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'DGE01', 'JHS', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'DGE02', 'SHS', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'DGE03', 'Bachelor', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'DGE04', 'Ungraduate', uuid_generate_v4(), NOW(), TRUE, 0);
+
 INSERT INTO t_person_type(id, type_code, type_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'PT001', 'Candidate', uuid_generate_v4(), NOW(), TRUE, 0),
 	(uuid_generate_v4(), 'PT002', 'Employee', uuid_generate_v4(), NOW(), TRUE, 0);
