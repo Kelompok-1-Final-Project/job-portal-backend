@@ -13,7 +13,7 @@ public class Degree extends BaseEntity {
 	@Column(name = "degree_code", length=5, nullable=false, unique=true)
 	private String degreeCode;
 	
-	@Column(name = "degree_name", length=10, nullable=false)
+	@Column(name = "degree_name", length=30, nullable=false)
 	private String degreeName;
 
 	public String getDegreeCode() {

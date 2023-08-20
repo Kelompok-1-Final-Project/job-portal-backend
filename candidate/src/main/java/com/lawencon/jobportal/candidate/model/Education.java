@@ -23,6 +23,9 @@ public class Education extends BaseEntity{
 	@Column(name = "end_date")
 	private LocalDate endDate;
 	
+	@Column(name = "description")
+	private String description;
+	
 	@OneToOne
 	@JoinColumn(name = "candidate_id")
 	private User candidate;

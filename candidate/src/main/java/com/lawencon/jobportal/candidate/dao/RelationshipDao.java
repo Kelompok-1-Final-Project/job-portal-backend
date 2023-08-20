@@ -22,7 +22,7 @@ public class RelationshipDao extends AbstractJpaDao{
 				+ "WHERE "
 				+ "relationship_code = :code";
 		
-		final Object relationshipObj = em().createNativeQuery(sql, Relationship.class)
+		final Object relationshipObj = em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 		

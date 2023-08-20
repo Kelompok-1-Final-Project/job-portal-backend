@@ -37,7 +37,7 @@ public class FamilyController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<InsertResDto> insertFamily(FamilyInsertReqDto data){
+	public ResponseEntity<InsertResDto> insertFamily(@RequestBody FamilyInsertReqDto data){
 		final InsertResDto response = familyService.insertFamily(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
@@ -62,7 +62,7 @@ public class FamilyController {
 	}
 	
 	@GetMapping("/candidate")
-	public ResponseEntity<List<FamilyGetResDto>> getFamilyCandidate(@RequestParam String candidateId){
+	public ResponseEntity<List<FamilyGetResDto>> getFamilyCandidate(@RequestParam("id") String candidateId){
 		final List<FamilyGetResDto> response = familyService.getByCandidate(candidateId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
