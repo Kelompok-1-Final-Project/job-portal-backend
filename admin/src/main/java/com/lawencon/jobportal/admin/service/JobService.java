@@ -86,7 +86,9 @@ public class JobService {
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
-			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
+			if(j.getUpdatedAt()!=null) {
+				jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+			}
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDtos.add(jobGetResDto);
 		});
