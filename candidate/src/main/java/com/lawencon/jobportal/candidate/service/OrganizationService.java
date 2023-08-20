@@ -19,6 +19,7 @@ import com.lawencon.jobportal.candidate.dto.organization.OrganizationInsertReqDt
 import com.lawencon.jobportal.candidate.dto.organization.OrganizationUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.Organization;
 import com.lawencon.jobportal.candidate.model.User;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 
 @Service
 public class OrganizationService {
@@ -58,8 +59,8 @@ public class OrganizationService {
 		organization.setCandidate(candidate);
 		organization.setOrganizationName(data.getOrganizationName());
 		organization.setPositionName(data.getPositionName());
-		organization.setStartDate(LocalDate.parse(data.getStartDate()));
-		organization.setEndDate(LocalDate.parse(data.getEndDate()));
+		organization.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
+		organization.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		organization.setDescription(data.getDescription());
 		final Organization organizationResult = organizationDao.save(organization);
 		final InsertResDto result = new InsertResDto();
@@ -87,8 +88,8 @@ public class OrganizationService {
 		organization.setCandidate(candidate);
 		organization.setOrganizationName(data.getOrganizationName());
 		organization.setPositionName(data.getPositionName());
-		organization.setStartDate(LocalDate.parse(data.getStartDate()));
-		organization.setEndDate(LocalDate.parse(data.getEndDate()));
+		organization.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
+		organization.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		organization.setDescription(data.getDescription());
 		final Organization organizationResult = organizationDao.saveAndFlush(organization);
 		final UpdateResDto result = new UpdateResDto();
