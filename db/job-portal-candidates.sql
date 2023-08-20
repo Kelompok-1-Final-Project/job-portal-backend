@@ -479,6 +479,7 @@ CREATE TABLE t_education(
 	education_name VARCHAR(30) NOT NULL,
 	start_date DATE NOT NULL,
 	end_date DATE,
+	description TEXT,
 	candidate_id VARCHAR(36) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
