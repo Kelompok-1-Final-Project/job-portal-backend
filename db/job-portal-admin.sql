@@ -840,7 +840,7 @@ ALTER TABLE t_relationship ADD CONSTRAINT relationship_bk
 CREATE TABLE t_degree(
 	id VARCHAR(36) NOT NULL,
 	degree_code VARCHAR(5) NOT NULL,
-	degree_name VARCHAR(10) NOT NULL,
+	degree_name VARCHAR(30) NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
