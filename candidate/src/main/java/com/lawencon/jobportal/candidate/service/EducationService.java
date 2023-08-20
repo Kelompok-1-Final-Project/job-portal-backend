@@ -88,7 +88,7 @@ public class EducationService {
 		final Education educationResult = educationDao.save(education);
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(educationResult.getVersion());
-		result.setMessage("Education Successfully added.");
+		result.setMessage("Education updated.");
 
 		em().getTransaction().commit();
 		return result;
