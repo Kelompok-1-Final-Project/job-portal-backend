@@ -1,6 +1,7 @@
 package com.lawencon.jobportal.candidate.service;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 
 import javax.persistence.EntityManager;
@@ -27,6 +28,8 @@ import com.lawencon.jobportal.candidate.dao.PersonTypeDao;
 import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserEmailGetResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginResDto;
@@ -194,6 +197,67 @@ public class UserService implements UserDetailsService {
 		}
 		
 		return result;
+	}
+	
+	public UserGetResDto getByCandidate(String candidateId) {
+		final User user = userDao.getById(User.class, candidateId);
+		
+		final UserGetResDto userGetResDto = new UserGetResDto();
+		userGetResDto.setFullName(user.getProfile().getFullName());
+		if(user.getProfile().getIdNumber() != null) {
+			userGetResDto.setIdNumber(user.getProfile().getIdNumber());
+		}
+		
+		userGetResDto.setEmail(user.getEmail());
+		
+		if(user.getProfile().getMobileNumber() != null) {
+			userGetResDto.setIdNumber(user.getProfile().getMobileNumber());
+		}
+		
+		if(user.getProfile().getMaritalStatus() != null) {
+			userGetResDto.setMaritalStatusId(user.getProfile().getMaritalStatus().getId());
+			userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
+		}
+		
+		if(user.getProfile().getGender() != null) {
+			userGetResDto.setGender(user.getProfile().getGender().getGenderName());
+		}
+		
+		if(user.getProfile().getExpectedSalary() != null) {
+			userGetResDto.setExpectedSalary(user.getProfile().getExpectedSalary());
+		}
+		
+		if(user.getProfile().getBirthdate() != null) {
+			final LocalDate curDate = LocalDate.now();  
+			final LocalDate getBirth = user.getProfile().getBirthdate();
+			final int age = Period.between(getBirth, curDate).getYears();
+			final String ageText = age + " years old";
+			userGetResDto.setAge(ageText);
+		}
+		
+		if(user.getProfile().getCv() != null) {
+			userGetResDto.setCvId(user.getProfile().getCv().getId());
+		}
+		
+		if(user.getProfile().getPhoto() != null) {
+			userGetResDto.setPhotoId(user.getProfile().getPhoto().getId());
+		}
+		
+		if(user.getProfile().getSummary() != null) {			
+			userGetResDto.setSummary(user.getProfile().getSummary());
+		}
+		
+		return userGetResDto;
+		
+	}
+	
+	public UserEmailGetResDto getEmail(String userId) {
+		final User user = userDao.getById(User.class, userId);
+		
+		final UserEmailGetResDto response = new UserEmailGetResDto();
+		response.setEmail(user.getEmail());
+		
+		return response;
 	}
 
 }

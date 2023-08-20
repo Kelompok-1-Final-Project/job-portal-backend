@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.candidate.dao.BenefitDao;
 import com.lawencon.jobportal.candidate.dao.CompanyDao;
 import com.lawencon.jobportal.candidate.dao.EmploymentTypeDao;
+import com.lawencon.jobportal.candidate.dao.JobBenefitDao;
 import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
@@ -20,9 +22,11 @@ import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
+import com.lawencon.jobportal.candidate.model.Benefit;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
 import com.lawencon.jobportal.candidate.model.Job;
+import com.lawencon.jobportal.candidate.model.JobBenefit;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
 
@@ -47,6 +51,12 @@ public class JobService {
 
 	@Autowired
 	private EmploymentTypeDao employmentTypeDao;
+	
+	@Autowired
+	private BenefitDao benefitDao;
+	
+	@Autowired
+	private JobBenefitDao jobBenefitDao;
 	
 	public List<JobStatusGetResDto> getAllJobStatus() {
 		final List<JobStatusGetResDto> jobStatusGetResDtos = new ArrayList<>();
@@ -102,6 +112,15 @@ public class JobService {
 		job.setEmployementType(employmentTypeResult);
 		
 		final Job jobResult = jobDao.save(job);
+		
+		for (String b : data.getBenefitCode()) {
+			final Benefit benefit = benefitDao.getByCode(b);
+			
+			final JobBenefit jobBenefit = new JobBenefit();
+			jobBenefit.setBenefit(benefit);
+			jobBenefit.setJob(jobResult);
+			jobBenefitDao.save(jobBenefit);
+		}
 		
 		final InsertResDto result = new InsertResDto();
 		result.setId(jobResult.getId());

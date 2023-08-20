@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.candidate.dto.job;
 
+import java.util.List;
+
 public class JobInsertReqDto {
 
 	private String jobTitle;
@@ -14,6 +16,7 @@ public class JobInsertReqDto {
 	private String employmentCode;
 	private String hrId;
 	private String interviewerId;
+	private List<String> benefitCode;
 
 	public String getJobTitle() {
 		return jobTitle;
@@ -22,7 +25,7 @@ public class JobInsertReqDto {
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
-	
+
 	public String getJobCode() {
 		return jobCode;
 	}
@@ -109,6 +112,14 @@ public class JobInsertReqDto {
 
 	public void setInterviewerId(String interviewerId) {
 		this.interviewerId = interviewerId;
+	}
+
+	public List<String> getBenefitCode() {
+		return benefitCode;
+	}
+
+	public void setBenefitCode(List<String> benefitCode) {
+		this.benefitCode = benefitCode;
 	}
 
 }

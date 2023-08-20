@@ -1,10 +1,87 @@
 package com.lawencon.jobportal.admin.dao;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
+import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.model.Company;
+import com.lawencon.jobportal.admin.model.File;
+import com.lawencon.jobportal.admin.model.Job;
+import com.lawencon.jobportal.admin.model.JobStatus;
+import com.lawencon.jobportal.admin.model.MedicalCheckup;
 
 @Repository
 public class MedicalCheckupDao extends AbstractJpaDao{
-
+	private EntityManager em() {
+		return ConnHandler.getManager();
+	}
+	
+	public List<MedicalCheckup> getByCandidate(String candidateId) {
+		final String sql = "SELECT "
+				+ "	tmc.id AS mcu_id, "
+				+ "	tj.id AS job_id, "
+				+ "	tj.job_title, "
+				+ "	tjs.status_name, "
+				+ "	tc.id AS company_id, "
+				+ "	tc.company_name, "
+				+ " tc.file_id, "
+				+ "	tmc.created_at, "
+				+ "	tmc.ver "
+				+ "FROM "
+				+ "	t_medical_checkup tmc "
+				+ "INNER JOIN "
+				+ "	t_job tj ON tmc.job_id = tj.id "
+				+ "INNER JOIN "
+				+ "	t_company tc ON tc.id = tj.company_id "
+				+ "INNER JOIN "
+				+ "	t_city tci ON tci.id = tc.city_id "
+				+ "INNER JOIN  "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id "
+				+ "WHERE "
+				+ "	to.candidate_id = :candidateId ";
+		
+		final List<?> medicalObjs = this.em().createNativeQuery(sql)
+				.setParameter("candidateId", candidateId)
+				.getResultList();
+		final List<MedicalCheckup> listMedical = new ArrayList<>();
+		if(medicalObjs.size() > 0) {
+			for(Object medicalObj : medicalObjs) {
+				final Object[] medicalArr = (Object[]) medicalObj;
+				
+				final MedicalCheckup medicalCheckup = new MedicalCheckup();
+				medicalCheckup.setId(medicalArr[0].toString());
+				
+				final Job job = new Job();
+				job.setId(medicalArr[1].toString());
+				job.setJobTitle(medicalArr[2].toString());
+				
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(medicalArr[3].toString());
+				job.setJobStatus(jobStatus);
+				
+				final Company company = new Company();
+				company.setId(medicalArr[4].toString());
+				company.setCompanyName(medicalArr[5].toString());
+				
+				final File file = new File();
+				file.setId(medicalArr[6].toString());
+				company.setFile(file);
+				job.setCompany(company);
+				
+				medicalCheckup.setJob(job);
+				medicalCheckup.setCreatedAt(Timestamp.valueOf(medicalArr[7].toString()).toLocalDateTime());
+				medicalCheckup.setVersion(Integer.valueOf(medicalArr[8].toString()));
+				
+				listMedical.add(medicalCheckup);
+			}
+		}
+		
+		return listMedical;
+	}
 }

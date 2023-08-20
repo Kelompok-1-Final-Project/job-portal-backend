@@ -1190,13 +1190,6 @@ INNER JOIN
 WHERE  
 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
 	
-<<<<<<< HEAD
-<<<<<<< HEAD
-SELECT * FROM t_result tr ;
-=======
-SELECT 	ta.id AS application_id, 	tj.id AS job_id, 	tj.job_title, 	tjs.status_name, 	tc.id AS company_id, 	tc.company_name, 	ta.created_at, 	ta.ver FROM 	t_assessment ta INNER JOIN 	t_job tj ON ta.job_id = tj.id INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id WHERE 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
->>>>>>> 4841ad8069607f4572c4ea41fec7d920a07e12d6
-=======
 SELECT 
 	ta.id AS application_id, 
 	tj.id AS job_id, 
@@ -1218,4 +1211,77 @@ INNER JOIN
 	t_job_status tjs ON tjs.id = tj.job_status_id 
 WHERE 
 	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
->>>>>>> 632cfbe7b9f4be51586997a2657bccd067f9c94d
+
+SELECT 
+	ta.id AS application_id, 
+	tj.id AS job_id, 
+	tj.job_title, 
+	tjs.status_name, 
+	tc.id AS company_id, 
+	tc.company_name, 
+	ta.created_at, 
+	ta.ver 
+FROM 
+	t_assessment ta 
+INNER JOIN 
+	t_job tj ON ta.job_id = tj.id 
+INNER JOIN 
+	t_company tc ON tc.id = tj.company_id 
+INNER JOIN 
+	t_city tci ON tci.id = tc.city_id 
+INNER JOIN  
+	t_job_status tjs ON tjs.id = tj.job_status_id 
+WHERE 
+	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
+
+SELECT 
+	tj.id, 
+	tj.job_title, 
+	tj.salary_start, 
+	tj.salary_end, 
+	tj.description, 
+	tj.end_date, 
+ 	tc.id AS company_id ,
+	tc.company_name, 
+	ti.industry_name, 
+	tci.city_name, 
+	tjp.position_name, 
+	tjs.status_name, 
+	tet.employment_name, 
+	tj.created_at, 
+ 	tj.updated_at, 
+	tj.ver,
+	tpi.full_name AS interviewer,
+	tph.full_name AS hr
+FROM 
+	t_job tj 
+INNER JOIN 
+	t_company tc ON tc.id = tj.company_id 
+INNER JOIN 
+	t_city tci ON tci.id = tc.city_id 
+INNER JOIN 
+	t_job_position tjp ON tjp.id = tj.job_position_id  
+INNER JOIN  
+	t_job_status tjs ON tjs.id = tj.job_status_id  
+INNER JOIN  
+	t_employment_type tet ON tet.id = tj.employment_type_id  
+INNER JOIN 
+	t_industry ti ON tc.industry_id = tc.industry_id 
+INNER JOIN 
+	t_user tuh ON tj.hr_id = tuh.id 
+INNER JOIN
+	t_user tui ON tj.interviewer_id = tui.id 
+INNER JOIN 
+	t_profile tph ON tuh.profile_id = tph.id 
+INNER JOIN
+	t_profile tpi ON tui.profile_id = tpi.id 
+
+	
+SELECT 
+	tjcs.id AS status_job_id,	tj.id AS job_id, 	tj.job_title, 	tjs.status_name, 	tc.id AS company_id, 	tc.company_name,  	tc.file_id,	tjcs.created_at, 
+	tsp.id AS status_stage_id,
+	tsp.process_name,	tjcs.ver FROM 	t_job_candidate_status tjcs INNER JOIN 	t_job tj ON tjcs.job_id = tj.id INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id 
+INNER JOIN
+	t_status_process tsp ON tjcs.status_id = tsp.id 
+WHERE 
+	tsp.id = '28f71d17-70ae-4ebd-83e5-24143d497777' 

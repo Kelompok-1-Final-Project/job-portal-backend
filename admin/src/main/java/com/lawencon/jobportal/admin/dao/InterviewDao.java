@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.Company;
+import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Interview;
 import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.JobStatus;
@@ -29,6 +30,7 @@ public class InterviewDao extends AbstractJpaDao{
 				+ "	tjs.status_name, "
 				+ "	tc.id AS company_id, "
 				+ "	tc.company_name, "
+				+ " tc.file_id, "
 				+ "	ti.created_at, "
 				+ "	ti.ver "
 				+ "FROM "
@@ -66,11 +68,15 @@ public class InterviewDao extends AbstractJpaDao{
 				final Company company = new Company();
 				company.setId(interviewArr[4].toString());
 				company.setCompanyName(interviewArr[5].toString());
+
+				final File file = new File();
+				file.setId(interviewArr[6].toString());
+				company.setFile(file);
 				job.setCompany(company);
 				
 				interview.setJob(job);
-				interview.setCreatedAt(Timestamp.valueOf(interviewArr[6].toString()).toLocalDateTime());
-				interview.setVersion(Integer.valueOf(interviewArr[7].toString()));
+				interview.setCreatedAt(Timestamp.valueOf(interviewArr[7].toString()).toLocalDateTime());
+				interview.setVersion(Integer.valueOf(interviewArr[8].toString()));
 				
 				listInterview.add(interview);
 			}

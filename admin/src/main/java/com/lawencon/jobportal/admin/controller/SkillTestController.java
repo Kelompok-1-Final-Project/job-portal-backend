@@ -19,6 +19,7 @@ import com.lawencon.jobportal.admin.dto.skilltest.SkillTestGetResDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestQuestionInsertReqDto;
 import com.lawencon.jobportal.admin.dto.skilltest.SkillTestUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.skilltest.TestGetResDto;
 import com.lawencon.jobportal.admin.service.SkillTestService;
 
 @RestController
@@ -38,6 +39,12 @@ public class SkillTestController {
 	public ResponseEntity<SkillTestGetResDto> getByFilter(
 			@PathVariable String candidateId, @PathVariable String jobId){
 		final SkillTestGetResDto data = skillTestService.getByCandidateAndJob(candidateId,jobId);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{jobId}")
+	public ResponseEntity<TestGetResDto> getAllQuestion(@PathVariable String jobId){
+		final TestGetResDto data = skillTestService.getAllQuestion(jobId);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 
