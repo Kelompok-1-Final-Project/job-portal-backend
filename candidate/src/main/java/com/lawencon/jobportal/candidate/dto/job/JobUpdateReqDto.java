@@ -1,4 +1,4 @@
-package com.lawencon.jobportal.admin.dto.job;
+package com.lawencon.jobportal.candidate.dto.job;
 
 public class JobUpdateReqDto {
 
@@ -10,8 +10,6 @@ public class JobUpdateReqDto {
 	private String description;
 	private String endDate;
 	private String jobStatusCode;
-	private String hrId;
-	private String interviewerId;
 
 	public String getJobId() {
 		return jobId;
@@ -77,19 +75,4 @@ public class JobUpdateReqDto {
 		this.jobStatusCode = jobStatusCode;
 	}
 
-	public String getHrId() {
-		return hrId;
-	}
-
-	public void setHrId(String hrId) {
-		this.hrId = hrId;
-	}
-
-	public String getInterviewerId() {
-		return interviewerId;
-	}
-
-	public void setInterviewerId(String interviewerId) {
-		this.interviewerId = interviewerId;
-	}
 }

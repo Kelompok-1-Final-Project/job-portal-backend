@@ -18,10 +18,12 @@ import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
+import com.lawencon.jobportal.candidate.dto.job.JobUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.Benefit;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
@@ -345,6 +347,29 @@ public class JobService {
 		return jobGetResDto;
 	}
 
-	
+	public UpdateResDto updateJob(JobUpdateReqDto data) {
+		em().getTransaction().begin();
+
+		final Job jobDb = jobDao.getByCode(data.getJobCode());
+		final Job job = jobDao.getById(Job.class, jobDb.getId());
+		job.setJobTitle(data.getJobTitle());
+		job.setSalaryStart(data.getSalaryStart());
+		job.setSalaryEnd(data.getSalaryEnd());
+		job.setDescription(data.getDescription());
+		job.setEndDate(LocalDate.parse(data.getEndDate()));
+
+		final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
+		final JobStatus jobStatusResult = jobStatusDao.getById(JobStatus.class, jobStatus.getId());
+		job.setJobStatus(jobStatusResult);
+
+		final Job jobResult = jobDao.saveAndFlush(job);
+
+		final UpdateResDto result = new UpdateResDto();
+		result.setVersion(jobResult.getVersion());
+		result.setMessage("Job updated successfully.");
+
+		em().getTransaction().commit();
+		return result;
+	}
 	
 }
