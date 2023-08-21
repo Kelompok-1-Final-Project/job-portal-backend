@@ -4,7 +4,9 @@ public class FamilyGetResDto {
 	private String id;
 	private String familyName;
 	private String relationshipName;
+	private String relationshipCode;
 	private String familyDegree;
+	private String degreeCode;
 	private String familyBirthDate;
 
 	public String getId() {
@@ -46,4 +48,21 @@ public class FamilyGetResDto {
 	public void setFamilyBirthDate(String familyBirthDate) {
 		this.familyBirthDate = familyBirthDate;
 	}
+
+	public String getRelationshipCode() {
+		return relationshipCode;
+	}
+
+	public void setRelationshipCode(String relationshipCode) {
+		this.relationshipCode = relationshipCode;
+	}
+
+	public String getDegreeCode() {
+		return degreeCode;
+	}
+
+	public void setDegreeCode(String degreeCode) {
+		this.degreeCode = degreeCode;
+	}
+
 }
