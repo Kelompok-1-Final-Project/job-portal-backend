@@ -116,6 +116,7 @@ public class ProfileService {
 			candidateProfile.setFullName(data.getFullName());
 			candidateProfile.setIdNumber(data.getIdNumber());
 			candidateProfile.setBirthdate(LocalDate.parse(data.getBirthdate()));
+			candidateProfile.setExpectedSalary(data.getExpectedSalary());
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
 			if(data.getPhotoFiles() != null) {

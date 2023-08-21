@@ -115,14 +115,17 @@ public class JobService {
 		
 		final Job jobResult = jobDao.save(job);
 		
-		for (String b : data.getBenefitCode()) {
-			final Benefit benefit = benefitDao.getByCode(b);
-			
-			final JobBenefit jobBenefit = new JobBenefit();
-			jobBenefit.setBenefit(benefit);
-			jobBenefit.setJob(jobResult);
-			jobBenefitDao.save(jobBenefit);
+		if(data.getBenefitCode() != null) {
+			for (String b : data.getBenefitCode()) {
+				final Benefit benefit = benefitDao.getByCode(b);
+				
+				final JobBenefit jobBenefit = new JobBenefit();
+				jobBenefit.setBenefit(benefit);
+				jobBenefit.setJob(jobResult);
+				jobBenefitDao.save(jobBenefit);
+			}
 		}
+		
 		
 		final InsertResDto result = new InsertResDto();
 		result.setId(jobResult.getId());
