@@ -215,7 +215,7 @@ public class UserService implements UserDetailsService {
 		}
 		
 		if(user.getProfile().getMaritalStatus() != null) {
-			userGetResDto.setMaritalStatusId(user.getProfile().getMaritalStatus().getId());
+			userGetResDto.setMaritalStatusCode(user.getProfile().getMaritalStatus().getStatusCode());
 			userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
 		}
 		
