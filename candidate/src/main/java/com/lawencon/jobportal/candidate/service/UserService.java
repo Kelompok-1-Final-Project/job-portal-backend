@@ -211,7 +211,7 @@ public class UserService implements UserDetailsService {
 		userGetResDto.setEmail(user.getEmail());
 		
 		if(user.getProfile().getMobileNumber() != null) {
-			userGetResDto.setIdNumber(user.getProfile().getMobileNumber());
+			userGetResDto.setPhone(user.getProfile().getMobileNumber());
 		}
 		
 		if(user.getProfile().getMaritalStatus() != null) {
