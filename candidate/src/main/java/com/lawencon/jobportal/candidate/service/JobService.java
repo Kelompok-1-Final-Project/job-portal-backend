@@ -34,6 +34,7 @@ import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobBenefit;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 import com.lawencon.jobportal.candidate.model.Question;
 import com.lawencon.jobportal.candidate.model.SkillTest;
 import com.lawencon.jobportal.candidate.model.SkillTestQuestion;
@@ -110,7 +111,7 @@ public class JobService {
 		job.setSalaryStart(data.getSalaryStart());
 		job.setSalaryEnd(data.getSalaryEnd());
 		job.setDescription(data.getDescription());
-		job.setEndDate(LocalDate.parse(data.getEndDate()));
+		job.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		job.setJobCode(data.getJobCode());
 		
 		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
