@@ -109,7 +109,7 @@ public class FamilyService {
 		final Degree degreeResult = degreeDao.getById(Degree.class, degree.getId());
 		family.setFamilyDegree(degreeResult);
 		
-		family.setFamilyBirthdate(LocalDate.parse(data.getBirthdate()));
+		family.setFamilyBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
 		
 		final Family familyResult = familyDao.save(family);
 		
