@@ -415,16 +415,19 @@ public class JobService {
 				skillTest.setTestName(data.getTestName());
 				skillTest.setJob(jobResult);
 				final SkillTest skillTestResult = skillTestDao.save(skillTest);
+				final List<String> questionCode = new ArrayList<>();
 				
-				for (String q : data.getQuestionCode()) {
-					final Question question = questionDao.getByCode(q);
-					
+				for (String q : data.getQuestionId()) {
+					final Question question = questionDao.getById(Question.class, q);
+					questionCode.add(question.getQuestionCode());
 					final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
 					skillTestQuestion.setQuestion(question);
 					skillTestQuestion.setSkillTest(skillTestResult);
 					
 					skillTestQuestionDao.save(skillTestQuestion);
 				}
+				
+				data.setQuestionCode(questionCode);
 			}
 
 			final String jobInsertCandidateAPI = "http://localhost:8081/jobs";
