@@ -282,6 +282,7 @@ public class CandidateService {
 			candidateProfile.setFullName(data.getFullName());
 			candidateProfile.setIdNumber(data.getIdNumber());
 			candidateProfile.setBirthDate(LocalDate.parse(data.getBirthdate()));
+			candidateProfile.setExpectedSalary(data.getExpectedSalary());
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
 			if (data.getPhotoFiles() != null) {

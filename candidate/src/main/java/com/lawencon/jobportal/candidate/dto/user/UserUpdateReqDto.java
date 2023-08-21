@@ -9,7 +9,7 @@ public class UserUpdateReqDto {
 	private String mobileNumber;
 	private String photoExt;
 	private String photoFiles;
-	private String expectedSalary;
+	private Integer expectedSalary;
 	private String maritalStatusCode;
 	private String genderCode;
 
@@ -77,11 +77,11 @@ public class UserUpdateReqDto {
 		this.photoFiles = photoFiles;
 	}
 
-	public String getExpectedSalary() {
+	public Integer getExpectedSalary() {
 		return expectedSalary;
 	}
 
-	public void setExpectedSalary(String expectedSalary) {
+	public void setExpectedSalary(Integer expectedSalary) {
 		this.expectedSalary = expectedSalary;
 	}
 
