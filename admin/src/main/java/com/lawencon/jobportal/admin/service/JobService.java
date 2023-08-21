@@ -41,6 +41,7 @@ import com.lawencon.jobportal.admin.model.JobBenefit;
 import com.lawencon.jobportal.admin.model.JobPosition;
 import com.lawencon.jobportal.admin.model.JobStatus;
 import com.lawencon.jobportal.admin.model.User;
+import com.lawencon.jobportal.admin.util.DateConvert;
 import com.lawencon.jobportal.admin.util.GeneratorId;
 
 @Service
@@ -356,7 +357,7 @@ public class JobService {
 			job.setSalaryStart(data.getSalaryStart());
 			job.setSalaryEnd(data.getSalaryEnd());
 			job.setDescription(data.getDescription());
-			job.setEndDate(LocalDate.parse(data.getEndDate()));
+			job.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 
 			final Company companyDb = companyDao.getByCode(data.getCompanyCode());
 			final Company companyResult = companyDao.getById(Company.class, companyDb.getId());
