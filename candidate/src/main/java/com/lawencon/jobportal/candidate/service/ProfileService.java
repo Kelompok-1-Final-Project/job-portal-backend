@@ -114,6 +114,7 @@ public class ProfileService {
 			
 			final Profile candidateProfile = profileDao.getById(Profile.class, candidate.getProfile().getId());
 			candidateProfile.setFullName(data.getFullName());
+			candidateProfile.setIdNumber(data.getIdNumber());
 			candidateProfile.setBirthdate(LocalDate.parse(data.getBirthdate()));
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 

@@ -278,8 +278,9 @@ public class CandidateService {
 			final Candidate candidate = candidateDao.getById(Candidate.class, candidateDb.getId());
 
 			final CandidateProfile candidateProfile = candidateProfileDao.getById(CandidateProfile.class,
-					candidate.getCandidateProfile().getId());
+			candidate.getCandidateProfile().getId());
 			candidateProfile.setFullName(data.getFullName());
+			candidateProfile.setIdNumber(data.getIdNumber());
 			candidateProfile.setBirthDate(LocalDate.parse(data.getBirthdate()));
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
