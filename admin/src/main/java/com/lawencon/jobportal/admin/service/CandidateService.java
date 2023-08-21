@@ -1,6 +1,5 @@
 package com.lawencon.jobportal.admin.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

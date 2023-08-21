@@ -19,6 +19,7 @@ import com.lawencon.jobportal.candidate.dto.workexperience.WorkExperienceInsertR
 import com.lawencon.jobportal.candidate.dto.workexperience.WorkExperienceUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.User;
 import com.lawencon.jobportal.candidate.model.WorkExperience;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 
 @Service
 public class WorkExperienceService {
@@ -58,8 +59,8 @@ public class WorkExperienceService {
 		experience.setCandidate(candidate);
 		experience.setPositionName(data.getPositionName());
 		experience.setCompanyName(data.getCompanyName());
-		experience.setStartDate(LocalDate.parse(data.getStartDate()));
-		experience.setEndDate(LocalDate.parse(data.getEndDate()));
+		experience.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
+		experience.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		final WorkExperience experienceResult = workExperienceDao.save(experience);
 		final InsertResDto result = new InsertResDto();
 		result.setId(experienceResult.getId());
@@ -86,8 +87,8 @@ public class WorkExperienceService {
 		experience.setCandidate(candidate);
 		experience.setPositionName(data.getPositionName());
 		experience.setCompanyName(data.getCompanyName());
-		experience.setStartDate(LocalDate.parse(data.getStartDate()));
-		experience.setEndDate(LocalDate.parse(data.getEndDate()));
+		experience.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
+		experience.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		final WorkExperience experienceResult = workExperienceDao.saveAndFlush(experience);
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(experienceResult.getVersion());
