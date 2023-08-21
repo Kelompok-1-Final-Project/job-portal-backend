@@ -20,6 +20,7 @@ public class JobInsertReqDto {
 	private String testName;
 	private String testCode;
 	private List<String> questionCode;
+	private List<String> questionId;
 
 	public String getJobTitle() {
 		return jobTitle;
@@ -147,6 +148,14 @@ public class JobInsertReqDto {
 
 	public void setQuestionCode(List<String> questionCode) {
 		this.questionCode = questionCode;
+	}
+
+	public List<String> getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(List<String> questionId) {
+		this.questionId = questionId;
 	}
 
 }
