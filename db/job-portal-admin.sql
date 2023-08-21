@@ -1286,3 +1286,13 @@ INNER JOIN
 	t_status_process tsp ON tjcs.status_id = tsp.id 
 WHERE 
 	tsp.id = '28f71d17-70ae-4ebd-83e5-24143d497777' 
+	
+SELECT tr.id, tcp.full_name, tr.grade, tr.notes, tr.verFROM t_result tr
+INNER JOIN
+t_candidate tc ON tc.id = tr.candidate_id 
+INNER JOIN 
+t_candidate_profile tcp ON tc.profile_id = tcp.id
+INNER JOIN
+t_skill_test tst ON tst.id = tr.skill_test_id 
+WHERE
+tst.job_id = '2d5577f1-7533-4ccb-a78d-041ae89f9c12'
