@@ -24,7 +24,7 @@ public class FamilyDao extends AbstractJpaDao{
 		final List<Family> families = new ArrayList<>();
 		
 		final String sql = "SELECT "
-				+ "tf.id, tf.family_name, tr.relationship_name, td.degree_name, tf.birthdate, tf.ver "
+				+ "tf.id, tf.family_name, tr.relationship_name, td.degree_name, tf.birthdate, tf.ver, tr.relationship_code, td.degree_code "
 				+ "FROM "
 				+ "t_family tf "
 				+ "INNER JOIN "
@@ -48,15 +48,15 @@ public class FamilyDao extends AbstractJpaDao{
 				
 				final Relationship relationship = new Relationship();
 				relationship.setRelationshipName(familyArr[2].toString());
+				relationship.setRelationshipCode(familyArr[6].toString());
 				family.setRelationship(relationship);
 				
 				final Degree degree = new Degree();
 				degree.setDegreeName(familyArr[3].toString());
+				degree.setDegreeCode(familyArr[7].toString());
 				family.setFamilyDegree(degree);
 				
-				final String birthDate = familyArr[4].toString().replaceAll("\\s.*", "");
-				
-				family.setFamilyBirthdate(Date.valueOf(birthDate).toLocalDate());
+				family.setFamilyBirthdate(Date.valueOf(familyArr[4].toString()).toLocalDate());
 				family.setVersion(Integer.valueOf(familyArr[5].toString()));
 				
 				families.add(family);

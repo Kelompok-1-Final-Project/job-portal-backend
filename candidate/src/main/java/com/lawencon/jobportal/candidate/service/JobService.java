@@ -17,11 +17,16 @@ import com.lawencon.jobportal.candidate.dao.JobBenefitDao;
 import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
+import com.lawencon.jobportal.candidate.dao.QuestionDao;
+import com.lawencon.jobportal.candidate.dao.SkillTestDao;
+import com.lawencon.jobportal.candidate.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
+import com.lawencon.jobportal.candidate.dto.job.JobUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.Benefit;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
@@ -29,7 +34,14 @@ import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobBenefit;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
+<<<<<<< HEAD
 import com.lawencon.jobportal.candidate.util.DateConvert;
+=======
+import com.lawencon.jobportal.candidate.model.Question;
+import com.lawencon.jobportal.candidate.model.SkillTest;
+import com.lawencon.jobportal.candidate.model.SkillTestQuestion;
+import com.lawencon.jobportal.candidate.util.GeneratorId;
+>>>>>>> 85b73fc2da82567fbe5556f0ed0c5797ca5567cc
 
 @Service
 public class JobService {
@@ -58,6 +70,15 @@ public class JobService {
 	
 	@Autowired
 	private JobBenefitDao jobBenefitDao;
+	
+	@Autowired
+	private SkillTestDao skillTestDao;
+	
+	@Autowired
+	private QuestionDao questionDao;
+	
+	@Autowired
+	private SkillTestQuestionDao skillTestQuestionDao;
 	
 	public List<JobStatusGetResDto> getAllJobStatus() {
 		final List<JobStatusGetResDto> jobStatusGetResDtos = new ArrayList<>();
@@ -114,13 +135,35 @@ public class JobService {
 		
 		final Job jobResult = jobDao.save(job);
 		
-		for (String b : data.getBenefitCode()) {
-			final Benefit benefit = benefitDao.getByCode(b);
+		if(data.getBenefitCode() != null) {
+			for (String b : data.getBenefitCode()) {
+				final Benefit benefit = benefitDao.getByCode(b);
+				
+				final JobBenefit jobBenefit = new JobBenefit();
+				jobBenefit.setBenefit(benefit);
+				jobBenefit.setJob(jobResult);
+				jobBenefitDao.save(jobBenefit);
+			}
+		}
+		
+		if(data.getTestName() != null && data.getTestName() != "") {
+			final SkillTest skillTest = new SkillTest();
+			final String skillTestCode = GeneratorId.generateCode();
+			data.setTestCode(skillTestCode);
+			skillTest.setTestCode(skillTestCode);
+			skillTest.setTestName(data.getTestName());
+			skillTest.setJob(jobResult);
+			final SkillTest skillTestResult = skillTestDao.save(skillTest);
 			
-			final JobBenefit jobBenefit = new JobBenefit();
-			jobBenefit.setBenefit(benefit);
-			jobBenefit.setJob(jobResult);
-			jobBenefitDao.save(jobBenefit);
+			for (String q : data.getQuestionCode()) {
+				final Question question = questionDao.getByCode(q);
+				
+				final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
+				skillTestQuestion.setQuestion(question);
+				skillTestQuestion.setSkillTest(skillTestResult);
+				
+				skillTestQuestionDao.save(skillTestQuestion);
+			}
 		}
 		
 		final InsertResDto result = new InsertResDto();
@@ -339,11 +382,36 @@ public class JobService {
 		jobGetResDto.setStatusName(job.getJobStatus().getStatusName());
 		jobGetResDto.setEmploymentName(job.getEmployementType().getEmploymentName());
 		jobGetResDto.setCreatedAt(job.getCreatedAt().toString());
-		jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());
+		if(job.getUpdatedAt()!=null) {
+			jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());
+		}
 		jobGetResDto.setVer(job.getVersion());
 		return jobGetResDto;
 	}
 
-	
+	public UpdateResDto updateJob(JobUpdateReqDto data) {
+		em().getTransaction().begin();
+
+		final Job jobDb = jobDao.getByCode(data.getJobCode());
+		final Job job = jobDao.getById(Job.class, jobDb.getId());
+		job.setJobTitle(data.getJobTitle());
+		job.setSalaryStart(data.getSalaryStart());
+		job.setSalaryEnd(data.getSalaryEnd());
+		job.setDescription(data.getDescription());
+		job.setEndDate(LocalDate.parse(data.getEndDate()));
+
+		final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
+		final JobStatus jobStatusResult = jobStatusDao.getById(JobStatus.class, jobStatus.getId());
+		job.setJobStatus(jobStatusResult);
+
+		final Job jobResult = jobDao.saveAndFlush(job);
+
+		final UpdateResDto result = new UpdateResDto();
+		result.setVersion(jobResult.getVersion());
+		result.setMessage("Job updated successfully.");
+
+		em().getTransaction().commit();
+		return result;
+	}
 	
 }

@@ -24,6 +24,9 @@ import com.lawencon.jobportal.admin.dao.JobBenefitDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
 import com.lawencon.jobportal.admin.dao.JobPositionDao;
 import com.lawencon.jobportal.admin.dao.JobStatusDao;
+import com.lawencon.jobportal.admin.dao.QuestionDao;
+import com.lawencon.jobportal.admin.dao.SkillTestDao;
+import com.lawencon.jobportal.admin.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
@@ -40,6 +43,9 @@ import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.JobBenefit;
 import com.lawencon.jobportal.admin.model.JobPosition;
 import com.lawencon.jobportal.admin.model.JobStatus;
+import com.lawencon.jobportal.admin.model.Question;
+import com.lawencon.jobportal.admin.model.SkillTest;
+import com.lawencon.jobportal.admin.model.SkillTestQuestion;
 import com.lawencon.jobportal.admin.model.User;
 import com.lawencon.jobportal.admin.util.DateConvert;
 import com.lawencon.jobportal.admin.util.GeneratorId;
@@ -74,6 +80,15 @@ public class JobService {
 	
 	@Autowired
 	private JobBenefitDao jobBenefitDao;
+
+	@Autowired
+	private SkillTestDao skillTestDao;
+	
+	@Autowired
+	private SkillTestQuestionDao skillTestQuestionDao;
+	
+	@Autowired
+	private QuestionDao questionDao;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -392,6 +407,29 @@ public class JobService {
 				jobBenefit.setJob(jobResult);
 				jobBenefitDao.save(jobBenefit);
 			}
+			
+			if(data.getTestName() != null && data.getTestName() != "") {
+				final SkillTest skillTest = new SkillTest();
+				final String skillTestCode = GeneratorId.generateCode();
+				data.setTestCode(skillTestCode);
+				skillTest.setTestCode(skillTestCode);
+				skillTest.setTestName(data.getTestName());
+				skillTest.setJob(jobResult);
+				final SkillTest skillTestResult = skillTestDao.save(skillTest);
+				final List<String> questionCode = new ArrayList<>();
+				
+				for (String q : data.getQuestionId()) {
+					final Question question = questionDao.getById(Question.class, q);
+					questionCode.add(question.getQuestionCode());
+					final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
+					skillTestQuestion.setQuestion(question);
+					skillTestQuestion.setSkillTest(skillTestResult);
+					
+					skillTestQuestionDao.save(skillTestQuestion);
+				}
+				
+				data.setQuestionCode(questionCode);
+			}
 
 			final String jobInsertCandidateAPI = "http://localhost:8081/jobs";
 
@@ -421,45 +459,53 @@ public class JobService {
 	}
 
 	public UpdateResDto updateJob(JobUpdateReqDto data) {
-		em().getTransaction().begin();
-
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		job.setJobTitle(data.getJobTitle());
-		job.setSalaryStart(data.getSalaryStart());
-		job.setSalaryEnd(data.getSalaryEnd());
-		job.setDescription(data.getDescription());
-		job.setEndDate(LocalDate.parse(data.getEndDate()));
-
-		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
-		final Company companyResult = companyDao.getById(Company.class, companyDb.getId());
-		job.setCompany(companyResult);
-
-		final JobPosition jobPositionDb = jobPositionDao.getByCode(data.getJobPositionCode());
-		final JobPosition jobPositionResult = jobPositionDao.getById(JobPosition.class, jobPositionDb.getId());
-		job.setJobPosition(jobPositionResult);
-
-		final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
-		final JobStatus jobStatusResult = jobStatusDao.getById(JobStatus.class, jobStatus.getId());
-		job.setJobStatus(jobStatusResult);
-
-		final EmploymentType employmentType = employmentTypeDao.getByCode(data.getEmploymentCode());
-		final EmploymentType employmentTypeResult = employmentTypeDao.getById(EmploymentType.class,
-				employmentType.getId());
-		job.setEmployementType(employmentTypeResult);
-
-		final User hr = userDao.getById(User.class, data.getHrId());
-		job.setHr(hr);
-
-		final User interviewer = userDao.getById(User.class, data.getInterviewerId());
-		job.setInterviewer(interviewer);
-
-		final Job jobResult = jobDao.saveAndFlush(job);
-
 		final UpdateResDto result = new UpdateResDto();
-		result.setVersion(jobResult.getVersion());
-		result.setMessage("Job updated successfully.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			data.setJobCode(job.getJobCode());
+			job.setJobTitle(data.getJobTitle());
+			job.setSalaryStart(data.getSalaryStart());
+			job.setSalaryEnd(data.getSalaryEnd());
+			job.setDescription(data.getDescription());
+			job.setEndDate(LocalDate.parse(data.getEndDate()));
+
+			final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
+			final JobStatus jobStatusResult = jobStatusDao.getById(JobStatus.class, jobStatus.getId());
+			job.setJobStatus(jobStatusResult);
+
+			final User hr = userDao.getById(User.class, data.getHrId());
+			job.setHr(hr);
+
+			final User interviewer = userDao.getById(User.class, data.getInterviewerId());
+			job.setInterviewer(interviewer);
+
+			final Job jobResult = jobDao.saveAndFlush(job);
+
+			final String jobUpdateCandidateAPI = "http://localhost:8081/jobs";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<JobUpdateReqDto> companyUpdate = RequestEntity.patch(jobUpdateCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(companyUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				result.setVersion(jobResult.getVersion());
+				result.setMessage("Job updated successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 		return result;
 	}
 

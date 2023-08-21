@@ -1,6 +1,6 @@
-package com.lawencon.jobportal.candidate.dto.user;
+package com.lawencon.jobportal.admin.dto.candidate;
 
-public class UserUpdateReqDto {
+public class UpdateProfileReqDto {
 	private String candidateId;
 	private String idNumber;
 	private String fullName;
