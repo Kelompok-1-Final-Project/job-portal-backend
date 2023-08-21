@@ -141,7 +141,7 @@ public class QuestionService {
 		final List<QuestionGetResDto> listResult = new ArrayList<>();
 		for(Question q:listQuestion) {
 			final QuestionGetResDto result = new QuestionGetResDto();
-			result.setQuestion(q.getId());
+			result.setQuestionId(q.getId());
 			result.setQuestion(q.getQuestion());
 			listResult.add(result);
 		}
