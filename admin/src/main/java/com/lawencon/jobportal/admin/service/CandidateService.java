@@ -30,6 +30,7 @@ import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateCvReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.UpdateProfileReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateSummaryReqDto;
 import com.lawencon.jobportal.admin.model.Candidate;
 import com.lawencon.jobportal.admin.model.CandidateProfile;
@@ -264,6 +265,59 @@ public class CandidateService {
 			em().getTransaction().rollback();
 		}
 
+		return result;
+	}
+
+	public UpdateResDto updateCandidate(UpdateProfileReqDto data) {
+		final UpdateResDto result = new UpdateResDto();
+		try {
+			em().getTransaction().begin();
+
+			final Candidate candidateDb = candidateDao.getByEmail(data.getEmail());
+			final Candidate candidate = candidateDao.getById(Candidate.class, candidateDb.getId());
+
+			final CandidateProfile candidateProfile = candidateProfileDao.getById(CandidateProfile.class,
+					candidate.getCandidateProfile().getId());
+			candidateProfile.setFullName(data.getFullName());
+			candidateProfile.setIdNumber(data.getIdNumber());
+			candidateProfile.setBirthDate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
+			candidateProfile.setMobileNumber(data.getMobileNumber());
+
+			if (data.getPhotoFiles() != null) {
+				final String oldPhotoId = candidateProfile.getPhoto().getId();
+
+				final File photo = new File();
+				photo.setExt(data.getPhotoExt());
+				photo.setFile(data.getPhotoFiles());
+				final File photoResult = fileDao.save(photo);
+				candidateProfile.setPhoto(photoResult);
+				fileDao.deleteById(File.class, oldPhotoId);
+			}
+
+			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
+
+			final Gender gender = genderDao.getByCode(data.getGenderCode());
+			final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
+			candidateProfile.setGender(genderResult);
+
+			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
+			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
+			candidateProfile.setMaritalStatus(maritalResult);
+
+			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
+			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
+			candidateProfile.setPersonType(personType);
+
+			final CandidateProfile profileResult = candidateProfileDao.save(candidateProfile);
+
+			result.setVersion(profileResult.getVersion());
+			result.setMessage("Candidate updated successfully");
+			em().getTransaction().commit();
+
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
 		return result;
 	}
 }

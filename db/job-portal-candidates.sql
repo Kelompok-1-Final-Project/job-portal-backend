@@ -641,7 +641,7 @@ CREATE TABLE t_family(
 	family_name VARCHAR(30) NOT NULL,
 	relationship_id VARCHAR(36) NOT NULL,
 	degree_id VARCHAR(36) NOT NULL,
-	birthdate VARCHAR(36) NOT NULL,
+	birthdate DATE NOT NULL,
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),

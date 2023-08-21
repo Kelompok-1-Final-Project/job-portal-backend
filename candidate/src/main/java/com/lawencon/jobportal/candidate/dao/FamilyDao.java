@@ -54,9 +54,7 @@ public class FamilyDao extends AbstractJpaDao{
 				degree.setDegreeName(familyArr[3].toString());
 				family.setFamilyDegree(degree);
 				
-				final String birthDate = familyArr[4].toString().replaceAll("\\s.*", "");
-				
-				family.setFamilyBirthdate(Date.valueOf(birthDate).toLocalDate());
+				family.setFamilyBirthdate(Date.valueOf(familyArr[4].toString()).toLocalDate());
 				family.setVersion(Integer.valueOf(familyArr[5].toString()));
 				
 				families.add(family);
