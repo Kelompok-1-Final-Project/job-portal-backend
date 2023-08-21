@@ -19,6 +19,7 @@ import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateCvReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.UpdateProfileReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateSummaryReqDto;
 import com.lawencon.jobportal.admin.service.CandidateService;
 
@@ -63,6 +64,12 @@ public class CandidateController {
 	@PatchMapping("/summaryUpdate")
 	public ResponseEntity<UpdateResDto> updateSummary(@RequestBody UpdateSummaryReqDto data){
 		final UpdateResDto response = candidateService.updateSummary(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/profileUpdate")
+	public ResponseEntity<UpdateResDto> updateProfile(@RequestBody UpdateProfileReqDto data){
+		final UpdateResDto response = candidateService.updateCandidate(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

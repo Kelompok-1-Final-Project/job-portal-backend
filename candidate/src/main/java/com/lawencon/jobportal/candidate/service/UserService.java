@@ -28,14 +28,12 @@ import com.lawencon.jobportal.candidate.dao.PersonTypeDao;
 import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
-import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserEmailGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserRegisterByAdminReqDto;
-import com.lawencon.jobportal.candidate.dto.user.UserUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.File;
 import com.lawencon.jobportal.candidate.model.Gender;
 import com.lawencon.jobportal.candidate.model.MaritalStatus;
@@ -82,7 +80,7 @@ public class UserService implements UserDetailsService {
 
 		userLoginResDto.setUserId(user.getId());
 		userLoginResDto.setUserName(user.getProfile().getFullName());
-//		userLoginResDto.setPhotoId(user.getProfile());
+//		userLoginResDto.setPhotoId(user.getProfile().getPhoto().getId());
 
 		return userLoginResDto;
 	}
@@ -217,7 +215,7 @@ public class UserService implements UserDetailsService {
 		}
 		
 		if(user.getProfile().getMaritalStatus() != null) {
-			userGetResDto.setMaritalStatusId(user.getProfile().getMaritalStatus().getId());
+			userGetResDto.setMaritalStatusCode(user.getProfile().getMaritalStatus().getStatusCode());
 			userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
 		}
 		
@@ -253,57 +251,6 @@ public class UserService implements UserDetailsService {
 		
 	}
 	
-	public UpdateResDto updateCandidate(UserUpdateReqDto data) {
-		final UpdateResDto result = new UpdateResDto();
-		try {
-			em().getTransaction().begin();
-
-			final User candidate = userDao.getById(User.class, data.getCandidateId());
-			
-			final Profile candidateProfile = profileDao.getById(Profile.class, candidate.getProfile().getId());
-			candidateProfile.setFullName(data.getFullName());
-			candidateProfile.setIdNumber(data.getIdNumber());
-			candidateProfile.setBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
-			candidateProfile.setMobileNumber(data.getMobileNumber());
-
-			if(data.getPhotoFiles() != null) {
-				final String oldPhotoId = candidateProfile.getPhoto().getId();
-				
-				final File photo = new File();
-				photo.setExt(data.getPhotoExt());
-				photo.setFile(data.getPhotoFiles());
-				final File photoResult = fileDao.save(photo);
-				candidateProfile.setPhoto(photoResult);
-				fileDao.deleteById(File.class, oldPhotoId);
-			}
-			
-			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
-
-			final Gender gender = genderDao.getByCode(data.getGenderCode());
-			final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
-			candidateProfile.setGender(genderResult);
-
-			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
-			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
-			candidateProfile.setMaritalStatus(maritalResult);
-
-			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
-			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
-			candidateProfile.setPersonType(personType);
-			
-			final Profile profileResult = profileDao.save(candidateProfile);
-
-			result.setVersion(profileResult.getVersion());
-			result.setMessage("Candidate inserted successfully");
-
-			em().getTransaction().commit();
-		}catch (Exception e) {
-			e.printStackTrace();
-			em().getTransaction().rollback();
-		}
-		
-		return result;
-	}
 	
 	public UserEmailGetResDto getEmail(String userId) {
 		final User user = userDao.getById(User.class, userId);
