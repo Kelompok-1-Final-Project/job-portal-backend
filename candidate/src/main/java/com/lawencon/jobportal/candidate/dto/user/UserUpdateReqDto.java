@@ -1,6 +1,7 @@
 package com.lawencon.jobportal.candidate.dto.user;
 
 public class UserUpdateReqDto {
+	private String candidateId;
 	private String fullName;
 	private String email;
 	private String idNumber;
@@ -12,6 +13,14 @@ public class UserUpdateReqDto {
 	private String genderCode;
 	private String maritalStatusCode;
 	private String personTypeCode;
+
+	public String getCandidateId() {
+		return candidateId;
+	}
+
+	public void setCandidateId(String candidateId) {
+		this.candidateId = candidateId;
+	}
 
 	public String getFullName() {
 		return fullName;
