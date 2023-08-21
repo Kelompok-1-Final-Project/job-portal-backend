@@ -39,6 +39,7 @@ import com.lawencon.jobportal.candidate.model.MaritalStatus;
 import com.lawencon.jobportal.candidate.model.PersonType;
 import com.lawencon.jobportal.candidate.model.Profile;
 import com.lawencon.jobportal.candidate.model.User;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 
 @Service
 public class ProfileService {
@@ -110,24 +111,30 @@ public class ProfileService {
 			em().getTransaction().begin();
 
 			final User candidate = userDao.getById(User.class, data.getCandidateId());
+			System.out.println(data.getCandidateId());
 			data.setEmail(candidate.getEmail());
 			
 			final Profile candidateProfile = profileDao.getById(Profile.class, candidate.getProfile().getId());
 			candidateProfile.setFullName(data.getFullName());
 			candidateProfile.setIdNumber(data.getIdNumber());
-			candidateProfile.setBirthdate(LocalDate.parse(data.getBirthdate()));
+			candidateProfile.setBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
 			candidateProfile.setExpectedSalary(data.getExpectedSalary());
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
 			if(data.getPhotoFiles() != null) {
-				final String oldPhotoId = candidateProfile.getPhoto().getId();
+				String oldPhotoId = "";
+				if(candidateProfile.getPhoto() != null) {
+					oldPhotoId=candidateProfile.getPhoto().getId();
+				}
 				
 				final File photo = new File();
 				photo.setExt(data.getPhotoExt());
 				photo.setFile(data.getPhotoFiles());
 				final File photoResult = fileDao.save(photo);
 				candidateProfile.setPhoto(photoResult);
-				fileDao.deleteById(File.class, oldPhotoId);
+				if(oldPhotoId!=null&&oldPhotoId!="") {
+					fileDao.deleteById(File.class, oldPhotoId);
+				}
 			}
 			
 			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
