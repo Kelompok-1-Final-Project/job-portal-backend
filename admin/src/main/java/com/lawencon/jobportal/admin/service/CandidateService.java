@@ -300,6 +300,9 @@ public class CandidateService {
 			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
 			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
 			candidateProfile.setMaritalStatus(maritalResult);
+			
+			final Gender gender = genderDao.getByCode(data.getGenderCode());
+			candidateProfile.setGender(gender);
 
 			final CandidateProfile profileResult = candidateProfileDao.save(candidateProfile);
 
