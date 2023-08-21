@@ -55,7 +55,9 @@ public class FamilyService {
 			familyGetResDto.setId(f.getId());
 			familyGetResDto.setFamilyName(f.getFamilyName());
 			familyGetResDto.setFamilyDegree(f.getFamilyDegree().getDegreeName());
+			familyGetResDto.setDegreeCode(f.getFamilyDegree().getDegreeCode());
 			familyGetResDto.setRelationshipName(f.getRelationship().getRelationshipName());
+			familyGetResDto.setRelationshipCode(f.getRelationship().getRelationshipCode());
 			familyGetResDto.setFamilyBirthDate(f.getFamilyBirthdate().toString());
 			familyGetResDtos.add(familyGetResDto);
 		});
