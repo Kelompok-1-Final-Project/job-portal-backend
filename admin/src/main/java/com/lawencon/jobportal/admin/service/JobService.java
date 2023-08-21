@@ -420,45 +420,53 @@ public class JobService {
 	}
 
 	public UpdateResDto updateJob(JobUpdateReqDto data) {
-		em().getTransaction().begin();
-
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		job.setJobTitle(data.getJobTitle());
-		job.setSalaryStart(data.getSalaryStart());
-		job.setSalaryEnd(data.getSalaryEnd());
-		job.setDescription(data.getDescription());
-		job.setEndDate(LocalDate.parse(data.getEndDate()));
-
-		final Company companyDb = companyDao.getByCode(data.getCompanyCode());
-		final Company companyResult = companyDao.getById(Company.class, companyDb.getId());
-		job.setCompany(companyResult);
-
-		final JobPosition jobPositionDb = jobPositionDao.getByCode(data.getJobPositionCode());
-		final JobPosition jobPositionResult = jobPositionDao.getById(JobPosition.class, jobPositionDb.getId());
-		job.setJobPosition(jobPositionResult);
-
-		final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
-		final JobStatus jobStatusResult = jobStatusDao.getById(JobStatus.class, jobStatus.getId());
-		job.setJobStatus(jobStatusResult);
-
-		final EmploymentType employmentType = employmentTypeDao.getByCode(data.getEmploymentCode());
-		final EmploymentType employmentTypeResult = employmentTypeDao.getById(EmploymentType.class,
-				employmentType.getId());
-		job.setEmployementType(employmentTypeResult);
-
-		final User hr = userDao.getById(User.class, data.getHrId());
-		job.setHr(hr);
-
-		final User interviewer = userDao.getById(User.class, data.getInterviewerId());
-		job.setInterviewer(interviewer);
-
-		final Job jobResult = jobDao.saveAndFlush(job);
-
 		final UpdateResDto result = new UpdateResDto();
-		result.setVersion(jobResult.getVersion());
-		result.setMessage("Job updated successfully.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			data.setJobCode(job.getJobCode());
+			job.setJobTitle(data.getJobTitle());
+			job.setSalaryStart(data.getSalaryStart());
+			job.setSalaryEnd(data.getSalaryEnd());
+			job.setDescription(data.getDescription());
+			job.setEndDate(LocalDate.parse(data.getEndDate()));
+
+			final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
+			final JobStatus jobStatusResult = jobStatusDao.getById(JobStatus.class, jobStatus.getId());
+			job.setJobStatus(jobStatusResult);
+
+			final User hr = userDao.getById(User.class, data.getHrId());
+			job.setHr(hr);
+
+			final User interviewer = userDao.getById(User.class, data.getInterviewerId());
+			job.setInterviewer(interviewer);
+
+			final Job jobResult = jobDao.saveAndFlush(job);
+
+			final String jobUpdateCandidateAPI = "http://localhost:8081/jobs";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<JobUpdateReqDto> companyUpdate = RequestEntity.patch(jobUpdateCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(companyUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				result.setVersion(jobResult.getVersion());
+				result.setMessage("Job updated successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 		return result;
 	}
 
