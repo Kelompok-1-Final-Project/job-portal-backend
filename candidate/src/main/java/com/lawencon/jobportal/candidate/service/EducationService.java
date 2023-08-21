@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 import com.lawencon.jobportal.candidate.dao.EducationDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
@@ -55,8 +56,8 @@ public class EducationService {
 		final User candidate = userDao.getById(User.class, data.getCandidateId());
 		education.setCandidate(candidate);
 		education.setEducationName(data.getEducationName());
-		education.setStartDate(LocalDate.parse(data.getStartDate()));
-		education.setEndDate(LocalDate.parse(data.getEndDate()));
+		education.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
+		education.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		final Education educationResult = educationDao.save(education);
 		final InsertResDto result = new InsertResDto();
 		result.setId(educationResult.getId());
@@ -82,12 +83,12 @@ public class EducationService {
 		final User candidate = userDao.getById(User.class, data.getCandidateId());
 		education.setCandidate(candidate);
 		education.setEducationName(data.getEducationName());
-		education.setStartDate(LocalDate.parse(data.getStartDate()));
-		education.setEndDate(LocalDate.parse(data.getEndDate()));
+		education.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
+		education.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		final Education educationResult = educationDao.save(education);
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(educationResult.getVersion());
-		result.setMessage("Education Successfully added.");
+		result.setMessage("Education updated.");
 
 		em().getTransaction().commit();
 		return result;

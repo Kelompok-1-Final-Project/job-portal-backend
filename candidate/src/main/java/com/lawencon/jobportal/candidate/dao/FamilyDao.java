@@ -1,6 +1,6 @@
 package com.lawencon.jobportal.candidate.dao;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +24,13 @@ public class FamilyDao extends AbstractJpaDao{
 		final List<Family> families = new ArrayList<>();
 		
 		final String sql = "SELECT "
-				+ "tf.id, tf.family_name, tr.relationship_name, tf.family_degree, tf.family_birthdate, tf.ver "
+				+ "tf.id, tf.family_name, tr.relationship_name, td.degree_name, tf.birthdate, tf.ver "
 				+ "FROM "
 				+ "t_family tf "
 				+ "INNER JOIN "
-				+ "t_relationship tr "
-				+ "ON "
-				+ "tf.relationship_id = tr.id "
+				+ "t_relationship tr ON tf.relationship_id = tr.id "
+				+ "INNER JOIN "
+				+ "t_degree td ON td.id = tf.degree_id "
 				+ "WHERE "
 				+ "candidate_id = :candidateId ";
 		
@@ -54,7 +54,9 @@ public class FamilyDao extends AbstractJpaDao{
 				degree.setDegreeName(familyArr[3].toString());
 				family.setFamilyDegree(degree);
 				
-				family.setFamilyBirthdate(LocalDate.parse(familyArr[4].toString()));
+				final String birthDate = familyArr[4].toString().replaceAll("\\s.*", "");
+				
+				family.setFamilyBirthdate(Date.valueOf(birthDate).toLocalDate());
 				family.setVersion(Integer.valueOf(familyArr[5].toString()));
 				
 				families.add(family);

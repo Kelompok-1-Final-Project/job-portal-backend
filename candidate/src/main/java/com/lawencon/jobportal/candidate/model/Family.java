@@ -25,7 +25,7 @@ public class Family extends BaseEntity {
 	@JoinColumn(name = "relationship_id")
 	private Relationship relationship;
 
-	@Column(name = "family_birthdate", length = 36, nullable = false)
+	@Column(name = "birthdate", length = 36, nullable = false)
 	private LocalDate familyBirthdate;
 	
 	@OneToOne
