@@ -5,7 +5,7 @@ public class UserGetResDto {
 	private String idNumber;
 	private String phone;
 	private String email;
-	private String maritalStatusId;
+	private String maritalStatusCode;
 	private String maritalStatus;
 	private String gender;
 	private Integer expectedSalary;
@@ -46,12 +46,12 @@ public class UserGetResDto {
 		this.email = email;
 	}
 
-	public String getMaritalStatusId() {
-		return maritalStatusId;
+	public String getMaritalStatusCode() {
+		return maritalStatusCode;
 	}
 
-	public void setMaritalStatusId(String maritalStatusId) {
-		this.maritalStatusId = maritalStatusId;
+	public void setMaritalStatusCode(String maritalStatusCode) {
+		this.maritalStatusCode = maritalStatusCode;
 	}
 
 	public String getMaritalStatus() {

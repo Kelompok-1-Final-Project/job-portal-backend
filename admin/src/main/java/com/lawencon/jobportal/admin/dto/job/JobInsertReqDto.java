@@ -17,6 +17,10 @@ public class JobInsertReqDto {
 	private String hrId;
 	private String interviewerId;
 	private List<String> benefitCode;
+	private String testName;
+	private String testCode;
+	private List<String> questionCode;
+	private List<String> questionId;
 
 	public String getJobTitle() {
 		return jobTitle;
@@ -120,6 +124,38 @@ public class JobInsertReqDto {
 
 	public void setBenefitCode(List<String> benefitCode) {
 		this.benefitCode = benefitCode;
+	}
+
+	public String getTestName() {
+		return testName;
+	}
+
+	public void setTestName(String testName) {
+		this.testName = testName;
+	}
+
+	public String getTestCode() {
+		return testCode;
+	}
+
+	public void setTestCode(String testCode) {
+		this.testCode = testCode;
+	}
+
+	public List<String> getQuestionCode() {
+		return questionCode;
+	}
+
+	public void setQuestionCode(List<String> questionCode) {
+		this.questionCode = questionCode;
+	}
+
+	public List<String> getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(List<String> questionId) {
+		this.questionId = questionId;
 	}
 
 }
