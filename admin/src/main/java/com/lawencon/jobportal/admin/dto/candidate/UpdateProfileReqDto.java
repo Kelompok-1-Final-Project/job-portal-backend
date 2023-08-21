@@ -11,6 +11,7 @@ public class UpdateProfileReqDto {
 	private String photoFiles;
 	private String expectedSalary;
 	private String maritalStatusCode;
+	private String genderCode;
 
 	public String getCandidateId() {
 		return candidateId;
@@ -91,4 +92,13 @@ public class UpdateProfileReqDto {
 	public void setMaritalStatusCode(String maritalStatusCode) {
 		this.maritalStatusCode = maritalStatusCode;
 	}
+
+	public String getGenderCode() {
+		return genderCode;
+	}
+
+	public void setGenderCode(String genderCode) {
+		this.genderCode = genderCode;
+	}
+
 }
