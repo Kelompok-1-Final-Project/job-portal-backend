@@ -24,6 +24,9 @@ import com.lawencon.jobportal.admin.dao.JobBenefitDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
 import com.lawencon.jobportal.admin.dao.JobPositionDao;
 import com.lawencon.jobportal.admin.dao.JobStatusDao;
+import com.lawencon.jobportal.admin.dao.QuestionDao;
+import com.lawencon.jobportal.admin.dao.SkillTestDao;
+import com.lawencon.jobportal.admin.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
@@ -40,6 +43,9 @@ import com.lawencon.jobportal.admin.model.Job;
 import com.lawencon.jobportal.admin.model.JobBenefit;
 import com.lawencon.jobportal.admin.model.JobPosition;
 import com.lawencon.jobportal.admin.model.JobStatus;
+import com.lawencon.jobportal.admin.model.Question;
+import com.lawencon.jobportal.admin.model.SkillTest;
+import com.lawencon.jobportal.admin.model.SkillTestQuestion;
 import com.lawencon.jobportal.admin.model.User;
 import com.lawencon.jobportal.admin.util.GeneratorId;
 
@@ -73,6 +79,15 @@ public class JobService {
 	
 	@Autowired
 	private JobBenefitDao jobBenefitDao;
+
+	@Autowired
+	private SkillTestDao skillTestDao;
+	
+	@Autowired
+	private SkillTestQuestionDao skillTestQuestionDao;
+	
+	@Autowired
+	private QuestionDao questionDao;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -390,6 +405,26 @@ public class JobService {
 				jobBenefit.setBenefit(benefit);
 				jobBenefit.setJob(jobResult);
 				jobBenefitDao.save(jobBenefit);
+			}
+			
+			if(data.getTestName() != null && data.getTestName() != "") {
+				final SkillTest skillTest = new SkillTest();
+				final String skillTestCode = GeneratorId.generateCode();
+				data.setTestCode(skillTestCode);
+				skillTest.setTestCode(skillTestCode);
+				skillTest.setTestName(data.getTestName());
+				skillTest.setJob(jobResult);
+				final SkillTest skillTestResult = skillTestDao.save(skillTest);
+				
+				for (String q : data.getQuestionCode()) {
+					final Question question = questionDao.getByCode(q);
+					
+					final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
+					skillTestQuestion.setQuestion(question);
+					skillTestQuestion.setSkillTest(skillTestResult);
+					
+					skillTestQuestionDao.save(skillTestQuestion);
+				}
 			}
 
 			final String jobInsertCandidateAPI = "http://localhost:8081/jobs";
