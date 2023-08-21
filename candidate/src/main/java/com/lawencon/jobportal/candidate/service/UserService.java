@@ -254,29 +254,29 @@ public class UserService implements UserDetailsService {
 	}
 	
 	public UpdateResDto updateCandidate(UserUpdateReqDto data) {
-		final InsertResDto result = new InsertResDto();
+		final UpdateResDto result = new UpdateResDto();
 		try {
 			em().getTransaction().begin();
 
-			final Profile candidateProfile = new Profile();
+			final User candidate = userDao.getById(User.class, data.getCandidateId());
+			
+			final Profile candidateProfile = profileDao.getById(Profile.class, candidate.getProfile().getId());
 			candidateProfile.setFullName(data.getFullName());
 			candidateProfile.setIdNumber(data.getIdNumber());
-			candidateProfile.setSummary(data.getSummary());
 			candidateProfile.setBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
-			final File photo = new File();
-			photo.setExt(data.getPhotoExt());
-			photo.setFile(data.getPhotoFiles());
-			final File photoResult = fileDao.save(photo);
-			candidateProfile.setPhoto(photoResult);
-
-			final File cv = new File();
-			cv.setExt(data.getCvExt());
-			cv.setFile(data.getCvFiles());
-			final File cvResult = fileDao.save(cv);
-			candidateProfile.setCv(cvResult);
-
+			if(data.getPhotoFiles() != null) {
+				final String oldPhotoId = candidateProfile.getPhoto().getId();
+				
+				final File photo = new File();
+				photo.setExt(data.getPhotoExt());
+				photo.setFile(data.getPhotoFiles());
+				final File photoResult = fileDao.save(photo);
+				candidateProfile.setPhoto(photoResult);
+				fileDao.deleteById(File.class, oldPhotoId);
+			}
+			
 			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
 
 			final Gender gender = genderDao.getByCode(data.getGenderCode());
@@ -290,16 +290,10 @@ public class UserService implements UserDetailsService {
 			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
 			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
 			candidateProfile.setPersonType(personType);
+			
 			final Profile profileResult = profileDao.save(candidateProfile);
 
-			final User candidate = new User();
-			candidate.setEmail(data.getEmail());
-			candidate.setProfile(profileResult);
-			candidate.setPass(data.getPassword());
-			
-			final User candidateResult = userDao.save(candidate);
-
-			result.setId(candidateResult.getId());
+			result.setVersion(profileResult.getVersion());
 			result.setMessage("Candidate inserted successfully");
 
 			em().getTransaction().commit();
