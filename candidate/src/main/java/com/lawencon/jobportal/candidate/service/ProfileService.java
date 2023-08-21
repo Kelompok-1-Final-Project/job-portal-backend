@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.candidate.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,6 @@ import com.lawencon.jobportal.candidate.model.MaritalStatus;
 import com.lawencon.jobportal.candidate.model.PersonType;
 import com.lawencon.jobportal.candidate.model.Profile;
 import com.lawencon.jobportal.candidate.model.User;
-import com.lawencon.jobportal.candidate.util.DateConvert;
 
 @Service
 public class ProfileService {
@@ -110,11 +110,11 @@ public class ProfileService {
 			em().getTransaction().begin();
 
 			final User candidate = userDao.getById(User.class, data.getCandidateId());
+			data.setEmail(candidate.getEmail());
 			
 			final Profile candidateProfile = profileDao.getById(Profile.class, candidate.getProfile().getId());
 			candidateProfile.setFullName(data.getFullName());
-			candidateProfile.setIdNumber(data.getIdNumber());
-			candidateProfile.setBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
+			candidateProfile.setBirthdate(LocalDate.parse(data.getBirthdate()));
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
 			if(data.getPhotoFiles() != null) {
@@ -130,25 +130,18 @@ public class ProfileService {
 			
 			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
 
-			final Gender gender = genderDao.getByCode(data.getGenderCode());
-			final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
-			candidateProfile.setGender(genderResult);
-
 			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
 			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
 			candidateProfile.setMaritalStatus(maritalResult);
 
-			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
-			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
-			candidateProfile.setPersonType(personType);
-			
 			final Profile profileResult = profileDao.save(candidateProfile);
 
 			final String candidateUpdateAdminAPI = "http://localhost:8080/candidates/profileUpdate";
 
 			final HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
-
+			headers.setBearerAuth(JwtConfig.get());
+			
 			final RequestEntity<UserUpdateReqDto> candidateRegister = RequestEntity.patch(candidateUpdateAdminAPI)
 					.headers(headers).body(data);
 

@@ -4,15 +4,12 @@ public class UserUpdateReqDto {
 	private String candidateId;
 	private String fullName;
 	private String email;
-	private String idNumber;
 	private String birthdate;
 	private String mobileNumber;
 	private String photoExt;
 	private String photoFiles;
 	private String expectedSalary;
-	private String genderCode;
 	private String maritalStatusCode;
-	private String personTypeCode;
 
 	public String getCandidateId() {
 		return candidateId;
@@ -36,14 +33,6 @@ public class UserUpdateReqDto {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getIdNumber() {
-		return idNumber;
-	}
-
-	public void setIdNumber(String idNumber) {
-		this.idNumber = idNumber;
 	}
 
 	public String getBirthdate() {
@@ -86,28 +75,12 @@ public class UserUpdateReqDto {
 		this.expectedSalary = expectedSalary;
 	}
 
-	public String getGenderCode() {
-		return genderCode;
-	}
-
-	public void setGenderCode(String genderCode) {
-		this.genderCode = genderCode;
-	}
-
 	public String getMaritalStatusCode() {
 		return maritalStatusCode;
 	}
 
 	public void setMaritalStatusCode(String maritalStatusCode) {
 		this.maritalStatusCode = maritalStatusCode;
-	}
-
-	public String getPersonTypeCode() {
-		return personTypeCode;
-	}
-
-	public void setPersonTypeCode(String personTypeCode) {
-		this.personTypeCode = personTypeCode;
 	}
 
 }

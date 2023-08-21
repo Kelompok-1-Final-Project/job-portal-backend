@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.admin.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -279,8 +280,7 @@ public class CandidateService {
 			final CandidateProfile candidateProfile = candidateProfileDao.getById(CandidateProfile.class,
 					candidate.getCandidateProfile().getId());
 			candidateProfile.setFullName(data.getFullName());
-			candidateProfile.setIdNumber(data.getIdNumber());
-			candidateProfile.setBirthDate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
+			candidateProfile.setBirthDate(LocalDate.parse(data.getBirthdate()));
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
 			if (data.getPhotoFiles() != null) {
@@ -296,17 +296,9 @@ public class CandidateService {
 
 			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
 
-			final Gender gender = genderDao.getByCode(data.getGenderCode());
-			final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
-			candidateProfile.setGender(genderResult);
-
 			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
 			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
 			candidateProfile.setMaritalStatus(maritalResult);
-
-			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
-			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
-			candidateProfile.setPersonType(personType);
 
 			final CandidateProfile profileResult = candidateProfileDao.save(candidateProfile);
 
