@@ -16,6 +16,7 @@ import com.lawencon.jobportal.candidate.dao.RelationshipDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.degree.DegreeGetResDto;
 import com.lawencon.jobportal.candidate.dto.family.FamilyGetResDto;
 import com.lawencon.jobportal.candidate.dto.family.FamilyInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.family.FamilyUpdateReqDto;
@@ -70,6 +71,19 @@ public class FamilyService {
 			result.setRelationshipId(r.getId());
 			result.setRelationshipCode(r.getRelationshipCode());
 			result.setRelationshipName(r.getRelationshipName());
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<DegreeGetResDto> getAllDegree() {
+		final List<Degree> listDegree = degreeDao.getAll(Degree.class);
+		final List<DegreeGetResDto> listResult = new ArrayList<>();
+		for(Degree d: listDegree) {
+			final DegreeGetResDto result = new DegreeGetResDto();
+			result.setId(d.getId());
+			result.setDegreeName(d.getDegreeName());
+			result.setDegreeCode(d.getDegreeCode());
 			listResult.add(result);
 		}
 		return listResult;

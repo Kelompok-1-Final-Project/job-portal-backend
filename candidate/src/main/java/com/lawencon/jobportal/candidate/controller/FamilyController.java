@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.jobportal.candidate.dto.DeleteResDto;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.degree.DegreeGetResDto;
 import com.lawencon.jobportal.candidate.dto.family.FamilyGetResDto;
 import com.lawencon.jobportal.candidate.dto.family.FamilyInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.family.FamilyUpdateReqDto;
@@ -29,6 +30,12 @@ public class FamilyController {
 	
 	@Autowired
 	private FamilyService familyService;
+	
+	@GetMapping("/degree")
+	public ResponseEntity<List<DegreeGetResDto>> getAllDegree(){
+		final List<DegreeGetResDto> response = familyService.getAllDegree();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 	
 	@GetMapping
 	public ResponseEntity<List<RelationshipGetResDto>> getAllRelationship(){

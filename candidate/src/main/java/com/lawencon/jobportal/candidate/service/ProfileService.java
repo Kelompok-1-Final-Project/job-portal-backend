@@ -1,6 +1,5 @@
 package com.lawencon.jobportal.candidate.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,17 +27,18 @@ import com.lawencon.jobportal.candidate.dto.profile.GenderGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.MaritalGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.PersonTypeGetResDto;
 import com.lawencon.jobportal.candidate.dto.profile.ProfileGetResDto;
-import com.lawencon.jobportal.candidate.dto.profile.ProfileUpdateReqDto;
 import com.lawencon.jobportal.candidate.dto.profile.UpdateCvReqDto;
 import com.lawencon.jobportal.candidate.dto.profile.UpdateCvSendAdminReqDto;
 import com.lawencon.jobportal.candidate.dto.profile.UpdateSummaryReqDto;
 import com.lawencon.jobportal.candidate.dto.profile.UpdateSummarySendAdminReqDto;
+import com.lawencon.jobportal.candidate.dto.user.UserUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.File;
 import com.lawencon.jobportal.candidate.model.Gender;
 import com.lawencon.jobportal.candidate.model.MaritalStatus;
 import com.lawencon.jobportal.candidate.model.PersonType;
 import com.lawencon.jobportal.candidate.model.Profile;
 import com.lawencon.jobportal.candidate.model.User;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 
 @Service
 public class ProfileService {
@@ -104,40 +104,72 @@ public class ProfileService {
 		return genderGetResDtos;
 	}
 
-	public UpdateResDto updateProfile(ProfileUpdateReqDto data) {
-		em().getTransaction().begin();
-
-		final Profile profile = profileDao.getById(Profile.class, data.getProfileId());
-		profile.setFullName(data.getFullName());
-		profile.setIdNumber(data.getIdNumber());
-		profile.setFullName(data.getFullName());
-		profile.setSummary(data.getSummary());
-		profile.setBirthdate(LocalDate.parse(data.getBirthdate()));
-		profile.setMobileNumber(data.getMobileNumber());
-		final File file = new File();
-		file.setExt(data.getPhotoExt());
-		file.setFile(data.getPhotoFiles());
-		final File photo = fileDao.save(file);
-		profile.setPhoto(photo);
-		file.setExt(data.getCvExt());
-		file.setFile(data.getCvFiles());
-		final File cv = fileDao.save(file);
-		profile.setCv(cv);
-		profile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
-		final Gender gender = genderDao.getById(Gender.class, data.getGenderId());
-		profile.setGender(gender);
-		final MaritalStatus status = maritalStatusDao.getById(MaritalStatus.class, data.getMaritalStatusId());
-		profile.setMaritalStatus(status);
-		final PersonType type = personTypeDao.getById(PersonType.class, data.getPersonTypeId());
-		profile.setPersonType(type);
-		final Profile profiles = profileDao.saveAndFlush(profile);
+	public UpdateResDto updateCandidate(UserUpdateReqDto data) {
 		final UpdateResDto result = new UpdateResDto();
-		result.setVersion(profiles.getVersion());
-		result.setMessage("Profile Successfully Updated.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final User candidate = userDao.getById(User.class, data.getCandidateId());
+			
+			final Profile candidateProfile = profileDao.getById(Profile.class, candidate.getProfile().getId());
+			candidateProfile.setFullName(data.getFullName());
+			candidateProfile.setIdNumber(data.getIdNumber());
+			candidateProfile.setBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
+			candidateProfile.setMobileNumber(data.getMobileNumber());
+
+			if(data.getPhotoFiles() != null) {
+				final String oldPhotoId = candidateProfile.getPhoto().getId();
+				
+				final File photo = new File();
+				photo.setExt(data.getPhotoExt());
+				photo.setFile(data.getPhotoFiles());
+				final File photoResult = fileDao.save(photo);
+				candidateProfile.setPhoto(photoResult);
+				fileDao.deleteById(File.class, oldPhotoId);
+			}
+			
+			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
+
+			final Gender gender = genderDao.getByCode(data.getGenderCode());
+			final Gender genderResult = genderDao.getById(Gender.class, gender.getId());
+			candidateProfile.setGender(genderResult);
+
+			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
+			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());
+			candidateProfile.setMaritalStatus(maritalResult);
+
+			final PersonType personTypeResult = personTypeDao.getByCode(data.getPersonTypeCode());
+			final PersonType personType = personTypeDao.getById(PersonType.class, personTypeResult.getId());
+			candidateProfile.setPersonType(personType);
+			
+			final Profile profileResult = profileDao.save(candidateProfile);
+
+			final String candidateUpdateAdminAPI = "http://localhost:8080/candidates/profileUpdate";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			final RequestEntity<UserUpdateReqDto> candidateRegister = RequestEntity.patch(candidateUpdateAdminAPI)
+					.headers(headers).body(data);
+
+			final ResponseEntity<UpdateResDto> responseAdmin = restTemplate.exchange(candidateRegister,
+					UpdateResDto.class);
+
+			if (responseAdmin.getStatusCode().equals(HttpStatus.OK)) {
+				result.setVersion(profileResult.getVersion());
+				result.setMessage("Candidate updated successfully");
+				em().getTransaction().commit();
+
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Profile Failed");
+			}
+
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
 		return result;
-
 	}
 
 	public ProfileGetResDto getProfileByCandidate(String userId) {
