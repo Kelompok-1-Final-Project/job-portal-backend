@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -30,14 +31,14 @@ public class UserController {
 	}
 	
 	@GetMapping("/hr")
-	public ResponseEntity<List<UserGetResDto>> getAllHr() {
-		final List<UserGetResDto> data = userService.getAllHr();
+	public ResponseEntity<List<UserGetResDto>> getAllHr(@RequestParam("sp") Integer startPosition, @RequestParam("ep")Integer endPosition) {
+		final List<UserGetResDto> data = userService.getAllHr(startPosition, endPosition);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
 	@GetMapping("/interviewer")
-	public ResponseEntity<List<UserGetResDto>> getAllInterviewer() {
-		final List<UserGetResDto> data = userService.getAllInterviewer();
+	public ResponseEntity<List<UserGetResDto>> getAllInterviewer(@RequestParam("sp") Integer startPosition, @RequestParam("ep")Integer endPosition) {
+		final List<UserGetResDto> data = userService.getAllInterviewer(startPosition, endPosition);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
