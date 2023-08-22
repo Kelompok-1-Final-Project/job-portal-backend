@@ -62,8 +62,8 @@ public class JobController {
 	}
 	
 	@GetMapping("/filter/id")
-	public ResponseEntity<JobGetResDto> getById(@RequestParam("id") String jobId){
-		final JobGetResDto response = jobService.getById(jobId);
+	public ResponseEntity<JobGetResDto> getById(@RequestParam("id") String jobId, @RequestParam("can") String candidateId){
+		final JobGetResDto response = jobService.getById(jobId, candidateId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
