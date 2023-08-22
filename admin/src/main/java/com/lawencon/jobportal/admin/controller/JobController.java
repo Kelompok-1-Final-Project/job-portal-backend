@@ -39,14 +39,14 @@ public class JobController {
 	}
 	
 	@GetMapping("filter/name")
-	public ResponseEntity<List<JobGetResDto>> getByName(@RequestParam("n") String jobName) {
-		final List<JobGetResDto> data = jobService.getByName(jobName);
+	public ResponseEntity<List<JobGetResDto>> getByName(@RequestParam("n") String jobName, @RequestParam("sp") Integer startPosition, @RequestParam("ep")Integer endPosition) {
+		final List<JobGetResDto> data = jobService.getByName(jobName, startPosition, endPosition);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
 	@GetMapping("filter/location/")
-	public ResponseEntity<List<JobGetResDto>> getByLocation(@RequestParam("loc") String location) {
-		final List<JobGetResDto> data = jobService.getByLocation(location);
+	public ResponseEntity<List<JobGetResDto>> getByLocation(@RequestParam("loc") String location, @RequestParam("sp") Integer startPosition, @RequestParam("ep")Integer endPosition) {
+		final List<JobGetResDto> data = jobService.getByLocation(location, startPosition, endPosition);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
@@ -57,20 +57,20 @@ public class JobController {
 	}
 	
 	@GetMapping("filter/type")
-	public ResponseEntity<List<JobGetResDto>> getByType(@RequestParam("type") String type) {
-		final List<JobGetResDto> data = jobService.getByEmploymentType(type);
+	public ResponseEntity<List<JobGetResDto>> getByType(@RequestParam("type") String type, @RequestParam("sp") Integer startPosition, @RequestParam("ep")Integer endPosition) {
+		final List<JobGetResDto> data = jobService.getByEmploymentType(type, startPosition, endPosition);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
 	@GetMapping("filter/position")
-	public ResponseEntity<List<JobGetResDto>> getByPosition(@RequestParam("pos") String postion) {
-		final List<JobGetResDto> data = jobService.getByPosition(postion);
+	public ResponseEntity<List<JobGetResDto>> getByPosition(@RequestParam("pos") String postion, @RequestParam("sp") Integer startPosition, @RequestParam("ep")Integer endPosition) {
+		final List<JobGetResDto> data = jobService.getByPosition(postion, startPosition, endPosition);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
 	@GetMapping("filter/status")
-	public ResponseEntity<List<JobGetResDto>> getByStatus(@RequestParam("stat") String status) {
-		final List<JobGetResDto> data = jobService.getByStatus(status);
+	public ResponseEntity<List<JobGetResDto>> getByStatus(@RequestParam("stat") String status, @RequestParam("sp") Integer startPosition, @RequestParam("ep")Integer endPosition) {
+		final List<JobGetResDto> data = jobService.getByStatus(status, startPosition, endPosition);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
