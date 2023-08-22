@@ -818,3 +818,7 @@ tj.id = 'c720d9b5-3218-43bc-8f47-8e82d0ee6da6' AND tsj.candidate_id = '2bc12f8a-
 SELECT  	tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, tc.company_name, tjp.position_name, tjs.status_name, tet.employment_name, sj.ver, sj.id AS saved_job_id, sj.created_at, sj.updated_at, ti.industry_name, tci.city_name  FROM   	t_save_job sj  INNER JOIN  	t_job tj ON tj.id = sj.job_id  INNER JOIN   	t_company tc ON tc.id = tj.company_id  INNER JOIN   	t_city tci ON tci.id = tc.city_id   INNER JOIN   	t_job_position tjp ON tjp.id = tj.job_position_id   INNER JOIN   	t_job_status tjs ON tjs.id = tj.job_status_id   INNER JOIN   	t_employment_type tet ON tet.id = tj.employment_type_id 
 INNER JOIN 
 	t_industry ti ON ti.id = tc.industry_id WHERE  	sj.candidate_id = '2bc12f8a-ca66-4232-aaff-3ef889cd9811'
+	
+SELECT id, candidate_id, job_id, status_id FROM t_job_candidate_status tjcs 
+WHERE 
+tjcs.candidate_id = '2bc12f8a-ca66-4232-aaff-3ef889cd9811'
