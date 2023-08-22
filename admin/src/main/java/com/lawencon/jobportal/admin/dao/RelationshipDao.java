@@ -21,9 +21,9 @@ public class RelationshipDao extends AbstractJpaDao{
 				+ "FROM " 
 				+ "t_Relationship " 
 				+ "WHERE "
-				+ "Relationship_code = :code";
+				+ "relationship_code = :code";
 
-		final Object relationshipObj = this.em().createNativeQuery(sql, Relationship.class)
+		final Object relationshipObj = this.em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 
