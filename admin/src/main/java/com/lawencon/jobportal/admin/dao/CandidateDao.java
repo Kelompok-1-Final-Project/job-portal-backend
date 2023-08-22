@@ -87,7 +87,7 @@ public class CandidateDao extends AbstractJpaDao{
 				
 				final CandidateProfile candidateProfile = new CandidateProfile();
 				candidateProfile.setFullName(candidateArr[2].toString());
-				candidateProfile.setMobileNumber(candidateArr[3].toString());
+				candidateProfile.setMobileNumber(candidateArr[3].toString());					
 				
 				candidate.setVersion(Integer.valueOf(candidateArr[4].toString()));
 
