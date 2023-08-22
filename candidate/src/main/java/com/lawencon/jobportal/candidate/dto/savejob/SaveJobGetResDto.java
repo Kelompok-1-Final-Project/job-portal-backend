@@ -8,6 +8,7 @@ public class SaveJobGetResDto {
 	private String description;
 	private String endDate;
 	private String companyName;
+	private String companyPhoto;
 	private String positionName;
 	private String statusName;
 	private String employmentName;
@@ -68,6 +69,14 @@ public class SaveJobGetResDto {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+
+	public String getCompanyPhoto() {
+		return companyPhoto;
+	}
+
+	public void setCompanyPhoto(String companyPhoto) {
+		this.companyPhoto = companyPhoto;
 	}
 
 	public String getPositionName() {
