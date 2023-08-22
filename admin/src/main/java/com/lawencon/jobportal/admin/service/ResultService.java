@@ -39,7 +39,7 @@ public class ResultService {
 		em().getTransaction().begin();
 		
 		final Candidate candidate = candidateDao.getByEmail(data.getCandidateEmail());
-//		System.out.println(candidate.getId());
+		System.out.println(candidate.getId());
 		final SkillTest skillTest = skillTestDao.getByCode(data.getSkillTestCode());
 		
 		final Result result = new Result();
