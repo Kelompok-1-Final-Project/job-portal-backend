@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.config.JwtConfig;
+import com.lawencon.jobportal.candidate.constant.StatusCodeEnum;
 import com.lawencon.jobportal.candidate.dao.JobCandidateStatusDao;
 import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.StatusProcessDao;
@@ -55,7 +56,7 @@ public class ProgressStatusService {
 			
 			final User candidate = userDao.getByEmail(data.getCandidateEmail());
 			final Job job = jobDao.getByCode(data.getJobCode());
-			final StatusProcess statusProcess = statusProcessDao.getByCode(data.getStatusCode());
+			final StatusProcess statusProcess = statusProcessDao.getByCode(StatusCodeEnum.APPLICATION.processCode);
 			final JobCandidateStatus jobCandidateStatus = new JobCandidateStatus();
 			jobCandidateStatus.setCandidate(candidate);
 			jobCandidateStatus.setJob(job);

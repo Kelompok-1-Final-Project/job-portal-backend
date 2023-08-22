@@ -14,6 +14,10 @@ public class SaveJobGetResDto {
 	private String employmentName;
 	private String jobId;
 	private Integer totalSaveJob;
+	private String createdAt;
+	private String updatedAt;
+	private String industryName;
+	private String cityName;
 
 	public String getId() {
 		return id;
@@ -117,6 +121,38 @@ public class SaveJobGetResDto {
 
 	public void setTotalSaveJob(Integer totalSaveJob) {
 		this.totalSaveJob = totalSaveJob;
+	}
+
+	public String getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public String getIndustryName() {
+		return industryName;
+	}
+
+	public void setIndustryName(String industryName) {
+		this.industryName = industryName;
+	}
+
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
 	}
 
 }

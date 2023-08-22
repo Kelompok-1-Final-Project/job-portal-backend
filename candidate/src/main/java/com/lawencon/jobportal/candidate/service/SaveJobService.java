@@ -54,6 +54,8 @@ public class SaveJobService {
 			saveJobGetResDto.setStatusName(sj.getJob().getJobStatus().getStatusName());
 			saveJobGetResDto.setJobId(sj.getJob().getId());
 			saveJobGetResDto.setTotalSaveJob(saveJobTotal);
+			saveJobGetResDto.setCreatedAt(sj.getCreatedBy());
+			
 			saveJobGetResDtos.add(saveJobGetResDto);
 		});
 
