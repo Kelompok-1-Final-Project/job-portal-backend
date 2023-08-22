@@ -568,6 +568,8 @@ public class JobService {
 		}
 		jobGetResDto.setVer(job.getVersion());
 		jobGetResDto.setInterviewerName(job.getInterviewer().getProfile().getFullName());
+		jobGetResDto.setHrId(job.getHr().getId());
+		jobGetResDto.setInterviewerId(job.getInterviewer().getId());
 		jobGetResDto.setHrName(job.getHr().getProfile().getFullName());
 		jobGetResDto.setJobCode(job.getJobCode());
 

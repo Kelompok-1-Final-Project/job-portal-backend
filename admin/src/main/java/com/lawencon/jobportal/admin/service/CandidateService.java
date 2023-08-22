@@ -86,7 +86,9 @@ public class CandidateService {
 			candidateGetResDto.setFullName(c.getCandidateProfile().getFullName());
 			candidateGetResDto.setMobileNumber(c.getCandidateProfile().getMobileNumber());
 			candidateGetResDto.setTypeName(c.getCandidateProfile().getPersonType().getTypeName());
-			candidateGetResDto.setGenderName(c.getCandidateProfile().getGender().getGenderName());
+			if(c.getCandidateProfile().getGender()!=null) {
+				candidateGetResDto.setGenderName(c.getCandidateProfile().getGender().getGenderName());				
+			}
 			candidateGetResDto.setVer(c.getVersion());
 			candidateGetResDtos.add(candidateGetResDto);
 		});

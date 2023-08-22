@@ -1121,6 +1121,13 @@ INSERT INTO t_job_benefit(id,benefit_id, job_id, created_by, created_at, is_acti
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN002'),(SELECT id FROM t_job WHERE job_title='Backend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0),
 	(uuid_generate_v4(),(SELECT id FROM t_benefit WHERE benefit_code='BN003'),(SELECT id FROM t_job WHERE job_title='Frontend Developer'),(SELECT id FROM t_user WHERE email='anggi@gmail.com'), NOW(),TRUE,0);
 	
+INSERT INTO t_relationship(id, relationship_code,relationship_name, created_by, created_at, is_active, ver) VALUES 
+	(uuid_generate_v4(), 'RLS01', 'Father', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RLS02', 'Mother', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RLS03', 'Sister', uuid_generate_v4(), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'RLS04', 'Brother', uuid_generate_v4(), NOW(), TRUE, 0);
+
+
 DELETE FROM t_blacklist WHERE id = 'e89075b2-09b3-4bbe-a024-ab87d3f779e7';
 
 DELETE FROM t_result WHERE grade = 0;
@@ -1296,3 +1303,5 @@ INNER JOIN
 t_skill_test tst ON tst.id = tr.skill_test_id 
 WHERE
 tst.job_id = '2d5577f1-7533-4ccb-a78d-041ae89f9c12'
+
+SELECT 	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tc.ver FROM  	t_candidate_profile tcp  INNER JOIN  	t_candidate tc ON tcp.id = tc.profile_id  WHERE 	tc.email = :userEmail 

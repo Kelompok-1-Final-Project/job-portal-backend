@@ -56,14 +56,14 @@ public class JobController {
 	@GetMapping("/filter")
 	public ResponseEntity<List<JobGetResDto>> getByStatus(@RequestParam("n") String name, 
 			@RequestParam("c") String city, @RequestParam("p") String position, @RequestParam("e") String employment, 
-			@RequestParam("ss") Integer salaryStart, @RequestParam("se") Integer salaryEnd) {
-		final List<JobGetResDto> data = jobService.getFilter(name, city, position, employment, salaryStart, salaryEnd);
+			@RequestParam("ss") Integer salaryStart, @RequestParam("se") Integer salaryEnd, @RequestParam("u") String user) {
+		final List<JobGetResDto> data = jobService.getFilter(name, city, position, employment, salaryStart, salaryEnd, user);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
 	@GetMapping("/filter/id")
-	public ResponseEntity<JobGetResDto> getById(@RequestParam("id") String jobId){
-		final JobGetResDto response = jobService.getById(jobId);
+	public ResponseEntity<JobGetResDto> getById(@RequestParam("id") String jobId, @RequestParam("can") String candidateId){
+		final JobGetResDto response = jobService.getById(jobId, candidateId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

@@ -70,7 +70,8 @@ public class CandidateDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_candidate tc ON tcp.id = tc.profile_id  "
 				+ "WHERE "
-				+ "tc.email = :userEmail ";
+				+ " tc.email = :userEmail ";
+		
 		try {
 			final Object userObj = em().createNativeQuery(sql)
 					.setParameter("userEmail", userEmail)
@@ -87,8 +88,9 @@ public class CandidateDao extends AbstractJpaDao{
 				
 				final CandidateProfile candidateProfile = new CandidateProfile();
 				candidateProfile.setFullName(candidateArr[2].toString());
-				candidateProfile.setMobileNumber(candidateArr[3].toString());					
-				
+				if(candidateArr[3]!=null) {
+					candidateProfile.setMobileNumber(candidateArr[3].toString());										
+				}
 				candidate.setVersion(Integer.valueOf(candidateArr[4].toString()));
 
 			}

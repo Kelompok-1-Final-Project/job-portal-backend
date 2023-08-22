@@ -1,15 +1,21 @@
 package com.lawencon.jobportal.candidate.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.candidate.dao.DegreeDao;
 import com.lawencon.jobportal.candidate.dao.FamilyDao;
 import com.lawencon.jobportal.candidate.dao.RelationshipDao;
@@ -41,6 +47,9 @@ public class FamilyService {
 	
 	@Autowired
 	private DegreeDao degreeDao;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	private EntityManager em() {
 		return ConnHandler.getManager();
@@ -92,34 +101,52 @@ public class FamilyService {
 	}
 
 	public InsertResDto insertFamily(FamilyInsertReqDto data) {
-		em().getTransaction().begin();
-		
-		final Family family = new Family();
-		System.out.println(data);
-		System.out.println(data.getUserId());
-		System.out.println(data.getFamilyName());
-		System.out.println(data.getBirthdate());
-		final User candidate = userDao.getById(User.class, data.getUserId());
-		family.setCandidate(candidate);
-		family.setFamilyName(data.getFamilyName());
-		
-		final Relationship relationship = relationshipDao.getByCode(data.getRelationshipCode());
-		final Relationship relationshipResult = relationshipDao.getById(Relationship.class, relationship.getId());
-		family.setRelationship(relationshipResult);
-		
-		final Degree degree = degreeDao.getByCode(data.getDegreeCode());
-		final Degree degreeResult = degreeDao.getById(Degree.class, degree.getId());
-		family.setFamilyDegree(degreeResult);
-		
-		family.setFamilyBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
-		
-		final Family familyResult = familyDao.save(family);
-		
 		final InsertResDto result = new InsertResDto();
-		result.setId(familyResult.getId());
-		result.setMessage("Family added successfully.");
+		try {
+			em().getTransaction().begin();
+			
+			final Family family = new Family();
+			final User candidate = userDao.getById(User.class, data.getUserId());
+			data.setUserEmail(candidate.getEmail());
+			family.setCandidate(candidate);
+			family.setFamilyName(data.getFamilyName());
+			
+			final Relationship relationship = relationshipDao.getByCode(data.getRelationshipCode());
+			final Relationship relationshipResult = relationshipDao.getById(Relationship.class, relationship.getId());
+			family.setRelationship(relationshipResult);
+			
+			final Degree degree = degreeDao.getByCode(data.getDegreeCode());
+			final Degree degreeResult = degreeDao.getById(Degree.class, degree.getId());
+			family.setFamilyDegree(degreeResult);
+			
+			family.setFamilyBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
+			
+			final Family familyResult = familyDao.save(family);
 		
-		em().getTransaction().commit();
+			final String familyInsertAdminAPI = "http://localhost:8080/families";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<FamilyInsertReqDto> familyInsert = RequestEntity.post(familyInsertAdminAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(familyInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(familyResult.getId());
+				result.setMessage("Family added successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 	
