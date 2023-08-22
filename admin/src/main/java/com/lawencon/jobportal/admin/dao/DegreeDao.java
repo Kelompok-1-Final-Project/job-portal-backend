@@ -23,7 +23,7 @@ public class DegreeDao extends AbstractJpaDao {
 				+ "WHERE "
 				+ "degree_code = :code";
 
-		final Object degreeObj = this.em().createNativeQuery(sql, Degree.class)
+		final Object degreeObj = this.em().createNativeQuery(sql)
 				.setParameter("code", code)
 				.getSingleResult();
 

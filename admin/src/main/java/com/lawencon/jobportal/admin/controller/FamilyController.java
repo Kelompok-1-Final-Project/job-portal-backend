@@ -31,7 +31,7 @@ public class FamilyController {
 	private FamilyService familyService;
 	
 	@PostMapping
-	public ResponseEntity<InsertResDto> insertFamily(FamilyInsertReqDto data){
+	public ResponseEntity<InsertResDto> insertFamily(@RequestBody FamilyInsertReqDto data){
 		final InsertResDto response = familyService.insertFamily(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}

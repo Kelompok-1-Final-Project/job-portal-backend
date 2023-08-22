@@ -70,7 +70,8 @@ public class CandidateDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_candidate tc ON tcp.id = tc.profile_id  "
 				+ "WHERE "
-				+ "tc.email = :userEmail ";
+				+ " tc.email = :userEmail ";
+		
 		try {
 			final Object userObj = em().createNativeQuery(sql)
 					.setParameter("userEmail", userEmail)
