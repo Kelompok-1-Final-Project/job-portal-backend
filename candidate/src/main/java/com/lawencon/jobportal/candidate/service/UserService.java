@@ -211,11 +211,11 @@ public class UserService implements UserDetailsService {
 		userGetResDto.setEmail(user.getEmail());
 		
 		if(user.getProfile().getMobileNumber() != null) {
-			userGetResDto.setIdNumber(user.getProfile().getMobileNumber());
+			userGetResDto.setPhone(user.getProfile().getMobileNumber());
 		}
 		
 		if(user.getProfile().getMaritalStatus() != null) {
-			userGetResDto.setMaritalStatusId(user.getProfile().getMaritalStatus().getId());
+			userGetResDto.setMaritalStatusCode(user.getProfile().getMaritalStatus().getStatusCode());
 			userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
 		}
 		

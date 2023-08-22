@@ -1,5 +1,8 @@
 package com.lawencon.jobportal.admin.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.ResultDao;
 import com.lawencon.jobportal.admin.dao.SkillTestDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.result.ResultGetResDto;
 import com.lawencon.jobportal.admin.dto.result.ResultInsertReqDto;
 import com.lawencon.jobportal.admin.model.Candidate;
 import com.lawencon.jobportal.admin.model.Result;
@@ -59,5 +63,19 @@ public class ResultService {
 		final Boolean result = resultDao.deleteById(Result.class, resultId);
 		em().getTransaction().commit();
 		return result;
+	}
+	
+	public List<ResultGetResDto> getAllByJob(String jobId) {
+		final List<ResultGetResDto> resultGetResDtos = new ArrayList<>();
+		resultDao.getByJob(jobId).forEach(r -> {
+			final ResultGetResDto resultGetResDto = new ResultGetResDto();
+			resultGetResDto.setResultId(r.getId());
+			resultGetResDto.setCandidateName(r.getCandidate().getCandidateProfile().getFullName());
+			resultGetResDto.setGrade(r.getGrade());
+			resultGetResDto.setNotes(r.getNotes());
+			resultGetResDtos.add(resultGetResDto);
+		});
+		
+		return resultGetResDtos;
 	}
 }
