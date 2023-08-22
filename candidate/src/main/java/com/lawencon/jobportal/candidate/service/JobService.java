@@ -18,6 +18,7 @@ import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
 import com.lawencon.jobportal.candidate.dao.QuestionDao;
+import com.lawencon.jobportal.candidate.dao.SaveJobDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
@@ -35,6 +36,7 @@ import com.lawencon.jobportal.candidate.model.JobBenefit;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
 import com.lawencon.jobportal.candidate.model.Question;
+import com.lawencon.jobportal.candidate.model.SaveJob;
 import com.lawencon.jobportal.candidate.model.SkillTest;
 import com.lawencon.jobportal.candidate.model.SkillTestQuestion;
 import com.lawencon.jobportal.candidate.util.DateConvert;
@@ -48,6 +50,9 @@ public class JobService {
 	
 	@Autowired
 	private JobDao jobDao;
+	
+	@Autowired
+	private SaveJobDao saveJobDao;
 
 	@Autowired
 	private JobStatusDao jobStatusDao;
@@ -330,10 +335,11 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
-	public List<JobGetResDto> getFilter(String name, String city, String position, String employment, Integer salaryStart, Integer salaryEnd) {
-
+	public List<JobGetResDto> getFilter(String name, String city, String position, String employment, Integer salaryStart, Integer salaryEnd, String userId) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
-
+		final List<SaveJob> saveJob = saveJobDao.getByCandidate(userId);
+		final Integer totalJob = jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).size();
+		
 		jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
@@ -344,14 +350,28 @@ public class JobService {
 			jobGetResDto.setEndDate(j.getEndDate().toString());
 			jobGetResDto.setCompanyId(j.getCompany().getId());
 			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setCompanyPhoto(j.getCompany().getFile().getId());
 			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
 			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
 			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
-//			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
+			if(j.getUpdatedAt() != null) {
+				jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+			}
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setTotalJob(totalJob);
+			
+			for(SaveJob sj : saveJob) {
+				if(sj.getJob().getId().equals(j.getId())) {
+					jobGetResDto.setIsBookmark(true);
+				}
+				else {
+					jobGetResDto.setIsBookmark(false);
+				}
+			}
+			
 			jobGetResDtos.add(jobGetResDto);
 		});
 

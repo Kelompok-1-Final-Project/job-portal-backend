@@ -23,7 +23,7 @@ public class UserSkillDao extends AbstractJpaDao{
 		final List<UserSkill> userSkills = new ArrayList<>();
 		
 		final String sql = "SELECT "
-				+ "tus.id, ts.skill_name, tl.level_name, tus.ver "
+				+ "tus.id, ts.skill_name, tl.level_name, tus.ver, ts.skill_code, tl.level_code "
 				+ "FROM "
 				+ "t_user_skill tus "
 				+ "INNER JOIN "
@@ -50,10 +50,12 @@ public class UserSkillDao extends AbstractJpaDao{
 				
 				final Skill skill = new Skill();
 				skill.setSkillName(userSkillArr[1].toString());
+				skill.setSkillCode(userSkillArr[4].toString());
 				userSkill.setSkill(skill);
 				
 				final Level level = new Level();
 				level.setLevelName(userSkillArr[2].toString());
+				level.setLevelCode(userSkillArr[5].toString());
 				userSkill.setLevel(level);
 				
 				userSkill.setVersion(Integer.valueOf(userSkillArr[3].toString()));

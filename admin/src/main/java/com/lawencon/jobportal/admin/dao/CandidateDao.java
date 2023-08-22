@@ -90,7 +90,6 @@ public class CandidateDao extends AbstractJpaDao{
 				if(candidateArr[3]!=null) {
 					candidateProfile.setMobileNumber(candidateArr[3].toString());										
 				}
-				
 				candidate.setVersion(Integer.valueOf(candidateArr[4].toString()));
 
 			}

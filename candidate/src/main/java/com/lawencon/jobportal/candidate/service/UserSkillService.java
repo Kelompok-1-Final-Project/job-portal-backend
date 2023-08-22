@@ -23,6 +23,7 @@ import com.lawencon.jobportal.candidate.model.Level;
 import com.lawencon.jobportal.candidate.model.Skill;
 import com.lawencon.jobportal.candidate.model.User;
 import com.lawencon.jobportal.candidate.model.UserSkill;
+import com.lawencon.jobportal.candidate.util.GeneratorId;
 
 @Service
 public class UserSkillService {
@@ -50,7 +51,9 @@ public class UserSkillService {
 			final UserSkillGetResDto userSkillGetResDto = new UserSkillGetResDto();
 			userSkillGetResDto.setId(us.getId());
 			userSkillGetResDto.setLevelName(us.getLevel().getLevelName());
+			userSkillGetResDto.setLevelCode(us.getLevel().getLevelCode());
 			userSkillGetResDto.setSkillName(us.getSkill().getSkillName());
+			userSkillGetResDto.setSkillCode(us.getSkill().getSkillCode());
 			userSkillGetResDtos.add(userSkillGetResDto);
 		});
 
@@ -98,21 +101,48 @@ public class UserSkillService {
 	}
 	
 	public InsertResDto insertUserSkill(UserSkillInsertReqDto data) {
-		em().getTransaction().begin();
-		
-		final UserSkill userSkill = new UserSkill();
-		final User user = userDao.getById(User.class, data.getCandidateId());
-		userSkill.setCandidate(user);
-		final Skill skill = skillDao.getById(Skill.class, data.getSkillId());
-		userSkill.setSkill(skill);
-		final Level level = levelDao.getById(Level.class, data.getLevelId());
-		userSkill.setLevel(level);
-		final UserSkill userSkillResult = userSkillDao.save(userSkill);
 		final InsertResDto result = new InsertResDto();
-		result.setId(userSkillResult.getId());
-		result.setMessage("Skill Successfully Assigned.");
 		
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			final UserSkill userSkill = new UserSkill();
+			
+			final User user = userDao.getById(User.class, data.getCandidateId());
+			userSkill.setCandidate(user);
+			
+			final Skill skill = skillDao.getById(Skill.class, data.getSkillId());
+			if (skill != null) {
+				userSkill.setSkill(skill);
+			}else {
+				final Skill newSkill = new Skill();
+				final String skillCode = GeneratorId.generateCode();
+				newSkill.setSkillCode(skillCode);
+				newSkill.setSkillName(data.getSkillId());
+				final Skill skills = skillDao.save(newSkill);
+				
+				userSkill.setSkill(skills);
+				
+				final InsertResDto resultSkill = new InsertResDto();
+				result.setId(resultSkill.getId());
+				result.setMessage("Success add Skill");
+			}
+			
+			
+			final Level level = levelDao.getById(Level.class, data.getLevelId());
+			userSkill.setLevel(level);
+			
+			final UserSkill userSkillResult = userSkillDao.save(userSkill);
+			
+			result.setId(userSkillResult.getId());
+			result.setMessage("Skill Successfully Assigned.");
+			
+			em().getTransaction().commit();
+		}catch(Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
+		
 		return result;
 	}
 	

@@ -43,6 +43,7 @@ public class SaveJobService {
 			final SaveJobGetResDto saveJobGetResDto = new SaveJobGetResDto();
 			saveJobGetResDto.setId(sj.getId());
 			saveJobGetResDto.setCompanyName(sj.getJob().getCompany().getCompanyName());
+			saveJobGetResDto.setCompanyPhoto(sj.getJob().getCompany().getFile().getId());
 			saveJobGetResDto.setDescription(sj.getJob().getDescription());
 			saveJobGetResDto.setEmploymentName(sj.getJob().getEmployementType().getEmploymentName());
 			saveJobGetResDto.setEndDate(sj.getJob().getEndDate().toString());
