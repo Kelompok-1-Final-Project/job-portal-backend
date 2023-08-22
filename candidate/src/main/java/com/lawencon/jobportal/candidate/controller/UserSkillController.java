@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.candidate.dto.DeleteResDto;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.skill.LevelGetResDto;
 import com.lawencon.jobportal.candidate.dto.skill.SkillGetResDto;
 import com.lawencon.jobportal.candidate.dto.skill.SkillInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.userskill.UserSkillGetResDto;
 import com.lawencon.jobportal.candidate.dto.userskill.UserSkillInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.userskill.UserSkillUpdateReqDto;
 import com.lawencon.jobportal.candidate.service.UserSkillService;
 
 @RestController
@@ -72,5 +75,10 @@ public class UserSkillController {
 		}
 	}
 
+	@PatchMapping
+	public ResponseEntity<UpdateResDto> updateLevel(@RequestBody UserSkillUpdateReqDto data){
+		final UpdateResDto response = userSkillService.updateLevel(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 	
 }

@@ -172,6 +172,10 @@ public class UserSkillService {
 	
 	public UpdateResDto updateLevel(UserSkillUpdateReqDto data) {
 		final UpdateResDto updateResDto = new UpdateResDto();
+		final UserSkill userSkill = userSkillDao.getById(UserSkill.class, data.getUserSkillId());
+		
+		final Level level = levelDao.getByCode(data.getLevelCode());
+		userSkill.setLevel(level);
 		
 		return updateResDto;
 	}
