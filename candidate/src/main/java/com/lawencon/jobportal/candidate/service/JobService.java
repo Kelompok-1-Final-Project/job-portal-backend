@@ -38,6 +38,7 @@ import com.lawencon.jobportal.candidate.util.DateConvert;
 import com.lawencon.jobportal.candidate.model.Question;
 import com.lawencon.jobportal.candidate.model.SkillTest;
 import com.lawencon.jobportal.candidate.model.SkillTestQuestion;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 import com.lawencon.jobportal.candidate.util.GeneratorId;
 
 @Service
