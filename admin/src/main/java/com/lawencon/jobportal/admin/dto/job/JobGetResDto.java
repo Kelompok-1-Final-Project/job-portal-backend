@@ -20,6 +20,8 @@ public class JobGetResDto {
 	private String hrName;
 	private String interviewerName;
 	private String jobCode;
+	private String hrId;
+	private String interviewerId;
 
 	public String getId() {
 		return id;
@@ -171,6 +173,22 @@ public class JobGetResDto {
 
 	public void setJobCode(String jobCode) {
 		this.jobCode = jobCode;
+	}
+
+	public String getHrId() {
+		return hrId;
+	}
+
+	public void setHrId(String hrId) {
+		this.hrId = hrId;
+	}
+
+	public String getInterviewerId() {
+		return interviewerId;
+	}
+
+	public void setInterviewerId(String interviewerId) {
+		this.interviewerId = interviewerId;
 	}
 
 }

@@ -14,11 +14,13 @@ import com.lawencon.jobportal.candidate.dao.SkillDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dao.UserSkillDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.skill.LevelGetResDto;
 import com.lawencon.jobportal.candidate.dto.skill.SkillGetResDto;
 import com.lawencon.jobportal.candidate.dto.skill.SkillInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.userskill.UserSkillGetResDto;
 import com.lawencon.jobportal.candidate.dto.userskill.UserSkillInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.userskill.UserSkillUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.Level;
 import com.lawencon.jobportal.candidate.model.Skill;
 import com.lawencon.jobportal.candidate.model.User;
@@ -166,5 +168,11 @@ public class UserSkillService {
 			listResult.add(result);
 		}
 		return listResult;
+	}
+	
+	public UpdateResDto updateLevel(UserSkillUpdateReqDto data) {
+		final UpdateResDto updateResDto = new UpdateResDto();
+		
+		return updateResDto;
 	}
 }
