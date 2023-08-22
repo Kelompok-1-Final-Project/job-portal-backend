@@ -28,7 +28,7 @@ public class JobDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
-	public List<Job> getByIndustry(String industry) {
+	public List<Job> getByIndustry(String industry, Integer startPosition, Integer endPosition) {
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -76,6 +76,8 @@ public class JobDao extends AbstractJpaDao{
 		
 		final List<?> jobsObj = this.em().createNativeQuery(sql)
 				.setParameter("industry", industry)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
 		if(jobsObj.size() > 0) {
@@ -140,7 +142,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> getByName(String jobName) {
+	public List<Job> getByName(String jobName, Integer startPosition, Integer endPosition) {
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -188,6 +190,8 @@ public class JobDao extends AbstractJpaDao{
 		
 		final List<?> jobsObj = this.em().createNativeQuery(sql)
 				.setParameter("jobName", jobName)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
 		if(jobsObj.size() > 0) {
@@ -252,7 +256,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> getByLocation(String location) {
+	public List<Job> getByLocation(String location, Integer startPosition, Integer endPosition) {
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -300,6 +304,8 @@ public class JobDao extends AbstractJpaDao{
 		
 		final List<?> jobsObj = this.em().createNativeQuery(sql)
 				.setParameter("location", location)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
 		if(jobsObj.size() > 0) {
@@ -490,7 +496,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> getByEmploymentType(String employmentName){
+	public List<Job> getByEmploymentType(String employmentName, Integer startPosition, Integer endPosition){
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -537,6 +543,8 @@ public class JobDao extends AbstractJpaDao{
 				+ "	employment_name ILIKE :employment || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("employment", employmentName)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
 		if(jobsObj.size() > 0) {
@@ -601,7 +609,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> getByPosition(String positionName){
+	public List<Job> getByPosition(String positionName, Integer startPosition, Integer endPosition){
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -648,6 +656,8 @@ public class JobDao extends AbstractJpaDao{
 				+ "	position_name ILIKE :position || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("position", positionName)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
 		if(jobsObj.size() > 0) {
@@ -712,7 +722,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> getByStatus(String status){
+	public List<Job> getByStatus(String status, Integer startPosition, Integer endPosition){
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -759,6 +769,8 @@ public class JobDao extends AbstractJpaDao{
 				+ "	status_name ILIKE :status  || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("status", status)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
 		if(jobsObj.size() > 0) {
@@ -823,7 +835,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> getBySalary(Integer salaryStart, Integer salaryEnd){
+	public List<Job> getBySalary(Integer salaryStart, Integer salaryEnd, Integer startPosition, Integer endPosition){
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -874,6 +886,8 @@ public class JobDao extends AbstractJpaDao{
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
 				.setParameter("start", salaryStart)
 				.setParameter("end", salaryEnd)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		
 		final List<Job> listJob = new ArrayList<>();
@@ -939,7 +953,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> filterSearch(String city, String position, String employment, Integer salaryStart, Integer salaryEnd){
+	public List<Job> filterSearch(String city, String position, String employment, Integer salaryStart, Integer salaryEnd, Integer startPosition, Integer endPosition){
 		final String sql = "SELECT  "
 				+ "	tj.id,  "
 				+ "	tj.job_title,  "
@@ -1034,6 +1048,8 @@ public class JobDao extends AbstractJpaDao{
 				.setParameter("employment", employmentParam)
 				.setParameter("start", salaryStartParam)
 				.setParameter("end", salaryEndParam)
+				.setFirstResult(startPosition)
+				.setMaxResults(endPosition)
 				.getResultList();
 		
 		final List<Job> listJob = new ArrayList<>();
