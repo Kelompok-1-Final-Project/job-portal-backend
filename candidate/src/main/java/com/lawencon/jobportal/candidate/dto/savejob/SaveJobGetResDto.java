@@ -11,6 +11,8 @@ public class SaveJobGetResDto {
 	private String positionName;
 	private String statusName;
 	private String employmentName;
+	private String jobId;
+	private Integer totalSaveJob;
 
 	public String getId() {
 		return id;
@@ -90,6 +92,22 @@ public class SaveJobGetResDto {
 
 	public void setEmploymentName(String employmentName) {
 		this.employmentName = employmentName;
+	}
+
+	public String getJobId() {
+		return jobId;
+	}
+
+	public void setJobId(String jobId) {
+		this.jobId = jobId;
+	}
+
+	public Integer getTotalSaveJob() {
+		return totalSaveJob;
+	}
+
+	public void setTotalSaveJob(Integer totalSaveJob) {
+		this.totalSaveJob = totalSaveJob;
 	}
 
 }

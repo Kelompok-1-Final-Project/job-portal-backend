@@ -34,12 +34,10 @@ import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobBenefit;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
-import com.lawencon.jobportal.candidate.util.DateConvert;
 import com.lawencon.jobportal.candidate.model.Question;
 import com.lawencon.jobportal.candidate.model.SkillTest;
 import com.lawencon.jobportal.candidate.model.SkillTestQuestion;
 import com.lawencon.jobportal.candidate.util.DateConvert;
-import com.lawencon.jobportal.candidate.util.GeneratorId;
 
 @Service
 public class JobService {
@@ -146,9 +144,7 @@ public class JobService {
 		
 		if(data.getTestName() != null && data.getTestName() != "") {
 			final SkillTest skillTest = new SkillTest();
-			final String skillTestCode = GeneratorId.generateCode();
-			data.setTestCode(skillTestCode);
-			skillTest.setTestCode(skillTestCode);
+			skillTest.setTestCode(data.getTestCode());
 			skillTest.setTestName(data.getTestName());
 			skillTest.setJob(jobResult);
 			final SkillTest skillTestResult = skillTestDao.save(skillTest);

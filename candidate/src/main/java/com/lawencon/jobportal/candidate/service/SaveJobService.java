@@ -37,7 +37,8 @@ public class SaveJobService {
 	
 	public List<SaveJobGetResDto> getByCandidate(String candidateId) {
 		final List<SaveJobGetResDto> saveJobGetResDtos = new ArrayList<>();
-
+		final Integer saveJobTotal = saveJobDao.getByCandidate(candidateId).size();
+		
 		saveJobDao.getByCandidate(candidateId).forEach(sj -> {
 			final SaveJobGetResDto saveJobGetResDto = new SaveJobGetResDto();
 			saveJobGetResDto.setId(sj.getId());
@@ -50,6 +51,8 @@ public class SaveJobService {
 			saveJobGetResDto.setSalaryEnd(sj.getJob().getSalaryEnd());
 			saveJobGetResDto.setSalaryStart(sj.getJob().getSalaryStart());
 			saveJobGetResDto.setStatusName(sj.getJob().getJobStatus().getStatusName());
+			saveJobGetResDto.setJobId(sj.getJob().getId());
+			saveJobGetResDto.setTotalSaveJob(saveJobTotal);
 			saveJobGetResDtos.add(saveJobGetResDto);
 		});
 
