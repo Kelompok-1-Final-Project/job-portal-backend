@@ -34,14 +34,12 @@ import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobBenefit;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
-<<<<<<< HEAD
-import com.lawencon.jobportal.candidate.util.DateConvert;
-=======
 import com.lawencon.jobportal.candidate.model.Question;
 import com.lawencon.jobportal.candidate.model.SkillTest;
 import com.lawencon.jobportal.candidate.model.SkillTestQuestion;
+import com.lawencon.jobportal.candidate.util.DateConvert;
 import com.lawencon.jobportal.candidate.util.GeneratorId;
->>>>>>> 85b73fc2da82567fbe5556f0ed0c5797ca5567cc
+
 
 @Service
 public class JobService {
