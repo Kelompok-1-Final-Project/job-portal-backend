@@ -50,7 +50,9 @@ public class UserSkillService {
 			final UserSkillGetResDto userSkillGetResDto = new UserSkillGetResDto();
 			userSkillGetResDto.setId(us.getId());
 			userSkillGetResDto.setLevelName(us.getLevel().getLevelName());
+			userSkillGetResDto.setLevelCode(us.getLevel().getLevelCode());
 			userSkillGetResDto.setSkillName(us.getSkill().getSkillName());
+			userSkillGetResDto.setSkillCode(us.getSkill().getSkillCode());
 			userSkillGetResDtos.add(userSkillGetResDto);
 		});
 
@@ -99,14 +101,21 @@ public class UserSkillService {
 	
 	public InsertResDto insertUserSkill(UserSkillInsertReqDto data) {
 		em().getTransaction().begin();
+		System.out.println(data.getCandidateId());
+		System.out.println(data.getLevelId());
+		System.out.println(data.getSkillId());
 		
 		final UserSkill userSkill = new UserSkill();
+		
 		final User user = userDao.getById(User.class, data.getCandidateId());
 		userSkill.setCandidate(user);
+		
 		final Skill skill = skillDao.getById(Skill.class, data.getSkillId());
 		userSkill.setSkill(skill);
+		
 		final Level level = levelDao.getById(Level.class, data.getLevelId());
 		userSkill.setLevel(level);
+		
 		final UserSkill userSkillResult = userSkillDao.save(userSkill);
 		final InsertResDto result = new InsertResDto();
 		result.setId(userSkillResult.getId());
