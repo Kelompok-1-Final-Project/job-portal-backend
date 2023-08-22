@@ -129,8 +129,6 @@ public class UserSkillService {
 			}
 			
 			
-			
-			
 			final Level level = levelDao.getById(Level.class, data.getLevelId());
 			userSkill.setLevel(level);
 			
