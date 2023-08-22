@@ -19,6 +19,8 @@ public class JobGetResDto {
 	private String updatedAt;
 	private Integer ver;
 	private Integer totalJob;
+	private Boolean isBookmark;
+	private Boolean isApply;
 
 	public String getId() {
 		return id;
@@ -162,6 +164,22 @@ public class JobGetResDto {
 
 	public void setTotalJob(Integer totalJob) {
 		this.totalJob = totalJob;
+	}
+
+	public Boolean getIsBookmark() {
+		return isBookmark;
+	}
+
+	public void setIsBookmark(Boolean isBookmark) {
+		this.isBookmark = isBookmark;
+	}
+
+	public Boolean getIsApply() {
+		return isApply;
+	}
+
+	public void setIsApply(Boolean isApply) {
+		this.isApply = isApply;
 	}
 
 }

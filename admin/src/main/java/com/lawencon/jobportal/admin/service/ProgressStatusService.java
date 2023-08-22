@@ -401,7 +401,7 @@ public class ProgressStatusService {
 
 		final Candidate candidate = candidateDao.getByEmail(data.getCandidateEmail());
 		final Job job = jobDao.getByCode(data.getJobCode());
-		final StatusProcess statusProcess = statusProcessDao.getByCode(data.getStatusCode());
+		final StatusProcess statusProcess = statusProcessDao.getByCode(StatusCodeEnum.APPLICATION.processCode);
 		final JobCandidateStatus jobCandidateStatus = new JobCandidateStatus();
 		jobCandidateStatus.setCandidate(candidate);
 		jobCandidateStatus.setJob(job);
