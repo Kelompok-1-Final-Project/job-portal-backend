@@ -18,6 +18,7 @@ import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
 import com.lawencon.jobportal.candidate.dao.QuestionDao;
+import com.lawencon.jobportal.candidate.dao.SaveJobDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
@@ -27,6 +28,7 @@ import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobUpdateReqDto;
+import com.lawencon.jobportal.candidate.dto.savejob.SaveJobGetResDto;
 import com.lawencon.jobportal.candidate.model.Benefit;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
@@ -48,6 +50,9 @@ public class JobService {
 	
 	@Autowired
 	private JobDao jobDao;
+	
+	@Autowired
+	private SaveJobDao saveJobDao;
 
 	@Autowired
 	private JobStatusDao jobStatusDao;
@@ -331,9 +336,13 @@ public class JobService {
 	}
 	
 	public List<JobGetResDto> getFilter(String name, String city, String position, String employment, Integer salaryStart, Integer salaryEnd) {
-
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
+		final Integer totalJob = jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).size();
+		
+//		final List<SaveJobGetResDto>
+		
+		
 		jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
@@ -350,8 +359,11 @@ public class JobService {
 			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
 			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
 			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
-//			jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());
+			if(j.getUpdatedAt() != null) {
+				jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+			}
 			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setTotalJob(totalJob);
 			jobGetResDtos.add(jobGetResDto);
 		});
 

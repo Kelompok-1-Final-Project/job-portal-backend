@@ -3,7 +3,9 @@ package com.lawencon.jobportal.candidate.dto.userskill;
 public class UserSkillGetResDto {
 	private String id;
 	private String skillName;
+	private String skillCode;
 	private String levelName;
+	private String levelCode;
 
 	public String getId() {
 		return id;
@@ -27,6 +29,22 @@ public class UserSkillGetResDto {
 
 	public void setLevelName(String levelName) {
 		this.levelName = levelName;
+	}
+
+	public String getSkillCode() {
+		return skillCode;
+	}
+
+	public void setSkillCode(String skillCode) {
+		this.skillCode = skillCode;
+	}
+
+	public String getLevelCode() {
+		return levelCode;
+	}
+
+	public void setLevelCode(String levelCode) {
+		this.levelCode = levelCode;
 	}
 
 }
