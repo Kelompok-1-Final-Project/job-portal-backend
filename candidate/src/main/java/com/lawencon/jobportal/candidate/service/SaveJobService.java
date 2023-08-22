@@ -50,6 +50,7 @@ public class SaveJobService {
 			saveJobGetResDto.setSalaryEnd(sj.getJob().getSalaryEnd());
 			saveJobGetResDto.setSalaryStart(sj.getJob().getSalaryStart());
 			saveJobGetResDto.setStatusName(sj.getJob().getJobStatus().getStatusName());
+			saveJobGetResDto.setJobId(sj.getJob().getId());
 			saveJobGetResDtos.add(saveJobGetResDto);
 		});
 

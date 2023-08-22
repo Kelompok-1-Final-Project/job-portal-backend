@@ -25,25 +25,24 @@ public class SaveJobDao extends AbstractJpaDao{
 	}
 	
 	public List<SaveJob> getByCandidate(String candidateId) {
-		final String sql = "SELECT "
-				+ "j.id, j.job_title, j.salary_start, j.salary_end, j.description, j.end_date, "
-				+ "c.company_name, jp.position_name, js.status_name, et.employment_name sj.ver "
-				+ "FROM "
-				+ " t_save_job sj "
-				+ "INNER JOIN "
-				+ "	t_job tj  "
+		final String sql = "SELECT  "
+				+ "	tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, tc.company_name, tjp.position_name, tjs.status_name, tet.employment_name, sj.ver, sj.id AS saved_job_id  "
+				+ "FROM  "
+				+ " t_save_job sj  "
 				+ "INNER JOIN  "
-				+ "	t_company tc ON tc.id = tj.company_id  "
-				+ "INNER JOIN  "
-				+ "	t_city tci ON tci.id = tc.city_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
+				+ "	t_job tj ON tj.id = sj.job_id  "
+				+ "INNER JOIN   "
+				+ "	t_company tc ON tc.id = tj.company_id   "
+				+ "INNER JOIN   "
+				+ "	t_city tci ON tci.id = tc.city_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
+				+ "INNER JOIN   "
+				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
+				+ "INNER JOIN   "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id "
-				+ "WHERE "
-				+ "sj.candidate_id = :candidateId ";
+				+ "WHERE  "
+				+ "	sj.candidate_id = :candidateId ";
 		
 		final List<?> saveJobsObj = em().createNativeQuery(sql)
 				.setParameter("candidateId", candidateId)
@@ -81,6 +80,8 @@ public class SaveJobDao extends AbstractJpaDao{
 				
 				final SaveJob saveJob = new SaveJob();
 				saveJob.setJob(job);
+				saveJob.setVersion(Integer.valueOf(saveJobArr[10].toString()));
+				saveJob.setId(saveJobArr[11].toString());
 				
 				listSaveJob.add(saveJob);
 			}
