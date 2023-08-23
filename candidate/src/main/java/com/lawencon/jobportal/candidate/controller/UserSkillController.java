@@ -45,7 +45,13 @@ public class UserSkillController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
-	@PatchMapping
+	@PostMapping("/candidate-insert")
+	public ResponseEntity<InsertResDto> insertSkillSendAdmin(@RequestBody SkillInsertReqDto data){
+		final InsertResDto response = userSkillService.insertSkillSendAdmin(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
+	@PatchMapping("/update")
 	public ResponseEntity<UpdateResDto> update(@RequestBody SkillUpdateReqDto data) {
 		final UpdateResDto response = userSkillService.update(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
