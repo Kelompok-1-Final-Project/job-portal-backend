@@ -96,18 +96,39 @@ public class CityService {
 	
 	
 	public UpdateResDto updateCity(CityUpdateReqDto data) {
-		em().getTransaction().begin();
-		
-		final City cityDb = cityDao.getByCode(data.getCityCode());
-		final City city = cityDao.getById(City.class,cityDb.getId());
-		city.setCityName(data.getCityName());
-		final City cityResult = cityDao.saveAndFlush(city);
-		
 		final UpdateResDto result = new UpdateResDto();
-		result.setVersion(cityResult.getVersion());
-		result.setMessage("Data updated successfully.");
+		try {
+			em().getTransaction().begin();
+			
+			final City cityDb = cityDao.getByCode(data.getCityCode());
+			final City city = cityDao.getById(City.class,cityDb.getId());
+			city.setCityName(data.getCityName());
+			final City cityResult = cityDao.save(city);
+			
+			final String updateCityCandidateAPI = "http://localhost:8081/cities";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<CityUpdateReqDto> cityUpdate = RequestEntity.patch(updateCityCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(cityUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				result.setVersion(cityResult.getVersion());
+				result.setMessage("City updated successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 		
-		em().getTransaction().commit();
 		return result;
 	}
 	

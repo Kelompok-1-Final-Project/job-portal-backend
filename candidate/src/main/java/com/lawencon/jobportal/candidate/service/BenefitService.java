@@ -12,8 +12,10 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.candidate.dao.BenefitDao;
 import com.lawencon.jobportal.candidate.dao.JobBenefitDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.benefit.BenefitGetResDto;
 import com.lawencon.jobportal.candidate.dto.benefit.BenefitInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.benefit.BenefitUpdateReqDto;
 import com.lawencon.jobportal.candidate.dto.benefit.JobBenefitGetResDto;
 import com.lawencon.jobportal.candidate.model.Benefit;
 import com.lawencon.jobportal.candidate.model.JobBenefit;
@@ -24,14 +26,14 @@ public class BenefitService {
 	private EntityManager em() {
 		return ConnHandler.getManager();
 	}
-	
+
 	@Autowired
 	private BenefitDao benefitDao;
-	
+
 	@Autowired
 	private JobBenefitDao jobBenefitDao;
-	
-	public List<BenefitGetResDto> getAllBenefit(){
+
+	public List<BenefitGetResDto> getAllBenefit() {
 		final List<BenefitGetResDto> benefitGetResDtos = new ArrayList<>();
 		benefitDao.getAll(Benefit.class).forEach(b -> {
 			final BenefitGetResDto benefitGetResDto = new BenefitGetResDto();
@@ -42,11 +44,11 @@ public class BenefitService {
 		});
 		return benefitGetResDtos;
 	}
-	
-	public List<JobBenefitGetResDto> getByJob(String jobId){
+
+	public List<JobBenefitGetResDto> getByJob(String jobId) {
 		final List<JobBenefitGetResDto> listResult = new ArrayList<>();
 		final List<JobBenefit> listJobBenefit = jobBenefitDao.getByJob(jobId);
-		for(JobBenefit j:listJobBenefit) {
+		for (JobBenefit j : listJobBenefit) {
 			final JobBenefitGetResDto result = new JobBenefitGetResDto();
 			result.setId(j.getId());
 			result.setBenefitName(j.getBenefit().getBenefitName());
@@ -54,7 +56,7 @@ public class BenefitService {
 		}
 		return listResult;
 	}
-	
+
 	public InsertResDto insert(BenefitInsertReqDto data) {
 		final InsertResDto result = new InsertResDto();
 		try {
@@ -65,16 +67,38 @@ public class BenefitService {
 			benefit.setBenefitName(data.getBenefitName());
 			final Benefit benefits = benefitDao.save(benefit);
 
-			
 			result.setId(benefits.getId());
 			result.setMessage("Benefit added successfully");
 
 			em().getTransaction().commit();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			em().getTransaction().rollback();
 		}
-		
+
 		return result;
+	}
+
+	public UpdateResDto update(BenefitUpdateReqDto dto) {
+		final UpdateResDto response = new UpdateResDto();
+		try {
+			em().getTransaction().begin();
+
+			Benefit benefitResult = new Benefit();
+			final Benefit benefitDb = benefitDao.getByCode(dto.getBenefitCode());
+			final Benefit benefitId = benefitDao.getById(Benefit.class, benefitDb.getId());
+
+			benefitId.setBenefitName(dto.getBenefitName());
+			benefitResult = benefitDao.save(benefitId);
+
+			response.setVersion(benefitResult.getVersion());
+			response.setMessage("Benefit updated successfully");
+
+			em().getTransaction().commit();
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
+
+		return response;
 	}
 }
