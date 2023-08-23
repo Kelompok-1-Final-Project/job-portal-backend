@@ -14,6 +14,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.candidate.model.City;
 import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
+import com.lawencon.jobportal.candidate.model.File;
 import com.lawencon.jobportal.candidate.model.Industry;
 import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobPosition;
@@ -31,8 +32,9 @@ public class SaveJobDao extends AbstractJpaDao{
 		final String sql = "SELECT   "
 				+ "	tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, "
 				+ "tc.company_name, tjp.position_name, tjs.status_name, tet.employment_name, sj.ver, "
-				+ "sj.id AS saved_job_id, sj.created_at, sj.updated_at, ti.industry_name, tci.city_name "
-				+ "FROM   "
+				+ "sj.id AS saved_job_id, sj.created_at, sj.updated_at, ti.industry_name, tci.city_name, tc.id AS company_id,"
+				+ "tc.file_id AS company_photo "
+				+ "FROM "
 				+ " t_save_job sj  "
 				+ "INNER JOIN   "
 				+ "	t_job tj ON tj.id = sj.job_id "
@@ -71,6 +73,11 @@ public class SaveJobDao extends AbstractJpaDao{
 				
 				final Company company = new Company();
 				company.setCompanyName(saveJobArr[6].toString());
+				company.setId(saveJobArr[16].toString());
+				
+				final File file = new File();
+				file.setId(saveJobArr[17].toString());
+				company.setFile(file);
 				
 				final Industry industry = new Industry();
 				industry.setIndustryName(saveJobArr[14].toString());
@@ -104,6 +111,7 @@ public class SaveJobDao extends AbstractJpaDao{
 				if(saveJobArr[13] != null) {
 					saveJob.setUpdatedAt(Timestamp.valueOf(saveJobArr[13].toString()).toLocalDateTime());					
 				}
+				
 				
 				listSaveJob.add(saveJob);
 			}

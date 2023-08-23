@@ -1334,3 +1334,16 @@ WHERE
 tst.job_id = '2d5577f1-7533-4ccb-a78d-041ae89f9c12'
 
 SELECT 	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tc.ver FROM  	t_candidate_profile tcp  INNER JOIN  	t_candidate tc ON tcp.id = tc.profile_id  WHERE 	tc.email = :userEmail 
+	
+SELECT 
+	te.id AS employee_id, tca.id AS candidate_id, tcp.full_name, tc.id, tc.company_name 
+FROM 
+	t_employee te 
+INNER JOIN
+	t_candidate tca ON te.candidate_id = tca.id 
+INNER JOIN
+	t_candidate_profile tcp ON tca.profile_id  = tcp.id 
+INNER JOIN
+	t_company tc ON te.company_id = tc.id  
+WHERE
+	te.candidate_id NOT IN (SELECT tb.candidate_id FROM t_blacklist tb); 
