@@ -53,6 +53,7 @@ import com.lawencon.jobportal.admin.dto.progress.StatusProgressGetResDto;
 import com.lawencon.jobportal.admin.model.Application;
 import com.lawencon.jobportal.admin.model.Assessment;
 import com.lawencon.jobportal.admin.model.Candidate;
+import com.lawencon.jobportal.admin.model.Employee;
 import com.lawencon.jobportal.admin.model.Hired;
 import com.lawencon.jobportal.admin.model.Interview;
 import com.lawencon.jobportal.admin.model.Job;
@@ -383,6 +384,8 @@ public class ProgressStatusService {
 			
 			result.setId(hiredDb.getId());
 			result.setMessage("Insert Hired Successfully.");
+			
+//			final Employee employee = empl
 			
 			em().getTransaction().commit();
 			
