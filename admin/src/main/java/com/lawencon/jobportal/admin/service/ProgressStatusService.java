@@ -1,6 +1,5 @@
 package com.lawencon.jobportal.admin.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -179,7 +178,9 @@ public class ProgressStatusService {
 			result.setMcuId(m.getId());
 			result.setCandidateId(m.getCandidate().getId());
 			result.setCandidateName(m.getCandidate().getCandidateProfile().getFullName());
-			result.setFileId(m.getFile().getId());
+			if(m.getFile()!= null) {
+				result.setFileId(m.getFile().getId());				
+			}
 			listResult.add(result);
 		}
 		return listResult;
@@ -319,7 +320,7 @@ public class ProgressStatusService {
 		interview.setCandidate(candidate);
 		interview.setJob(job);
 		interview.setInterviewer(interviewer);
-		interview.setSchedule(LocalDateTime.parse(data.getSchedule()));
+		interview.setSchedule(DateConvert.convertDate(data.getSchedule()));
 		final Interview interviews = interviewDao.save(interview);
 
 		final InsertResDto result = new InsertResDto();
