@@ -21,6 +21,7 @@ public class JobGetResDto {
 	private Integer totalJob;
 	private Boolean isBookmark;
 	private Boolean isApply;
+	private String saveJobId;
 
 	public String getId() {
 		return id;
@@ -180,6 +181,14 @@ public class JobGetResDto {
 
 	public void setIsApply(Boolean isApply) {
 		this.isApply = isApply;
+	}
+
+	public String getSaveJobId() {
+		return saveJobId;
+	}
+
+	public void setSaveJobId(String saveJobId) {
+		this.saveJobId = saveJobId;
 	}
 
 }

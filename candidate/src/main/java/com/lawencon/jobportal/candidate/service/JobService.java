@@ -422,6 +422,7 @@ public class JobService {
 			for(SaveJob sj : saveJob) {
 				if(sj.getJob().getId().equals(j.getId())) {
 					jobGetResDto.setIsBookmark(true);
+					jobGetResDto.setSaveJobId(sj.getId());
 				}
 			}
 			
