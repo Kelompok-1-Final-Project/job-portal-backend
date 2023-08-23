@@ -10,6 +10,8 @@ public class JobUpdateReqDto {
 	private String description;
 	private String endDate;
 	private String jobStatusCode;
+	private String jobPositionCode;
+	private String employmentTypeCode;
 
 	public String getJobId() {
 		return jobId;
@@ -75,4 +77,20 @@ public class JobUpdateReqDto {
 		this.jobStatusCode = jobStatusCode;
 	}
 
+	public String getJobPositionCode() {
+		return jobPositionCode;
+	}
+
+	public void setJobPositionCode(String jobPositionCode) {
+		this.jobPositionCode = jobPositionCode;
+	}
+
+	public String getEmploymentTypeCode() {
+		return employmentTypeCode;
+	}
+
+	public void setEmploymentTypeCode(String employmentTypeCode) {
+		this.employmentTypeCode = employmentTypeCode;
+	}
+	
 }

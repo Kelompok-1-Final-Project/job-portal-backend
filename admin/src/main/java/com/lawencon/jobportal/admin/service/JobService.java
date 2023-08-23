@@ -472,8 +472,13 @@ public class JobService {
 			job.setEndDate(LocalDate.parse(data.getEndDate()));
 
 			final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
-			final JobStatus jobStatusResult = jobStatusDao.getById(JobStatus.class, jobStatus.getId());
-			job.setJobStatus(jobStatusResult);
+			job.setJobStatus(jobStatus);
+			
+			final JobPosition jobPosition = jobPositionDao.getByCode(data.getJobPositionCode());
+			job.setJobPosition(jobPosition);
+			
+			final EmploymentType employmentType = employmentTypeDao.getByCode(data.getEmploymentTypeCode());
+			job.setEmployementType(employmentType);
 
 			final User hr = userDao.getById(User.class, data.getHrId());
 			job.setHr(hr);

@@ -82,7 +82,7 @@ public class QuestionService {
 	}
 	
 	public UpdateResDto updateQuestionOption(QuestionOptionUpdateReqDto data) {
-		em().getTransaction().begin();
+		em().getTransaction().begin(); 
 		
 		final QuestionOption option = questionOptionDao.getById(QuestionOption.class, data.getOptionId());
 		option.setLabels(data.getLabels());

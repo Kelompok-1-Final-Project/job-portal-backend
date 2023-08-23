@@ -136,6 +136,8 @@ public class QuestionService {
 			em().getTransaction().begin();
 			
 			final QuestionOption option = questionOptionDao.getById(QuestionOption.class, data.getOptionId());
+			final Question question = questionDao.getById(Question.class, option.getQuestion().getId());
+			data.setQuesstionCode(question.getQuestionCode());
 			option.setLabels(data.getLabels());
 			option.setIsAnswer(data.getIsAnswer());
 			final QuestionOption optionResult = questionOptionDao.save(option);
