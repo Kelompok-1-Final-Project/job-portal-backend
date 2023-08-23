@@ -87,6 +87,7 @@ public class QuestionService {
 		option.setLabels(data.getLabels());
 		option.setIsAnswer(data.getIsAnswer());
 		final QuestionOption optionResult = questionOptionDao.save(option);
+		
 		final UpdateResDto result = new UpdateResDto();
 		result.setVersion(optionResult.getVersion());
 		result.setMessage("Option Successfully Updated.");

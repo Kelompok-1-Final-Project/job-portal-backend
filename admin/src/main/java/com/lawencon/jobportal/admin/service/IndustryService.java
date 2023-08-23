@@ -103,20 +103,41 @@ public class IndustryService{
 	
 	
 	public UpdateResDto update(IndustryUpdateReqDto dto) {
-		em().getTransaction().begin();
-		
-		Industry industryResult = new Industry();
-		final Industry industryDb = industryDao.getByCode(dto.getIndustryCode());
-		final Industry industryUpdate = industryDao.getById(Industry.class, industryDb.getId());
-		
-		industryUpdate.setIndustryName(dto.getIndustryName());
-		industryResult = industryDao.saveAndFlush(industryUpdate);
-
 		final UpdateResDto response = new UpdateResDto();
-		response.setVersion(industryResult.getVersion());
-		response.setMessage("Industry updated successfully");
+		try {
+			em().getTransaction().begin();
+			
+			Industry industryResult = new Industry();
+			final Industry industryDb = industryDao.getByCode(dto.getIndustryCode());
+			final Industry industryId = industryDao.getById(Industry.class, industryDb.getId());
+			
+			industryId.setIndustryName(dto.getIndustryName());
+			industryResult = industryDao.save(industryId);
+
+			final String updateIndustryCandidateAPI = "http://localhost:8081/industries";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<IndustryUpdateReqDto> industryUpdate = RequestEntity.patch(updateIndustryCandidateAPI).headers(headers)
+					.body(dto);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(industryUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				response.setVersion(industryResult.getVersion());
+				response.setMessage("Industry updated successfully");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 		
-		em().getTransaction().commit();
 		return response;
 	}
 	

@@ -20,6 +20,7 @@ import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.skill.LevelGetResDto;
 import com.lawencon.jobportal.candidate.dto.skill.SkillGetResDto;
 import com.lawencon.jobportal.candidate.dto.skill.SkillInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.skill.SkillUpdateReqDto;
 import com.lawencon.jobportal.candidate.dto.userskill.UserSkillGetResDto;
 import com.lawencon.jobportal.candidate.dto.userskill.UserSkillInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.userskill.UserSkillUpdateReqDto;
@@ -41,6 +42,12 @@ public class UserSkillController {
 	@PostMapping
 	public ResponseEntity<InsertResDto> insertSkill(@RequestBody SkillInsertReqDto data){
 		final InsertResDto response = userSkillService.insertSkill(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+	
+	@PatchMapping
+	public ResponseEntity<UpdateResDto> update(@RequestBody SkillUpdateReqDto data) {
+		final UpdateResDto response = userSkillService.update(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	

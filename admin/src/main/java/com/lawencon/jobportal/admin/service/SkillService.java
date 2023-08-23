@@ -108,20 +108,40 @@ public class SkillService {
 	
 	
 	public UpdateResDto update(SkillUpdateReqDto dto) {
-		em().getTransaction().begin();
-		
-		Skill skillResult = new Skill();
-		final Skill skillDb = skillDao.getByCode(dto.getSkillCode());
-		final Skill skillUpdate = skillDao.getById(Skill.class, skillDb.getId());
-		
-		skillUpdate.setSkillName(dto.getSkillName());
-		skillResult = skillDao.saveAndFlush(skillUpdate);
-
 		final UpdateResDto response = new UpdateResDto();
-		response.setVersion(skillResult.getVersion());
-		response.setMessage("Berhasil Update skill");
-		
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			Skill skillResult = new Skill();
+			final Skill skillDb = skillDao.getByCode(dto.getSkillCode());
+			final Skill skillId = skillDao.getById(Skill.class, skillDb.getId());
+			
+			skillId.setSkillName(dto.getSkillName());
+			skillResult = skillDao.saveAndFlush(skillId);
+			
+			final String updateSkillCandidateAPI = "http://localhost:8081/skills";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<SkillUpdateReqDto> skillUpdate = RequestEntity.patch(updateSkillCandidateAPI).headers(headers)
+					.body(dto);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(skillUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				response.setVersion(skillResult.getVersion());
+				response.setMessage("Skill updated successfully.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 		return response;
 	}
 	
