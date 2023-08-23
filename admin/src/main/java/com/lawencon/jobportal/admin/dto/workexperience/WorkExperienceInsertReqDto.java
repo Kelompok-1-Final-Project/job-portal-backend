@@ -1,21 +1,12 @@
-package com.lawencon.jobportal.candidate.dto.workexperience;
+package com.lawencon.jobportal.admin.dto.workexperience;
 
 public class WorkExperienceInsertReqDto {
 
-	private String candidateId;
 	private String candidateEmail;
 	private String positionName;
 	private String companyName;
 	private String startDate;
 	private String endDate;
-
-	public String getCandidateId() {
-		return candidateId;
-	}
-
-	public void setCandidateId(String candidateId) {
-		this.candidateId = candidateId;
-	}
 
 	public String getCandidateEmail() {
 		return candidateEmail;

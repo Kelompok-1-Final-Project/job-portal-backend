@@ -18,6 +18,7 @@ import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionGetResDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionInsertReqDto;
+import com.lawencon.jobportal.admin.dto.question.QuestionOptionUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.question.QuestionUpdateReqDto;
 import com.lawencon.jobportal.admin.service.QuestionService;
 
@@ -61,6 +62,12 @@ public class QuestionController {
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> updateQuestion(@RequestBody QuestionUpdateReqDto data){
 		final UpdateResDto response = questionService.updateQuestion(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/option")
+	public ResponseEntity<UpdateResDto> updateQuestionOption(@RequestBody QuestionOptionUpdateReqDto data){
+		final UpdateResDto response = questionService.updateQuestionOption(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

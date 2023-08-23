@@ -1,13 +1,21 @@
-package com.lawencon.jobportal.candidate.dto.workexperience;
+package com.lawencon.jobportal.admin.dto.workexperience;
 
-public class WorkExperienceInsertReqDto {
+public class WorkExperienceUpdateReqDto {
 
+	private String experienceId;
 	private String candidateId;
-	private String candidateEmail;
 	private String positionName;
 	private String companyName;
 	private String startDate;
 	private String endDate;
+
+	public String getExperienceId() {
+		return experienceId;
+	}
+
+	public void setExperienceId(String experienceId) {
+		this.experienceId = experienceId;
+	}
 
 	public String getCandidateId() {
 		return candidateId;
@@ -15,14 +23,6 @@ public class WorkExperienceInsertReqDto {
 
 	public void setCandidateId(String candidateId) {
 		this.candidateId = candidateId;
-	}
-
-	public String getCandidateEmail() {
-		return candidateEmail;
-	}
-
-	public void setCandidateEmail(String candidateEmail) {
-		this.candidateEmail = candidateEmail;
 	}
 
 	public String getPositionName() {
@@ -57,4 +57,5 @@ public class WorkExperienceInsertReqDto {
 		this.endDate = endDate;
 	}
 
+	
 }

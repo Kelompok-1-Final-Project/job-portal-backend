@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.candidate.dao.IndustryDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.industry.IndustryGetResDto;
 import com.lawencon.jobportal.candidate.dto.industry.IndustryInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.industry.IndustryUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.Industry;
 
 @Service
@@ -60,5 +62,23 @@ public class IndustryService {
 		
 		em().getTransaction().commit();
 		return result;
+	}
+	
+	public UpdateResDto update(IndustryUpdateReqDto dto) {
+		em().getTransaction().begin();
+		
+		Industry industryResult = new Industry();
+		final Industry industryDb = industryDao.getByCode(dto.getIndustryCode());
+		final Industry industryUpdate = industryDao.getById(Industry.class, industryDb.getId());
+		
+		industryUpdate.setIndustryName(dto.getIndustryName());
+		industryResult = industryDao.saveAndFlush(industryUpdate);
+
+		final UpdateResDto response = new UpdateResDto();
+		response.setVersion(industryResult.getVersion());
+		response.setMessage("Industry updated successfully");
+		
+		em().getTransaction().commit();
+		return response;
 	}
 }

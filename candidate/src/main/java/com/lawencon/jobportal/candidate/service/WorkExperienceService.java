@@ -6,9 +6,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dao.WorkExperienceDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
@@ -32,6 +39,9 @@ public class WorkExperienceService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	public List<WorkExperienceGetResDto> getByCandidate(String candidateId) {
 		final List<WorkExperienceGetResDto> experienceGetResDtos = new ArrayList<>();
@@ -51,21 +61,44 @@ public class WorkExperienceService {
 	}
 
 	public InsertResDto insertWorkExperience(WorkExperienceInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final WorkExperience experience = new WorkExperience();
-		final User candidate = userDao.getById(User.class, data.getCandidateId());
-		experience.setCandidate(candidate);
-		experience.setPositionName(data.getPositionName());
-		experience.setCompanyName(data.getCompanyName());
-		experience.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
-		experience.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
-		final WorkExperience experienceResult = workExperienceDao.save(experience);
 		final InsertResDto result = new InsertResDto();
-		result.setId(experienceResult.getId());
-		result.setMessage("Experience Successfully added.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final WorkExperience experience = new WorkExperience();
+			
+			final User candidate = userDao.getById(User.class, data.getCandidateId());
+			data.setCandidateEmail(candidate.getEmail());
+			experience.setCandidate(candidate);
+			experience.setPositionName(data.getPositionName());
+			experience.setCompanyName(data.getCompanyName());
+			experience.setStartDate(DateConvert.convertDate(data.getStartDate()).toLocalDate());
+			experience.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
+			final WorkExperience experienceResult = workExperienceDao.save(experience);
+			
+			final String experienceInsertAdminAPI = "http://localhost:8080/work-experience";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<WorkExperienceInsertReqDto> experienceInsert = RequestEntity.post(experienceInsertAdminAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(experienceInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(experienceResult.getId());
+				result.setMessage("Experience Successfully added.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
 		return result;
 	}
 

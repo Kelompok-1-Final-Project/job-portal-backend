@@ -95,31 +95,73 @@ public class QuestionService {
 	}
 	
 	public UpdateResDto updateQuestion(QuestionUpdateReqDto data) {
-		em().getTransaction().begin();
-		
-		final Question question = questionDao.getById(Question.class, data.getQuestionId());
-		question.setQuestion(data.getQuestion());
-		final Question questionResult = questionDao.saveAndFlush(question);
 		final UpdateResDto result = new UpdateResDto();
-		result.setVersion(questionResult.getVersion());
-		result.setMessage("Question Successfully Updated.");
-		
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			final Question question = questionDao.getById(Question.class, data.getQuestionId());
+			question.setQuestion(data.getQuestion());
+			final Question questionResult = questionDao.saveAndFlush(question);
+			
+			final String updateQuestionCandidateAPI = "http://localhost:8081/questions";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<QuestionUpdateReqDto> questionUpdate = RequestEntity.patch(updateQuestionCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(questionUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				result.setVersion(questionResult.getVersion());
+				result.setMessage("Question Successfully Updated.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 		return result;
 	}
 	
 	public UpdateResDto updateQuestionOption(QuestionOptionUpdateReqDto data) {
-		em().getTransaction().begin();
-		
-		final QuestionOption option = questionOptionDao.getById(QuestionOption.class, data.getOptionId());
-		option.setLabels(data.getLabels());
-		option.setIsAnswer(data.getIsAnswer());
-		final QuestionOption optionResult = questionOptionDao.save(option);
 		final UpdateResDto result = new UpdateResDto();
-		result.setVersion(optionResult.getVersion());
-		result.setMessage("Option Successfully Updated.");
-		
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			final QuestionOption option = questionOptionDao.getById(QuestionOption.class, data.getOptionId());
+			option.setLabels(data.getLabels());
+			option.setIsAnswer(data.getIsAnswer());
+			final QuestionOption optionResult = questionOptionDao.save(option);
+			
+			final String updateOptionCandidateAPI = "http://localhost:8081/questions/option";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<QuestionOptionUpdateReqDto> optionUpdate = RequestEntity.patch(updateOptionCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(optionUpdate, UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				result.setVersion(optionResult.getVersion());
+				result.setMessage("Option Successfully Updated.");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+			
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
 		return result;
 	}
 	
