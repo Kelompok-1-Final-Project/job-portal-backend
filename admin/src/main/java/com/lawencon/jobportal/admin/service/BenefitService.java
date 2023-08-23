@@ -39,7 +39,7 @@ public class BenefitService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	public InsertResDto insert(BenefitInsertReqDto data) {
 		final InsertResDto result = new InsertResDto();
 		try {
@@ -52,7 +52,6 @@ public class BenefitService {
 			benefit.setBenefitName(data.getBenefitName());
 			final Benefit benefits = benefitDao.save(benefit);
 
-			
 			result.setId(benefits.getId());
 			result.setMessage("Benefit added successfully");
 
@@ -61,11 +60,12 @@ public class BenefitService {
 			final HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setBearerAuth(JwtConfig.get());
-			
-			final RequestEntity<BenefitInsertReqDto> companyInsert = RequestEntity.post(benefitInsertCandidateAPI).headers(headers)
-					.body(data);
 
-			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(companyInsert, InsertResDto.class);
+			final RequestEntity<BenefitInsertReqDto> companyInsert = RequestEntity.post(benefitInsertCandidateAPI)
+					.headers(headers).body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(companyInsert,
+					InsertResDto.class);
 
 			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
 				result.setId(benefits.getId());
@@ -75,29 +75,50 @@ public class BenefitService {
 				em().getTransaction().rollback();
 				throw new RuntimeException("Insert Failed");
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			em().getTransaction().rollback();
 		}
-		
+
 		return result;
 	}
 
 	public UpdateResDto update(BenefitUpdateReqDto dto) {
-		em().getTransaction().begin();
-
-		Benefit benefitResult = new Benefit();
-		final Benefit benefitDb = benefitDao.getByCode(dto.getBenefitCode());
-		final Benefit benefitUpdate = benefitDao.getById(Benefit.class, benefitDb.getId());
-
-		benefitUpdate.setBenefitName(dto.getBenefitName());
-		benefitResult = benefitDao.saveAndFlush(benefitUpdate);
-
 		final UpdateResDto response = new UpdateResDto();
-		response.setVersion(benefitResult.getVersion());
-		response.setMessage("Benefit updated successfully");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			Benefit benefitResult = new Benefit();
+			final Benefit benefitDb = benefitDao.getByCode(dto.getBenefitCode());
+			final Benefit benefitId = benefitDao.getById(Benefit.class, benefitDb.getId());
+
+			benefitId.setBenefitName(dto.getBenefitName());
+			benefitResult = benefitDao.save(benefitId);
+
+			final String companyInsertCandidateAPI = "http://localhost:8081/benefits";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+
+			final RequestEntity<BenefitUpdateReqDto> benefitUpdate = RequestEntity.patch(companyInsertCandidateAPI)
+					.headers(headers).body(dto);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(benefitUpdate,
+					UpdateResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
+				response.setVersion(benefitResult.getVersion());
+				response.setMessage("Benefit updated successfully");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
+		
 		return response;
 	}
 
@@ -138,52 +159,52 @@ public class BenefitService {
 		BenefitGetResDto.setBenefitCode(benefit.getBenefitCode());
 		return BenefitGetResDto;
 	}
-	
-	//insert
+
+	// insert
 	public Boolean valIdNull(Benefit benefit) {
-		if(benefit.getId() == null) {
+		if (benefit.getId() == null) {
 			return true;
 		}
 		return false;
 	}
-	
+
 //	public Boolean valBkNotNull(Benefit benefit) {
 //		return true;
 //	}
-	
+
 	public Boolean valBkNotExist(Benefit benefit) {
 		return true;
 	}
-	
+
 	public Boolean valNonBk(Benefit benefit) {
 		return true;
 	}
-	
-	//update
-	
+
+	// update
+
 	public Boolean valIdNotNull(Benefit benefit) {
-		if(benefit.getId() == null) {
+		if (benefit.getId() == null) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	public Boolean valIdExist(String benefitId) {
 		final Benefit benefit = benefitDao.getByIdRef(Benefit.class, benefitId);
-		if(benefit == null) {
+		if (benefit == null) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	public Boolean valBkNotNull(Benefit benefit) {
 		return true;
 	}
-	
+
 	public Boolean valBKNotChange(Benefit benefit) {
 		return true;
 	}
-	
+
 	public Boolean valNotBk(Benefit benefit) {
 		return true;
 	}

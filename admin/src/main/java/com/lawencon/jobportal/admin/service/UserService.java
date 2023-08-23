@@ -135,10 +135,10 @@ public class UserService implements UserDetailsService {
 		throw new UsernameNotFoundException("Email tidak ditemukan");
 	}
 	
-	public List<UserGetResDto> getAllHr() {
+	public List<UserGetResDto> getAllHr(Integer startPosition, Integer endPosition) {
 		final List<UserGetResDto> usersDto = new ArrayList<>();
 		
-		userDao.getByRoleCode(RoleEnum.HR.roleCode).forEach(u -> {
+		userDao.getByRoleCode(RoleEnum.HR.roleCode, startPosition, endPosition).forEach(u -> {
 			final UserGetResDto userGetResDto = new UserGetResDto();
 			userGetResDto.setUserId(u.getId());
 			userGetResDto.setUserEmail(u.getEmail());
@@ -152,10 +152,10 @@ public class UserService implements UserDetailsService {
 		return usersDto;
 	}
 	
-	public List<UserGetResDto> getAllInterviewer() {
+	public List<UserGetResDto> getAllInterviewer(Integer startPosition, Integer endPosition) {
 		final List<UserGetResDto> usersDto = new ArrayList<>();
 		
-		userDao.getByRoleCode(RoleEnum.INTERVIEWER.roleCode).forEach(u -> {
+		userDao.getByRoleCode(RoleEnum.INTERVIEWER.roleCode, startPosition, endPosition).forEach(u -> {
 			final UserGetResDto userGetResDto = new UserGetResDto();
 			userGetResDto.setUserId(u.getId());
 			userGetResDto.setUserEmail(u.getEmail());

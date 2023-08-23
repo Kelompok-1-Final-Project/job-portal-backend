@@ -3,6 +3,7 @@ package com.lawencon.jobportal.admin.dto.family;
 public class FamilyInsertReqDto {
 
 	private String candidateId;
+	private String userEmail;
 	private String familyName;
 	private String relationshipCode;
 	private String degreeCode;
@@ -14,6 +15,14 @@ public class FamilyInsertReqDto {
 
 	public void setCandidateId(String candidateId) {
 		this.candidateId = candidateId;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	public String getFamilyName() {

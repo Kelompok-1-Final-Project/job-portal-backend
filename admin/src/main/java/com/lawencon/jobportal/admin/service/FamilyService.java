@@ -24,6 +24,7 @@ import com.lawencon.jobportal.admin.model.Candidate;
 import com.lawencon.jobportal.admin.model.Degree;
 import com.lawencon.jobportal.admin.model.Family;
 import com.lawencon.jobportal.admin.model.Relationship;
+import com.lawencon.jobportal.admin.util.DateConvert;
 
 @Service
 public class FamilyService {
@@ -73,29 +74,39 @@ public class FamilyService {
 	}
 	
 	public InsertResDto insertFamily(FamilyInsertReqDto data) {
-		em().getTransaction().begin();
-		
-		final Family family = new Family();
-		
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		family.setCandidate(candidate);
-		family.setFamilyName(data.getFamilyName());
-		
-		final Relationship relationship = relationshipDao.getByCode(data.getRelationshipCode());
-		final Relationship relationshipResult = relationshipDao.getById(Relationship.class, relationship.getId());
-		family.setRelationship(relationshipResult);
-		
-		final Degree degree = degreeDao.getByCode(data.getDegreeCode());
-		final Degree degreeResult = degreeDao.getById(Degree.class, degree.getId());
-		family.setDegree(degreeResult);
-		
-		final Family familyResult = familyDao.save(family);
-		
 		final InsertResDto result = new InsertResDto();
-		result.setId(familyResult.getId());
-		result.setMessage("Family added successfully.");
 		
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			final Family family = new Family();
+			
+			final Candidate candidate = candidateDao.getByEmail(data.getUserEmail());
+			family.setCandidate(candidate);
+			family.setFamilyName(data.getFamilyName());
+			
+			final Relationship relationship = relationshipDao.getByCode(data.getRelationshipCode());
+			family.setRelationship(relationship);
+			
+			final Degree degree = degreeDao.getByCode(data.getDegreeCode());
+			family.setDegree(degree);
+			
+			family.setBirthdate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
+			
+			final Family familyResult = familyDao.save(family);
+			
+			
+			result.setId(familyResult.getId());
+			result.setMessage("Family added successfully.");
+			
+			em().getTransaction().commit();
+		}
+		catch(Exception e){
+			em().getTransaction().rollback();
+			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
+		}
+		
 		return result;
 	}
 	

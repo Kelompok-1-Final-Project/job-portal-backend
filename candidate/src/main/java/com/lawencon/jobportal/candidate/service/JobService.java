@@ -14,6 +14,7 @@ import com.lawencon.jobportal.candidate.dao.BenefitDao;
 import com.lawencon.jobportal.candidate.dao.CompanyDao;
 import com.lawencon.jobportal.candidate.dao.EmploymentTypeDao;
 import com.lawencon.jobportal.candidate.dao.JobBenefitDao;
+import com.lawencon.jobportal.candidate.dao.JobCandidateStatusDao;
 import com.lawencon.jobportal.candidate.dao.JobDao;
 import com.lawencon.jobportal.candidate.dao.JobPositionDao;
 import com.lawencon.jobportal.candidate.dao.JobStatusDao;
@@ -33,6 +34,7 @@ import com.lawencon.jobportal.candidate.model.Company;
 import com.lawencon.jobportal.candidate.model.EmploymentType;
 import com.lawencon.jobportal.candidate.model.Job;
 import com.lawencon.jobportal.candidate.model.JobBenefit;
+import com.lawencon.jobportal.candidate.model.JobCandidateStatus;
 import com.lawencon.jobportal.candidate.model.JobPosition;
 import com.lawencon.jobportal.candidate.model.JobStatus;
 import com.lawencon.jobportal.candidate.model.Question;
@@ -77,6 +79,9 @@ public class JobService {
 	
 	@Autowired
 	private QuestionDao questionDao;
+	
+	@Autowired
+	private JobCandidateStatusDao jobCandidateStatusDao;
 	
 	@Autowired
 	private SkillTestQuestionDao skillTestQuestionDao;
@@ -378,9 +383,12 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
-	public JobGetResDto getById(String jobId) {
+	public JobGetResDto getById(String jobId, String candidateId) {
 		final Job job = jobDao.getById(Job.class, jobId);
 
+		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(candidateId);
+		final List<SaveJob> saveJob = saveJobDao.getByCandidate(candidateId);
+		
 		final JobGetResDto jobGetResDto = new JobGetResDto();
 		jobGetResDto.setId(job.getId());
 		jobGetResDto.setJobTitle(job.getJobTitle());
@@ -400,6 +408,25 @@ public class JobService {
 			jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());
 		}
 		jobGetResDto.setVer(job.getVersion());
+		
+		for(SaveJob sj : saveJob) {
+			if(sj.getJob().getId().equals(job.getId())) {
+				jobGetResDto.setIsBookmark(true);
+			}
+			else {
+				jobGetResDto.setIsBookmark(false);
+			}
+		}
+		
+		for(JobCandidateStatus jcs : jobCandidateStatus) {
+			if(jcs.getJob().getId().equals(job.getId())) {
+				jobGetResDto.setIsApply(true);
+			}
+			else {
+				jobGetResDto.setIsApply(false);
+			}
+		}
+		
 		return jobGetResDto;
 	}
 
