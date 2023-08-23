@@ -27,6 +27,7 @@ import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.job.JobPositionGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobUpdateReqDto;
 import com.lawencon.jobportal.candidate.model.Benefit;
@@ -97,6 +98,20 @@ public class JobService {
 			jobStatusGetResDtos.add(jobStatusGetResDto);
 		});
 		return jobStatusGetResDtos;
+	}
+	
+	public List<JobPositionGetResDto> getAllJobPosition() {
+		final List<JobPositionGetResDto> jobPositionGetResDtos = new ArrayList<>();
+
+		jobPositionDao.getAll(JobPosition.class).forEach(jp -> {
+			final JobPositionGetResDto jobPositionGetResDto = new JobPositionGetResDto();
+			jobPositionGetResDto.setId(jp.getId());
+			jobPositionGetResDto.setPositionName(jp.getPositionName());
+			jobPositionGetResDto.setPositionCode(jp.getPositionCode());
+			jobPositionGetResDtos.add(jobPositionGetResDto);
+		});
+
+		return jobPositionGetResDtos;
 	}
 	
 	public List<EmploymentTypeGetResDto> getAllEmploymentType() {

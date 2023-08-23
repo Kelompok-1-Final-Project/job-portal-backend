@@ -18,6 +18,7 @@ import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
+import com.lawencon.jobportal.candidate.dto.job.JobPositionGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobUpdateReqDto;
 import com.lawencon.jobportal.candidate.service.JobService;
@@ -39,6 +40,12 @@ public class JobController {
 	public ResponseEntity<List<JobStatusGetResDto>> getAllJobStatus() {
 		final List<JobStatusGetResDto> data = jobService.getAllJobStatus();
 		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
+	@GetMapping("job-position")
+	public ResponseEntity<List<JobPositionGetResDto>> getAllJobPosition(){
+		final List<JobPositionGetResDto> response = jobService.getAllJobPosition();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("employment-type")
