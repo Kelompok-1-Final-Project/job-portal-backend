@@ -48,7 +48,7 @@ public class UserSkillController {
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> update(@RequestBody SkillUpdateReqDto data) {
 		final UpdateResDto response = userSkillService.update(data);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/level")
@@ -82,7 +82,7 @@ public class UserSkillController {
 		}
 	}
 
-	@PatchMapping
+	@PatchMapping("/level")
 	public ResponseEntity<UpdateResDto> updateLevel(@RequestBody UserSkillUpdateReqDto data){
 		final UpdateResDto response = userSkillService.updateLevel(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
