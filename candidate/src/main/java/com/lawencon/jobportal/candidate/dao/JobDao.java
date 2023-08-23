@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
@@ -744,8 +745,8 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> filterSearch(String name, String cityId, String positionId, String employmentId, Integer salaryStart, Integer salaryEnd){
-		final String sql = "SELECT "
+	public List<Job> filterSearch(String name, String cityId, String positionId, List<String> employmentId, Integer salaryStart, Integer salaryEnd){
+		String sql = "SELECT "
 				+ "	tj.id, "
 				+ "	tj.job_title, "
 				+ "	tj.salary_start, "
@@ -777,73 +778,64 @@ public class JobDao extends AbstractJpaDao{
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
 				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE"
-				+ " tj.job_title ILIKE :name || '%' "
-				+ " AND "
-				+ "	tci.id ILIKE :city || '%' "
-				+ "	AND "
-				+ "	tjp.id ILIKE :position || '%' "
-				+ "	AND "
-				+ "	tet.id ILIKE :employment || '%' "
-				+ "	AND"
-				+ "	tj.salary_start >= :start "
-				+ "	AND "
-				+ "	tj.salary_end <= :end ";
-		
-		String nameParam = "";
-		String cityParam = "";
-		String positionParam = "";
-		String employmentParam = "";
-		Integer salaryStartParam = 0;
-		Integer salaryEndParam = 0;
+				+ "WHERE 1 = 1 ";
 		
 		if(name != null) {
-			nameParam = name;
+			sql += " AND tj.job_title ILIKE :name || '%' ";
 		}
 		
 		if(cityId != null) {
-			cityParam = cityId;
+			sql += " AND tci.id ILIKE :city || '%' ";
 		}
 		
 		if(positionId != null) {
-			positionParam = positionId;
+			sql += " AND tjp.id ILIKE :position || '%' ";
 		}
 		
 		if(employmentId != null) {
-			employmentParam = employmentId;
+			sql +=  " AND tet.id IN (:employment) ";
 		}
 		
 		if(salaryStart != null) {
-			salaryStartParam = salaryStart;
+			sql += " AND tj.salary_start >= :start ";
 		}
 		
-		if(salaryEnd == null) {
-			salaryEndParam = Integer.MAX_VALUE;
-		}
-		else if(salaryEnd != null) {
-			if (salaryEnd == 0) {
-				salaryEndParam = Integer.MAX_VALUE;
-			}
-			else {
-				salaryEndParam = salaryEnd;
-			}
+		if(salaryEnd != null) {
+			sql += "AND tj.salary_end <= :end ";
 		}
 		
-		System.out.println(nameParam + cityParam + positionParam + employmentParam + salaryStartParam + salaryEndParam);
+		final Query jobQuery = this.em().createNativeQuery(sql);
 		
-		final List<?> jobsObj = this.em().createNativeQuery(sql)
-				.setParameter("name", nameParam)
-				.setParameter("city", cityParam)
-				.setParameter("position", positionParam)
-				.setParameter("employment", employmentParam)
-				.setParameter("start", salaryStartParam)
-				.setParameter("end", salaryEndParam)
-				.getResultList();
+		if(name != null) {
+			jobQuery.setParameter("name", name);
+		}
+		
+		if(cityId != null) {
+			jobQuery.setParameter("city", cityId);
+		}
+		
+		if(positionId != null) {
+			jobQuery.setParameter("position", positionId);
+		}
+		
+		if(employmentId != null) {
+			jobQuery.setParameter("employment", employmentId);
+		}
+		
+		if(salaryStart != null) {
+			jobQuery.setParameter("start", salaryStart);
+		}
+		
+		if(salaryEnd != null) {
+			jobQuery.setParameter("end", salaryEnd);
+		}
+				
+		final List<?> jobObjs = jobQuery.getResultList();
 		
 		final List<Job> listJob = new ArrayList<>();
 		
-		if(jobsObj.size() > 0) {
-			for(Object jobObj:jobsObj) {
+		if(jobObjs.size() > 0) {
+			for(Object jobObj : jobObjs) {
 				final Object[] jobArr = (Object[]) jobObj;
 				
 				final Job job = new Job();

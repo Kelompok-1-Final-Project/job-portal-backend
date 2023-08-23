@@ -363,6 +363,7 @@ CREATE TABLE t_question_option(
 	labels VARCHAR(30) NOT NULL,
 	is_answer boolean NOT NULL,
 	question_id VARCHAR(36) NOT NULL ,
+	option_code VARCHAR(5) NOT NULL, 
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -376,6 +377,8 @@ ALTER TABLE t_question_option ADD CONSTRAINT question_option_pk
 ALTER TABLE t_question_option ADD CONSTRAINT question_option_question_fk
 	FOREIGN KEY(question_id)
 	REFERENCES t_question(id);
+ALTER TABLE t_question_option ADD CONSTRAINT question_option_bk
+	UNIQUE(option_code);
 
 CREATE TABLE t_employment_type(
 	id VARCHAR(36) NOT NULL,
@@ -823,6 +826,9 @@ SELECT id, candidate_id, job_id, status_id FROM t_job_candidate_status tjcs
 WHERE 
 tjcs.candidate_id = '2bc12f8a-ca66-4232-aaff-3ef889cd9811'
 
-SELECT DISTINCT	tj.id, 	tj.job_title, 	tj.salary_start, 	tj.salary_end, 	tj.description, 	tj.end_date,  	tc.id AS company_id, 	tc.company_name,  	tc.file_id, 	ti.industry_name, 	tci.city_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name, 	tj.created_at,  	tj.updated_at, 	tj.ver FROM 	t_job tj INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN 	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN 	t_industry ti ON tc.industry_id = ti.id WHERE 	tj.job_title ILIKE :name || '%'  	AND 	tci.id ILIKE :city || '%' 	AND 	tjp.id ILIKE :position || '%' 	AND 	tet.id ILIKE :employment || '%' 	AND	tj.salary_start >= :start 	AND 	tj.salary_end <= :end 
+SELECT DISTINCT	tj.id, 	tj.job_title, 	tj.salary_start, 	tj.salary_end, 	tj.description, 	tj.end_date,  	tc.id AS company_id, 	tc.company_name,  	tc.file_id, 	ti.industry_name, 	tci.city_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name, 	tj.created_at,  	tj.updated_at, 	tj.ver FROM 	t_job tj INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN 	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN 	t_industry ti ON tc.industry_id = ti.id WHERE 	tj.job_title ILIKE :name || '%'  	AND 	tci.id ILIKE :city || '%' 	AND 	tjp.id ILIKE :position || '%' 	AND 	tet.id IN :employment	AND	tj.salary_start >= :start 	AND 	tj.salary_end <= :end 
+ORDER BY
+	tj.created_at DESC
+	
 	
 SELECT 	tj.id, 	tj.job_title, 	tj.salary_start, 	tj.salary_end, 	tj.description, 	tj.end_date,  	tc.id AS company_id, 	tc.company_name, 	ti.industry_name, 	tci.city_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name, 	tj.created_at,  tj.updated_at, 	tj.ver FROM t_job tj INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN 	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN 	t_industry ti ON tc.industry_id = ti.id  WHERE  ti.id ILIKE :industry || '%'

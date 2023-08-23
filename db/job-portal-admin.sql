@@ -748,6 +748,7 @@ CREATE TABLE t_question_option(
 	labels VARCHAR(30) NOT NULL,
 	is_answer boolean NOT NULL,
 	question_id VARCHAR(36) NOT NULL ,
+	option_code VARCHAR(5) NOT NULL, 
 	created_by VARCHAR(36) NOT NULL,
 	created_at timestamp NOT NULL,
 	updated_by VARCHAR(36),
@@ -761,6 +762,8 @@ ALTER TABLE t_question_option ADD CONSTRAINT question_option_pk
 ALTER TABLE t_question_option ADD CONSTRAINT question_option_question_fk
 	FOREIGN KEY(question_id)
 	REFERENCES t_question(id);
+ALTER TABLE t_question_option ADD CONSTRAINT question_option_bk
+	UNIQUE(option_code);
 
 CREATE TABLE t_blacklist(
 	id VARCHAR(36) NOT NULL,

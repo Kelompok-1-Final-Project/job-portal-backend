@@ -68,7 +68,7 @@ public class JobController {
 	
 	@GetMapping("/filter")
 	public ResponseEntity<List<JobGetResDto>> getByStatus(@RequestParam("n") String name, 
-			@RequestParam("c") String city, @RequestParam("p") String position, @RequestParam("e") String employment, 
+			@RequestParam("c") String city, @RequestParam("p") String position, @RequestParam("e") List<String> employment, 
 			@RequestParam("ss") Integer salaryStart, @RequestParam("se") Integer salaryEnd, @RequestParam("u") String user) {
 		final List<JobGetResDto> data = jobService.getFilter(name, city, position, employment, salaryStart, salaryEnd, user);
 		return new ResponseEntity<>(data, HttpStatus.OK);

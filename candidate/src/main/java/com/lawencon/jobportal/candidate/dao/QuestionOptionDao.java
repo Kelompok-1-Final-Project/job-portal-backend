@@ -43,4 +43,19 @@ public class QuestionOptionDao extends AbstractJpaDao{
 		}
 		return listQuestionOption;
 	}
+	
+	public QuestionOption getByCode(String optionCode) {
+		final String sql = "SELECT "
+				+ "qo "
+				+ "FROM "
+				+ "QuestionOption qo "
+				+ "WHERE "
+				+ "qo.optionCode = :optionCode";
+		
+		final QuestionOption questionOption = em().createQuery(sql, QuestionOption.class)
+				.setParameter("optionCode", optionCode)
+				.getSingleResult();
+		
+		return questionOption;
+	}
 }
