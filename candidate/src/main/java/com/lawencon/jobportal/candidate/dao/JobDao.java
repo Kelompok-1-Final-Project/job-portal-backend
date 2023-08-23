@@ -58,7 +58,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN   "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
 				+ "INNER JOIN  "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id  "
+				+ "t_industry ti ON tc.industry_id = ti.id  "
 				+ "WHERE  "
 				+ "ti.id ILIKE :industry || '%'";
 		
@@ -145,7 +145,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE  "
 				+ "tj.job_title ILIKE '%' || :jobName || '%'";
 		
@@ -232,7 +232,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE  "
 				+ "city_name ILIKE :location || '%'";
 		
@@ -334,7 +334,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE   "
 				+ "	company_name ILIKE :company || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -420,7 +420,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE   "
 				+ "	employment_name ILIKE :employment || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -506,7 +506,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE   "
 				+ "	position_name ILIKE :position || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -592,7 +592,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE   "
 				+ "	status_name ILIKE :status  || '%'";
 		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
@@ -678,7 +678,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE"
 				+ "	tj.salary_start >= :start "
 				+ "	AND "
@@ -770,7 +770,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "INNER JOIN  "
 				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
 				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = tc.industry_id "
+				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE"
 				+ " tj.job_title ILIKE :name || '%' "
 				+ " AND "
