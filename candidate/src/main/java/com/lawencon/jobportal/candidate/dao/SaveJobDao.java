@@ -105,8 +105,6 @@ public class SaveJobDao extends AbstractJpaDao{
 					saveJob.setUpdatedAt(Timestamp.valueOf(saveJobArr[13].toString()).toLocalDateTime());					
 				}
 				
-				
-				
 				listSaveJob.add(saveJob);
 			}
 		}

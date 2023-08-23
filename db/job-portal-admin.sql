@@ -21,6 +21,7 @@
 --DROP TABLE IF EXISTS t_education;
 --DROP TABLE IF EXISTS t_organization;
 --DROP TABLE IF EXISTS t_work_experience;
+--DROP TABLE IF EXISTS t_employee
 --DROP TABLE IF EXISTS t_candidate;
 --DROP TABLE IF EXISTS t_candidate_profile;
 --DROP TABLE IF EXISTS t_job;
@@ -924,6 +925,27 @@ ALTER TABLE t_work_experience ADD CONSTRAINT work_experience_pk
 ALTER TABLE t_work_experience ADD CONSTRAINT work_experience_candidate_fk
 	FOREIGN KEY(candidate_id)
 	REFERENCES t_candidate(id);
+
+CREATE TABLE t_employee(
+	id VARCHAR(36) NOT NULL,
+	candidate_id VARCHAR(36) NOT NULL,
+	company_id VARCHAR(36) NOT NULL,
+	created_by VARCHAR(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	updated_by VARCHAR(36),
+	updated_at timestamp,
+	is_active boolean NOT NULL,
+	ver int NOT NULL
+);
+
+ALTER TABLE t_employee ADD CONSTRAINT employee_pk
+	PRIMARY KEY(id);
+ALTER TABLE t_employee ADD CONSTRAINT employee_candidate_fk
+	FOREIGN KEY(candidate_id)
+	REFERENCES t_candidate(id);
+ALTER TABLE t_employee ADD CONSTRAINT employee_company_fk
+	FOREIGN KEY(company_id)
+	REFERENCES t_company(id);
 
 
 --CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
