@@ -392,6 +392,7 @@ public class JobService {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 		final List<SaveJob> saveJob = saveJobDao.getByCandidate(userId);
 		final Integer totalJob = jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).size();
+		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(userId);
 		
 		jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
@@ -416,10 +417,17 @@ public class JobService {
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDto.setTotalJob(totalJob);
 			jobGetResDto.setIsBookmark(false);
+			jobGetResDto.setIsApply(false);
 			
 			for(SaveJob sj : saveJob) {
 				if(sj.getJob().getId().equals(j.getId())) {
 					jobGetResDto.setIsBookmark(true);
+				}
+			}
+			
+			for(JobCandidateStatus jcs : jobCandidateStatus) {
+				if(jcs.getJob().getId().equals(j.getId())) {
+					jobGetResDto.setIsApply(true);
 				}
 			}
 			
