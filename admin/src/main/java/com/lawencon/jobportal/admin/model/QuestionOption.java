@@ -10,14 +10,17 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_question_option")
-public class QuestionOption extends BaseEntity{
+public class QuestionOption extends BaseEntity {
 
-	@Column(name = "labels", length=30, nullable=false)
+	@Column(name = "labels", length = 30, nullable = false)
 	private String labels;
-	
-	@Column(name = "is_answer", nullable=false)
+
+	@Column(name = "is_answer", nullable = false)
 	private Boolean isAnswer;
-	
+
+	@Column(name = "option_code", nullable = false)
+	private String optionCode;
+
 	@OneToOne
 	@JoinColumn(name = "question_id")
 	private Question question;
@@ -45,5 +48,13 @@ public class QuestionOption extends BaseEntity{
 	public void setQuestion(Question question) {
 		this.question = question;
 	}
-	
+
+	public String getOptionCode() {
+		return optionCode;
+	}
+
+	public void setOptionCode(String optionCode) {
+		this.optionCode = optionCode;
+	}
+
 }

@@ -18,6 +18,9 @@ public class QuestionOption extends BaseEntity{
 	@Column(name = "is_answer", nullable=false)
 	private Boolean isAnswer;
 	
+	@Column(name = "option_code", nullable = false)
+	private String optionCode;
+	
 	@OneToOne
 	@JoinColumn(name = "question_id")
 	private Question question;

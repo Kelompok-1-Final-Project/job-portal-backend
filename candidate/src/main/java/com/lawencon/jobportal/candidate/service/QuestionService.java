@@ -84,7 +84,8 @@ public class QuestionService {
 	public UpdateResDto updateQuestionOption(QuestionOptionUpdateReqDto data) {
 		em().getTransaction().begin(); 
 		
-		final QuestionOption option = questionOptionDao.getById(QuestionOption.class, data.getOptionId());
+		final QuestionOption optionId = questionOptionDao.getByCode(data.getOptionCode());
+		final QuestionOption option = questionOptionDao.getById(QuestionOption.class, optionId.getId());
 		option.setLabels(data.getLabels());
 		option.setIsAnswer(data.getIsAnswer());
 		final QuestionOption optionResult = questionOptionDao.save(option);

@@ -1,17 +1,17 @@
 package com.lawencon.jobportal.admin.dto.question;
 
 public class QuestionOptionUpdateReqDto {
-	private String quesstionCode;
+	private String optionCode;
 	private String optionId;
 	private String labels;
 	private Boolean isAnswer;
 
-	public String getQuesstionCode() {
-		return quesstionCode;
+	public String getOptionCode() {
+		return optionCode;
 	}
 
-	public void setQuesstionCode(String quesstionCode) {
-		this.quesstionCode = quesstionCode;
+	public void setOptionCode(String optionCode) {
+		this.optionCode = optionCode;
 	}
 
 	public String getOptionId() {

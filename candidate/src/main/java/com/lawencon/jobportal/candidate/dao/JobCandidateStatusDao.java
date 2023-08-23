@@ -37,14 +37,12 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 	}
 	
 	public List<JobCandidateStatus> getByCandidate(String candidateId) {
-		final String sql = "SELECT  "
-				+ "id, candidate_id, job_id, status_id  "
-				+ "FROM  "
-				+ "t_job_candidate_status tjcs  "
-				+ "WHERE  "
-				+ "tjcs.candidate_id = :candidateId ";
-		
-		final List<?> jobCandidateStatusObjs = em().createNativeQuery(sql)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, candidate_id, job_id, status_id ");
+		sql.append("FROM t_job_candidate_status tjcs ");
+		sql.append("WHERE tjcs.candidate_id = :candidateId ");
+				
+		final List<?> jobCandidateStatusObjs = em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		
