@@ -7,6 +7,7 @@ public class SaveJobGetResDto {
 	private Integer salaryEnd;
 	private String description;
 	private String endDate;
+	private String companyId;
 	private String companyName;
 	private String companyPhoto;
 	private String positionName;
@@ -65,6 +66,14 @@ public class SaveJobGetResDto {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
 	}
 
 	public String getCompanyName() {

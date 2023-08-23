@@ -59,6 +59,11 @@ public class SaveJobService {
 			}
 			saveJobGetResDto.setIndustryName(sj.getJob().getCompany().getIndustry().getIndustryName());
 			saveJobGetResDto.setCityName(sj.getJob().getCompany().getCity().getCityName());
+			if(sj.getJob().getCompany().getFile() != null) {
+				saveJobGetResDto.setCompanyPhoto(sj.getJob().getCompany().getFile().getId());
+			}
+			saveJobGetResDto.setCompanyId(sj.getJob().getCompany().getId());
+			
 			saveJobGetResDtos.add(saveJobGetResDto);
 		});
 

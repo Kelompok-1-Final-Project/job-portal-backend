@@ -20,6 +20,7 @@ import com.lawencon.jobportal.admin.constant.StatusCodeEnum;
 import com.lawencon.jobportal.admin.dao.ApplicationDao;
 import com.lawencon.jobportal.admin.dao.AssessmentDao;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
+import com.lawencon.jobportal.admin.dao.EmployeeDao;
 import com.lawencon.jobportal.admin.dao.HiredDao;
 import com.lawencon.jobportal.admin.dao.InterviewDao;
 import com.lawencon.jobportal.admin.dao.JobCandidateStatusDao;
@@ -103,6 +104,9 @@ public class ProgressStatusService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private EmployeeDao employeeDao;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -385,7 +389,11 @@ public class ProgressStatusService {
 			result.setId(hiredDb.getId());
 			result.setMessage("Insert Hired Successfully.");
 			
-//			final Employee employee = empl
+			final Employee employee = new Employee();
+			employee.setCandidate(candidate);
+			employee.setCompany(job.getCompany());
+			
+			employeeDao.save(employee);
 			
 			em().getTransaction().commit();
 			
