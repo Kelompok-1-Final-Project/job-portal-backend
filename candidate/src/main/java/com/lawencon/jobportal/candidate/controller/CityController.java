@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawencon.jobportal.admin.dto.UpdateResDto;
-import com.lawencon.jobportal.admin.dto.city.CityUpdateReqDto;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.benefit.CityUpdateReqDto;
 import com.lawencon.jobportal.candidate.dto.city.CityGetResDto;
 import com.lawencon.jobportal.candidate.dto.city.CityInsertReqDto;
 import com.lawencon.jobportal.candidate.service.CityService;
