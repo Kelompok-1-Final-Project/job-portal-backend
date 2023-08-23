@@ -6,9 +6,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.config.JwtConfig;
 import com.lawencon.jobportal.candidate.dao.LevelDao;
 import com.lawencon.jobportal.candidate.dao.SkillDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
@@ -42,6 +49,9 @@ public class UserSkillService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	private EntityManager em() {
 		return ConnHandler.getManager();
@@ -100,6 +110,45 @@ public class UserSkillService {
 		result.setMessage("Success add Skill");
 
 		em().getTransaction().commit();
+		return result;
+	}
+	
+	public InsertResDto insertSkillSendAdmin(SkillInsertReqDto data) {
+		final InsertResDto result = new InsertResDto();
+		try {
+			em().getTransaction().begin();
+			
+			final String skillCode = GeneratorId.generateCode();
+			final Skill skill = new Skill();
+			data.setSkillCode(skillCode);
+			skill.setSkillCode(skillCode);
+			skill.setSkillName(data.getSkillName());
+			final Skill skills = skillDao.save(skill);
+			
+			final String skillInsertAdminAPI = "http://localhost:8080/cities/candidate-insert";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<SkillInsertReqDto> skillInsert = RequestEntity.post(skillInsertAdminAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(skillInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(skills.getId());
+				result.setMessage("Success add Skill");
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+		
 		return result;
 	}
 

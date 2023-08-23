@@ -32,26 +32,26 @@ import com.lawencon.jobportal.admin.model.Skill;
 
 @Service
 public class SkillService {
-	
+
 	private EntityManager em() {
 		return ConnHandler.getManager();
 	}
-	
+
 	@Autowired
 	private SkillDao skillDao;
-	
+
 	@Autowired
 	private LevelDao levelDao;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	public InsertResDto insert(SkillInsertReqDto data) {
 		final InsertResDto result = new InsertResDto();
-		
+
 		try {
 			em().getTransaction().begin();
-			
+
 			final String skillCode = generateCode();
 			final Skill skill = new Skill();
 			data.setSkillCode(skillCode);
@@ -64,11 +64,12 @@ public class SkillService {
 			final HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setBearerAuth(JwtConfig.get());
-			
-			final RequestEntity<SkillInsertReqDto> skillInsert = RequestEntity.post(skillInserCandidateAPI).headers(headers)
-					.body(data);
 
-			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(skillInsert, InsertResDto.class);
+			final RequestEntity<SkillInsertReqDto> skillInsert = RequestEntity.post(skillInserCandidateAPI)
+					.headers(headers).body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(skillInsert,
+					InsertResDto.class);
 
 			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
 				result.setId(skills.getId());
@@ -84,8 +85,30 @@ public class SkillService {
 		}
 		return result;
 	}
-	
-	public List<SkillGetResDto> getAllSkill(){
+
+	public InsertResDto insertFromCandidate(SkillInsertReqDto data) {
+		final InsertResDto result = new InsertResDto();
+
+		try {
+			em().getTransaction().begin();
+
+			final Skill skill = new Skill();
+			skill.setSkillCode(data.getSkillCode());
+			skill.setSkillName(data.getSkillName());
+			final Skill skills = skillDao.save(skill);
+
+			result.setId(skills.getId());
+			result.setMessage("Success add Skill");
+			em().getTransaction().commit();
+
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public List<SkillGetResDto> getAllSkill() {
 		final List<SkillGetResDto> skillGetResDtos = new ArrayList<>();
 		skillDao.getAll(Skill.class).forEach(s -> {
 			final SkillGetResDto skillGetResDto = new SkillGetResDto();
@@ -96,39 +119,39 @@ public class SkillService {
 		});
 		return skillGetResDtos;
 	}
-	
-	public SkillGetResDto getByName(String name){
-			final SkillGetResDto industryGetResDto = new SkillGetResDto();
-			final Skill skill = skillDao.getByName(name);
-			industryGetResDto.setId(skill.getId());
-			industryGetResDto.setSkillName(skill.getSkillName());
-			industryGetResDto.setSkillCode(skill.getSkillCode());
-			return industryGetResDto;
+
+	public SkillGetResDto getByName(String name) {
+		final SkillGetResDto industryGetResDto = new SkillGetResDto();
+		final Skill skill = skillDao.getByName(name);
+		industryGetResDto.setId(skill.getId());
+		industryGetResDto.setSkillName(skill.getSkillName());
+		industryGetResDto.setSkillCode(skill.getSkillCode());
+		return industryGetResDto;
 	}
-	
-	
+
 	public UpdateResDto update(SkillUpdateReqDto dto) {
 		final UpdateResDto response = new UpdateResDto();
 		try {
 			em().getTransaction().begin();
-			
+
 			Skill skillResult = new Skill();
 			final Skill skillDb = skillDao.getByCode(dto.getSkillCode());
 			final Skill skillId = skillDao.getById(Skill.class, skillDb.getId());
-			
+
 			skillId.setSkillName(dto.getSkillName());
 			skillResult = skillDao.saveAndFlush(skillId);
-			
+
 			final String updateSkillCandidateAPI = "http://localhost:8081/skills";
 
 			final HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setBearerAuth(JwtConfig.get());
-			
-			final RequestEntity<SkillUpdateReqDto> skillUpdate = RequestEntity.patch(updateSkillCandidateAPI).headers(headers)
-					.body(dto);
 
-			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(skillUpdate, UpdateResDto.class);
+			final RequestEntity<SkillUpdateReqDto> skillUpdate = RequestEntity.patch(updateSkillCandidateAPI)
+					.headers(headers).body(dto);
+
+			final ResponseEntity<UpdateResDto> responseCandidate = restTemplate.exchange(skillUpdate,
+					UpdateResDto.class);
 
 			if (responseCandidate.getStatusCode().equals(HttpStatus.OK)) {
 				response.setVersion(skillResult.getVersion());
@@ -138,35 +161,34 @@ public class SkillService {
 				em().getTransaction().rollback();
 				throw new RuntimeException("Update Failed");
 			}
-			
+
 		} catch (Exception e) {
 			em().getTransaction().rollback();
 		}
 		return response;
 	}
-	
-	
+
 	public DeleteResDto deleteByCode(String code) {
 		em().getTransaction().begin();
-		
+
 		boolean checkUpdate;
 		final Skill skillDb = skillDao.getByCode(code);
 		final Skill skillDelete = skillDao.getById(Skill.class, skillDb.getId());
 		final DeleteResDto response = new DeleteResDto();
-		
-		checkUpdate=skillDao.deleteById(Skill.class, skillDelete);
-		
-		if(checkUpdate) {
-			response.setMessage("Successful delete data");			
-		}else {
+
+		checkUpdate = skillDao.deleteById(Skill.class, skillDelete);
+
+		if (checkUpdate) {
+			response.setMessage("Successful delete data");
+		} else {
 			response.setMessage("Failed to delete data");
 		}
-		
+
 		em().getTransaction().commit();
 		return response;
 	}
-	
-	public List<LevelGetResDto> getAllLevel(){
+
+	public List<LevelGetResDto> getAllLevel() {
 		final List<LevelGetResDto> listResult = new ArrayList<>();
 		levelDao.getAll(Level.class).forEach(l -> {
 			final LevelGetResDto result = new LevelGetResDto();

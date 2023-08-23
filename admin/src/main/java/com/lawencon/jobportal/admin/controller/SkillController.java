@@ -36,6 +36,12 @@ public class SkillController {
 		final InsertResDto response = skillService.insert(data);
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
+	
+	@PostMapping("/candidate-insert")
+	public ResponseEntity<InsertResDto> insertFromCandidate(@RequestBody SkillInsertReqDto data) {
+		final InsertResDto response = skillService.insertFromCandidate(data);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
 
 	@GetMapping
 	public ResponseEntity<List<SkillGetResDto>> getAllSkill() {
