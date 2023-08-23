@@ -415,13 +415,11 @@ public class JobService {
 			}
 			jobGetResDto.setVer(j.getVersion());
 			jobGetResDto.setTotalJob(totalJob);
+			jobGetResDto.setIsBookmark(false);
 			
 			for(SaveJob sj : saveJob) {
 				if(sj.getJob().getId().equals(j.getId())) {
 					jobGetResDto.setIsBookmark(true);
-				}
-				else {
-					jobGetResDto.setIsBookmark(false);
 				}
 			}
 			
