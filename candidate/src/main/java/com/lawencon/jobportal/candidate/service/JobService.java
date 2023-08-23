@@ -355,6 +355,39 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
+	public List<JobGetResDto> getByIndustry(String industry) {
+		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+		final Integer totalJob = jobDao.getByIndustry(industry).size();
+		
+		jobDao.getByIndustry(industry).forEach(j -> {
+			final JobGetResDto jobGetResDto = new JobGetResDto();
+			jobGetResDto.setId(j.getId());
+			jobGetResDto.setJobTitle(j.getJobTitle());
+			jobGetResDto.setSalaryStart(j.getSalaryStart());
+			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+			jobGetResDto.setDescription(j.getDescription());
+			jobGetResDto.setEndDate(j.getEndDate().toString());
+			jobGetResDto.setCompanyId(j.getCompany().getId());
+			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setCompanyPhoto(j.getCompany().getFile().getId());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
+			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			if(j.getUpdatedAt() != null) {
+				jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+			}
+			jobGetResDto.setIsBookmark(false);
+			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setTotalJob(totalJob);		
+			jobGetResDtos.add(jobGetResDto);
+		});
+
+		return jobGetResDtos;
+	}
+	
 	public List<JobGetResDto> getFilter(String name, String city, String position, String employment, Integer salaryStart, Integer salaryEnd, String userId) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 		final List<SaveJob> saveJob = saveJobDao.getByCandidate(userId);
