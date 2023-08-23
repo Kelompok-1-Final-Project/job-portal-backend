@@ -37,6 +37,7 @@ public class JobDao extends AbstractJpaDao{
 				+ "	tj.end_date,  "
 				+ " tc.id AS company_id,  "
 				+ "	tc.company_name,  "
+				+ " tc.file_id, "
 				+ "	ti.industry_name,  "
 				+ "	tci.city_name,  "
 				+ "	tjp.position_name,  "
@@ -69,7 +70,6 @@ public class JobDao extends AbstractJpaDao{
 		if(jobsObj.size() > 0) {
 			for(Object jobObj:jobsObj) {
 				final Object[] jobArr = (Object[]) jobObj;
-				
 				final Job job = new Job();
 				job.setId(jobArr[0].toString());
 				job.setJobTitle(jobArr[1].toString());
@@ -82,31 +82,37 @@ public class JobDao extends AbstractJpaDao{
 				company.setId(jobArr[6].toString());
 				company.setCompanyName(jobArr[7].toString());
 				
+				final File file = new File();
+				file.setId(jobArr[8].toString());
+				company.setFile(file);
+				
 				final Industry industrySet = new Industry();
-				industrySet.setIndustryName(jobArr[8].toString());
+				industrySet.setIndustryName(jobArr[9].toString());
 				company.setIndustry(industrySet);
 				
 				final City city = new City();
-				city.setCityName(jobArr[9].toString());
+				city.setCityName(jobArr[10].toString());
 				company.setCity(city);
 				
 				job.setCompany(company);
 				
 				final JobPosition jobPosition = new JobPosition();
-				jobPosition.setPositionName(jobArr[10].toString());
+				jobPosition.setPositionName(jobArr[11].toString());
 				job.setJobPosition(jobPosition);
 				
 				final JobStatus jobStatus = new JobStatus();
-				jobStatus.setStatusName(jobArr[11].toString());
+				jobStatus.setStatusName(jobArr[12].toString());
 				job.setJobStatus(jobStatus);
 				
 				final EmploymentType employmentType = new EmploymentType();
-				employmentType.setEmploymentName(jobArr[12].toString());
+				employmentType.setEmploymentName(jobArr[13].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
-				job.setVersion(Integer.valueOf(jobArr[15].toString()));
+				job.setCreatedAt(Timestamp.valueOf(jobArr[14].toString()).toLocalDateTime());
+				if(jobArr[15] != null) {
+					job.setUpdatedAt(Timestamp.valueOf(jobArr[15].toString()).toLocalDateTime());					
+				}
+				job.setVersion(Integer.valueOf(jobArr[16].toString()));
 				listJob.add(job);
 			}
 		}
