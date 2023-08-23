@@ -125,10 +125,10 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
-	public List<JobGetResDto> getByLocation(String location) {
+	public List<JobGetResDto> getByLocation(String location, Integer startPosition, Integer endPosition) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByLocation(location).forEach(j -> {
+		jobDao.getByLocation(location, startPosition, endPosition).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -155,10 +155,10 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
-	public List<JobGetResDto> getByName(String jobName) {
+	public List<JobGetResDto> getByName(String jobName, Integer startPosition, Integer endPosition) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByName(jobName).forEach(j -> {
+		jobDao.getByName(jobName, startPosition, endPosition).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -185,10 +185,10 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
-	public List<JobGetResDto> getByIdustry(String jobName) {
+	public List<JobGetResDto> getByIdustry(String jobName, Integer startPosition, Integer endPosition) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByName(jobName).forEach(j -> {
+		jobDao.getByName(jobName, startPosition, endPosition).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -245,10 +245,10 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
-	public List<JobGetResDto> getByEmploymentType(String employmentType) {
+	public List<JobGetResDto> getByEmploymentType(String employmentType, Integer startPosition, Integer endPosition) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByEmploymentType(employmentType).forEach(j -> {
+		jobDao.getByEmploymentType(employmentType, startPosition, endPosition).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -275,10 +275,10 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
-	public List<JobGetResDto> getByPosition(String position) {
+	public List<JobGetResDto> getByPosition(String position, Integer startPosition, Integer endPosition) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByPosition(position).forEach(j -> {
+		jobDao.getByPosition(position, startPosition, endPosition).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -305,10 +305,10 @@ public class JobService {
 		return jobGetResDtos;
 	}
 
-	public List<JobGetResDto> getByStatus(String status) {
+	public List<JobGetResDto> getByStatus(String status, Integer startPosition, Integer endPosition) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByStatus(status).forEach(j -> {
+		jobDao.getByStatus(status, startPosition, endPosition).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
