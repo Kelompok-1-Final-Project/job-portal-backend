@@ -48,7 +48,7 @@ public class IndustryController {
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> update(@RequestBody IndustryUpdateReqDto data) {
 		final UpdateResDto response = industryService.update(data);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 }

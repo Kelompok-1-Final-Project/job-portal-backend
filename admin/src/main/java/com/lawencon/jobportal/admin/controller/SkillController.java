@@ -58,7 +58,7 @@ public class SkillController {
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> update(@RequestBody SkillUpdateReqDto data) {
 		final UpdateResDto response = skillService.update(data);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping("{code}")
