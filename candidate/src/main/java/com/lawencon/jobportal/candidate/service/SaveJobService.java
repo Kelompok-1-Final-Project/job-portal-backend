@@ -43,7 +43,6 @@ public class SaveJobService {
 			final SaveJobGetResDto saveJobGetResDto = new SaveJobGetResDto();
 			saveJobGetResDto.setId(sj.getId());
 			saveJobGetResDto.setCompanyName(sj.getJob().getCompany().getCompanyName());
-			saveJobGetResDto.setCompanyPhoto(sj.getJob().getCompany().getFile().getId());
 			saveJobGetResDto.setDescription(sj.getJob().getDescription());
 			saveJobGetResDto.setEmploymentName(sj.getJob().getEmployementType().getEmploymentName());
 			saveJobGetResDto.setEndDate(sj.getJob().getEndDate().toString());
@@ -55,7 +54,9 @@ public class SaveJobService {
 			saveJobGetResDto.setJobId(sj.getJob().getId());
 			saveJobGetResDto.setTotalSaveJob(saveJobTotal);
 			saveJobGetResDto.setCreatedAt(sj.getCreatedAt().toString());
-			saveJobGetResDto.setUpdatedAt(sj.getUpdatedAt().toString());
+			if(sj.getUpdatedAt() != null) {
+				saveJobGetResDto.setUpdatedAt(sj.getUpdatedAt().toString());				
+			}
 			saveJobGetResDto.setIndustryName(sj.getJob().getCompany().getIndustry().getIndustryName());
 			saveJobGetResDto.setCityName(sj.getJob().getCompany().getCity().getCityName());
 			saveJobGetResDtos.add(saveJobGetResDto);

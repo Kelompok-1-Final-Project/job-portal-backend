@@ -370,29 +370,36 @@ public class ProgressStatusService {
 	}
 
 	public InsertResDto insertHired(HiredInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		final Hired hired = new Hired();
-		hired.setCandidate(candidate);
-		hired.setJob(job);
-		final Hired hiredDb = hiredDao.save(hired);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(hiredDb.getId());
-		result.setMessage("Insert Hired Successfully.");
+		try {
+			em().getTransaction().begin();
+			
+			final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			final Hired hired = new Hired();
+			hired.setCandidate(candidate);
+			hired.setJob(job);
+			final Hired hiredDb = hiredDao.save(hired);
+			
+			result.setId(hiredDb.getId());
+			result.setMessage("Insert Hired Successfully.");
+			
+			em().getTransaction().commit();
+			
+			final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
+					job.getJobCode());
+			
+			final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
+			dataSend.setStatusProcessCode(StatusCodeEnum.HIRED.processCode);
+			dataSend.setCandidateProgressId(jobCandidateStatus.getId());
 
-		em().getTransaction().commit();
+			updateCandidateProgress(dataSend);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
 		
-		final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
-				job.getJobCode());
-		
-		final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
-		dataSend.setStatusProcessCode(StatusCodeEnum.HIRED.processCode);
-		dataSend.setCandidateProgressId(jobCandidateStatus.getId());
-
-		updateCandidateProgress(dataSend);
 		
 		return result;
 	}
