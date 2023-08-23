@@ -100,6 +100,7 @@ public class QuestionService {
 			em().getTransaction().begin();
 			
 			final Question question = questionDao.getById(Question.class, data.getQuestionId());
+			data.setQuestionCode(question.getQuestionCode());
 			question.setQuestion(data.getQuestion());
 			final Question questionResult = questionDao.saveAndFlush(question);
 			
