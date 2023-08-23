@@ -52,7 +52,7 @@ public class BenefitController {
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> update(@RequestBody BenefitUpdateReqDto data) {
 		final UpdateResDto response = benefitService.update(data);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@DeleteMapping("{code}")
