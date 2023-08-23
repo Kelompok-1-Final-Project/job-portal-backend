@@ -69,7 +69,8 @@ public class QuestionService {
 	public UpdateResDto updateQuestion(QuestionUpdateReqDto data) {
 		em().getTransaction().begin();
 		
-		final Question question = questionDao.getById(Question.class, data.getQuestionId());
+		final Question questionGet = questionDao.getByCode(data.getQuestionCode());
+		final Question question = questionDao.getById(Question.class, questionGet.getId());
 		question.setQuestion(data.getQuestion());
 		final Question questionResult = questionDao.saveAndFlush(question);
 		final UpdateResDto result = new UpdateResDto();
@@ -81,7 +82,7 @@ public class QuestionService {
 	}
 	
 	public UpdateResDto updateQuestionOption(QuestionOptionUpdateReqDto data) {
-		em().getTransaction().begin();
+		em().getTransaction().begin(); 
 		
 		final QuestionOption option = questionOptionDao.getById(QuestionOption.class, data.getOptionId());
 		option.setLabels(data.getLabels());

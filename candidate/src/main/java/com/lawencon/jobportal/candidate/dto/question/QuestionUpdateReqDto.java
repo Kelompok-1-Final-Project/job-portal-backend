@@ -3,6 +3,7 @@ package com.lawencon.jobportal.candidate.dto.question;
 public class QuestionUpdateReqDto {
 
 	private String questionId;
+	private String questionCode;
 	private String question;
 
 	public String getQuestionId() {
@@ -11,6 +12,14 @@ public class QuestionUpdateReqDto {
 
 	public void setQuestionId(String questionId) {
 		this.questionId = questionId;
+	}
+
+	public String getQuestionCode() {
+		return questionCode;
+	}
+
+	public void setQuestionCode(String questionCode) {
+		this.questionCode = questionCode;
 	}
 
 	public String getQuestion() {
