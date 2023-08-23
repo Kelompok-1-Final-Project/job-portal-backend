@@ -36,7 +36,7 @@ public class JobController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
-	@GetMapping("filter/location")
+	@GetMapping("filter/industry")
 	public ResponseEntity<List<JobGetResDto>> getByIndustry(@RequestParam("ind") String industry) {
 		final List<JobGetResDto> data = jobService.getByIndustry(industry);
 		return new ResponseEntity<>(data, HttpStatus.OK);
