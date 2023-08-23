@@ -61,7 +61,7 @@ public class UserDao extends AbstractJpaDao{
 		}
 	}
 	
-	public List<User> getByRoleCode(String roleCode, Integer startPosition, Integer endPosition) {
+	public List<User> getByRoleCode(String roleCode) {
 		final String sql = "SELECT "
 				+ "u "
 				+ "FROM "
@@ -71,8 +71,6 @@ public class UserDao extends AbstractJpaDao{
 		
 		final List<User> user = em().createQuery(sql, User.class)
 				.setParameter("roleCode", roleCode)
-				.setFirstResult(startPosition)
-				.setMaxResults(endPosition)
 				.getResultList();
 		
 		return user;	
