@@ -1,6 +1,5 @@
 package com.lawencon.jobportal.candidate.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -492,7 +491,7 @@ public class JobService {
 		job.setSalaryStart(data.getSalaryStart());
 		job.setSalaryEnd(data.getSalaryEnd());
 		job.setDescription(data.getDescription());
-		job.setEndDate(LocalDate.parse(data.getEndDate()));
+		job.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
 		
 		final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
 		job.setJobStatus(jobStatus);
