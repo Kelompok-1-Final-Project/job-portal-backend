@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -29,6 +28,7 @@ import com.lawencon.jobportal.admin.dto.hired.HiredInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewGetResDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.jobcandidatestatus.JobCandidateStatusGetReqDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupInsertReqDto;
 import com.lawencon.jobportal.admin.dto.offering.OfferingGetResDto;
@@ -157,46 +157,52 @@ public class StatusProgressController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/application-id")
+	@PostMapping("/application-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllApplicationByCandidate(
-			@RequestParam("email") String candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getApplicationByCandidate(candidateEmail);
+			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getApplicationByCandidate(candidateEmail.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/assessment-id")
-	public ResponseEntity<List<CandidateStageProcessResDto>> getAllAssessmentByCandidate(@RequestParam("email") String candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getAssessmentByCandidate(candidateEmail);
+	@PostMapping("/assessment-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllAssessmentByCandidate(
+			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getAssessmentByCandidate(candidateEmail.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/interview-id")
-	public ResponseEntity<List<CandidateStageProcessResDto>> getAllInterviewByCandidate(@RequestParam("email") String candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getInterviewByCandidate(candidateEmail);
+	@PostMapping("/interview-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllInterviewByCandidate(
+			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getInterviewByCandidate(candidateEmail.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/hired-id")
-	public ResponseEntity<List<CandidateStageProcessResDto>> getAllHiredByCandidate(@RequestParam("email") String candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getHiredByCandidate(candidateEmail);
+	@PostMapping("/hired-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllHiredByCandidate(
+			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getHiredByCandidate(candidateEmail.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/offering-id")
-	public ResponseEntity<List<CandidateStageProcessResDto>> getAllOfferingByCandidate(@RequestParam("email") String candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getOfferingByCandidate(candidateEmail);
+	@PostMapping("/offering-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllOfferingByCandidate(
+			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getOfferingByCandidate(candidateEmail.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/medical-id")
-	public ResponseEntity<List<CandidateStageProcessResDto>> getAllMedicalByCandidate(@RequestParam("email") String candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getMCUbyCandidate(candidateEmail);
+	@PostMapping("/medical-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllMedicalByCandidate(
+			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getMCUbyCandidate(candidateEmail.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/reject-id")
-	public ResponseEntity<List<CandidateStageProcessResDto>> getAllRejectByCandidate(@RequestParam("email") String candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getRejectbyCandidate(candidateEmail);
+	@PostMapping("/reject-id")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllRejectByCandidate(
+			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getRejectbyCandidate(candidateEmail.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

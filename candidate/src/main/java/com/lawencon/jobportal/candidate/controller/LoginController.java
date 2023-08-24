@@ -57,6 +57,7 @@ public class LoginController {
 		loginRes.setUserName(userGet.getUserName());
 		loginRes.setPhotoId(userGet.getPhotoId());
 		loginRes.setToken(response.getBody());
+		loginRes.setUserEmail(userGet.getUserEmail());
 		
 		return new ResponseEntity<>(loginRes, HttpStatus.OK);
 	}

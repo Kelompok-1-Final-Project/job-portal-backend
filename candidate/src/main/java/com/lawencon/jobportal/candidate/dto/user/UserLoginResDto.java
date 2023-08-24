@@ -3,6 +3,7 @@ package com.lawencon.jobportal.candidate.dto.user;
 public class UserLoginResDto {
 	private String token;
 	private String userId;
+	private String userEmail;
 	private String userName;
 	private String message;
 	private String photoId;
@@ -21,6 +22,14 @@ public class UserLoginResDto {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 	public String getUserName() {
@@ -46,5 +55,5 @@ public class UserLoginResDto {
 	public void setPhotoId(String photoId) {
 		this.photoId = photoId;
 	}
-	
+
 }

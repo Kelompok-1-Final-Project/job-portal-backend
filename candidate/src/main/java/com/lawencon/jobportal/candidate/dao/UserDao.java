@@ -18,7 +18,7 @@ public class UserDao extends AbstractJpaDao{
 	
 	public User getByEmail(String userEmail) {
 		final String sql = "SELECT "
-				+ "u.id AS user_id, p.full_name, u.is_active, u.pass, p.photo_id "
+				+ "u.id AS user_id, p.full_name, u.is_active, u.pass, p.photo_id, u.email "
 				+ "FROM "
 				+ "t_user u "
 				+ "INNER JOIN "
@@ -51,6 +51,7 @@ public class UserDao extends AbstractJpaDao{
 				
 				user.setIsActive(Boolean.valueOf(userArr[2].toString()));
 				user.setPass(userArr[3].toString());
+				user.setEmail(userArr[4].toString());
 			}
 			return user;
 		}catch (Exception e) {
