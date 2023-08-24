@@ -50,7 +50,7 @@ public class UserSkillController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
-	@PatchMapping("/update")
+	@PatchMapping()
 	public ResponseEntity<UpdateResDto> update(@RequestBody SkillUpdateReqDto data) {
 		final UpdateResDto response = userSkillService.update(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
