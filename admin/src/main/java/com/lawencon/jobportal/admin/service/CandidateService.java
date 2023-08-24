@@ -1,6 +1,5 @@
 package com.lawencon.jobportal.admin.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -283,7 +282,7 @@ public class CandidateService {
 			candidate.getCandidateProfile().getId());
 			candidateProfile.setFullName(data.getFullName());
 			candidateProfile.setIdNumber(data.getIdNumber());
-			candidateProfile.setBirthDate(LocalDate.parse(data.getBirthdate()));
+			candidateProfile.setBirthDate(DateConvert.convertDate(data.getBirthdate()).toLocalDate());
 			candidateProfile.setExpectedSalary(data.getExpectedSalary());
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
