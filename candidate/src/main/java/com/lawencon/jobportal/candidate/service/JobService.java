@@ -21,10 +21,10 @@ import com.lawencon.jobportal.candidate.dao.QuestionDao;
 import com.lawencon.jobportal.candidate.dao.SaveJobDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestDao;
 import com.lawencon.jobportal.candidate.dao.SkillTestQuestionDao;
+import com.lawencon.jobportal.candidate.dto.DeleteResDto;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
-import com.lawencon.jobportal.candidate.dto.job.JobBenefitUpdateReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobPositionGetResDto;
@@ -513,33 +513,20 @@ public class JobService {
 		return result;
 	}
 	
-//	public UpdateResDto updateJobBenefit(JobBenefitUpdateReqDto data) {
-////		em().getTransaction().begin();
-////
-////		final Job jobDb = jobDao.getByCode(data.getJobCode());
-////		final Job job = jobDao.getById(Job.class, jobDb.getId());
-////		job.setJobTitle(data.getJobTitle());
-////		job.setSalaryStart(data.getSalaryStart());
-////		job.setSalaryEnd(data.getSalaryEnd());
-////		job.setDescription(data.getDescription());
-////		job.setEndDate(DateConvert.convertDate(data.getEndDate()).toLocalDate());
-////		
-////		final JobStatus jobStatus = jobStatusDao.getByCode(data.getJobStatusCode());
-////		job.setJobStatus(jobStatus);
-////		
-////		final JobPosition jobPosition = jobPositionDao.getByCode(data.getJobPositionCode());
-////		job.setJobPosition(jobPosition);
-////		
-////		final EmploymentType employmentType = employmentTypeDao.getByCode(data.getEmploymentTypeCode());
-////		job.setEmployementType(employmentType);
-////
-////		final Job jobResult = jobDao.saveAndFlush(job);
-////
-////		final UpdateResDto result = new UpdateResDto();
-////		result.setVersion(jobResult.getVersion());
-////		result.setMessage("Job updated successfully.");
-////
-////		em().getTransaction().commit();
-////		return result;
-//	}
+	public DeleteResDto deleteJobBenefit(String jobCode, String benefitCode) {
+		em().getTransaction().begin();
+
+		final Job jobDb = jobDao.getByCode(jobCode);
+		final Benefit benefitDb = benefitDao.getByCode(benefitCode);
+		
+		final JobBenefit jobBenefitDb = jobBenefitDao.getByJobAndBenefit(jobDb.getId(), benefitDb.getId());
+		
+		jobBenefitDao.deleteById(JobBenefit.class, jobBenefitDb.getId());
+
+		final DeleteResDto result = new DeleteResDto();
+		result.setMessage("Job Benefit Delete successfully.");
+
+		em().getTransaction().commit();
+		return result;
+	}
 }
