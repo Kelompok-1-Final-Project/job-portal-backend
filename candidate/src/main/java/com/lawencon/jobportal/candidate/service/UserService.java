@@ -80,7 +80,9 @@ public class UserService implements UserDetailsService {
 
 		userLoginResDto.setUserId(user.getId());
 		userLoginResDto.setUserName(user.getProfile().getFullName());
-//		userLoginResDto.setPhotoId(user.getProfile().getPhoto().getId());
+		if(user.getProfile().getPhoto() != null) {
+			userLoginResDto.setPhotoId(user.getProfile().getPhoto().getId());			
+		}
 
 		return userLoginResDto;
 	}
