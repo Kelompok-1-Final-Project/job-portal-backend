@@ -95,6 +95,12 @@ public class JobController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
+	@DeleteMapping("{st}/{q}")
+	public ResponseEntity<DeleteResDto> deleteSkillTestQuestion(@PathVariable("st") String skillTestCode, @PathVariable("q") String questionCode) {
+		final DeleteResDto result = jobService.deleteSkillTestQuestion(skillTestCode, questionCode);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 //	@PatchMapping("/job-benefit")
 //	public ResponseEntity<UpdateResDto> updateJobBenfit(@RequestBody JobBenefitUpdateReqDto data){
 //		final UpdateResDto response = jobService.updateJobBenefit(data);

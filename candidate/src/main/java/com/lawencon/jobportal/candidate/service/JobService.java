@@ -529,4 +529,21 @@ public class JobService {
 		em().getTransaction().commit();
 		return result;
 	}
+	
+	public DeleteResDto deleteSkillTestQuestion(String skillTestCode, String questionCode) {
+		em().getTransaction().begin();
+
+		final SkillTest skillTest = skillTestDao.getByCode(skillTestCode);
+		final Question question = questionDao.getByCode(questionCode);
+		
+		final SkillTestQuestion skillTestQuestion = skillTestQuestionDao.getBySkillTestAndQuestion(skillTest.getId(), question.getId());
+		
+		skillTestQuestionDao.deleteById(SkillTestQuestion.class, skillTestQuestion.getId());
+
+		final DeleteResDto result = new DeleteResDto();
+		result.setMessage("Job Benefit Delete successfully.");
+
+		em().getTransaction().commit();
+		return result;
+	}
 }
