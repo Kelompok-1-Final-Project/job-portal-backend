@@ -23,30 +23,17 @@ public class MedicalCheckupDao extends AbstractJpaDao{
 	}
 	
 	public List<MedicalCheckup> getByCandidate(String candidateId) {
-		final String sql = "SELECT "
-				+ "	tmc.id AS mcu_id, "
-				+ "	tj.id AS job_id, "
-				+ "	tj.job_title, "
-				+ "	tjs.status_name, "
-				+ "	tc.id AS company_id, "
-				+ "	tc.company_name, "
-				+ " tc.file_id, "
-				+ "	tmc.created_at, "
-				+ "	tmc.ver "
-				+ "FROM "
-				+ "	t_medical_checkup tmc "
-				+ "INNER JOIN "
-				+ "	t_job tj ON tmc.job_id = tj.id "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id "
-				+ "WHERE "
-				+ "	to.candidate_id = :candidateId ";
-		
-		final List<?> medicalObjs = this.em().createNativeQuery(sql)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tmc.id AS mcu_id, tj.id AS job_id, tj.job_title, tjs.status_name,  ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, tmc.created_at, tmc.ver ");
+		sql.append("FROM t_medical_checkup tmc ");
+		sql.append("INNER JOIN t_job tj ON tmc.job_id = tj.id ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("WHERE to.candidate_id = :candidateId ");
+
+		final List<?> medicalObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		final List<MedicalCheckup> listMedical = new ArrayList<>();
