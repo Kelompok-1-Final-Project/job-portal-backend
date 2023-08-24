@@ -12,7 +12,7 @@ public class FileService {
 	@Autowired
 	private FileDao fileDao;
 	
-	public File getById(Long id) {
+	public File getById(String id) {
 		final File file = fileDao.getById(File.class, id);
 		return file;
 	}
