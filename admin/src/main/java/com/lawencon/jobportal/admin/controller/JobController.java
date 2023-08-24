@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -129,5 +130,16 @@ public class JobController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@DeleteMapping("{j}/{b}")
+	public ResponseEntity<DeleteResDto> deleteJobBenefit(@PathVariable("j") String jobCode, @PathVariable("b") String benefitCode) {
+		final DeleteResDto result = jobService.deleteJobBenefit(jobCode, benefitCode);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("{st}/{q}")
+	public ResponseEntity<DeleteResDto> deleteSkillTestQuestion(@PathVariable("st") String skillTestCode, @PathVariable("q") String questionCode) {
+		final DeleteResDto result = jobService.deleteSkillTestQuestion(skillTestCode, questionCode);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 	
 }

@@ -54,4 +54,43 @@ public class SkillTestQuestionDao extends AbstractJpaDao{
 
 		return skillTestQuestions;
 	}
+	
+	public SkillTestQuestion getBySkillTestAndQuestion(String skillTestId, String questionId){
+		final String sql = "SELECT "
+				+ "tstq.id as stq_id, tq.id, tq.question, tq.question_code, tstq.ver "
+				+ "FROM "
+				+ "t_skill_test_question tstq "
+				+ "INNER JOIN "
+				+ "t_question tq ON tstq.question_id = tq.id "
+				+ "WHERE "
+				+ "tstq.skill_test_id = :skillTestId AND tstq.question_id = :questionId";
+		
+		try {
+			final Object skillTestQuestionObjs = em().createNativeQuery(sql)
+					.setParameter("skillTestId", skillTestId)
+					.setParameter("questionId", questionId)
+					.getSingleResult();
+			
+			final Object[] skillTestQuestionArr = (Object[]) skillTestQuestionObjs;
+			
+			SkillTestQuestion skillTestQuestion = null;
+
+			if(skillTestQuestionArr.length > 0) {
+				skillTestQuestion = new SkillTestQuestion();
+				skillTestQuestion.setId(skillTestQuestionArr[0].toString());
+				
+				final Question question = new Question();
+				question.setId(skillTestQuestionArr[1].toString());
+				question.setQuestion(skillTestQuestionArr[2].toString());
+				question.setQuestionCode(skillTestQuestionArr[3].toString());
+				skillTestQuestion.setQuestion(question);
+				
+				skillTestQuestion.setVersion(Integer.valueOf(skillTestQuestionArr[4].toString()));
+			}
+			return skillTestQuestion;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
