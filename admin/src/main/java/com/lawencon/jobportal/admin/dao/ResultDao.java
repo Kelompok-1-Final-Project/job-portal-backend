@@ -21,20 +21,15 @@ public class ResultDao extends AbstractJpaDao{
 	
 	public List<Result> getByJob(String jobId){
 		final List<Result> results = new ArrayList<>();
-		final String sql = "SELECT  "
-				+ "tr.id, tcp.full_name, tr.grade, tr.notes, tr.ver "
-				+ "FROM  "
-				+ "t_result tr "
-				+ "INNER JOIN "
-				+ "t_candidate tc ON tc.id = tr.candidate_id  "
-				+ "INNER JOIN  "
-				+ "t_candidate_profile tcp ON tc.profile_id = tcp.id "
-				+ "INNER JOIN "
-				+ "t_skill_test tst ON tst.id = tr.skill_test_id  "
-				+ "WHERE "
-				+ "tst.job_id = :jobId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tr.id, tcp.full_name, tr.grade, tr.notes, tr.ver ");
+		sql.append("FROM t_result tr ");
+		sql.append("INNER JOIN t_candidate tc ON tc.id = tr.candidate_id ");
+		sql.append("INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id ");
+		sql.append("INNER JOIN t_skill_test tst ON tst.id = tr.skill_test_id ");
+		sql.append("WHERE tst.job_id = :jobId ");
 		
-		final List<?> resultObjs = this.em().createNativeQuery(sql)
+		final List<?> resultObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
 				.getResultList();
 

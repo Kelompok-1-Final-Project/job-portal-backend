@@ -20,18 +20,15 @@ public class UserDao extends AbstractJpaDao{
 	}
 	
 	public User getByEmail(String userEmail) {
-		final String sql = "SELECT "
-				+ "u.id AS user_id, p.full_name, r.role_code, u.is_active, u.pass "
-				+ "FROM "
-				+ "t_user u "
-				+ "INNER JOIN "
-				+ "t_role r ON r.id = u.role_id "
-				+ "INNER JOIN "
-				+ "t_profile p ON p.id = u.profile_id "
-				+ "WHERE "
-				+ "u.email = :userEmail ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT u.id AS user_id, p.full_name, r.role_code, u.is_active, u.pass ");
+		sql.append("FROM t_user u ");
+		sql.append("INNER JOIN t_role r ON r.id = u.role_id ");
+		sql.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+		sql.append("WHERE u.email = :userEmail ");
+
 		try {
-			final Object userObj = em().createNativeQuery(sql)
+			final Object userObj = em().createNativeQuery(sql.toString())
 					.setParameter("userEmail", userEmail)
 					.getSingleResult();
 			
@@ -62,14 +59,10 @@ public class UserDao extends AbstractJpaDao{
 	}
 	
 	public List<User> getByRoleCode(String roleCode) {
-		final String sql = "SELECT "
-				+ "u "
-				+ "FROM "
-				+ "User u "
-				+ "WHERE "
-				+ "u.role.roleCode = :roleCode";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT u FROM User u WHERE u.role.roleCode = :roleCode ");
 		
-		final List<User> user = em().createQuery(sql, User.class)
+		final List<User> user = em().createQuery(sql.toString(), User.class)
 				.setParameter("roleCode", roleCode)
 				.getResultList();
 		
