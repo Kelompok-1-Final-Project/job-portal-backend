@@ -42,8 +42,10 @@ public class UserDao extends AbstractJpaDao{
 				profile.setFullName(userArr[1].toString());
 				
 				final File file = new File();
-				file.setId(userArr[4].toString());
-				profile.setPhoto(file);
+				if(userArr[4] != null) {
+					file.setId(userArr[4].toString());
+					profile.setPhoto(file);					
+				}
 				
 				user.setProfile(profile);
 				

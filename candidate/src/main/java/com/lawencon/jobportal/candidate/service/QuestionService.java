@@ -51,6 +51,7 @@ public class QuestionService {
 					questionOption.setQuestion(questionResult);
 					questionOption.setLabels(q.getLabels());
 					questionOption.setIsAnswer(q.getIsAnswer());
+					questionOption.setOptionCode(q.getOptionCode());
 					questionOptionDao.save(questionOption);
 				}
 			}

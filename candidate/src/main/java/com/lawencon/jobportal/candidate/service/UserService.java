@@ -28,6 +28,8 @@ import com.lawencon.jobportal.candidate.dao.PersonTypeDao;
 import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserChangePassReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserEmailGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
@@ -261,6 +263,31 @@ public class UserService implements UserDetailsService {
 		response.setEmail(user.getEmail());
 		
 		return response;
+	}
+	
+	public UpdateResDto changePassword(UserChangePassReqDto data) {
+		final UpdateResDto updateResDto = new UpdateResDto();
+		final User user =  userDao.getById(User.class, data.getUserId());
+		
+		if(passwordEncoder.matches(data.getUserOldPass(), user.getPass())) {
+			if(data.getUserNewPass().equals(data.getUserConfirmNewPass())) {
+				final User updateUser = userDao.getById(User.class, data.getUserId());
+				updateUser.setPass(passwordEncoder.encode(data.getUserNewPass()));
+				userDao.save(updateUser);
+				updateResDto.setVersion(updateUser.getVersion());
+				updateResDto.setMessage("Update Berhasil!!");
+				return updateResDto;
+			}
+			else {
+				updateResDto.setMessage("Password baru tidak sama!!!");
+				return updateResDto;
+			}
+			
+		}
+		
+		updateResDto.setMessage("Update Gagal, password lama anda tidak sama!!!");
+		
+		return updateResDto;
 	}
 
 }
