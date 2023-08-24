@@ -16,14 +16,12 @@ public class RoleDao extends AbstractJpaDao{
 	}
 	
 	public Role getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, role_name, role_code, ver "
-				+ "FROM "
-				+ "t_role "
-				+ "WHERE "
-				+ "role_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, role_name, role_code, ver ");
+		sql.append("FROM t_role ");
+		sql.append("WHERE role_code = :code ");
 		
-		final Object roleObj = em().createNativeQuery(sql)
+		final Object roleObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 		

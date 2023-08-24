@@ -16,14 +16,13 @@ public class SkillTestDao extends AbstractJpaDao{
 	}
 
 	public SkillTest getByJob(String jobId) {
-		final String sql = "SELECT "
-				+ "id, test_name, test_code, job_id, ver "
-				+ "FROM "
-				+ "t_skill_test "
-				+ "WHERE "
-				+ "job_id = :jobId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, test_name, test_code, job_id, ver ");
+		sql.append("FROM t_skill_test ");
+		sql.append("WHERE job_id = :jobId ");
+
 		
-		final Object skillTestObj = em().createNativeQuery(sql)
+		final Object skillTestObj = em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
 				.getSingleResult();
 		
@@ -49,16 +48,12 @@ public class SkillTestDao extends AbstractJpaDao{
 	}
 	
 	public SkillTest getByCandidateAndJob(String candidateId, String jobId) {
-		final String sql = "SELECT "
-				+ "id, test_name, job_id, ver "
-				+ "FROM "
-				+ "t_skill_test "
-				+ "WHERE "
-				+ "job_id = :jobId "
-				+ "AND "
-				+ "candidate_id = : candidateId";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, test_name, job_id, ver ");
+		sql.append("FROM t_skill_test ");
+		sql.append("WHERE job_id = :jobId AND candidate_id = : candidateId ");
 		
-		final Object skillTestObj = em().createNamedQuery(sql)
+		final Object skillTestObj = em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
 				.setParameter("candidateId", candidateId)
 				.getSingleResult();
@@ -84,14 +79,10 @@ public class SkillTestDao extends AbstractJpaDao{
 	}
 	
 	public SkillTest getByCode(String testCode) {
-		final String sql = "SELECT "
-				+ "st "
-				+ "FROM "
-				+ "SkillTest st "
-				+ "WHERE "
-				+ "st.testCode = :testCode";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT st FROM SkillTest st WHERE st.testCode = :testCode ");
 		
-		final SkillTest skillTest = em().createQuery(sql, SkillTest.class)
+		final SkillTest skillTest = em().createQuery(sql.toString(), SkillTest.class)
 				.setParameter("testCode", testCode)
 				.getSingleResult();
 		

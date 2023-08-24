@@ -15,14 +15,12 @@ public class BenefitDao extends AbstractJpaDao {
 	}
 
 	public Benefit getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, benefit_name, benefit_code, ver " 
-				+ "FROM " 
-				+ "t_benefit " 
-				+ "WHERE "
-				+ "benefit_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, benefit_name, benefit_code, ver ");
+		sql.append("FROM t_benefit ");
+		sql.append("WHERE benefit_code = :code ");
 
-		final Object benefitObj = this.em().createNativeQuery(sql)
+		final Object benefitObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -42,14 +40,12 @@ public class BenefitDao extends AbstractJpaDao {
 	}
 	
 	public Benefit getByName(String benefitName) {
-		final String sql = "SELECT "
-				+ "id, benefit_name, benefit_code, ver " 
-				+ "FROM " 
-				+ "t_benefit " 
-				+ "WHERE "
-				+ "benefit_name = :benefitName";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, benefit_name, benefit_code, ver ");
+		sql.append("FROM t_benefit ");
+		sql.append("WHERE benefit_name = :benefitName ");
 
-		final Object benefitObj = this.em().createNativeQuery(sql)
+		final Object benefitObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("benefitName", benefitName)
 				.getSingleResult();
 

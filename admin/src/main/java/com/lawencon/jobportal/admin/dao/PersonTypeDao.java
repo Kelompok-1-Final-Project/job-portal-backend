@@ -16,14 +16,12 @@ public class PersonTypeDao extends AbstractJpaDao {
 	}
 
 	public PersonType getByCode(String code) {
-		final String sql = "SELECT " 
-				+ "id, type_name, type_code, ver " 
-				+ "FROM " 
-				+ "t_person_type " 
-				+ "WHERE "
-				+ "type_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, type_name, type_code, ver ");
+		sql.append("FROM t_person_type ");
+		sql.append("WHERE type_code = :code ");
 
-		final Object personTypeObj = em().createNativeQuery(sql)
+		final Object personTypeObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 

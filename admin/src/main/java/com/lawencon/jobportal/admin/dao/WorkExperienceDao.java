@@ -22,14 +22,12 @@ public class WorkExperienceDao extends AbstractJpaDao{
 	public List<WorkExperience> getByCandidate(String candidateId){
 		final List<WorkExperience> workExperiences = new ArrayList<>();
 		
-		final String sql = "SELECT "
-				+ "id, position_name, company_name, start_date, end_date, ver "
-				+ "FROM "
-				+ "t_work_experience "
-				+ "WHERE "
-				+ "candidate_id = :candidateId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, position_name, company_name, start_date, end_date, ver ");
+		sql.append("FROM t_work_experience ");
+		sql.append("WHERE candidate_id = :candidateId ");
 		
-		final List<?> workExperienceObjs = em().createNativeQuery(sql)
+		final List<?> workExperienceObjs = em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		

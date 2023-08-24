@@ -21,16 +21,13 @@ public class SkillTestQuestionDao extends AbstractJpaDao{
 	public List<SkillTestQuestion> getBySkillTest(String skillTestId) {
 		final List<SkillTestQuestion> skillTestQuestions = new ArrayList<>();
 		
-		final String sql = "SELECT "
-				+ "tstq.id as stq_id, tq.id, tq.question, tq.question_code, tstq.ver "
-				+ "FROM "
-				+ "t_skill_test_question tstq "
-				+ "INNER JOIN "
-				+ "t_question tq ON tstq.question_id = tq.id "
-				+ "WHERE "
-				+ "tstq.skill_test_id = :skillTestId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tstq.id as stq_id, tq.id, tq.question, tq.question_code, tstq.ver ");
+		sql.append("FROM t_skill_test_question tstq ");
+		sql.append("INNER JOIN t_question tq ON tstq.question_id = tq.id ");
+		sql.append("WHERE tstq.skill_test_id = :skillTestId ");
 		
-		final List<?> skillTestQuestionObjs = this.em().createNativeQuery(sql)
+		final List<?> skillTestQuestionObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("skillTestId", skillTestId)
 				.getResultList();
 
@@ -56,17 +53,14 @@ public class SkillTestQuestionDao extends AbstractJpaDao{
 	}
 	
 	public SkillTestQuestion getBySkillTestAndQuestion(String skillTestId, String questionId){
-		final String sql = "SELECT "
-				+ "tstq.id as stq_id, tq.id, tq.question, tq.question_code, tstq.ver "
-				+ "FROM "
-				+ "t_skill_test_question tstq "
-				+ "INNER JOIN "
-				+ "t_question tq ON tstq.question_id = tq.id "
-				+ "WHERE "
-				+ "tstq.skill_test_id = :skillTestId AND tstq.question_id = :questionId";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tstq.id as stq_id, tq.id, tq.question, tq.question_code, tstq.ver ");
+		sql.append("FROM t_skill_test_question tstq ");
+		sql.append("INNER JOIN t_question tq ON tstq.question_id = tq.id ");
+		sql.append("WHERE tstq.skill_test_id = :skillTestId AND tstq.question_id = :questionId ");
 		
 		try {
-			final Object skillTestQuestionObjs = em().createNativeQuery(sql)
+			final Object skillTestQuestionObjs = em().createNativeQuery(sql.toString())
 					.setParameter("skillTestId", skillTestId)
 					.setParameter("questionId", questionId)
 					.getSingleResult();
