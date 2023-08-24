@@ -26,6 +26,7 @@ public class EmployeeService {
 			employeeGetResDto.setCandidateName(e.getCandidate().getCandidateProfile().getFullName());
 			employeeGetResDto.setCompanyId(e.getCompany().getId());
 			employeeGetResDto.setCompanyName(e.getCompany().getCompanyName());
+			listResult.add(employeeGetResDto);
 		}
 		return listResult;
 	}
