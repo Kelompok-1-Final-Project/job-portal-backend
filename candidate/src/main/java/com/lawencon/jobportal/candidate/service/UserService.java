@@ -28,6 +28,8 @@ import com.lawencon.jobportal.candidate.dao.PersonTypeDao;
 import com.lawencon.jobportal.candidate.dao.ProfileDao;
 import com.lawencon.jobportal.candidate.dao.UserDao;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
+import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserChangePassReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserEmailGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
@@ -265,15 +267,14 @@ public class UserService implements UserDetailsService {
 	
 	public UpdateResDto changePassword(UserChangePassReqDto data) {
 		final UpdateResDto updateResDto = new UpdateResDto();
-		final User user =  userDao.getById(principalService.getPrincipal());
+		final User user =  userDao.getById(User.class, data.getUserId());
 		
-		if(passwordEncoder.matches(data.getUserOldPass(), user.getUserPassword())) {
+		if(passwordEncoder.matches(data.getUserOldPass(), user.getPass())) {
 			if(data.getUserNewPass().equals(data.getUserConfirmNewPass())) {
-				final User updateUser = userDao.getById(user.getId());
-				updateUser.setUserPassword(passwordEncoder.encode(data.getUserNewPass()));
-				updateUser.setUpdatedBy(principalService.getPrincipal());
-				userDao.updateUser(updateUser);
-				updateResDto.setVersion(updateUser.getVersionNum());
+				final User updateUser = userDao.getById(User.class, data.getUserId());
+				updateUser.setPass(passwordEncoder.encode(data.getUserNewPass()));
+				userDao.save(updateUser);
+				updateResDto.setVersion(updateUser.getVersion());
 				updateResDto.setMessage("Update Berhasil!!");
 				return updateResDto;
 			}

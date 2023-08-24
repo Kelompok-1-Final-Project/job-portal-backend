@@ -780,19 +780,19 @@ public class JobDao extends AbstractJpaDao{
 				+ "t_industry ti ON tc.industry_id = ti.id "
 				+ "WHERE 1 = 1 ";
 		
-		if(name != null) {
+		if(name != null && !name.equalsIgnoreCase("")) {
 			sql += " AND tj.job_title ILIKE :name || '%' ";
 		}
 		
-		if(cityId != null) {
+		if(cityId != null && !cityId.equalsIgnoreCase("")) {
 			sql += " AND tci.id ILIKE :city || '%' ";
 		}
 		
-		if(positionId != null) {
+		if(positionId != null && !positionId.equalsIgnoreCase("")) {
 			sql += " AND tjp.id ILIKE :position || '%' ";
 		}
 		
-		if(employmentId != null) {
+		if(!employmentId.isEmpty()) {
 			sql +=  " AND tet.id IN (:employment) ";
 		}
 		
@@ -806,19 +806,19 @@ public class JobDao extends AbstractJpaDao{
 		
 		final Query jobQuery = this.em().createNativeQuery(sql);
 		
-		if(name != null) {
+		if(name != null && !name.equalsIgnoreCase("")) {
 			jobQuery.setParameter("name", name);
 		}
 		
-		if(cityId != null) {
+		if(cityId != null && !cityId.equalsIgnoreCase("")) {
 			jobQuery.setParameter("city", cityId);
 		}
 		
-		if(positionId != null) {
+		if(positionId != null && !positionId.equalsIgnoreCase("")) {
 			jobQuery.setParameter("position", positionId);
 		}
 		
-		if(employmentId != null) {
+		if(!employmentId.isEmpty()) {
 			jobQuery.setParameter("employment", employmentId);
 		}
 		
@@ -827,7 +827,12 @@ public class JobDao extends AbstractJpaDao{
 		}
 		
 		if(salaryEnd != null) {
-			jobQuery.setParameter("end", salaryEnd);
+			if(salaryEnd != 0) {
+				jobQuery.setParameter("end", salaryEnd);				
+			}
+			else {
+				jobQuery.setParameter("end", Integer.MAX_VALUE);
+			}
 		}
 				
 		final List<?> jobObjs = jobQuery.getResultList();

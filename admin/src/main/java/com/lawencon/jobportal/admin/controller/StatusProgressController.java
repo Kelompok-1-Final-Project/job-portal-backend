@@ -165,7 +165,8 @@ public class StatusProgressController {
 	}
 	
 	@GetMapping("/assessment-id")
-	public ResponseEntity<List<CandidateStageProcessResDto>> getAllAssessmentByCandidate(@RequestParam String candidateEmail){
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllAssessmentByCandidate(
+			@RequestParam("email") String candidateEmail){
 		final List<CandidateStageProcessResDto> response = progressStatusService.getAssessmentByCandidate(candidateEmail);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
