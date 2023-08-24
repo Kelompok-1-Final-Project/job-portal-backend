@@ -181,17 +181,27 @@ public class SkillTestService {
 	}
 	
 	public UpdateResDto update(SkillTestUpdateReqDto data) {
-		em().getTransaction().begin();
 		final UpdateResDto updateResDto = new UpdateResDto();
-		
-		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getId());
-		
-		final SkillTest result = skillTestDao.saveAndFlush(skillTest);
-		
-		updateResDto.setMessage("Score Inputted");
-		updateResDto.setVersion(result.getVersion());		
-		
-		em().getTransaction().commit();		
+		try {
+			em().getTransaction().begin();
+			
+			final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getId());
+			data.setTestCode(data.getTestCode());
+			
+			skillTest.setTestName(data.getTestName());
+			
+			final SkillTest result = skillTestDao.save(skillTest);
+			
+			updateResDto.setMessage("Skill Test Updated");
+			updateResDto.setVersion(result.getVersion());		
+			
+			em().getTransaction().commit();		
+			
+		}catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+			return null;
+		}
 		return updateResDto;
 	}
   

@@ -2,8 +2,8 @@ package com.lawencon.jobportal.candidate.dto.skilltest;
 
 public class SkillTestUpdateReqDto {
 	private String id;
-	private Double grade;
-	private String notes;
+	private String testName;
+	private String testCode;
 
 	public String getId() {
 		return id;
@@ -13,20 +13,20 @@ public class SkillTestUpdateReqDto {
 		this.id = id;
 	}
 
-	public Double getGrade() {
-		return grade;
+	public String getTestName() {
+		return testName;
 	}
 
-	public void setGrade(Double grade) {
-		this.grade = grade;
+	public void setTestName(String testName) {
+		this.testName = testName;
 	}
 
-	public String getNotes() {
-		return notes;
+	public String getTestCode() {
+		return testCode;
 	}
 
-	public void setNotes(String notes) {
-		this.notes = notes;
+	public void setTestCode(String testCode) {
+		this.testCode = testCode;
 	}
 
 }

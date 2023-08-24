@@ -118,7 +118,11 @@ public class SkillTestService {
 		em().getTransaction().begin();
 		final UpdateResDto updateResDto = new UpdateResDto();
 
-		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, data.getId());
+		final SkillTest skillTestDb = skillTestDao.getByCode(data.getTestCode());
+		
+		final SkillTest skillTest = skillTestDao.getById(SkillTest.class, skillTestDb.getId());
+
+		skillTest.setTestName(data.getTestName());
 
 		final SkillTest result = skillTestDao.saveAndFlush(skillTest);
 

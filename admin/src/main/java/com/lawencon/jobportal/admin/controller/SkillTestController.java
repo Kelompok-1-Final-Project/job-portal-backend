@@ -55,7 +55,8 @@ public class SkillTestController {
 	}
 
 	@PatchMapping
-	public ResponseEntity<UpdateResDto> updateScore(@RequestBody SkillTestUpdateReqDto data) {
+	public ResponseEntity<UpdateResDto> updateSkillTest(
+			@RequestBody SkillTestUpdateReqDto data){
 		final UpdateResDto response = skillTestService.update(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
