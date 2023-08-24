@@ -85,4 +85,10 @@ public class JobController {
 		final UpdateResDto response = jobService.updateJob(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
+//	@PatchMapping("/job-benefit")
+//	public ResponseEntity<UpdateResDto> updateJobBenfit(@RequestBody JobBenefitUpdateReqDto data){
+//		final UpdateResDto response = jobService.updateJobBenefit(data);
+//		return new ResponseEntity<>(response, HttpStatus.OK);
+//	}
 }

@@ -55,7 +55,9 @@ public class ProgressStatusService {
 			em().getTransaction().begin();
 			
 			final User candidate = userDao.getByEmail(data.getCandidateEmail());
-			final Job job = jobDao.getByCode(data.getJobCode());
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			data.setJobCode(job.getJobCode());
+			
 			final StatusProcess statusProcess = statusProcessDao.getByCode(StatusCodeEnum.APPLICATION.processCode);
 			final JobCandidateStatus jobCandidateStatus = new JobCandidateStatus();
 			jobCandidateStatus.setCandidate(candidate);
