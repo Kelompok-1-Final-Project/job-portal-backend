@@ -85,6 +85,7 @@ public class UserService implements UserDetailsService {
 		if(user.getProfile().getPhoto() != null) {
 			userLoginResDto.setPhotoId(user.getProfile().getPhoto().getId());			
 		}
+		userLoginResDto.setUserEmail(user.getEmail());
 
 		return userLoginResDto;
 	}
