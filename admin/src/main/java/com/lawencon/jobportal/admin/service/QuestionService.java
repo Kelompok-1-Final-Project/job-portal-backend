@@ -60,11 +60,14 @@ public class QuestionService {
 				
 				questionResult = questionDao.save(question);
 				final List<QuestionOptionReqDto> listQuestionOption = data.get(i).getListQuestionOption();
-				for(QuestionOptionReqDto q:listQuestionOption) {
+				for(int j = 0; j < listQuestionOption.size(); j++) {
 					final QuestionOption questionOption = new QuestionOption();
+					final String optionCode = GeneratorId.generateCode();
+					listQuestionOption.get(j).setOptionCode(optionCode);
 					questionOption.setQuestion(questionResult);
-					questionOption.setLabels(q.getLabels());
-					questionOption.setIsAnswer(q.getIsAnswer());
+					questionOption.setLabels(listQuestionOption.get(j).getLabels());
+					questionOption.setIsAnswer(listQuestionOption.get(j).getIsAnswer());
+					questionOption.setOptionCode(optionCode);
 					questionOptionDao.save(questionOption);
 				}
 			}

@@ -1350,3 +1350,5 @@ INNER JOIN
 	t_company tc ON te.company_id = tc.id  
 WHERE
 	te.candidate_id NOT IN (SELECT tb.candidate_id FROM t_blacklist tb); 
+	
+SELECT 	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tc.ver FROM  	t_candidate_profile tcp  INNER JOIN  	t_candidate tc ON tcp.id = tc.profile_id  WHERE  tc.email = :userEmail 
