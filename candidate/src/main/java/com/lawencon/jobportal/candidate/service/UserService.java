@@ -262,5 +262,31 @@ public class UserService implements UserDetailsService {
 		
 		return response;
 	}
+	
+	public UpdateResDto changePassword(UserChangePassReqDto data) {
+		final UpdateResDto updateResDto = new UpdateResDto();
+		final User user =  userDao.getById(principalService.getPrincipal());
+		
+		if(passwordEncoder.matches(data.getUserOldPass(), user.getUserPassword())) {
+			if(data.getUserNewPass().equals(data.getUserConfirmNewPass())) {
+				final User updateUser = userDao.getById(user.getId());
+				updateUser.setUserPassword(passwordEncoder.encode(data.getUserNewPass()));
+				updateUser.setUpdatedBy(principalService.getPrincipal());
+				userDao.updateUser(updateUser);
+				updateResDto.setVersion(updateUser.getVersionNum());
+				updateResDto.setMessage("Update Berhasil!!");
+				return updateResDto;
+			}
+			else {
+				updateResDto.setMessage("Password baru tidak sama!!!");
+				return updateResDto;
+			}
+			
+		}
+		
+		updateResDto.setMessage("Update Gagal, password lama anda tidak sama!!!");
+		
+		return updateResDto;
+	}
 
 }
