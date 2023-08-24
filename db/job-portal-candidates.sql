@@ -832,3 +832,5 @@ ORDER BY
 	
 	
 SELECT 	tj.id, 	tj.job_title, 	tj.salary_start, 	tj.salary_end, 	tj.description, 	tj.end_date,  	tc.id AS company_id, 	tc.company_name, 	ti.industry_name, 	tci.city_name, 	tjp.position_name, 	tjs.status_name, 	tet.employment_name, 	tj.created_at,  tj.updated_at, 	tj.ver FROM t_job tj INNER JOIN 	t_company tc ON tc.id = tj.company_id INNER JOIN 	t_city tci ON tci.id = tc.city_id INNER JOIN 	t_job_position tjp ON tjp.id = tj.job_position_id  INNER JOIN  	t_job_status tjs ON tjs.id = tj.job_status_id  INNER JOIN  	t_employment_type tet ON tet.id = tj.employment_type_id  INNER JOIN 	t_industry ti ON tc.industry_id = ti.id  WHERE  ti.id ILIKE :industry || '%'
+
+SELECT  	tjb.id,tjb.job_id,tb.benefit_name, tjb.ver  FROM  	t_job_benefit tjb  INNER JOIN  	t_job tj ON tj.id = tjb.job_id  INNER JOIN  	t_benefit tb ON tb.id = tjb.benefit_id  WHERE  	tjb.job_id = '5701f674-c234-401a-a567-2e4b3f108bc6'
