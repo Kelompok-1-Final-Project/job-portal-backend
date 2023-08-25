@@ -235,7 +235,9 @@ public class CandidateService {
 			profile.setCv(newFile);
 			final CandidateProfile newProfile = candidateProfileDao.saveAndFlush(profile);
 
-			fileDao.deleteById(File.class, oldFileId);
+			if(oldFileId != null) {
+				fileDao.deleteById(File.class, oldFileId);				
+			}
 
 			result.setVersion(newProfile.getVersion());
 			result.setMessage("CV updated successfully.");

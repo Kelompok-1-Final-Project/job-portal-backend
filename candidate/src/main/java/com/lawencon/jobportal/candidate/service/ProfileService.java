@@ -211,7 +211,9 @@ public class ProfileService {
 			profile.setCv(newFile);
 			final Profile newProfile = profileDao.saveAndFlush(profile);
 
-			fileDao.deleteById(File.class, oldFileId);
+			if(oldFileId != null) {
+				fileDao.deleteById(File.class, oldFileId);				
+			}
 
 			final UpdateCvSendAdminReqDto sendData = new UpdateCvSendAdminReqDto();
 			sendData.setCandidateEmail(candidate.getEmail());
