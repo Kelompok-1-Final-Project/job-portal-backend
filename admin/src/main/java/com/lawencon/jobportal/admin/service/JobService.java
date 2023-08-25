@@ -29,6 +29,7 @@ import com.lawencon.jobportal.admin.dao.SkillTestQuestionDao;
 import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.JobBenefitResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
@@ -579,6 +580,19 @@ public class JobService {
 		jobGetResDto.setJobCode(job.getJobCode());
 
 		return jobGetResDto;
+	}
+	
+	public JobBenefitResDto getByJob(String jobId) {
+		final JobBenefit jobBenefit = jobBenefitDao.getByJob(jobId);
+		
+		final JobBenefitResDto jobBenefitResDto = new JobBenefitResDto();
+		jobBenefitResDto.setJobBenefitId(jobBenefit.getId());
+		jobBenefitResDto.setBenefitId(jobBenefit.getBenefit().getId());
+		jobBenefitResDto.setBenefitName(jobBenefit.getBenefit().getBenefitName());
+		jobBenefitResDto.setBenefitCode(jobBenefit.getBenefit().getBenefitCode());
+		
+		return jobBenefitResDto;
+		
 	}
 	
 	public DeleteResDto deleteJobBenefit(String jobCode, String benefitCode) {
