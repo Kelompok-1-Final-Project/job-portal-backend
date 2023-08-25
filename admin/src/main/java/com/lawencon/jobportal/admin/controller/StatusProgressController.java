@@ -31,6 +31,7 @@ import com.lawencon.jobportal.admin.dto.interview.InterviewUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.jobcandidatestatus.JobCandidateStatusGetReqDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupInsertReqDto;
+import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.offering.OfferingGetResDto;
 import com.lawencon.jobportal.admin.dto.offering.OfferingInsertReqDto;
 import com.lawencon.jobportal.admin.dto.progress.StatusProgressGetResDto;
@@ -154,6 +155,12 @@ public class StatusProgressController {
 	@PatchMapping("/interview")
 	public ResponseEntity<UpdateResDto> updateInterviewNotes(@RequestBody InterviewUpdateReqDto data){
 		final UpdateResDto response = progressStatusService.updateInterviewNotes(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/medical")
+	public ResponseEntity<UpdateResDto> updateMedical(@RequestBody MedicalCheckupUpdateReqDto data){
+		final UpdateResDto response = progressStatusService.updateMedical(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

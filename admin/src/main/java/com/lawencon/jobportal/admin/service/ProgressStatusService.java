@@ -21,6 +21,7 @@ import com.lawencon.jobportal.admin.dao.ApplicationDao;
 import com.lawencon.jobportal.admin.dao.AssessmentDao;
 import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.EmployeeDao;
+import com.lawencon.jobportal.admin.dao.FileDao;
 import com.lawencon.jobportal.admin.dao.HiredDao;
 import com.lawencon.jobportal.admin.dao.InterviewDao;
 import com.lawencon.jobportal.admin.dao.JobCandidateStatusDao;
@@ -48,6 +49,7 @@ import com.lawencon.jobportal.admin.dto.interview.InterviewInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupInsertReqDto;
+import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupUpdateReqDto;
 import com.lawencon.jobportal.admin.dto.offering.OfferingGetResDto;
 import com.lawencon.jobportal.admin.dto.offering.OfferingInsertReqDto;
 import com.lawencon.jobportal.admin.dto.progress.StatusProgressGetResDto;
@@ -55,6 +57,7 @@ import com.lawencon.jobportal.admin.model.Application;
 import com.lawencon.jobportal.admin.model.Assessment;
 import com.lawencon.jobportal.admin.model.Candidate;
 import com.lawencon.jobportal.admin.model.Employee;
+import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Hired;
 import com.lawencon.jobportal.admin.model.Interview;
 import com.lawencon.jobportal.admin.model.Job;
@@ -107,6 +110,9 @@ public class ProgressStatusService {
 	
 	@Autowired
 	private EmployeeDao employeeDao;
+	
+	@Autowired
+	private FileDao fileDao;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -471,6 +477,29 @@ public class ProgressStatusService {
 		return result;
 	}
 
+	public UpdateResDto updateMedical(MedicalCheckupUpdateReqDto data) {
+		final UpdateResDto result = new UpdateResDto();
+		try {
+			final MedicalCheckup medicalCheckup = medicalCheckupDao.getById(MedicalCheckup.class, data.getMedicalId());
+			
+			final File file = new File();
+			file.setFile(data.getFile());
+			file.setExt(data.getExt());
+			fileDao.save(file);
+			
+			medicalCheckup.setFile(file);
+			final MedicalCheckup medicalCheckupResult = medicalCheckupDao.save(medicalCheckup);
+			
+			result.setVersion(medicalCheckupResult.getVersion());
+			result.setMessage("Update Medical File Successfully.");
+			
+		}catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	public UpdateResDto updateCandidateProgress(CandidateProgressUpdateReqDto data) {
 		final UpdateResDto result = new UpdateResDto();
 		try {
