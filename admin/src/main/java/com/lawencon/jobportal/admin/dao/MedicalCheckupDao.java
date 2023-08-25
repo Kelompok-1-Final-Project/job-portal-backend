@@ -31,7 +31,7 @@ public class MedicalCheckupDao extends AbstractJpaDao{
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
 		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
 		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
-		sql.append("WHERE to.candidate_id = :candidateId ");
+		sql.append("WHERE tmc.candidate_id = :candidateId ");
 
 		final List<?> medicalObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
