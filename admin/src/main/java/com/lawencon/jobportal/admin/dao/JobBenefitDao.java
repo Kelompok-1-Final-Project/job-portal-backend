@@ -1,5 +1,8 @@
 package com.lawencon.jobportal.admin.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -48,7 +51,7 @@ public class JobBenefitDao extends AbstractJpaDao{
 		}
 	}
 	
-	public JobBenefit getByJob(String jobId){
+	public List<JobBenefit> getByJob(String jobId){
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tjb.id AS job_benefit_id, tb.id AS benefit_id, tb.benefit_name, tb.benefit_code, tjb.ver ");
 		sql.append("FROM t_job_benefit tjb  ");
@@ -56,17 +59,17 @@ public class JobBenefitDao extends AbstractJpaDao{
 		sql.append("INNER JOIN t_benefit tb ON tb.id = tjb.benefit_id ");
 		sql.append("WHERE tjb.job_id = :jobId ");
 		
-		try {
-			final Object jobBenefitObjs = em().createNativeQuery(sql.toString())
-					.setParameter("jobId", jobId)
-					.getSingleResult();
-			
-			final Object[] jobBenefitArr = (Object[]) jobBenefitObjs;
-			
-			JobBenefit jobBenefit = null;
-
-			if(jobBenefitArr.length > 0) {
-				jobBenefit = new JobBenefit();
+		
+		final List<?> jobBenefitObjs = em().createNativeQuery(sql.toString())
+				.setParameter("jobId", jobId)
+				.getResultList();
+		
+		final List<JobBenefit> listBenefits = new ArrayList<>();
+		if(jobBenefitObjs.size() > 0) {
+			for(Object jobBenefitObj : jobBenefitObjs) {
+				final Object[] jobBenefitArr = (Object[]) jobBenefitObj;
+				
+				final JobBenefit jobBenefit = new JobBenefit();
 				jobBenefit.setId(jobBenefitArr[0].toString());
 				
 				final Benefit benefit = new Benefit();
@@ -76,11 +79,11 @@ public class JobBenefitDao extends AbstractJpaDao{
 				jobBenefit.setBenefit(benefit);
 				
 				jobBenefit.setVersion(Integer.valueOf(jobBenefitArr[4].toString()));
+				
+				listBenefits.add(jobBenefit);
 			}
-			return jobBenefit;
-		}catch (Exception e) {
-			e.printStackTrace();
-			return null;
 		}
+		
+		return listBenefits;
 	}
 }

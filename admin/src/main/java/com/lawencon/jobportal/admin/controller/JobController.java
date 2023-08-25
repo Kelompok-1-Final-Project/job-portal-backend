@@ -126,8 +126,8 @@ public class JobController {
 	}
 	
 	@GetMapping("/job-benefit")
-	public ResponseEntity<JobBenefitResDto> getByJob(@RequestParam("job") String jobId){
-		final JobBenefitResDto response = jobService.getByJob(jobId);
+	public ResponseEntity<List<JobBenefitResDto>> getByJob(@RequestParam("job") String jobId){
+		final List<JobBenefitResDto> response = jobService.getByJob(jobId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
