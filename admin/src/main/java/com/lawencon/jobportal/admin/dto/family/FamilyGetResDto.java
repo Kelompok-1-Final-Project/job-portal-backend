@@ -4,16 +4,17 @@ public class FamilyGetResDto {
 
 	private String familyId;
 	private String familyName;
-	private String realtionshipName;
+	private String relationshipName;
 	private String degreeName;
 	private String birthdate;
 
-	public String getRealtionshipName() {
-		return realtionshipName;
+
+	public String getRelationshipName() {
+		return relationshipName;
 	}
 
-	public void setRealtionshipName(String realtionshipName) {
-		this.realtionshipName = realtionshipName;
+	public void setRelationshipName(String relationshipName) {
+		this.relationshipName = relationshipName;
 	}
 
 	public String getDegreeName() {
