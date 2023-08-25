@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.JobBenefitResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.job.EmploymentTypeGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
@@ -121,6 +122,12 @@ public class JobController {
 	@GetMapping("job-position")
 	public ResponseEntity<List<JobPositionGetResDto>> getAllJobPosition(){
 		final List<JobPositionGetResDto> response = jobService.getAllJobPosition();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/job-benefit")
+	public ResponseEntity<JobBenefitResDto> getByJob(@RequestParam("job") String jobId){
+		final JobBenefitResDto response = jobService.getByJob(jobId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

@@ -16,19 +16,15 @@ public class JobBenefitDao extends AbstractJpaDao{
 	}
 	
 	public JobBenefit getByJobAndBenefit(String jobId, String benefitId){
-		final String sql = "SELECT  "
-				+ "	tjb.id, tb.benefit_name, tjb.ver  "
-				+ "FROM  "
-				+ "	t_job_benefit tjb  "
-				+ "INNER JOIN  "
-				+ "	t_job tj ON tj.id = tjb.job_id  "
-				+ "INNER JOIN  "
-				+ "	t_benefit tb ON tb.id = tjb.benefit_id  "
-				+ "WHERE  "
-				+ "	tjb.job_id = :jobId AND tjb.benefit_id = :benefitId";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tjb.id, tb.benefit_name, tjb.ver ");
+		sql.append("FROM t_job_benefit tjb  ");
+		sql.append("INNER JOIN t_job tj ON tj.id = tjb.job_id ");
+		sql.append("INNER JOIN t_benefit tb ON tb.id = tjb.benefit_id ");
+		sql.append("WHERE tjb.job_id = :jobId AND tjb.benefit_id = :benefitId ");
 		
 		try {
-			final Object jobBenefitObjs = em().createNativeQuery(sql)
+			final Object jobBenefitObjs = em().createNativeQuery(sql.toString())
 					.setParameter("jobId", jobId)
 					.setParameter("benefitId", benefitId)
 					.getSingleResult();
@@ -44,6 +40,42 @@ public class JobBenefitDao extends AbstractJpaDao{
 				benefit.setBenefitName(jobBenefitArr[1].toString());
 				jobBenefit.setBenefit(benefit);
 				jobBenefit.setVersion(Integer.valueOf(jobBenefitArr[2].toString()));
+			}
+			return jobBenefit;
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public JobBenefit getByJob(String jobId){
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tjb.id AS job_benefit_id, tb.id AS benefit_id, tb.benefit_name, tb.benefit_code, tjb.ver ");
+		sql.append("FROM t_job_benefit tjb  ");
+		sql.append("INNER JOIN t_job tj ON tj.id = tjb.job_id ");
+		sql.append("INNER JOIN t_benefit tb ON tb.id = tjb.benefit_id ");
+		sql.append("WHERE tjb.job_id = :jobId ");
+		
+		try {
+			final Object jobBenefitObjs = em().createNativeQuery(sql.toString())
+					.setParameter("jobId", jobId)
+					.getSingleResult();
+			
+			final Object[] jobBenefitArr = (Object[]) jobBenefitObjs;
+			
+			JobBenefit jobBenefit = null;
+
+			if(jobBenefitArr.length > 0) {
+				jobBenefit = new JobBenefit();
+				jobBenefit.setId(jobBenefitArr[0].toString());
+				
+				final Benefit benefit = new Benefit();
+				benefit.setId(jobBenefitArr[1].toString());
+				benefit.setBenefitName(jobBenefitArr[2].toString());
+				benefit.setBenefitName(jobBenefitArr[3].toString());
+				jobBenefit.setBenefit(benefit);
+				
+				jobBenefit.setVersion(Integer.valueOf(jobBenefitArr[4].toString()));
 			}
 			return jobBenefit;
 		}catch (Exception e) {
