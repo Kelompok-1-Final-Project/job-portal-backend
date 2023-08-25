@@ -6,7 +6,16 @@ public class QuestionGetResDto {
 
 	private String questionId;
 	private String question;
+	private String questionCode;
 	private List<QuestionOptionResDto> listQuestionOption;
+
+	public String getQuestionCode() {
+		return questionCode;
+	}
+
+	public void setQuestionCode(String questionCode) {
+		this.questionCode = questionCode;
+	}
 
 	public String getQuestionId() {
 		return questionId;

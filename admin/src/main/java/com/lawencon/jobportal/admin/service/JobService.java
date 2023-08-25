@@ -623,7 +623,7 @@ public class JobService {
 		skillTestQuestionDao.deleteById(SkillTestQuestion.class, skillTestQuestion.getId());
 
 		final DeleteResDto result = new DeleteResDto();
-		result.setMessage("Job Benefit Delete successfully.");
+		result.setMessage("Question Delete successfully.");
 
 		em().getTransaction().commit();
 		return result;
