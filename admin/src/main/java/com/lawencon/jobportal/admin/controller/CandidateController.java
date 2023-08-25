@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.candidate.CandidateGetProfileResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
@@ -70,6 +72,12 @@ public class CandidateController {
 	@PatchMapping("/profileUpdate")
 	public ResponseEntity<UpdateResDto> updateProfile(@RequestBody UpdateProfileReqDto data){
 		final UpdateResDto response = candidateService.updateCandidate(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{candidateId}")
+	public ResponseEntity<CandidateGetProfileResDto> getByCandidate(@PathVariable String candidateId){
+		final CandidateGetProfileResDto response = candidateService.getByCandidate(candidateId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

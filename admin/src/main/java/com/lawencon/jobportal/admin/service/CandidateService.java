@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.admin.service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ import com.lawencon.jobportal.admin.dao.MaritalStatusDao;
 import com.lawencon.jobportal.admin.dao.PersonTypeDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.candidate.CandidateGetProfileResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
@@ -317,5 +320,57 @@ public class CandidateService {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public CandidateGetProfileResDto getByCandidate(String candidateId) {
+		final Candidate user = candidateDao.getById(Candidate.class, candidateId);
+		
+		final CandidateGetProfileResDto userGetResDto = new CandidateGetProfileResDto();
+		userGetResDto.setFullName(user.getCandidateProfile().getFullName());
+		if(user.getCandidateProfile().getIdNumber() != null) {
+			userGetResDto.setIdNumber(user.getCandidateProfile().getIdNumber());
+		}
+		
+		userGetResDto.setEmail(user.getEmail());
+		
+		if(user.getCandidateProfile().getMobileNumber() != null) {
+			userGetResDto.setPhone(user.getCandidateProfile().getMobileNumber());
+		}
+		
+		if(user.getCandidateProfile().getMaritalStatus() != null) {
+			userGetResDto.setMaritalStatusCode(user.getCandidateProfile().getMaritalStatus().getStatusCode());
+			userGetResDto.setMaritalStatus(user.getCandidateProfile().getMaritalStatus().getStatusName());
+		}
+		
+		if(user.getCandidateProfile().getGender() != null) {
+			userGetResDto.setGender(user.getCandidateProfile().getGender().getGenderName());
+		}
+		
+		if(user.getCandidateProfile().getExpectedSalary() != null) {
+			userGetResDto.setExpectedSalary(user.getCandidateProfile().getExpectedSalary());
+		}
+		
+		if(user.getCandidateProfile().getBirthDate() != null) {
+			final LocalDate curDate = LocalDate.now();  
+			final LocalDate getBirth = user.getCandidateProfile().getBirthDate();
+			final int age = Period.between(getBirth, curDate).getYears();
+			final String ageText = age + " years old";
+			userGetResDto.setAge(ageText);
+		}
+		
+		if(user.getCandidateProfile().getCv() != null) {
+			userGetResDto.setCvId(user.getCandidateProfile().getCv().getId());
+		}
+		
+		if(user.getCandidateProfile().getPhoto() != null) {
+			userGetResDto.setPhotoId(user.getCandidateProfile().getPhoto().getId());
+		}
+		
+		if(user.getCandidateProfile().getSummary() != null) {			
+			userGetResDto.setSummary(user.getCandidateProfile().getSummary());
+		}
+		
+		return userGetResDto;
+		
 	}
 }
