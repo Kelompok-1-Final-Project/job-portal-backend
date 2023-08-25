@@ -66,7 +66,7 @@ public class FamilyService {
 			result.setFamilyId(f.getId());
 			result.setFamilyName(f.getFamilyName());
 			result.setDegreeName(f.getDegree().getDegreeName());
-			result.setRealtionshipName(f.getRelationship().getRelationshipName());
+			result.setRelationshipName(f.getRelationship().getRelationshipName());
 			result.setBirthdate(f.getBirthdate().toString());
 			listResult.add(result);
 		}
