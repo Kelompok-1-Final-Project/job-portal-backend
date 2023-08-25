@@ -75,7 +75,7 @@ public class JobBenefitDao extends AbstractJpaDao{
 				final Benefit benefit = new Benefit();
 				benefit.setId(jobBenefitArr[1].toString());
 				benefit.setBenefitName(jobBenefitArr[2].toString());
-				benefit.setBenefitName(jobBenefitArr[3].toString());
+				benefit.setBenefitCode(jobBenefitArr[3].toString());
 				jobBenefit.setBenefit(benefit);
 				
 				jobBenefit.setVersion(Integer.valueOf(jobBenefitArr[4].toString()));
