@@ -190,6 +190,7 @@ public class QuestionService {
 			final QuestionGetResDto result = new QuestionGetResDto();
 			result.setQuestionId(q.getId());
 			result.setQuestion(q.getQuestion());
+			result.setQuestionCode(q.getQuestionCode());
 			listResult.add(result);
 		}
 		return listResult;
