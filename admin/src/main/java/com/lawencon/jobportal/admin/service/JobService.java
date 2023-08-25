@@ -36,6 +36,7 @@ import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.jobbenefit.JobBenefitReqDto;
 import com.lawencon.jobportal.admin.dto.jobposition.JobPositionGetResDto;
 import com.lawencon.jobportal.admin.model.Benefit;
 import com.lawencon.jobportal.admin.model.Company;
@@ -612,6 +613,46 @@ public class JobService {
 		result.setMessage("Job Benefit Delete successfully.");
 
 		em().getTransaction().commit();
+		return result;
+	}
+	
+	public InsertResDto insertJobBenefit(JobBenefitReqDto data) {
+		final InsertResDto result = new InsertResDto();
+		try {
+			final JobBenefit jobBenefit = new JobBenefit();
+			
+			final Benefit benefit = benefitDao.getById(Benefit.class, data.getBenefitId());
+			jobBenefit.setBenefit(benefit);
+			
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			jobBenefit.setJob(job);
+			
+			final JobBenefit jobBenefitResult = jobBenefitDao.save(jobBenefit);
+			
+			final String jobInsertCandidateAPI = "http://localhost:8081/jobs/job-benefit";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+
+			final RequestEntity<JobBenefitReqDto> jobInsert = RequestEntity.post(jobInsertCandidateAPI).headers(headers)
+					.body(data);
+
+			final ResponseEntity<InsertResDto> responseCandidate = restTemplate.exchange(jobInsert, InsertResDto.class);
+
+			if (responseCandidate.getStatusCode().equals(HttpStatus.CREATED)) {
+				result.setId(jobBenefitResult.getId());
+				result.setMessage("Insert Job Benefit Succesfully");
+
+				em().getTransaction().commit();
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Insert Failed");
+			}
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+		}
+		
 		return result;
 	}
 	

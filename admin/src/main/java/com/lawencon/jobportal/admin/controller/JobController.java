@@ -24,6 +24,7 @@ import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.jobbenefit.JobBenefitReqDto;
 import com.lawencon.jobportal.admin.dto.jobposition.JobPositionGetResDto;
 import com.lawencon.jobportal.admin.service.JobService;
 
@@ -135,6 +136,12 @@ public class JobController {
 	public ResponseEntity<JobGetResDto> getById(@RequestParam String jobId){
 		final JobGetResDto response = jobService.getById(jobId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/job-benefit")
+	public ResponseEntity<InsertResDto> insertJobBenfit(@RequestBody JobBenefitReqDto data) {
+		final InsertResDto result = jobService.insertJobBenefit(data);
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("{j}/{b}")
