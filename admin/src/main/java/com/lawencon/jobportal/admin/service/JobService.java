@@ -582,16 +582,19 @@ public class JobService {
 		return jobGetResDto;
 	}
 	
-	public JobBenefitResDto getByJob(String jobId) {
-		final JobBenefit jobBenefit = jobBenefitDao.getByJob(jobId);
+	public List<JobBenefitResDto> getByJob(String jobId) {
+		final List<JobBenefitResDto> jobBenefitResDtos = new ArrayList<>();
 		
-		final JobBenefitResDto jobBenefitResDto = new JobBenefitResDto();
-		jobBenefitResDto.setJobBenefitId(jobBenefit.getId());
-		jobBenefitResDto.setBenefitId(jobBenefit.getBenefit().getId());
-		jobBenefitResDto.setBenefitName(jobBenefit.getBenefit().getBenefitName());
-		jobBenefitResDto.setBenefitCode(jobBenefit.getBenefit().getBenefitCode());
+		jobBenefitDao.getByJob(jobId).forEach(jb ->{
+			final JobBenefitResDto jobBenefitResDto = new JobBenefitResDto();
+			jobBenefitResDto.setJobBenefitId(jb.getId());
+			jobBenefitResDto.setBenefitId(jb.getBenefit().getId());
+			jobBenefitResDto.setBenefitName(jb.getBenefit().getBenefitName());
+			jobBenefitResDto.setBenefitCode(jb.getBenefit().getBenefitCode());
+			jobBenefitResDtos.add(jobBenefitResDto);
+		});
 		
-		return jobBenefitResDto;
+		return jobBenefitResDtos;
 		
 	}
 	
