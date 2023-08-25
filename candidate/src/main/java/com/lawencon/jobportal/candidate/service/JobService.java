@@ -25,6 +25,7 @@ import com.lawencon.jobportal.candidate.dto.DeleteResDto;
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.UpdateResDto;
 import com.lawencon.jobportal.candidate.dto.job.EmploymentTypeGetResDto;
+import com.lawencon.jobportal.candidate.dto.job.JobBenefitReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobGetResDto;
 import com.lawencon.jobportal.candidate.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.job.JobPositionGetResDto;
@@ -510,6 +511,24 @@ public class JobService {
 		result.setMessage("Job updated successfully.");
 
 		em().getTransaction().commit();
+		return result;
+	}
+	
+	public InsertResDto insertJobBenefit(JobBenefitReqDto data) {
+		final JobBenefit jobBenefit = new JobBenefit();
+		
+		final Benefit benefit = benefitDao.getById(Benefit.class, data.getBenefitId());
+		jobBenefit.setBenefit(benefit);
+		
+		final Job job = jobDao.getById(Job.class, data.getJobId());
+		jobBenefit.setJob(job);
+		
+		final JobBenefit jobBenefitResult = jobBenefitDao.save(jobBenefit);
+		
+		final InsertResDto result = new InsertResDto();
+		result.setId(jobBenefitResult.getId());
+		result.setMessage("Insert Job Benefit Succesfully");
+		
 		return result;
 	}
 	

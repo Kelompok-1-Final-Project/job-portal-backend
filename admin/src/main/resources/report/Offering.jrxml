@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Offering" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="58cb73fc-20d0-472a-9447-fb410884aae0">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="company" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM t_job]]>
+	</queryString>
+	<field name="job_title" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="job_title"/>
+		<property name="com.jaspersoft.studio.field.label" value="job_title"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_job"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="130" splitType="Stretch">
+			<image>
+				<reportElement x="20" y="9" width="140" height="105" uuid="5562cef4-b7dc-44ca-bbc1-f9691b5ccf5d"/>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/Kelompok-1-Final-Project/job-portal-backend/master/inlook-logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="210" y="10" width="300" height="74" uuid="c2170097-dbec-48b9-a597-af86928213f6"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="17"/>
+				</textElement>
+				<text><![CDATA[PT. InLook Agency 
+Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="287" y="72" width="150" height="20" uuid="04cf7985-eec8-4260-a00b-13de543d46f7"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[Telp : (021) 79187676]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="98" width="180" height="20" uuid="a2a1c4e9-a633-43e5-960e-79e77b08d0c0"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[Email : inlook@contact.com]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="115" splitType="Stretch">
+			<staticText>
+				<reportElement x="203" y="14" width="166" height="30" uuid="e89680df-b749-48d2-802f-f1f0fe7762ce"/>
+				<textElement markup="styled">
+					<font fontName="Arial" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Offering Letter]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="44" width="550" height="30" uuid="ba115c05-e3e5-41b8-9131-79951f99b425"/>
+				<textFieldExpression><![CDATA["On behalf of  " + $P{company}  + " blabka"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="4" width="100" height="18" uuid="7fb03aeb-8be0-4855-8f51-59e4ca3edcd0"/>
+				<textFieldExpression><![CDATA[$F{job_title}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="4" width="17" height="16" uuid="ecd67e4a-93b2-4859-9384-6422dae374da"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[•]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="50" splitType="Stretch"/>
+	</summary>
+</jasperReport>
