@@ -19,20 +19,15 @@ public class CandidateDao extends AbstractJpaDao{
 	}
 	
 	public Candidate getByName(String candidateName) {
-		final String sql = "SELECT "
-				+ "	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tpt.type_name, tg.gender_name, tc.ver "
-				+ "FROM  "
-				+ "	t_candidate_profile tcp  "
-				+ "INNER JOIN  "
-				+ "	t_candidate tc ON tcp.id = tc.profile_id  "
-				+ "INNER JOIN  "
-				+ "	t_person_type tpt ON tpt.id = tcp.person_type_id "
-				+ "INNER JOIN "
-				+ "	t_gender tg ON tg.id = tcp.gender_id;   "
-				+ "WHERE  "
-				+ "	tcp.full_name ILIKE :candidateName || '%";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tc.id, tc.email, tcp.full_name, tcp.mobile_number, tpt.type_name, tg.gender_name, tc.ver ");
+		sql.append("FROM t_candidate_profile tcp  ");
+		sql.append("INNER JOIN t_candidate tc ON tcp.id = tc.profile_id ");
+		sql.append("INNER JOIN t_person_type tpt ON tpt.id = tcp.person_type_id ");
+		sql.append("INNER JOIN 	t_gender tg ON tg.id = tcp.gender_id ");
+		sql.append("WHERE tcp.full_name ILIKE :candidateName || '%' ");
 		
-		final Object candidateObj = this.em().createNativeQuery(sql, Candidate.class)
+		final Object candidateObj = this.em().createNativeQuery(sql.toString(), Candidate.class)
 				.setParameter("candidateName", candidateName)
 				.getSingleResult();
 		
@@ -63,17 +58,14 @@ public class CandidateDao extends AbstractJpaDao{
 	}
 	
 	public Candidate getByEmail(String userEmail) {
-		final String sql = "SELECT "
-				+ "	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tc.ver "
-				+ "FROM  "
-				+ "	t_candidate_profile tcp  "
-				+ "INNER JOIN  "
-				+ "	t_candidate tc ON tcp.id = tc.profile_id  "
-				+ "WHERE "
-				+ " tc.email = :userEmail ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tc.ver ");
+		sql.append("FROM t_candidate_profile tcp  ");
+		sql.append("INNER JOIN t_candidate tc ON tcp.id = tc.profile_id ");
+		sql.append("WHERE tc.email = :userEmail ");
 		
 		try {
-			final Object userObj = em().createNativeQuery(sql)
+			final Object userObj = em().createNativeQuery(sql.toString())
 					.setParameter("userEmail", userEmail)
 					.getSingleResult();
 			

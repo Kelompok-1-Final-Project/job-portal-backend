@@ -16,14 +16,12 @@ public class DegreeDao extends AbstractJpaDao {
 	}
 	
 	public Degree getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, degree_code, degree_name, ver " 
-				+ "FROM " 
-				+ "t_degree " 
-				+ "WHERE "
-				+ "degree_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, degree_code, degree_name, ver ");
+		sql.append("FROM t_degree ");
+		sql.append("WHERE degree_code = :code");
 
-		final Object degreeObj = this.em().createNativeQuery(sql)
+		final Object degreeObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 
