@@ -115,6 +115,7 @@ public class SkillTestService {
 			questionOptionDao.getByQuestion(stq.getQuestion().getId()).forEach(qo -> {
 				final QuestionOptionGetResDto questionOptionGetResDto = new QuestionOptionGetResDto();
 				questionOptionGetResDto.setOptionId(qo.getId());
+				questionOptionGetResDto.setOptionCode(qo.getOptionCode());
 				questionOptionGetResDto.setLabel(qo.getLabels());
 				questionOptionGetResDto.setIsAnswer(qo.getIsAnswer());
 				questionOptionGetResDtos.add(questionOptionGetResDto);
@@ -122,6 +123,7 @@ public class SkillTestService {
 			
 			questionGetResDto.setQuestion(stq.getQuestion().getQuestion());
 			questionGetResDto.setQuestionId(stq.getQuestion().getId());
+			questionGetResDto.setQuestionCode(stq.getQuestion().getQuestionCode());
 			questionGetResDto.setOptionGetResDtos(questionOptionGetResDtos);
 			questionGetResDtos.add(questionGetResDto);
 		});
