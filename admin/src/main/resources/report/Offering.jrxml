@@ -8,12 +8,12 @@
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="salary" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM t_job]]>
+		<![CDATA[SELECT * FROM t_job_benefit tjb INNER JOIN t_benefit tb ON tjb.benefit_id = tb.id]]>
 	</queryString>
-	<field name="job_title" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="job_title"/>
-		<property name="com.jaspersoft.studio.field.label" value="job_title"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="t_job"/>
+	<field name="benefit_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="benefit_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="benefit_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_benefit"/>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -49,7 +49,7 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="171" splitType="Stretch">
+		<band height="160" splitType="Stretch">
 			<staticText>
 				<reportElement x="203" y="14" width="166" height="30" uuid="e89680df-b749-48d2-802f-f1f0fe7762ce"/>
 				<textElement markup="styled">
@@ -62,7 +62,7 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["On behalf of  " + $P{company}  + " We are delighted to offer you the position of " +  $P{jobPosition} + " at " + $P{company} + ". We noticed your impressive skills and experiences during the selection process, and we believe you would be a valuable addition. " ]]></textFieldExpression>
+				<textFieldExpression><![CDATA["On behalf of  " + $P{company}  + " We are delighted to offer you the position of " +  $P{jobPosition} + " at " + $P{company} + ". We noticed your impressive skills and experiences during the selection process, and we believe you would be a valuable addition. "]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="80" width="550" height="50" uuid="df545435-c6b6-419c-b055-e966cd5af898"/>
@@ -72,7 +72,7 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 				<textFieldExpression><![CDATA["Name : " + $P{name} + "\n" + "Position : " + $P{jobPosition} + "\n" + "Salary : " + $P{salary} + "n"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="140" width="550" height="30" uuid="a26d7cb0-a763-44c9-8641-740bcd815cbf"/>
+				<reportElement x="0" y="140" width="550" height="20" uuid="a26d7cb0-a763-44c9-8641-740bcd815cbf"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
@@ -81,10 +81,13 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="25" splitType="Stretch">
+		<band height="24" splitType="Stretch">
 			<textField>
 				<reportElement x="10" y="4" width="100" height="18" uuid="7fb03aeb-8be0-4855-8f51-59e4ca3edcd0"/>
-				<textFieldExpression><![CDATA[$F{job_title}]]></textFieldExpression>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{benefit_name}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="4" width="17" height="16" uuid="ecd67e4a-93b2-4859-9384-6422dae374da"/>
@@ -96,6 +99,28 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 		</band>
 	</detail>
 	<summary>
-		<band height="50" splitType="Stretch"/>
+		<band height="170" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="550" height="20" uuid="9966b59e-2fe9-4594-a975-c8b1ddaf4fff"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[If you decide to accept this offer, kindly bring the copy of this letter and necessary documents to our office.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="17" width="550" height="30" uuid="9567e7e1-a881-4767-aeb0-660088c605f2"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Once we receive your paperwork, we will confirm your starting date. We are looking forward to having you as a " + $P{company} + " team"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="60" width="100" height="90" uuid="938265e2-4eb8-4489-a6c6-380fc5735fce"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Best Regards," + "\n" + "\n" + "\n" + $P{company} + " Team"]]></textFieldExpression>
+			</textField>
+		</band>
 	</summary>
 </jasperReport>
