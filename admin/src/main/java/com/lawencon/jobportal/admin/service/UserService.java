@@ -19,10 +19,12 @@ import com.lawencon.jobportal.admin.dao.ProfileDao;
 import com.lawencon.jobportal.admin.dao.RoleDao;
 import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.user.UserGetResDto;
 import com.lawencon.jobportal.admin.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserLoginResDto;
+import com.lawencon.jobportal.admin.dto.user.UserUpdateIsActiveReqDto;
 import com.lawencon.jobportal.admin.model.Gender;
 import com.lawencon.jobportal.admin.model.Profile;
 import com.lawencon.jobportal.admin.model.Role;
@@ -167,5 +169,19 @@ public class UserService implements UserDetailsService {
 		});
 
 		return usersDto;
+	}
+	
+	public UpdateResDto updateUser(UserUpdateIsActiveReqDto data)  {
+		final User userDb = userDao.getById(User.class, data.getUserId());
+		userDb.setIsActive(data.getIsActive());
+		
+		final User userResult = userDao.save(userDb);
+		
+		final UpdateResDto updateResDto = new UpdateResDto();
+		
+		updateResDto.setVersion(userResult.getVersion());
+		updateResDto.setMessage("Update Berhasil!!!");
+
+		return updateResDto;
 	}
 }

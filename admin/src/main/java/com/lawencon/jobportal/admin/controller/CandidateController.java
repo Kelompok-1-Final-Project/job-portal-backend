@@ -20,6 +20,7 @@ import com.lawencon.jobportal.admin.dto.candidate.CandidateGetProfileResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.CandidateUpdateIsActiveReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateCvReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateProfileReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateSummaryReqDto;
@@ -78,6 +79,13 @@ public class CandidateController {
 	@GetMapping("/{candidateId}")
 	public ResponseEntity<CandidateGetProfileResDto> getByCandidate(@PathVariable String candidateId){
 		final CandidateGetProfileResDto response = candidateService.getByCandidate(candidateId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/update-acvite")
+	public ResponseEntity<UpdateResDto> updateIsActive(
+			@RequestBody CandidateUpdateIsActiveReqDto data){
+		final UpdateResDto response = candidateService.updateIsActive(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

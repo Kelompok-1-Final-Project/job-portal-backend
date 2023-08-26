@@ -36,6 +36,7 @@ import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserLoginResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserRegisterByAdminReqDto;
+import com.lawencon.jobportal.candidate.dto.user.UserUpdateIsActiveReqDto;
 import com.lawencon.jobportal.candidate.model.File;
 import com.lawencon.jobportal.candidate.model.Gender;
 import com.lawencon.jobportal.candidate.model.MaritalStatus;
@@ -55,16 +56,16 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private PersonTypeDao personTypeDao;
-	
+
 	@Autowired
 	private FileDao fileDao;
 
 	@Autowired
 	private GenderDao genderDao;
-	
+
 	@Autowired
 	private MaritalStatusDao maritalStatusDao;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
 
@@ -82,8 +83,8 @@ public class UserService implements UserDetailsService {
 
 		userLoginResDto.setUserId(user.getId());
 		userLoginResDto.setUserName(user.getProfile().getFullName());
-		if(user.getProfile().getPhoto() != null) {
-			userLoginResDto.setPhotoId(user.getProfile().getPhoto().getId());			
+		if (user.getProfile().getPhoto() != null) {
+			userLoginResDto.setPhotoId(user.getProfile().getPhoto().getId());
 		}
 		userLoginResDto.setUserEmail(user.getEmail());
 
@@ -145,7 +146,7 @@ public class UserService implements UserDetailsService {
 		}
 		return result;
 	}
-	
+
 	public InsertResDto insertCandidate(UserRegisterByAdminReqDto data) {
 		final InsertResDto result = new InsertResDto();
 		try {
@@ -189,106 +190,118 @@ public class UserService implements UserDetailsService {
 			candidate.setEmail(data.getEmail());
 			candidate.setProfile(profileResult);
 			candidate.setPass(data.getPassword());
-			
+
 			final User candidateResult = userDao.save(candidate);
 
 			result.setId(candidateResult.getId());
 			result.setMessage("Candidate inserted successfully");
 
 			em().getTransaction().commit();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			em().getTransaction().rollback();
 		}
-		
+
 		return result;
 	}
-	
+
 	public UserGetResDto getByCandidate(String candidateId) {
 		final User user = userDao.getById(User.class, candidateId);
-		
+
 		final UserGetResDto userGetResDto = new UserGetResDto();
 		userGetResDto.setFullName(user.getProfile().getFullName());
-		if(user.getProfile().getIdNumber() != null) {
+		if (user.getProfile().getIdNumber() != null) {
 			userGetResDto.setIdNumber(user.getProfile().getIdNumber());
 		}
-		
+
 		userGetResDto.setEmail(user.getEmail());
-		
-		if(user.getProfile().getMobileNumber() != null) {
+
+		if (user.getProfile().getMobileNumber() != null) {
 			userGetResDto.setPhone(user.getProfile().getMobileNumber());
 		}
-		
-		if(user.getProfile().getMaritalStatus() != null) {
+
+		if (user.getProfile().getMaritalStatus() != null) {
 			userGetResDto.setMaritalStatusCode(user.getProfile().getMaritalStatus().getStatusCode());
 			userGetResDto.setMaritalStatus(user.getProfile().getMaritalStatus().getStatusName());
 		}
-		
-		if(user.getProfile().getGender() != null) {
+
+		if (user.getProfile().getGender() != null) {
 			userGetResDto.setGender(user.getProfile().getGender().getGenderName());
 		}
-		
-		if(user.getProfile().getExpectedSalary() != null) {
+
+		if (user.getProfile().getExpectedSalary() != null) {
 			userGetResDto.setExpectedSalary(user.getProfile().getExpectedSalary());
 		}
-		
-		if(user.getProfile().getBirthdate() != null) {
-			final LocalDate curDate = LocalDate.now();  
+
+		if (user.getProfile().getBirthdate() != null) {
+			final LocalDate curDate = LocalDate.now();
 			final LocalDate getBirth = user.getProfile().getBirthdate();
 			final int age = Period.between(getBirth, curDate).getYears();
 			final String ageText = age + " years old";
 			userGetResDto.setAge(ageText);
 		}
-		
-		if(user.getProfile().getCv() != null) {
+
+		if (user.getProfile().getCv() != null) {
 			userGetResDto.setCvId(user.getProfile().getCv().getId());
 		}
-		
-		if(user.getProfile().getPhoto() != null) {
+
+		if (user.getProfile().getPhoto() != null) {
 			userGetResDto.setPhotoId(user.getProfile().getPhoto().getId());
 		}
-		
-		if(user.getProfile().getSummary() != null) {			
+
+		if (user.getProfile().getSummary() != null) {
 			userGetResDto.setSummary(user.getProfile().getSummary());
 		}
-		
+
 		return userGetResDto;
-		
+
 	}
-	
-	
+
 	public UserEmailGetResDto getEmail(String userId) {
 		final User user = userDao.getById(User.class, userId);
-		
+
 		final UserEmailGetResDto response = new UserEmailGetResDto();
 		response.setEmail(user.getEmail());
-		
+
 		return response;
 	}
-	
+
 	public UpdateResDto changePassword(UserChangePassReqDto data) {
 		final UpdateResDto updateResDto = new UpdateResDto();
-		final User user =  userDao.getById(User.class, data.getUserId());
-		
-		if(passwordEncoder.matches(data.getUserOldPass(), user.getPass())) {
-			if(data.getUserNewPass().equals(data.getUserConfirmNewPass())) {
+		final User user = userDao.getById(User.class, data.getUserId());
+
+		if (passwordEncoder.matches(data.getUserOldPass(), user.getPass())) {
+			if (data.getUserNewPass().equals(data.getUserConfirmNewPass())) {
 				final User updateUser = userDao.getById(User.class, data.getUserId());
 				updateUser.setPass(passwordEncoder.encode(data.getUserNewPass()));
 				userDao.save(updateUser);
 				updateResDto.setVersion(updateUser.getVersion());
 				updateResDto.setMessage("Update Berhasil!!");
 				return updateResDto;
-			}
-			else {
+			} else {
 				updateResDto.setMessage("Password baru tidak sama!!!");
 				return updateResDto;
 			}
-			
+
 		}
-		
+
 		updateResDto.setMessage("Update Gagal, password lama anda tidak sama!!!");
-		
+
 		return updateResDto;
 	}
 
+	public UpdateResDto updateIsActive(UserUpdateIsActiveReqDto data) {
+		final UpdateResDto updateResDto = new UpdateResDto();
+
+		final User userDb = userDao.getById(User.class, data.getUserId());
+		data.setEmail(userDb.getEmail());
+		userDb.setIsActive(data.getIsActive());
+
+		final User userResult = userDao.save(userDb);
+		
+		updateResDto.setVersion(userResult.getVersion());
+		updateResDto.setMessage("Update Berhasil!!!");
+
+		return updateResDto;
+	}
 }

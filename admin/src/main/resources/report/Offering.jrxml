@@ -4,6 +4,9 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="company" class="java.lang.String"/>
+	<parameter name="jobPosition" class="java.lang.String"/>
+	<parameter name="name" class="java.lang.String"/>
+	<parameter name="salary" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT * FROM t_job]]>
 	</queryString>
@@ -46,7 +49,7 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="115" splitType="Stretch">
+		<band height="171" splitType="Stretch">
 			<staticText>
 				<reportElement x="203" y="14" width="166" height="30" uuid="e89680df-b749-48d2-802f-f1f0fe7762ce"/>
 				<textElement markup="styled">
@@ -56,8 +59,25 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="0" y="44" width="550" height="30" uuid="ba115c05-e3e5-41b8-9131-79951f99b425"/>
-				<textFieldExpression><![CDATA["On behalf of  " + $P{company}  + " blabka"]]></textFieldExpression>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["On behalf of  " + $P{company}  + " We are delighted to offer you the position of " +  $P{jobPosition} + " at " + $P{company} + ". We noticed your impressive skills and experiences during the selection process, and we believe you would be a valuable addition. " ]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="0" y="80" width="550" height="50" uuid="df545435-c6b6-419c-b055-e966cd5af898"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Name : " + $P{name} + "\n" + "Position : " + $P{jobPosition} + "\n" + "Salary : " + $P{salary} + "n"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="140" width="550" height="30" uuid="a26d7cb0-a763-44c9-8641-740bcd815cbf"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[Please review the attached document that provides information about the salary and benefits.]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<detail>
