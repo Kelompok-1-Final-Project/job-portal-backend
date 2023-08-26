@@ -32,6 +32,7 @@ import com.lawencon.jobportal.admin.dto.candidate.CandidateGetProfileResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateGetResDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.CandidateSelfRegisterReqDto;
+import com.lawencon.jobportal.admin.dto.candidate.CandidateUpdateIsActiveReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateCvReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateProfileReqDto;
 import com.lawencon.jobportal.admin.dto.candidate.UpdateSummaryReqDto;
@@ -374,5 +375,43 @@ public class CandidateService {
 		
 		return userGetResDto;
 		
+	}
+	
+	public UpdateResDto updateIsActive(CandidateUpdateIsActiveReqDto data)  {
+		final UpdateResDto updateResDto = new UpdateResDto();
+		try {
+			final Candidate userDb = candidateDao.getById(Candidate.class, data.getUserId());
+			data.setEmail(userDb.getEmail());
+			userDb.setIsActive(data.getIsActive());
+			
+			final Candidate userResult = candidateDao.save(userDb);
+
+			final String candidateUpdateAdminAPI = "http://localhost:8081/users/update-acvite";
+
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.setBearerAuth(JwtConfig.get());
+			
+			final RequestEntity<CandidateUpdateIsActiveReqDto> candidateUpdate = RequestEntity.patch(candidateUpdateAdminAPI)
+					.headers(headers).body(data);
+
+			final ResponseEntity<UpdateResDto> responseAdmin = restTemplate.exchange(candidateUpdate,
+					UpdateResDto.class);
+
+			if (responseAdmin.getStatusCode().equals(HttpStatus.OK)) {
+				updateResDto.setVersion(userResult.getVersion());
+				updateResDto.setMessage("Update Berhasil!!!");
+				em().getTransaction().commit();
+
+			} else {
+				em().getTransaction().rollback();
+				throw new RuntimeException("Update Is Active Failed");
+			}
+
+		} catch (Exception e) {
+			em().getTransaction().rollback();
+			e.printStackTrace();
+		}
+		return updateResDto;
 	}
 }
