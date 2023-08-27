@@ -9,6 +9,7 @@ public class UserGetResDto {
 	private String maritalStatus;
 	private String gender;
 	private Integer expectedSalary;
+	private String birthDate;
 	private String age;
 	private String cvId;
 	private String photoId;
@@ -76,6 +77,14 @@ public class UserGetResDto {
 
 	public void setExpectedSalary(Integer expectedSalary) {
 		this.expectedSalary = expectedSalary;
+	}
+
+	public String getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(String birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	public String getAge() {

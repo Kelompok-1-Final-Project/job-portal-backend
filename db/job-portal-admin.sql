@@ -1228,7 +1228,7 @@ INNER JOIN
 INNER JOIN  
 	t_job_status tjs ON tjs.id = tj.job_status_id
 WHERE  
-	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05'
+	ta.candidate_id = '0c5edf5d-b11b-4213-8159-758b2d3fba05' AND ta.is_active = TRUE 
 	
 SELECT 
 	ta.id AS application_id, 
