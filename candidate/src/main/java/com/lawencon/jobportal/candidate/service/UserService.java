@@ -239,6 +239,7 @@ public class UserService implements UserDetailsService {
 			final int age = Period.between(getBirth, curDate).getYears();
 			final String ageText = age + " years old";
 			userGetResDto.setAge(ageText);
+			userGetResDto.setBirthDate(getBirth.toString());
 		}
 
 		if (user.getProfile().getCv() != null) {

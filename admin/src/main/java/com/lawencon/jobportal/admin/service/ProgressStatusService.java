@@ -263,119 +263,167 @@ public class ProgressStatusService {
 	}
 
 	public InsertResDto insertAssessment(AssessmentInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		final User hr = userDao.getById(User.class, data.getHrId());
-		final Assessment assessment = new Assessment();
-		assessment.setCandidate(candidate);
-		assessment.setJob(job);
-		assessment.setHr(hr);
-		assessment.setSchedule(DateConvert.convertDate(data.getSchedule()));
-		final Assessment assessments = assessmentDao.save(assessment);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(assessments.getId());
-		result.setMessage("Insert Assessment Successfully.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
+			final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			final User hr = userDao.getById(User.class, data.getHrId());
+			final Assessment assessment = new Assessment();
+			assessment.setCandidate(candidate);
+			assessment.setJob(job);
+			assessment.setHr(hr);
+			assessment.setSchedule(DateConvert.convertDate(data.getSchedule()));
+			
+			final Application applicationDb = applicationDao.getByCandidateAndJob(data.getCandidateId(), data.getJobId());
+			
+			final Application application = applicationDao.getById(Application.class, applicationDb.getId());
+			application.setIsActive(false);
+			applicationDao.save(application);
+			
+			final Assessment assessments = assessmentDao.save(assessment);
 
-		final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
-				job.getJobCode());
+			result.setId(assessments.getId());
+			result.setMessage("Insert Assessment Successfully.");
 
-		final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
-		dataSend.setStatusProcessCode(StatusCodeEnum.ASSESSMENT.processCode);
-		dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+			em().getTransaction().commit();
 
-		updateCandidateProgress(dataSend);
+			final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
+					job.getJobCode());
 
+			final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
+			dataSend.setStatusProcessCode(StatusCodeEnum.ASSESSMENT.processCode);
+			dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+
+			updateCandidateProgress(dataSend);
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
+		
 		return result;
 	}
 
 	public InsertResDto insertMedicalCheckup(MedicalCheckupInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		final MedicalCheckup medicalCheckup = new MedicalCheckup();
-		medicalCheckup.setCandidate(candidate);
-		medicalCheckup.setJob(job);
-		final MedicalCheckup medicalCheckups = medicalCheckupDao.save(medicalCheckup);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(medicalCheckups.getId());
-		result.setMessage("Insert Medical Checkup Successfully.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
-		
-		final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
-				job.getJobCode());
+			final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			final MedicalCheckup medicalCheckup = new MedicalCheckup();
+			medicalCheckup.setCandidate(candidate);
+			medicalCheckup.setJob(job);
+			
+			final Interview interviewDb = interviewDao.getByCandidateAndJob(data.getCandidateId(), data.getJobId());
+			
+			final Interview interview = interviewDao.getById(Interview.class, interviewDb.getId());
+			interview.setIsActive(false);
+			interviewDao.save(interview);
+			
+			final MedicalCheckup medicalCheckups = medicalCheckupDao.save(medicalCheckup);
 
-		final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
-		dataSend.setStatusProcessCode(StatusCodeEnum.MCU.processCode);
-		dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+			result.setId(medicalCheckups.getId());
+			result.setMessage("Insert Medical Checkup Successfully.");
 
-		updateCandidateProgress(dataSend);
+			em().getTransaction().commit();
+			
+			final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
+					job.getJobCode());
+
+			final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
+			dataSend.setStatusProcessCode(StatusCodeEnum.MCU.processCode);
+			dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+
+			updateCandidateProgress(dataSend);
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
 		
 		return result;
 	}
 
 	public InsertResDto insertInterview(InterviewInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		final User interviewer = userDao.getById(User.class, data.getInterviewerId());
-		final Interview interview = new Interview();
-		interview.setCandidate(candidate);
-		interview.setJob(job);
-		interview.setInterviewer(interviewer);
-		interview.setSchedule(DateConvert.convertDate(data.getSchedule()));
-		final Interview interviews = interviewDao.save(interview);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(interviews.getId());
-		result.setMessage("Insert Interview Successfully.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
-		
-		final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
-				job.getJobCode());
+			final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			final User interviewer = userDao.getById(User.class, data.getInterviewerId());
+			final Interview interview = new Interview();
+			interview.setCandidate(candidate);
+			interview.setJob(job);
+			interview.setInterviewer(interviewer);
+			interview.setSchedule(DateConvert.convertDate(data.getSchedule()));
+			
+			final Assessment assessmentDb = assessmentDao.getByCandidateAndJob(data.getCandidateId(), data.getJobId());
+			
+			final Assessment assessment = assessmentDao.getById(Assessment.class, assessmentDb.getId());
+			assessment.setIsActive(false);
+			assessmentDao.save(assessment);
+			
+			final Interview interviews = interviewDao.save(interview);
 
-		final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
-		dataSend.setStatusProcessCode(StatusCodeEnum.INTERVIEW.processCode);
-		dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+			result.setId(interviews.getId());
+			result.setMessage("Insert Interview Successfully.");
 
-		updateCandidateProgress(dataSend);
+			em().getTransaction().commit();
+			
+			final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
+					job.getJobCode());
+
+			final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
+			dataSend.setStatusProcessCode(StatusCodeEnum.INTERVIEW.processCode);
+			dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+
+			updateCandidateProgress(dataSend);
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
 		
 		return result;
 	}
 
 	public InsertResDto insertOffering(OfferingInsertReqDto data) {
-		em().getTransaction().begin();
-
-		final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
-		final Job job = jobDao.getById(Job.class, data.getJobId());
-		final Offering offering = new Offering();
-		offering.setCandidate(candidate);
-		offering.setJob(job);
-		final Offering offerings = offeringDao.save(offering);
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(offerings.getId());
-		result.setMessage("Insert Offering Successfully.");
+		try {
+			em().getTransaction().begin();
 
-		em().getTransaction().commit();
-		
-		final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
-				job.getJobCode());
+			final Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
+			final Job job = jobDao.getById(Job.class, data.getJobId());
+			final Offering offering = new Offering();
+			offering.setCandidate(candidate);
+			offering.setJob(job);
+			
+			final MedicalCheckup medicalCheckupDb = medicalCheckupDao.getByCandidateAndJob(data.getCandidateId(), data.getJobId());
+			
+			final MedicalCheckup medicalCheckup = medicalCheckupDao.getById(MedicalCheckup.class, medicalCheckupDb.getId());
+			medicalCheckup.setIsActive(false);
+			medicalCheckupDao.save(medicalCheckup);
+			
+			final Offering offerings = offeringDao.save(offering);
 
-		final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
-		dataSend.setStatusProcessCode(StatusCodeEnum.OFFERING.processCode);
-		dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+			result.setId(offerings.getId());
+			result.setMessage("Insert Offering Successfully.");
 
-		updateCandidateProgress(dataSend);
+			em().getTransaction().commit();
+			
+			final JobCandidateStatus jobCandidateStatus = jobCandidateStatusDao.getByCandidateAndJob(candidate.getEmail(),
+					job.getJobCode());
+
+			final CandidateProgressUpdateReqDto dataSend = new CandidateProgressUpdateReqDto();
+			dataSend.setStatusProcessCode(StatusCodeEnum.OFFERING.processCode);
+			dataSend.setCandidateProgressId(jobCandidateStatus.getId());
+
+			updateCandidateProgress(dataSend);
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
 		
 		return result;
 	}
@@ -390,6 +438,13 @@ public class ProgressStatusService {
 			final Hired hired = new Hired();
 			hired.setCandidate(candidate);
 			hired.setJob(job);
+			
+			final Offering offeringDb = offeringDao.getByCandidateAndJob(data.getCandidateId(), data.getJobId());
+			
+			final Offering offering = offeringDao.getById(Offering.class, offeringDb.getId());
+			offering.setIsActive(false);
+			offeringDao.save(offering);
+			
 			final Hired hiredDb = hiredDao.save(hired);
 			
 			result.setId(hiredDb.getId());

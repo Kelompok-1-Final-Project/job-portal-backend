@@ -120,7 +120,7 @@ public class ProfileService {
 			candidateProfile.setExpectedSalary(data.getExpectedSalary());
 			candidateProfile.setMobileNumber(data.getMobileNumber());
 
-			if(data.getPhotoFiles() != null) {
+			if(data.getPhotoFiles() != null && data.getPhotoFiles() != "") {
 				String oldPhotoId = "";
 				if(candidateProfile.getPhoto() != null) {
 					oldPhotoId=candidateProfile.getPhoto().getId();
@@ -131,7 +131,7 @@ public class ProfileService {
 				photo.setFile(data.getPhotoFiles());
 				final File photoResult = fileDao.save(photo);
 				candidateProfile.setPhoto(photoResult);
-				if(oldPhotoId!=null&&oldPhotoId!="") {
+				if(oldPhotoId != null && oldPhotoId != "") {
 					fileDao.deleteById(File.class, oldPhotoId);
 				}
 			}
