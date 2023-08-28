@@ -57,6 +57,7 @@ public class MedicalCheckupDao extends AbstractJpaDao {
 				final CandidateProfile candidateProfile = new CandidateProfile();
 				candidateProfile.setFullName(medicalArr[4].toString());
 				candidate.setCandidateProfile(candidateProfile);
+				medicalCheckup.setCandidate(candidate);
 				
 				if (medicalArr[5] != null) {
 					final File file = new File();
