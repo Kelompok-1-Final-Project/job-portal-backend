@@ -216,9 +216,9 @@ public class ProgressStatusService {
 		return listResult;
 	}
 
-	public List<HiredGetResDto> getAllHired() {
+	public List<HiredGetResDto> getAllHired(String userId) {
 		final List<HiredGetResDto> listResult = new ArrayList<>();
-		final List<Hired> listHired = hiredDao.getAll(Hired.class);
+		final List<Hired> listHired = hiredDao.getByUser(userId);
 		for (Hired h : listHired) {
 			final HiredGetResDto result = new HiredGetResDto();
 			result.setHiredId(h.getId());
@@ -231,9 +231,9 @@ public class ProgressStatusService {
 		return listResult;
 	}
 
-	public List<OfferingGetResDto> getAllOffering() {
+	public List<OfferingGetResDto> getAllOffering(String userId) {
 		final List<OfferingGetResDto> listResult = new ArrayList<>();
-		final List<Offering> listOffering = offeringDao.getAll(Offering.class);
+		final List<Offering> listOffering = offeringDao.getByUser(userId);
 		for (Offering o : listOffering) {
 			final OfferingGetResDto result = new OfferingGetResDto();
 			result.setOfferingId(o.getId());
