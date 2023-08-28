@@ -36,9 +36,9 @@ public class StatusProgressController {
 	}
 	
 //	@PostMapping("/application")
-//	public ResponseEntity<InsertResDto> insertApplication(@RequestBody ApplicationInsertReqDto data){
-//		final InsertResDto response = progressStatusService.insertApplication(data);
-//		return new ResponseEntity<>(response, HttpStatus.CREATED);
+//	public ResponseEntity<JobCandidateStatusSendAdminResDto> getJobAndCandidate(){
+//		final JobCandidateStatusSendAdminResDto response = progressStatusService.();
+//		return new ResponseEntity<>(response, HttpStatus.OK);
 //	}
 	
 }	
