@@ -95,7 +95,7 @@ public class JobService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public List<JobGetResDto> getAll() {
+	public List<JobGetResDto> getAll(String userId) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
 		jobDao.getAll(Job.class).forEach(j -> {
