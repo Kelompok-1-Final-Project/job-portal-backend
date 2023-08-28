@@ -1380,4 +1380,14 @@ INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id
 INNER JOIN t_file tf ON tmc.file_id = tf.id 
 WHERE tj.hr_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5' OR tj.interviewer_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5'
 
-		
+
+SELECT ti.id AS interview_id, tj.id AS job_id, tj.job_title, ti.interviewer_id, tp.full_name, 
+ti.schedule , ti.notes, tc.id AS candidate_id, tcp.full_name AS candidate_name 
+FROM t_interview ti
+INNER JOIN t_job tj ON ti.job_id = tj.id 
+INNER JOIN t_user tu ON ti.interviewer_id = tu.id 
+INNER JOIN t_profile tp ON tu.profile_id = tp.id 
+INNER JOIN t_candidate tc ON ti.candidate_id = tc.id 
+INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id 
+WHERE tj.hr_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5' OR tj.interviewer_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5'
+
