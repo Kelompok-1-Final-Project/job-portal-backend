@@ -53,16 +53,20 @@ public class AssessmentDao extends AbstractJpaDao {
 				final Job job = new Job();
 				job.setId(assessmentArr[1].toString());
 				job.setJobTitle(assessmentArr[2].toString());
+				assessment.setJob(job);
 		
 				final User user = new User();
 				user.setId(assessmentArr[3].toString());
+				assessment.setHr(user);
 				
 				final Profile profile = new Profile();
 				profile.setFullName(assessmentArr[4].toString());
 				user.setProfile(profile);
 				
 				assessment.setSchedule(Timestamp.valueOf(assessmentArr[5].toString()).toLocalDateTime());
-				assessment.setNotes(assessmentArr[6].toString());
+				if(assessmentArr[6]!=null) {
+					assessment.setNotes(assessmentArr[6].toString());					
+				}
 				
 				final Candidate candidate = new Candidate();
 				candidate.setId(assessmentArr[7].toString());

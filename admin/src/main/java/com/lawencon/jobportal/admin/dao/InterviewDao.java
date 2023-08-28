@@ -140,7 +140,7 @@ public class InterviewDao extends AbstractJpaDao {
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
 		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
 		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
-		sql.append("WHERE ti.candidate_id = :candidateId AND ta.job_id = :jobId");
+		sql.append("WHERE ti.candidate_id = :candidateId AND ti.job_id = :jobId");
 
 		final Object interviewObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
