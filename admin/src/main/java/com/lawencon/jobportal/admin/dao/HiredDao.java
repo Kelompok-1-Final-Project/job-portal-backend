@@ -47,6 +47,7 @@ public class HiredDao extends AbstractJpaDao{
 				final Job job = new Job();
 				job.setId(hiredArr[1].toString());
 				job.setJobTitle(hiredArr[2].toString());
+				hired.setJob(job);
 				
 				final Candidate candidate = new Candidate();
 				candidate.setId(hiredArr[3].toString());
@@ -54,6 +55,7 @@ public class HiredDao extends AbstractJpaDao{
 				final CandidateProfile candidateProfile = new CandidateProfile();
 				candidateProfile.setFullName(hiredArr[4].toString());
 				candidate.setCandidateProfile(candidateProfile);
+				hired.setCandidate(candidate);
 				
 				listHired.add(hired);
 			}

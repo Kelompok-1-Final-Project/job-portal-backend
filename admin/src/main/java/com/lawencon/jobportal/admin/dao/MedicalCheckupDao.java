@@ -32,7 +32,7 @@ public class MedicalCheckupDao extends AbstractJpaDao {
 		sql.append("INNER JOIN t_job tj ON tmc.job_id = tj.id ");
 		sql.append("INNER JOIN t_candidate tc ON tmc.candidate_id = tc.id ");
 		sql.append("INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id ");
-		sql.append("INNER JOIN t_file tf ON tmc.file_id = tf.id ");
+		sql.append("LEFT JOIN t_file tf ON tmc.file_id = tf.id ");
 		sql.append("WHERE tj.hr_id = :userId OR tj.interviewer_id = :userId ");
 
 		final List<?> medicalObjs = this.em().createNativeQuery(sql.toString())
