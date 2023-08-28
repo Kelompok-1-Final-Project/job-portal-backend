@@ -66,14 +66,14 @@ public class OfferingDao extends AbstractJpaDao{
 	
 	public List<Offering> getByCandidate(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
-		sql.append("SELECT to.id AS offering_id, tj.id AS job_id, tj.job_title, tjs.status_name, tc.id AS company_id, ");
-		sql.append("tc.company_name, tc.file_id, to.created_at, to.ver, tj.job_code ");
-		sql.append("FROM t_offering to ");
-		sql.append("INNER JOIN t_job tj ON to.job_id = tj.id ");
+		sql.append("SELECT tof.id AS offering_id, tj.id AS job_id, tj.job_title, tjs.status_name, tc.id AS company_id, ");
+		sql.append("tc.company_name, tc.file_id, tof.created_at, tof.ver, tj.job_code ");
+		sql.append("FROM t_offering tof ");
+		sql.append("INNER JOIN t_job tj ON tof.job_id = tj.id ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
 		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
 		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
-		sql.append("WHERE to.candidate_id = :candidateId AND to.is_active = TRUE ");
+		sql.append("WHERE tof.candidate_id = :candidateId AND tof.is_active = TRUE ");
 
 		final List<?> offeringObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
