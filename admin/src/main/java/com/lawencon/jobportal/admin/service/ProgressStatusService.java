@@ -147,8 +147,8 @@ public class ProgressStatusService {
 		return listResult;
 	}
 
-	public List<ApplicationGetResDto> getAllApplication() {
-		final List<Application> listApplication = applicationDao.getAll(Application.class);
+	public List<ApplicationGetResDto> getAllApplication(String userId) {
+		final List<Application> listApplication = applicationDao.getByUser(userId);
 		final List<ApplicationGetResDto> listResult = new ArrayList<>();
 		for (Application a : listApplication) {
 			final ApplicationGetResDto result = new ApplicationGetResDto();

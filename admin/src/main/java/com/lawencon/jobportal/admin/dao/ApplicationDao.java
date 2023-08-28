@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.model.Application;
+import com.lawencon.jobportal.admin.model.Candidate;
+import com.lawencon.jobportal.admin.model.CandidateProfile;
 import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Job;
@@ -22,6 +24,48 @@ public class ApplicationDao extends AbstractJpaDao {
 		return ConnHandler.getManager();
 	}
 
+	public List<Application> getByUser(String userId){
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tc.id AS candidate_id, tcp.full_name  ");
+		sql.append("FROM t_application ta ");
+		sql.append("INNER JOIN t_job tj ON ta.job_id = tj.id");
+		sql.append("INNER JOIN t_candidate tc ON ta.candidate_id = tc.id ");
+		sql.append("INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id ");
+		sql.append("WHERE tj.hr_id = :userId OR tj.interviewer_id = :userId ");
+		
+		final List<?> applicationObjs = this.em().createNativeQuery(sql.toString())
+				.setParameter("userId", userId)
+				.getResultList();
+		
+		final List<Application> listApplication = new ArrayList<>();
+		
+		if (applicationObjs.size() > 0) {
+			for (Object applicationObj : applicationObjs) {
+				final Object[] applicationArr = (Object[]) applicationObj;
+
+				final Application application = new Application();
+				application.setId(applicationArr[0].toString());
+
+				final Job job = new Job();
+				job.setId(applicationArr[1].toString());
+				job.setJobTitle(applicationArr[2].toString());
+				application.setJob(job);
+				
+				final Candidate candidate = new Candidate();
+				candidate.setId(applicationArr[3].toString());
+
+				final CandidateProfile candidateProfile = new CandidateProfile();
+				candidateProfile.setFullName(applicationArr[4].toString());
+				candidate.setCandidateProfile(candidateProfile);
+				application.setCandidate(candidate);	
+
+				listApplication.add(application);
+			}
+		}
+		
+		return listApplication;
+	}
+	
 	public List<Application> getByCandidate(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tjs.status_name, ");
