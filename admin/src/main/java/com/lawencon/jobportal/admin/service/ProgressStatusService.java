@@ -162,8 +162,8 @@ public class ProgressStatusService {
 		return listResult;
 	}
 
-	public List<AssessmentGetResDto> getAllAssessment() {
-		final List<Assessment> listAssessment = assessmentDao.getAll(Assessment.class);
+	public List<AssessmentGetResDto> getAllAssessment(String userId) {
+		final List<Assessment> listAssessment = assessmentDao.getByUser(userId);
 		final List<AssessmentGetResDto> listResult = new ArrayList<>();
 		for (Assessment a : listAssessment) {
 			final AssessmentGetResDto result = new AssessmentGetResDto();
@@ -181,9 +181,9 @@ public class ProgressStatusService {
 		return listResult;
 	}
 
-	public List<MedicalCheckupGetResDto> getAllMedicalCheckup() {
+	public List<MedicalCheckupGetResDto> getAllMedicalCheckup(String userId) {
 		final List<MedicalCheckupGetResDto> listResult = new ArrayList<>();
-		final List<MedicalCheckup> listMcu = medicalCheckupDao.getAll(MedicalCheckup.class);
+		final List<MedicalCheckup> listMcu = medicalCheckupDao.getByUser(userId);
 		for (MedicalCheckup m : listMcu) {
 			final MedicalCheckupGetResDto result = new MedicalCheckupGetResDto();
 			result.setMcuId(m.getId());

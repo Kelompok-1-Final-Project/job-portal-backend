@@ -76,14 +76,14 @@ public class StatusProgressController {
 	}
 	
 	@GetMapping("/assessment")
-	public ResponseEntity<List<AssessmentGetResDto>> getAllAssessment(){
-		final List<AssessmentGetResDto> response = progressStatusService.getAllAssessment();
+	public ResponseEntity<List<AssessmentGetResDto>> getAllAssessment(@RequestParam("user") String userId){
+		final List<AssessmentGetResDto> response = progressStatusService.getAllAssessment(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/medical-checkup")
-	public ResponseEntity<List<MedicalCheckupGetResDto>> getAllMedicalCheckup(){
-		final List<MedicalCheckupGetResDto> response = progressStatusService.getAllMedicalCheckup();
+	public ResponseEntity<List<MedicalCheckupGetResDto>> getAllMedicalCheckup(@RequestParam("user") String userId){
+		final List<MedicalCheckupGetResDto> response = progressStatusService.getAllMedicalCheckup(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

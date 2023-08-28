@@ -1369,3 +1369,15 @@ INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id
 INNER JOIN t_user tu ON ta.hr_id = tu.id 
 INNER JOIN t_profile tp ON tu.profile_id = tp.id 
 WHERE tj.hr_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5' OR tj.interviewer_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5'
+
+
+SELECT tmc.id AS mcu_id, tj.id AS job_id, tj.job_title, 
+tc.id AS candidate_id, tcp.full_name AS candidate_name, tf.id AS file_id
+FROM t_medical_checkup tmc 
+INNER JOIN t_job tj ON tmc.job_id = tj.id
+INNER JOIN t_candidate tc ON tmc.candidate_id = tc.id 
+INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id 
+INNER JOIN t_file tf ON tmc.file_id = tf.id 
+WHERE tj.hr_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5' OR tj.interviewer_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5'
+
+		

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.model.Candidate;
+import com.lawencon.jobportal.admin.model.CandidateProfile;
 import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Job;
@@ -22,6 +24,53 @@ public class MedicalCheckupDao extends AbstractJpaDao {
 		return ConnHandler.getManager();
 	}
 
+	public List<MedicalCheckup> getByUser(String userId) {
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tmc.id AS mcu_id, tj.id AS job_id, tj.job_title, ");
+		sql.append("tc.id AS candidate_id, tcp.full_name AS candidate_name, tf.id AS file_id ");
+		sql.append("FROM t_medical_checkup tmc ");
+		sql.append("INNER JOIN t_job tj ON tmc.job_id = tj.id ");
+		sql.append("INNER JOIN t_candidate tc ON tmc.candidate_id = tc.id ");
+		sql.append("INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id ");
+		sql.append("INNER JOIN t_file tf ON tmc.file_id = tf.id ");
+		sql.append("WHERE tj.hr_id = :userId OR tj.interviewer_id = :userId ");
+
+		final List<?> medicalObjs = this.em().createNativeQuery(sql.toString())
+				.setParameter("userId", userId)
+				.getResultList();
+		final List<MedicalCheckup> listMedical = new ArrayList<>();
+		if (medicalObjs.size() > 0) {
+			for (Object medicalObj : medicalObjs) {
+				final Object[] medicalArr = (Object[]) medicalObj;
+
+				final MedicalCheckup medicalCheckup = new MedicalCheckup();
+				medicalCheckup.setId(medicalArr[0].toString());
+
+				final Job job = new Job();
+				job.setId(medicalArr[1].toString());
+				job.setJobTitle(medicalArr[2].toString());
+				medicalCheckup.setJob(job);
+				
+				final Candidate candidate = new Candidate();
+				candidate.setId(medicalArr[3].toString());
+				
+				final CandidateProfile candidateProfile = new CandidateProfile();
+				candidateProfile.setFullName(medicalArr[4].toString());
+				candidate.setCandidateProfile(candidateProfile);
+				
+				if (medicalArr[5] != null) {
+					final File file = new File();
+					file.setId(medicalArr[5].toString());
+					medicalCheckup.setFile(file);
+				}
+
+				listMedical.add(medicalCheckup);
+			}
+		}
+		
+		return listMedical;
+	}
+	
 	public List<MedicalCheckup> getByCandidate(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tmc.id AS mcu_id, tj.id AS job_id, tj.job_title, tjs.status_name,  ");
