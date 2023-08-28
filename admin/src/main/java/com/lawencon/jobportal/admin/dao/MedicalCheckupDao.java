@@ -25,7 +25,7 @@ public class MedicalCheckupDao extends AbstractJpaDao {
 	public List<MedicalCheckup> getByCandidate(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tmc.id AS mcu_id, tj.id AS job_id, tj.job_title, tjs.status_name,  ");
-		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, tmc.created_at, tmc.ver ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, tmc.created_at, tmc.ver, tj.job_code ");
 		sql.append("FROM t_medical_checkup tmc ");
 		sql.append("INNER JOIN t_job tj ON tmc.job_id = tj.id ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
@@ -46,6 +46,7 @@ public class MedicalCheckupDao extends AbstractJpaDao {
 				final Job job = new Job();
 				job.setId(medicalArr[1].toString());
 				job.setJobTitle(medicalArr[2].toString());
+				job.setJobCode(medicalArr[9].toString());
 
 				final JobStatus jobStatus = new JobStatus();
 				jobStatus.setStatusName(medicalArr[3].toString());

@@ -24,36 +24,19 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 	}
 	
 	public List<JobCandidateStatus> getByStatus(String candidateId, String statusId) {
-		final String sql = "SELECT  "
-				+ "	tjcs.id AS status_job_id, "
-				+ "	tj.id AS job_id,  "
-				+ "	tj.job_title,  "
-				+ "	tjs.status_name,  "
-				+ "	tc.id AS company_id,  "
-				+ "	tc.company_name,  "
-				+ " tc.file_id, "
-				+ "	tjcs.created_at,  "
-				+ "	tsp.id AS status_stage_id, "
-				+ "	tsp.process_name, "
-				+ "	tjcs.ver  "
-				+ "FROM  "
-				+ "	t_job_candidate_status tjcs  "
-				+ "INNER JOIN  "
-				+ "	t_job tj ON tjcs.job_id = tj.id  "
-				+ "INNER JOIN  "
-				+ "	t_company tc ON tc.id = tj.company_id  "
-				+ "INNER JOIN  "
-				+ "	t_city tci ON tci.id = tc.city_id  "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN "
-				+ "	t_status_process tsp ON tjcs.status_id = tsp.id  "
-				+ "WHERE  "
-				+ "	tjcs.status_id = :statusId "
-				+ "AND "
-				+ "	tjcs.candidate_id = :candidateId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tjcs.id AS status_job_id, tj.id AS job_id, tj.job_title, tjs.status_name, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, tjcs.created_at, tsp.id AS status_stage_id, ");
+		sql.append("tsp.process_name, tjcs.ver, tj.job_code ");
+		sql.append("FROM t_job_candidate_status tjcs ");
+		sql.append("INNER JOIN t_job tj ON tjcs.job_id = tj.id ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_status_process tsp ON tjcs.status_id = tsp.id ");
+		sql.append("WHERE tjcs.status_id = :statusId AND tjcs.candidate_id = :candidateId ");
 		
-		final List<?> jobStatusObjs = this.em().createNativeQuery(sql)
+		final List<?> jobStatusObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.setParameter("statusId", statusId)
 				.getResultList();
@@ -68,6 +51,7 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 				final Job job = new Job();
 				job.setId(jobStatusArr[1].toString());
 				job.setJobTitle(jobStatusArr[2].toString());
+				job.setJobCode(jobStatusArr[11].toString());
 				
 				final JobStatus jobStatus = new JobStatus();
 				jobStatus.setStatusName(jobStatusArr[3].toString());
@@ -100,14 +84,10 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 	}
 	
 	public List<JobCandidateStatus> getByJob(String jobCode) {
-		final String sql = "SELECT "
-				+ "jcs "
-				+ "FROM "
-				+ "JobCandidateStatus jcs "
-				+ "WHERE "
-				+ "jcs.job.jobCode = :jobCode ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT jcs FROM JobCandidateStatus jcs WHERE jcs.job.jobCode = :jobCode");
 		
-		final List<JobCandidateStatus> jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
+		final List<JobCandidateStatus> jobCandidateStatus = em().createQuery(sql.toString(), JobCandidateStatus.class)
 				.setParameter("jobCode", jobCode)
 				.getResultList();
 		
@@ -115,14 +95,11 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 	}
 	
 	public JobCandidateStatus getByCandidateAndJob(String candidateEmail, String jobCode) {
-		final String sql = "SELECT "
-				+ "jcs "
-				+ "FROM "
-				+ "JobCandidateStatus jcs "
-				+ "WHERE "
-				+ "jcs.job.jobCode = :jobCode AND jcs.candidate.email = :candidateEmail ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT jcs FROM JobCandidateStatus jcs ");
+		sql.append("WHERE jcs.job.jobCode = :jobCode AND jcs.candidate.email = :candidateEmail ");
 		
-		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
+		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql.toString(), JobCandidateStatus.class)
 				.setParameter("jobCode", jobCode)
 				.setParameter("candidateEmail", candidateEmail)
 				.getSingleResult();
@@ -131,14 +108,11 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 	}
 	
 	public JobCandidateStatus getByCandidateAndCompany(String candidateEmail, String companyCode) {
-		final String sql = "SELECT "
-				+ "jcs "
-				+ "FROM "
-				+ "JobCandidateStatus jcs "
-				+ "WHERE "
-				+ "jcs.job.company.companyCode = :companyCode AND jcs.candidate.email = :candidateEmail ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT jcs FROM JobCandidateStatus jcs ");
+		sql.append("WHERE jcs.job.company.companyCode = :companyCode AND jcs.candidate.email = :candidateEmail ");
 		
-		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
+		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql.toString(), JobCandidateStatus.class)
 				.setParameter("companyCode", companyCode)
 				.setParameter("candidateEmail", candidateEmail)
 				.getSingleResult();
