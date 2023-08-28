@@ -25,7 +25,7 @@ public class OfferingDao extends AbstractJpaDao{
 	public List<Offering> getByCandidate(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT to.id AS offering_id, tj.id AS job_id, tj.job_title, tjs.status_name, tc.id AS company_id, ");
-		sql.append("tc.company_name, tc.file_id, to.created_at, to.ver ");
+		sql.append("tc.company_name, tc.file_id, to.created_at, to.ver, tj.job_code ");
 		sql.append("FROM t_offering to ");
 		sql.append("INNER JOIN t_job tj ON to.job_id = tj.id ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
@@ -47,6 +47,7 @@ public class OfferingDao extends AbstractJpaDao{
 				final Job job = new Job();
 				job.setId(offeringArr[1].toString());
 				job.setJobTitle(offeringArr[2].toString());
+				job.setJobCode(offeringArr[9].toString());
 				
 				final JobStatus jobStatus = new JobStatus();
 				jobStatus.setStatusName(offeringArr[3].toString());

@@ -658,6 +658,7 @@ public class ProgressStatusService {
 			result.setApplicationId(a.getId());
 			result.setJobId(a.getJob().getId());
 			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
@@ -681,6 +682,7 @@ public class ProgressStatusService {
 			result.setApplicationId(a.getId());
 			result.setJobId(a.getJob().getId());
 			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
@@ -704,6 +706,7 @@ public class ProgressStatusService {
 			result.setApplicationId(a.getId());
 			result.setJobId(a.getJob().getId());
 			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
@@ -727,6 +730,7 @@ public class ProgressStatusService {
 			result.setApplicationId(a.getId());
 			result.setJobId(a.getJob().getId());
 			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
@@ -751,6 +755,7 @@ public class ProgressStatusService {
 			result.setApplicationId(a.getId());
 			result.setJobId(a.getJob().getId());
 			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
 			result.setStatusName(a.getJob().getJobStatus().getStatusName());
 			result.setCompanyId(a.getJob().getCompany().getId());
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());

@@ -25,7 +25,7 @@ public class InterviewDao extends AbstractJpaDao {
 	public List<Interview> getByCandidate(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ti.id AS interview_id, tj.id AS job_id, tj.job_title, tjs.status_name, ");
-		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.created_at, ti.ver ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.created_at, ti.ver, tj.job_code ");
 		sql.append("FROM t_interview ti ");
 		sql.append("INNER JOIN t_job tj ON ti.job_id = tj.id ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
@@ -48,6 +48,7 @@ public class InterviewDao extends AbstractJpaDao {
 				final Job job = new Job();
 				job.setId(interviewArr[1].toString());
 				job.setJobTitle(interviewArr[2].toString());
+				job.setJobCode(interviewArr[9].toString());
 
 				final JobStatus jobStatus = new JobStatus();
 				jobStatus.setStatusName(interviewArr[3].toString());

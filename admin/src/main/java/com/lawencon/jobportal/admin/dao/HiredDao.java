@@ -23,30 +23,17 @@ public class HiredDao extends AbstractJpaDao{
 	}
 	
 	public List<Hired> getByCandidate(String candidateId) {
-		final String sql = "SELECT "
-				+ "	th.id AS hired_id, "
-				+ "	tj.id AS job_id, "
-				+ "	tj.job_title, "
-				+ "	tjs.status_name, "
-				+ "	tc.id AS company_id, "
-				+ "	tc.company_name, "
-				+ " tc.file_id, "
-				+ "	th.created_at, "
-				+ "	th.ver "
-				+ "FROM "
-				+ "	t_hired th "
-				+ "INNER JOIN "
-				+ "	t_job tj ON th.job_id = tj.id "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id "
-				+ "WHERE "
-				+ "	th.candidate_id = :candidateId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT th.id AS hired_id, tj.id AS job_id, tj.job_title, tjs.status_name, tc.id AS company_id, ");
+		sql.append("tc.company_name, tc.file_id, th.created_at, th.ver, tj.job_code ");
+		sql.append("FROM t_hired th ");
+		sql.append("INNER JOIN t_job tj ON th.job_id = tj.id ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("WHERE th.candidate_id = :candidateId ");
 		
-		final List<?> hiredObjs = this.em().createNativeQuery(sql)
+		final List<?> hiredObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		final List<Hired> listHired = new ArrayList<>();
@@ -60,6 +47,7 @@ public class HiredDao extends AbstractJpaDao{
 				final Job job = new Job();
 				job.setId(hiredArr[1].toString());
 				job.setJobTitle(hiredArr[2].toString());
+				job.setJobCode(hiredArr[9].toString());
 				
 				final JobStatus jobStatus = new JobStatus();
 				jobStatus.setStatusName(hiredArr[3].toString());
