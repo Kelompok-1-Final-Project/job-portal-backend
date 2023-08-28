@@ -75,7 +75,6 @@ public class SecurityConfig {
 							HttpMethod.PUT.name(), 
 							HttpMethod.PATCH.name(), 
 							HttpMethod.DELETE.name());
-			
 			}
 		};
 	}

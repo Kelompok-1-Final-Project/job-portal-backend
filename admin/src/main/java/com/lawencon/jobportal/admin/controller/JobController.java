@@ -36,7 +36,7 @@ public class JobController {
 	private JobService jobService;
 	
 	@GetMapping
-	public ResponseEntity<List<JobGetResDto>> getAll(@RequestParam String userId) {
+	public ResponseEntity<List<JobGetResDto>> getAll(@RequestParam("user") String userId) {
 		final List<JobGetResDto> data = jobService.getAll(userId);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
