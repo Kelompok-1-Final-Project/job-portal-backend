@@ -197,9 +197,9 @@ public class ProgressStatusService {
 		return listResult;
 	}
 
-	public List<InterviewGetResDto> getAllInterview() {
+	public List<InterviewGetResDto> getAllInterview(String userId) {
 		final List<InterviewGetResDto> listResult = new ArrayList<>();
-		final List<Interview> listInterview = interviewDao.getAll(Interview.class);
+		final List<Interview> listInterview = interviewDao.getByUser(userId);
 		for (Interview i : listInterview) {
 			final InterviewGetResDto result = new InterviewGetResDto();
 			result.setInterviewId(i.getId());

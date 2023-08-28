@@ -88,8 +88,8 @@ public class StatusProgressController {
 	}
 	
 	@GetMapping("/interview")
-	public ResponseEntity<List<InterviewGetResDto>> getAllInterview(){
-		final List<InterviewGetResDto> response = progressStatusService.getAllInterview();
+	public ResponseEntity<List<InterviewGetResDto>> getAllInterview(@RequestParam("user") String userId){
+		final List<InterviewGetResDto> response = progressStatusService.getAllInterview(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
