@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.model.Candidate;
+import com.lawencon.jobportal.admin.model.CandidateProfile;
 import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Job;
@@ -20,6 +22,46 @@ import com.lawencon.jobportal.admin.model.Offering;
 public class OfferingDao extends AbstractJpaDao{
 	private EntityManager em() {
 		return ConnHandler.getManager();
+	}
+	
+	public List<Offering> getByUser(String userId) {
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tof.id AS offering_id, tj.id AS job_id, tj.job_title, tc.id AS candidate_id, tcp.full_name  ");
+		sql.append("FROM t_offering to ");
+		sql.append("INNER JOIN t_job tj ON to.job_id = tj.id ");
+		sql.append("INNER JOIN t_candidate tc ON tof.candidate_id = tc.id ");
+		sql.append("INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id ");
+		sql.append("WHERE tj.hr_id = :userId OR tj.interviewer_id = :userId ");
+
+		final List<?> offeringObjs = this.em().createNativeQuery(sql.toString())
+				.setParameter("userId", userId)
+				.getResultList();
+		final List<Offering> listOffering = new ArrayList<>();
+		if(offeringObjs.size() > 0) {
+			for(Object offeringObj : offeringObjs) {
+				final Object[] offeringArr = (Object[]) offeringObj;
+				
+				final Offering offering = new Offering();
+				offering.setId(offeringArr[0].toString());
+				
+				final Job job = new Job();
+				job.setId(offeringArr[1].toString());
+				job.setJobTitle(offeringArr[2].toString());
+				offering.setJob(job);
+				
+				final Candidate candidate = new Candidate();
+				candidate.setId(offeringArr[3].toString());
+
+				final CandidateProfile candidateProfile = new CandidateProfile();
+				candidateProfile.setFullName(offeringArr[4].toString());
+				candidate.setCandidateProfile(candidateProfile);
+				offering.setCandidate(candidate);	
+				
+				listOffering.add(offering);
+			}
+		}
+		
+		return listOffering;
 	}
 	
 	public List<Offering> getByCandidate(String candidateId) {

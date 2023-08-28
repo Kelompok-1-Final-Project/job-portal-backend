@@ -94,14 +94,14 @@ public class StatusProgressController {
 	}
 	
 	@GetMapping("/hired")
-	public ResponseEntity<List<HiredGetResDto>> getAllHired(){
-		final List<HiredGetResDto> response = progressStatusService.getAllHired();
+	public ResponseEntity<List<HiredGetResDto>> getAllHired(@RequestParam("user") String userId){
+		final List<HiredGetResDto> response = progressStatusService.getAllHired(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/offering")
-	public ResponseEntity<List<OfferingGetResDto>> getAllOffering(){
-		final List<OfferingGetResDto> response = progressStatusService.getAllOffering();
+	public ResponseEntity<List<OfferingGetResDto>> getAllOffering(@RequestParam("user") String userId){
+		final List<OfferingGetResDto> response = progressStatusService.getAllOffering(userId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

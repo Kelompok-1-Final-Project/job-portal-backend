@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.model.Candidate;
+import com.lawencon.jobportal.admin.model.CandidateProfile;
 import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Hired;
@@ -20,6 +22,44 @@ import com.lawencon.jobportal.admin.model.JobStatus;
 public class HiredDao extends AbstractJpaDao{
 	private EntityManager em() {
 		return ConnHandler.getManager();
+	}
+	
+	public List<Hired> getByUser(String userId) {
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT th.id AS hired_id, tj.id AS job_id, tj.job_title, tc.id AS candidate_id, tcp.full_name ");
+		sql.append("FROM t_hired th ");
+		sql.append("INNER JOIN t_job tj ON th.job_id = tj.id ");
+		sql.append("INNER JOIN t_candidate tc ON th.candidate_id = tc.id ");
+		sql.append("INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id ");
+		sql.append("WHERE tj.hr_id = :userId OR tj.interviewer_id = :userId ");
+		
+		final List<?> hiredObjs = this.em().createNativeQuery(sql.toString())
+				.setParameter("userId", userId)
+				.getResultList();
+		final List<Hired> listHired = new ArrayList<>();
+		if(hiredObjs.size() > 0) {
+			for(Object hiredObj : hiredObjs) {
+				final Object[] hiredArr = (Object[]) hiredObj;
+				
+				final Hired hired = new Hired();
+				hired.setId(hiredArr[0].toString());
+				
+				final Job job = new Job();
+				job.setId(hiredArr[1].toString());
+				job.setJobTitle(hiredArr[2].toString());
+				
+				final Candidate candidate = new Candidate();
+				candidate.setId(hiredArr[3].toString());
+				
+				final CandidateProfile candidateProfile = new CandidateProfile();
+				candidateProfile.setFullName(hiredArr[4].toString());
+				candidate.setCandidateProfile(candidateProfile);
+				
+				listHired.add(hired);
+			}
+		}
+		
+		return listHired;
 	}
 	
 	public List<Hired> getByCandidate(String candidateId) {
