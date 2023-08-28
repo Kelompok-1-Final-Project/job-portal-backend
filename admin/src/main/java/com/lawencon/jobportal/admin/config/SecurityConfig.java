@@ -75,6 +75,14 @@ public class SecurityConfig {
 							HttpMethod.PUT.name(), 
 							HttpMethod.PATCH.name(), 
 							HttpMethod.DELETE.name());
+				
+				registry.addMapping("/**")
+				.allowedOrigins("http://localhost:4201")
+				.allowedMethods(HttpMethod.GET.name(), 
+						HttpMethod.POST.name(), 
+						HttpMethod.PUT.name(), 
+						HttpMethod.PATCH.name(), 
+						HttpMethod.DELETE.name());
 			}
 		};
 	}
