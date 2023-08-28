@@ -98,7 +98,7 @@ public class JobService {
 	public List<JobGetResDto> getAll(String userId) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getAll(Job.class).forEach(j -> {
+		jobDao.getByUser(userId).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
@@ -365,7 +365,6 @@ public class JobService {
 		final InsertResDto result = new InsertResDto();
 		try {
 			em().getTransaction().begin();
-
 			final Job job = new Job();
 			final String jobCode = GeneratorId.generateCode();
 			data.setJobCode(jobCode);
@@ -401,13 +400,15 @@ public class JobService {
 
 			final Job jobResult = jobDao.save(job);
 			
-			for (String b : data.getBenefitCode()) {
-				final Benefit benefit = benefitDao.getByCode(b);
-				
-				final JobBenefit jobBenefit = new JobBenefit();
-				jobBenefit.setBenefit(benefit);
-				jobBenefit.setJob(jobResult);
-				jobBenefitDao.save(jobBenefit);
+			if(data.getBenefitCode() != null) {
+				for (String b : data.getBenefitCode()) {
+					final Benefit benefit = benefitDao.getByCode(b);
+					
+					final JobBenefit jobBenefit = new JobBenefit();
+					jobBenefit.setBenefit(benefit);
+					jobBenefit.setJob(jobResult);
+					jobBenefitDao.save(jobBenefit);
+				}
 			}
 			
 			if(data.getTestName() != null && data.getTestName() != "") {
