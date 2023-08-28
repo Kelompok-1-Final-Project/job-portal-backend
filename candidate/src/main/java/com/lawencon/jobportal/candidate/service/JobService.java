@@ -515,12 +515,16 @@ public class JobService {
 	}
 	
 	public InsertResDto insertJobBenefit(JobBenefitReqDto data) {
+		em().getTransaction().begin();
+		
 		final JobBenefit jobBenefit = new JobBenefit();
 		
-		final Benefit benefit = benefitDao.getById(Benefit.class, data.getBenefitId());
+		final Benefit benefits = benefitDao.getByCode(data.getBenefitCode());
+		final Benefit benefit = benefitDao.getById(Benefit.class, benefits.getId());
 		jobBenefit.setBenefit(benefit);
 		
-		final Job job = jobDao.getById(Job.class, data.getJobId());
+		final Job jobs = jobDao.getByCode(data.getJobCode());
+		final Job job = jobDao.getById(Job.class, jobs.getId());
 		jobBenefit.setJob(job);
 		
 		final JobBenefit jobBenefitResult = jobBenefitDao.save(jobBenefit);
@@ -528,6 +532,8 @@ public class JobService {
 		final InsertResDto result = new InsertResDto();
 		result.setId(jobBenefitResult.getId());
 		result.setMessage("Insert Job Benefit Succesfully");
+		
+		em().getTransaction().commit();
 		
 		return result;
 	}

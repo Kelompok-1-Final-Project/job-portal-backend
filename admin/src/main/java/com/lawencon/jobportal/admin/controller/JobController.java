@@ -141,7 +141,7 @@ public class JobController {
 	@PostMapping("/job-benefit")
 	public ResponseEntity<InsertResDto> insertJobBenfit(@RequestBody JobBenefitReqDto data) {
 		final InsertResDto result = jobService.insertJobBenefit(data);
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("{j}/{b}")

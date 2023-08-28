@@ -3,6 +3,24 @@ package com.lawencon.jobportal.admin.dto.jobbenefit;
 public class JobBenefitReqDto {
 	private String jobId;
 	private String benefitId;
+	private String jobCode;
+	private String benefitCode;
+
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
+	}
+
+	public String getBenefitCode() {
+		return benefitCode;
+	}
+
+	public void setBenefitCode(String benefitCode) {
+		this.benefitCode = benefitCode;
+	}
 
 	public String getJobId() {
 		return jobId;
