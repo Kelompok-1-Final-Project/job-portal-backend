@@ -4,6 +4,7 @@ public class CandidateStageProcessResDto {
 	private String applicationId;
 	private String jobId;
 	private String jobName;
+	private String jobCode;
 	private String statusName;
 	private String companyId;
 	private String companyName;
@@ -33,6 +34,14 @@ public class CandidateStageProcessResDto {
 
 	public void setJobName(String jobName) {
 		this.jobName = jobName;
+	}
+
+	public String getJobCode() {
+		return jobCode;
+	}
+
+	public void setJobCode(String jobCode) {
+		this.jobCode = jobCode;
 	}
 
 	public String getStatusName() {

@@ -25,7 +25,7 @@ public class ApplicationDao extends AbstractJpaDao {
 	public List<Application> getByCandidate(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tjs.status_name, ");
-		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ta.created_at, ta.ver ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ta.created_at, ta.ver, tj.job_code ");
 		sql.append("FROM t_application ta ");
 		sql.append("INNER JOIN t_job tj ON ta.job_id = tj.id ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
@@ -49,6 +49,7 @@ public class ApplicationDao extends AbstractJpaDao {
 				final Job job = new Job();
 				job.setId(applicationArr[1].toString());
 				job.setJobTitle(applicationArr[2].toString());
+				job.setJobCode(applicationArr[9].toString());
 
 				final JobStatus jobStatus = new JobStatus();
 				jobStatus.setStatusName(applicationArr[3].toString());
