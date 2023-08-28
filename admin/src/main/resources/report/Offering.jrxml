@@ -20,10 +20,6 @@
 	</background>
 	<title>
 		<band height="130" splitType="Stretch">
-			<image>
-				<reportElement x="20" y="9" width="140" height="105" uuid="5562cef4-b7dc-44ca-bbc1-f9691b5ccf5d"/>
-				<imageExpression><![CDATA["https://raw.githubusercontent.com/Kelompok-1-Final-Project/job-portal-backend/master/inlook-logo.png"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="210" y="10" width="300" height="74" uuid="c2170097-dbec-48b9-a597-af86928213f6"/>
 				<textElement textAlignment="Center">
@@ -46,33 +42,37 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 				</textElement>
 				<text><![CDATA[Email : inlook@contact.com]]></text>
 			</staticText>
+			<image>
+				<reportElement x="30" y="4" width="110" height="120" uuid="22f2d2a3-d521-4480-8321-1af091a63ef6"/>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/Kelompok-1-Final-Project/job-portal-frontend/master/projects/base/src/assets/images/logo.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="160" splitType="Stretch">
+		<band height="165" splitType="Stretch">
 			<staticText>
-				<reportElement x="203" y="14" width="166" height="30" uuid="e89680df-b749-48d2-802f-f1f0fe7762ce"/>
+				<reportElement x="203" y="11" width="166" height="30" uuid="e89680df-b749-48d2-802f-f1f0fe7762ce"/>
 				<textElement markup="styled">
 					<font fontName="Arial" size="22" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Offering Letter]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="44" width="550" height="30" uuid="ba115c05-e3e5-41b8-9131-79951f99b425"/>
+				<reportElement x="0" y="47" width="550" height="30" uuid="ba115c05-e3e5-41b8-9131-79951f99b425"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["On behalf of  " + $P{company}  + " We are delighted to offer you the position of " +  $P{jobPosition} + " at " + $P{company} + ". We noticed your impressive skills and experiences during the selection process, and we believe you would be a valuable addition. "]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="80" width="550" height="50" uuid="df545435-c6b6-419c-b055-e966cd5af898"/>
+				<reportElement x="0" y="83" width="550" height="50" uuid="df545435-c6b6-419c-b055-e966cd5af898"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Name : " + $P{name} + "\n" + "Position : " + $P{jobPosition} + "\n" + "Salary : " + $P{salary} + "n"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="140" width="550" height="20" uuid="a26d7cb0-a763-44c9-8641-740bcd815cbf"/>
+				<reportElement x="0" y="143" width="550" height="20" uuid="a26d7cb0-a763-44c9-8641-740bcd815cbf"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
