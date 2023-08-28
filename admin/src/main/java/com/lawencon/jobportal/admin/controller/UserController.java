@@ -51,7 +51,7 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@PatchMapping("/update-acvite")
+	@PatchMapping("/update-active")
 	public ResponseEntity<UpdateResDto> updateIsActive(
 			@RequestBody UserUpdateIsActiveReqDto data){
 		final UpdateResDto response = userService.updateUser(data);

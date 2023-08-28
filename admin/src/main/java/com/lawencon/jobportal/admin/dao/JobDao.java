@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.admin.dao;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,21 +34,21 @@ public class JobDao extends AbstractJpaDao{
 		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
 		sql.append("tc.id AS company_id, tc.company_name, ti.industry_name, tci.city_name, tjp.position_name, ");
 		sql.append("tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver, ");
-		sql.append("tpi.full_name AS interviewer, tph.full_name AS hr, tj.job_code");
+		sql.append("tpi.full_name AS interviewer, tph.full_name AS hr, tj.job_code ");
 		sql.append("FROM t_job tj ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
 		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
 		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
 		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
 		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
-		sql.append("INNER JOIN t_industry ti ON tc.industry_id = tc.industry_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
 		sql.append("INNER JOIN t_user tuh ON tj.hr_id = tuh.id ");
 		sql.append("INNER JOIN t_user tui ON tj.interviewer_id = tui.id ");
 		sql.append("INNER JOIN t_profile tph ON tuh.profile_id = tph.id ");
 		sql.append("INNER JOIN t_profile tpi ON tui.profile_id = tpi.id ");
 		sql.append("WHERE tj.hr_id = :userId OR tj.interviewer_id = :userId ");
 
-		final List<?> jobsObj = this.em().createNativeQuery(sql.toString(), Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("userId", userId)
 				.getResultList();
 		
@@ -91,8 +92,10 @@ public class JobDao extends AbstractJpaDao{
 				employmentType.setEmploymentName(jobArr[12].toString());
 				job.setEmployementType(employmentType);
 				
-				job.setCreatedAt(DateConvert.convertDate(jobArr[13].toString()));
-				job.setUpdatedAt(DateConvert.convertDate(jobArr[14].toString()));
+				job.setCreatedAt(Timestamp.valueOf(jobArr[13].toString()).toLocalDateTime());
+				if(jobArr[14]!=null) {
+					job.setUpdatedAt(Timestamp.valueOf(jobArr[14].toString()).toLocalDateTime());					
+				}
 				job.setVersion(Integer.valueOf(jobArr[15].toString()));
 
 				final Profile profileHr = new Profile();
@@ -105,7 +108,7 @@ public class JobDao extends AbstractJpaDao{
 				profileInterviewer.setFullName(jobArr[17].toString());
 				final User userInterviewer = new User();
 				userInterviewer.setProfile(profileInterviewer);
-				job.setHr(userInterviewer);
+				job.setInterviewer(userInterviewer);
 				
 				job.setJobCode(jobArr[18].toString());
 				listJob.add(job);

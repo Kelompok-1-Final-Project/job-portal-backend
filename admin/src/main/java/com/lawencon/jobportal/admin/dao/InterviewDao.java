@@ -61,9 +61,12 @@ public class InterviewDao extends AbstractJpaDao {
 				final Profile profile = new Profile();
 				profile.setFullName(interviewArr[4].toString());
 				user.setProfile(profile);
+				interview.setInterviewer(user);
 				
 				interview.setSchedule(Timestamp.valueOf(interviewArr[5].toString()).toLocalDateTime());
-				interview.setNotes(interviewArr[6].toString());
+				if(interviewArr[6]!=null) {
+					interview.setNotes(interviewArr[6].toString());					
+				}
 				
 				final Candidate candidate = new Candidate();
 				candidate.setId(interviewArr[7].toString());
@@ -71,6 +74,7 @@ public class InterviewDao extends AbstractJpaDao {
 				final CandidateProfile candidateProfile = new CandidateProfile();
 				candidateProfile.setFullName(interviewArr[8].toString());
 				candidate.setCandidateProfile(candidateProfile);
+				interview.setCandidate(candidate);
 				
 				listInterview.add(interview);
 			}

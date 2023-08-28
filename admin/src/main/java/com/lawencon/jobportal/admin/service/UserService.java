@@ -172,6 +172,8 @@ public class UserService implements UserDetailsService {
 	}
 	
 	public UpdateResDto updateUser(UserUpdateIsActiveReqDto data)  {
+		em().getTransaction().begin();
+		
 		final User userDb = userDao.getById(User.class, data.getUserId());
 		userDb.setIsActive(data.getIsActive());
 		
@@ -181,6 +183,8 @@ public class UserService implements UserDetailsService {
 		
 		updateResDto.setVersion(userResult.getVersion());
 		updateResDto.setMessage("Update Berhasil!!!");
+		
+		em().getTransaction().commit();
 
 		return updateResDto;
 	}
