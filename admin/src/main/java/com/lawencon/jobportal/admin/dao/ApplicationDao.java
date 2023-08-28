@@ -28,7 +28,7 @@ public class ApplicationDao extends AbstractJpaDao {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tc.id AS candidate_id, tcp.full_name  ");
 		sql.append("FROM t_application ta ");
-		sql.append("INNER JOIN t_job tj ON ta.job_id = tj.id");
+		sql.append("INNER JOIN t_job tj ON ta.job_id = tj.id ");
 		sql.append("INNER JOIN t_candidate tc ON ta.candidate_id = tc.id ");
 		sql.append("INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id ");
 		sql.append("WHERE tj.hr_id = :userId OR tj.interviewer_id = :userId ");
