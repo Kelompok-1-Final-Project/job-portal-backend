@@ -1353,4 +1353,14 @@ WHERE
 	
 SELECT 	tc.id, tc.email, tcp.full_name, tcp.mobile_number, tc.ver FROM  	t_candidate_profile tcp  INNER JOIN  	t_candidate tc ON tcp.id = tc.profile_id  WHERE  tc.email = :userEmail 
  
- 
+ result.setApplicationId(a.getId());
+			result.setCandidateId(a.getCandidate().getId());
+			result.setCandidateName(a.getCandidate().getCandidateProfile().getFullName());
+			result.setJobId(a.getJob().getId());
+			result.setJobTitle(a.getJob().getJobTitle());
+ SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tc.id AS candidate_id, tcp.full_name 
+FROM t_application ta 
+INNER JOIN t_job tj ON ta.job_id = tj.id 
+INNER JOIN t_candidate tc ON ta.candidate_id = tc.id 
+INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id 
+WHERE tj.hr_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5' OR tj.interviewer_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5'

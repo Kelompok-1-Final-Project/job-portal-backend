@@ -84,6 +84,12 @@ public class JobController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@GetMapping("/filter/code")
+	public ResponseEntity<JobGetResDto> getByCode(@RequestParam("code") String jobCode, @RequestParam("can") String candidateId){
+		final JobGetResDto response = jobService.getJobByCode(jobCode, candidateId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	@PatchMapping
 	public ResponseEntity<UpdateResDto> updateJob(@RequestBody JobUpdateReqDto data){
 		final UpdateResDto response = jobService.updateJob(data);

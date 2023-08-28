@@ -439,6 +439,52 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
+	public JobGetResDto getJobByCode(String code, String candidateId) {
+		final Job jobDb = jobDao.getByCode(code);
+		final Job job = jobDao.getById(Job.class, jobDb.getId());
+
+		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(candidateId);
+		final List<SaveJob> saveJob = saveJobDao.getByCandidate(candidateId);
+		
+		final JobGetResDto jobGetResDto = new JobGetResDto();
+		jobGetResDto.setId(job.getId());
+		jobGetResDto.setJobTitle(job.getJobTitle());
+		jobGetResDto.setSalaryStart(job.getSalaryStart());
+		jobGetResDto.setSalaryEnd(job.getSalaryEnd());
+		jobGetResDto.setDescription(job.getDescription());
+		jobGetResDto.setEndDate(job.getEndDate().toString());
+		jobGetResDto.setCompanyId(job.getCompany().getId());
+		jobGetResDto.setCompanyName(job.getCompany().getCompanyName());
+		jobGetResDto.setCompanyPhoto(job.getCompany().getFile().getId());
+		jobGetResDto.setIndustryName(job.getCompany().getIndustry().getIndustryName());
+		jobGetResDto.setCityName(job.getCompany().getCity().getCityName());
+		jobGetResDto.setPositionName(job.getJobPosition().getPositionName());
+		jobGetResDto.setStatusName(job.getJobStatus().getStatusName());
+		jobGetResDto.setEmploymentName(job.getEmployementType().getEmploymentName());
+		jobGetResDto.setCreatedAt(job.getCreatedAt().toString());
+		if(job.getUpdatedAt() != null) {
+			jobGetResDto.setUpdatedAt(job.getUpdatedAt().toString());				
+		}
+		jobGetResDto.setVer(job.getVersion());
+		jobGetResDto.setIsBookmark(false);
+		jobGetResDto.setIsApply(false);
+		
+		for(SaveJob sj : saveJob) {
+			if(sj.getJob().getId().equals(job.getId())) {
+				jobGetResDto.setIsBookmark(true);
+				jobGetResDto.setSaveJobId(sj.getId());
+			}
+		}
+		
+		for(JobCandidateStatus jcs : jobCandidateStatus) {
+			if(jcs.getJob().getId().equals(job.getId())) {
+				jobGetResDto.setIsApply(true);
+			}
+		}
+		
+		return jobGetResDto;
+	}
+	
 	public JobGetResDto getById(String jobId, String candidateId) {
 		final Job job = jobDao.getById(Job.class, jobId);
 
