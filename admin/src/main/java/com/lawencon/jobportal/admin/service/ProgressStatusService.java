@@ -599,10 +599,12 @@ public class ProgressStatusService {
 		return result;
 	}
 	
-	public List<CandidateStageProcessResDto> getApplicationByCandidate(String candidateEmail) {
+	public List<CandidateStageProcessResDto> getApplicationByCandidate(String candidateEmail, Integer startIndex, Integer endIndex) {
 		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
 		
-		final List<Application> listApplication = applicationDao.getByCandidate(candidateId.getId());
+		final List<Application> listApplication = applicationDao.getByCandidate(candidateId.getId(), startIndex, endIndex);
+		final Integer totalApplication = applicationDao.getByCandidateNonPagination(candidateId.getId()).size();
+		
 		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
 		for (Application a : listApplication) {
 			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
@@ -616,17 +618,44 @@ public class ProgressStatusService {
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
 			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
-			result.setTotalStage(listApplication.size());
+			result.setTotalStage(totalApplication);
 
 			listResult.add(result);
 		}
 		return listResult;
 	}
 	
-	public List<CandidateStageProcessResDto> getAssessmentByCandidate(String candidateEmail) {
+	public List<CandidateStageProcessResDto> getApplicationByCandidateNonPagination(String candidateEmail) {
 		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
 		
-		final List<Assessment> listAssessment = assessmentDao.getByCandidate(candidateId.getId());
+		final List<Application> listApplication = applicationDao.getByCandidateNonPagination(candidateId.getId());
+		final Integer totalApplication = applicationDao.getByCandidateNonPagination(candidateId.getId()).size();
+		
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Application a : listApplication) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(totalApplication);
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getAssessmentByCandidate(String candidateEmail, Integer startIndex, Integer endIndex) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Assessment> listAssessment = assessmentDao.getByCandidate(candidateId.getId(), startIndex, endIndex);
+		final Integer totalData = assessmentDao.getByCandidateNonPagination(candidateId.getId()).size();
 		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
 		for (Assessment a : listAssessment) {
 			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
@@ -640,17 +669,67 @@ public class ProgressStatusService {
 			result.setCompanyName(a.getJob().getCompany().getCompanyName());
 			result.setPhotoId(a.getJob().getCompany().getFile().getId());
 			result.setCreatedAt(a.getCreatedAt().toString());
-			result.setTotalStage(listAssessment.size());
+			result.setTotalStage(totalData);
 
 			listResult.add(result);
 		}
 		return listResult;
 	}
 	
-	public List<CandidateStageProcessResDto> getInterviewByCandidate(String candidateEmail) {
+	public List<CandidateStageProcessResDto> getAssessmentByCandidateNonPagination(String candidateEmail) {
 		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
 		
-		final List<Interview> listInterview = interviewDao.getByCandidate(candidateId.getId());
+		final List<Assessment> listAssessment = assessmentDao.getByCandidateNonPagination(candidateId.getId());
+		final Integer totalData = assessmentDao.getByCandidateNonPagination(candidateId.getId()).size();
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Assessment a : listAssessment) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(totalData);
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getInterviewByCandidate(String candidateEmail, Integer startIndex, Integer endIndex) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Interview> listInterview = interviewDao.getByCandidate(candidateId.getId(), startIndex, endIndex);
+		final Integer totalData = interviewDao.getByCandidateNonPagination(candidateId.getId()).size();
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Interview a : listInterview) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(totalData);
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getInterviewByCandidateNonPagination(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Interview> listInterview = interviewDao.getByCandidateNonPagination(candidateId.getId());
 		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
 		for (Interview a : listInterview) {
 			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
@@ -671,10 +750,35 @@ public class ProgressStatusService {
 		return listResult;
 	}
 	
-	public List<CandidateStageProcessResDto> getHiredByCandidate(String candidateEmail) {
+	public List<CandidateStageProcessResDto> getHiredByCandidate(String candidateEmail, Integer startIndex, Integer endIndex) {
 		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
 		
-		final List<Hired> listHired = hiredDao.getByCandidate(candidateId.getId());
+		final List<Hired> listHired = hiredDao.getByCandidate(candidateId.getId(), startIndex, endIndex);
+		final Integer totalData = hiredDao.getByCandidateNonPagination(candidateId.getId()).size();
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Hired a : listHired) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(totalData);
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getHiredByCandidateNonPagination(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Hired> listHired = hiredDao.getByCandidateNonPagination(candidateId.getId());
 		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
 		for (Hired a : listHired) {
 			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
@@ -695,10 +799,35 @@ public class ProgressStatusService {
 		return listResult;
 	}
 	
-	public List<CandidateStageProcessResDto> getOfferingByCandidate(String candidateEmail) {
+	public List<CandidateStageProcessResDto> getOfferingByCandidate(String candidateEmail, Integer startIndex, Integer endIndex) {
 		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
 		
-		final List<Offering> listOffering= offeringDao.getByCandidate(candidateId.getId());
+		final List<Offering> listOffering= offeringDao.getByCandidate(candidateId.getId(), startIndex, endIndex);
+		final Integer totalData = offeringDao.getByCandidateNonPagination(candidateId.getId()).size();
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (Offering a : listOffering) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(totalData);
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getOfferingByCandidateNonPagination(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<Offering> listOffering= offeringDao.getByCandidateNonPagination(candidateId.getId());
 		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
 		for (Offering a : listOffering) {
 			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
@@ -719,10 +848,35 @@ public class ProgressStatusService {
 		return listResult;
 	}
 	
-	public List<CandidateStageProcessResDto> getMCUbyCandidate(String candidateEmail) {
+	public List<CandidateStageProcessResDto> getMCUbyCandidate(String candidateEmail, Integer startIndex, Integer endIndex) {
 		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
 		
-		final List<MedicalCheckup> listMedical= medicalCheckupDao.getByCandidate(candidateId.getId());
+		final List<MedicalCheckup> listMedical= medicalCheckupDao.getByCandidate(candidateId.getId(), startIndex, endIndex);
+		final Integer totalData = medicalCheckupDao.getByCandidateNonPagination(candidateId.getId()).size();
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (MedicalCheckup a : listMedical) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(totalData);
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getMCUbyCandidateNonPagination(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		
+		final List<MedicalCheckup> listMedical= medicalCheckupDao.getByCandidateNonPagination(candidateId.getId());
 		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
 		for (MedicalCheckup a : listMedical) {
 			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
@@ -743,11 +897,37 @@ public class ProgressStatusService {
 		return listResult;
 	}
 	
-	public List<CandidateStageProcessResDto> getRejectbyCandidate(String candidateEmail) {
+	public List<CandidateStageProcessResDto> getRejectbyCandidate(String candidateEmail, Integer startIndex, Integer endIndex) {
 		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
 		final StatusProcess statusProcess = statusProcessDao.getByCode(StatusCodeEnum.REJECTED.processCode);
 		
-		final List<JobCandidateStatus> listJobCandidateStatus = jobCandidateStatusDao.getByStatus(candidateId.getId(), statusProcess.getId());
+		final List<JobCandidateStatus> listJobCandidateStatus = jobCandidateStatusDao.getByStatus(candidateId.getId(), statusProcess.getId(), startIndex, endIndex);
+		final Integer totalData = jobCandidateStatusDao.getByStatusNonPagination(candidateId.getId(), statusProcess.getId()).size();
+		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
+		for (JobCandidateStatus a : listJobCandidateStatus) {
+			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();
+	
+			result.setApplicationId(a.getId());
+			result.setJobId(a.getJob().getId());
+			result.setJobName(a.getJob().getJobTitle());
+			result.setJobCode(a.getJob().getJobCode());
+			result.setStatusName(a.getJob().getJobStatus().getStatusName());
+			result.setCompanyId(a.getJob().getCompany().getId());
+			result.setCompanyName(a.getJob().getCompany().getCompanyName());
+			result.setPhotoId(a.getJob().getCompany().getFile().getId());
+			result.setCreatedAt(a.getCreatedAt().toString());
+			result.setTotalStage(totalData);
+
+			listResult.add(result);
+		}
+		return listResult;
+	}
+	
+	public List<CandidateStageProcessResDto> getRejectbyCandidateNonPagination(String candidateEmail) {
+		final Candidate candidateId = candidateDao.getByEmail(candidateEmail);
+		final StatusProcess statusProcess = statusProcessDao.getByCode(StatusCodeEnum.REJECTED.processCode);
+		
+		final List<JobCandidateStatus> listJobCandidateStatus = jobCandidateStatusDao.getByStatusNonPagination(candidateId.getId(), statusProcess.getId());
 		final List<CandidateStageProcessResDto> listResult = new ArrayList<>();
 		for (JobCandidateStatus a : listJobCandidateStatus) {
 			final CandidateStageProcessResDto result = new CandidateStageProcessResDto();

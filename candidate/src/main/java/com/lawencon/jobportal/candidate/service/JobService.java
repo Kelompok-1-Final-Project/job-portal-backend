@@ -424,7 +424,7 @@ public class JobService {
 	
 	public List<JobGetResDto> getFilterWithoutPagination(String name, String city, String position, List<String> employment, Integer salaryStart, Integer salaryEnd, String userId) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
-		final List<SaveJob> saveJob = saveJobDao.countSaveJob(userId);
+		final List<SaveJob> saveJob = saveJobDao.getByCandidateNonPagination(userId);
 		final Integer totalJob = jobDao.filterSearchWithoutPagination(name, city, position, employment, salaryStart, salaryEnd).size();
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(userId);
 		
@@ -474,7 +474,7 @@ public class JobService {
 	
 	public List<JobGetResDto> getFilter(String name, String city, String position, List<String> employment, Integer salaryStart, Integer salaryEnd, String userId, Integer startIndex, Integer endIndex) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
-		final List<SaveJob> saveJob = saveJobDao.countSaveJob(userId);
+		final List<SaveJob> saveJob = saveJobDao.getByCandidateNonPagination(userId);
 		final Integer totalJob = jobDao.filterSearchWithoutPagination(name, city, position, employment, salaryStart, salaryEnd).size();
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(userId);
 		
@@ -527,7 +527,7 @@ public class JobService {
 		final Job job = jobDao.getById(Job.class, jobDb.getId());
 
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(candidateId);
-		final List<SaveJob> saveJob = saveJobDao.countSaveJob(candidateId);
+		final List<SaveJob> saveJob = saveJobDao.getByCandidateNonPagination(candidateId);
 		
 		final JobGetResDto jobGetResDto = new JobGetResDto();
 		jobGetResDto.setId(job.getId());
@@ -572,7 +572,7 @@ public class JobService {
 		final Job job = jobDao.getById(Job.class, jobId);
 
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(candidateId);
-		final List<SaveJob> saveJob = saveJobDao.countSaveJob(candidateId);
+		final List<SaveJob> saveJob = saveJobDao.getByCandidateNonPagination(candidateId);
 		
 		final JobGetResDto jobGetResDto = new JobGetResDto();
 		jobGetResDto.setId(job.getId());

@@ -167,51 +167,100 @@ public class StatusProgressController {
 	
 	@PostMapping("/application-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllApplicationByCandidate(
-			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getApplicationByCandidate(candidateEmail.getEmail());
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getApplicationByCandidate(data.getEmail(), data.getStartIndex(), data.getEndIndex());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/application-id-non-pagination")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllApplicationByCandidateNonPagination(
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getApplicationByCandidateNonPagination(data.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/assessment-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllAssessmentByCandidate(
-			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getAssessmentByCandidate(candidateEmail.getEmail());
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getAssessmentByCandidate(data.getEmail(), data.getStartIndex(), data.getEndIndex());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/assessment-id-non-pagination")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllAssessmentByCandidateNonPagination(
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getAssessmentByCandidateNonPagination(data.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/interview-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllInterviewByCandidate(
-			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getInterviewByCandidate(candidateEmail.getEmail());
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getInterviewByCandidate(data.getEmail(), data.getStartIndex(), data.getEndIndex());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@PostMapping("/interview-id-non-pagination")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllInterviewByCandidateNonPagination(
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getInterviewByCandidateNonPagination(data.getEmail());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	
 	@PostMapping("/hired-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllHiredByCandidate(
-			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getHiredByCandidate(candidateEmail.getEmail());
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getHiredByCandidate(data.getEmail(), data.getStartIndex(), data.getEndIndex());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/hired-id-non-pagination")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllHiredByCandidateNonPagination(
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getHiredByCandidateNonPagination(data.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/offering-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllOfferingByCandidate(
-			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getOfferingByCandidate(candidateEmail.getEmail());
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getOfferingByCandidate(data.getEmail(), data.getStartIndex(), data.getEndIndex());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/offering-id-non-pagination")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllOfferingByCandidateNonPagination(
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getOfferingByCandidateNonPagination(data.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/medical-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllMedicalByCandidate(
-			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getMCUbyCandidate(candidateEmail.getEmail());
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getMCUbyCandidate(data.getEmail(), data.getStartIndex(), data.getEndIndex());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/medical-id-non-pagination")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllMedicalByCandidateNonPagination(
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getMCUbyCandidateNonPagination(data.getEmail());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
 	@PostMapping("/reject-id")
 	public ResponseEntity<List<CandidateStageProcessResDto>> getAllRejectByCandidate(
-			@RequestBody JobCandidateStatusGetReqDto candidateEmail){
-		final List<CandidateStageProcessResDto> response = progressStatusService.getRejectbyCandidate(candidateEmail.getEmail());
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getRejectbyCandidate(data.getEmail(), data.getStartIndex(), data.getEndIndex());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@PostMapping("/reject-id-non-pagination")
+	public ResponseEntity<List<CandidateStageProcessResDto>> getAllRejectByCandidateNonPagination(
+			@RequestBody JobCandidateStatusGetReqDto data){
+		final List<CandidateStageProcessResDto> response = progressStatusService.getRejectbyCandidateNonPagination(data.getEmail());
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }	

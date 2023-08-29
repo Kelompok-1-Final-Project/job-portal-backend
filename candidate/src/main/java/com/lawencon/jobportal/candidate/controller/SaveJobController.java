@@ -40,6 +40,12 @@ public class SaveJobController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@GetMapping("/{candidateId}")
+	public ResponseEntity<List<SaveJobGetResDto>> getSaveJobByCandidateNonPagination(@PathVariable String candidateId){
+		final List<SaveJobGetResDto> response = saveJobService.getByCandidateNonPagination(candidateId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	@DeleteMapping
 	public ResponseEntity<DeleteResDto> deleteExperience(@RequestParam String saveJobId){
 		final Boolean result = saveJobService.deleteSaveJob(saveJobId);

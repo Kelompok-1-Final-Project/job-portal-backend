@@ -64,7 +64,60 @@ public class OfferingDao extends AbstractJpaDao{
 		return listOffering;
 	}
 	
-	public List<Offering> getByCandidate(String candidateId) {
+	public List<Offering> getByCandidate(String candidateId, Integer startIndex, Integer endIndex) {
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tof.id AS offering_id, tj.id AS job_id, tj.job_title, tjs.status_name, tc.id AS company_id, ");
+		sql.append("tc.company_name, tc.file_id, tof.created_at, tof.ver, tj.job_code ");
+		sql.append("FROM t_offering tof ");
+		sql.append("INNER JOIN t_job tj ON tof.job_id = tj.id ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("WHERE tof.candidate_id = :candidateId AND tof.is_active = TRUE ");
+
+		final List<?> offeringObjs = this.em().createNativeQuery(sql.toString())
+				.setParameter("candidateId", candidateId)
+				.setFirstResult(startIndex)
+				.setMaxResults(endIndex)
+				.getResultList();
+		final List<Offering> listOffering = new ArrayList<>();
+		if(offeringObjs.size() > 0) {
+			for(Object offeringObj : offeringObjs) {
+				final Object[] offeringArr = (Object[]) offeringObj;
+				
+				final Offering offering = new Offering();
+				offering.setId(offeringArr[0].toString());
+				
+				final Job job = new Job();
+				job.setId(offeringArr[1].toString());
+				job.setJobTitle(offeringArr[2].toString());
+				job.setJobCode(offeringArr[9].toString());
+				
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(offeringArr[3].toString());
+				job.setJobStatus(jobStatus);
+				
+				final Company company = new Company();
+				company.setId(offeringArr[4].toString());
+				company.setCompanyName(offeringArr[5].toString());
+				
+				final File file = new File();
+				file.setId(offeringArr[6].toString());
+				company.setFile(file);
+				job.setCompany(company);
+				
+				offering.setJob(job);
+				offering.setCreatedAt(Timestamp.valueOf(offeringArr[7].toString()).toLocalDateTime());
+				offering.setVersion(Integer.valueOf(offeringArr[8].toString()));
+				
+				listOffering.add(offering);
+			}
+		}
+		
+		return listOffering;
+	}
+	
+	public List<Offering> getByCandidateNonPagination(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tof.id AS offering_id, tj.id AS job_id, tj.job_title, tjs.status_name, tc.id AS company_id, ");
 		sql.append("tc.company_name, tc.file_id, tof.created_at, tof.ver, tj.job_code ");
