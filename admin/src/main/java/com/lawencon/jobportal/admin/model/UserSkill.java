@@ -9,15 +9,19 @@ import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_user_skill")
-public class UserSkill extends BaseEntity{
-	
+public class UserSkill extends BaseEntity {
+
 	@OneToOne
 	@JoinColumn(name = "candidate_id")
 	private Candidate candidate;
-	
+
 	@OneToOne
 	@JoinColumn(name = "skill_id")
 	private Skill skill;
+
+	@OneToOne
+	@JoinColumn(name = "level_id")
+	private Level level;
 
 	public Candidate getCandidate() {
 		return candidate;
@@ -34,5 +38,13 @@ public class UserSkill extends BaseEntity{
 	public void setSkill(Skill skill) {
 		this.skill = skill;
 	}
-	
+
+	public Level getLevel() {
+		return level;
+	}
+
+	public void setLevel(Level level) {
+		this.level = level;
+	}
+
 }
