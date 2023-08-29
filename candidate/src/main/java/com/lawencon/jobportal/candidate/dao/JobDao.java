@@ -928,7 +928,7 @@ public class JobDao extends AbstractJpaDao{
 		return listJob;
 	}
 	
-	public List<Job> filterCountSearch(String name, String cityId, String positionId, List<String> employmentId, Integer salaryStart, Integer salaryEnd){
+	public List<Job> filterSearchWithoutPagination(String name, String cityId, String positionId, List<String> employmentId, Integer salaryStart, Integer salaryEnd){
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
 		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");

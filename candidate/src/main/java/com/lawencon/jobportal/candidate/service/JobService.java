@@ -389,10 +389,60 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
+	public List<JobGetResDto> getFilterWithoutPagination(String name, String city, String position, List<String> employment, Integer salaryStart, Integer salaryEnd, String userId) {
+		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+		final List<SaveJob> saveJob = saveJobDao.countSaveJob(userId);
+		final Integer totalJob = jobDao.filterSearchWithoutPagination(name, city, position, employment, salaryStart, salaryEnd).size();
+		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(userId);
+		
+		jobDao.filterSearchWithoutPagination(name, city, position, employment, salaryStart, salaryEnd).forEach(j -> {
+			final JobGetResDto jobGetResDto = new JobGetResDto();
+			jobGetResDto.setId(j.getId());
+			jobGetResDto.setJobTitle(j.getJobTitle());
+			jobGetResDto.setSalaryStart(j.getSalaryStart());
+			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+			jobGetResDto.setDescription(j.getDescription());
+			jobGetResDto.setEndDate(j.getEndDate().toString());
+			jobGetResDto.setCompanyId(j.getCompany().getId());
+			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setCompanyPhoto(j.getCompany().getFile().getId());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
+			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			if(j.getUpdatedAt() != null) {
+				jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+			}
+			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setTotalJob(totalJob);
+			jobGetResDto.setIsBookmark(false);
+			jobGetResDto.setIsApply(false);
+			
+			for(SaveJob sj : saveJob) {
+				if(sj.getJob().getId().equals(j.getId())) {
+					jobGetResDto.setIsBookmark(true);
+					jobGetResDto.setSaveJobId(sj.getId());
+				}
+			}
+			
+			for(JobCandidateStatus jcs : jobCandidateStatus) {
+				if(jcs.getJob().getId().equals(j.getId())) {
+					jobGetResDto.setIsApply(true);
+				}
+			}
+			
+			jobGetResDtos.add(jobGetResDto);
+		});
+
+		return jobGetResDtos;
+	}
+	
 	public List<JobGetResDto> getFilter(String name, String city, String position, List<String> employment, Integer salaryStart, Integer salaryEnd, String userId, Integer startIndex, Integer endIndex) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 		final List<SaveJob> saveJob = saveJobDao.countSaveJob(userId);
-		final Integer totalJob = jobDao.filterCountSearch(name, city, position, employment, salaryStart, salaryEnd).size();
+		final Integer totalJob = jobDao.filterSearchWithoutPagination(name, city, position, employment, salaryStart, salaryEnd).size();
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(userId);
 		
 		jobDao.filterSearch(name, city, position, employment, salaryStart, salaryEnd, startIndex, endIndex).forEach(j -> {
