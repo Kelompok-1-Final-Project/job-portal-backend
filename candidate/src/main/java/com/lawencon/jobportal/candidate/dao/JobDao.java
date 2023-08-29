@@ -917,7 +917,7 @@ public class JobDao extends AbstractJpaDao{
 				job.setEmployementType(employmentType);
 				
 				job.setCreatedAt(Timestamp.valueOf(jobArr[14].toString()).toLocalDateTime());
-				if(jobArr[16] != null) {
+				if(jobArr[15] != null) {
 					job.setUpdatedAt(Timestamp.valueOf(jobArr[15].toString()).toLocalDateTime());					
 				}
 				job.setVersion(Integer.valueOf(jobArr[16].toString()));
@@ -1045,7 +1045,7 @@ public class JobDao extends AbstractJpaDao{
 				job.setEmployementType(employmentType);
 				
 				job.setCreatedAt(Timestamp.valueOf(jobArr[14].toString()).toLocalDateTime());
-				if(jobArr[16] != null) {
+				if(jobArr[15] != null) {
 					job.setUpdatedAt(Timestamp.valueOf(jobArr[15].toString()).toLocalDateTime());					
 				}
 				job.setVersion(Integer.valueOf(jobArr[16].toString()));
