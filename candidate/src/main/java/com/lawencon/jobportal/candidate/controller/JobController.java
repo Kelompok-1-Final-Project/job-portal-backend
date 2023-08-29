@@ -47,6 +47,12 @@ public class JobController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
+	@GetMapping("filternonpagination/industry")
+	public ResponseEntity<List<JobGetResDto>> getByIndustryNonPagination(@RequestParam("ind") String industry) {
+		final List<JobGetResDto> data = jobService.getByIndustryWithoutPagination(industry);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
 	@GetMapping("job-status")
 	public ResponseEntity<List<JobStatusGetResDto>> getAllJobStatus() {
 		final List<JobStatusGetResDto> data = jobService.getAllJobStatus();

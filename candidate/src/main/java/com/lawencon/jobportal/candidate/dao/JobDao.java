@@ -28,7 +28,7 @@ public class JobDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
-	public List<Job> getCountByIndustry(String industry) {
+	public List<Job> getByIndustryNonPagination(String industry) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
 		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");

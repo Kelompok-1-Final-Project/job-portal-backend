@@ -358,9 +358,42 @@ public class JobService {
 	
 	public List<JobGetResDto> getByIndustry(String industry, Integer startIndex, Integer endIndex) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
-		final Integer totalJob = jobDao.getCountByIndustry(industry).size();
+		final Integer totalJob = jobDao.getByIndustryNonPagination(industry).size();
 		
 		jobDao.getByIndustry(industry, startIndex, endIndex).forEach(j -> {
+			final JobGetResDto jobGetResDto = new JobGetResDto();
+			jobGetResDto.setId(j.getId());
+			jobGetResDto.setJobTitle(j.getJobTitle());
+			jobGetResDto.setSalaryStart(j.getSalaryStart());
+			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+			jobGetResDto.setDescription(j.getDescription());
+			jobGetResDto.setEndDate(j.getEndDate().toString());
+			jobGetResDto.setCompanyId(j.getCompany().getId());
+			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+			jobGetResDto.setCompanyPhoto(j.getCompany().getFile().getId());
+			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
+			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+			if(j.getUpdatedAt() != null) {
+				jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+			}
+			jobGetResDto.setIsBookmark(false);
+			jobGetResDto.setVer(j.getVersion());
+			jobGetResDto.setTotalJob(totalJob);		
+			jobGetResDtos.add(jobGetResDto);
+		});
+
+		return jobGetResDtos;
+	}
+	
+	public List<JobGetResDto> getByIndustryWithoutPagination(String industry) {
+		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
+		final Integer totalJob = jobDao.getByIndustryNonPagination(industry).size();
+		
+		jobDao.getByIndustryNonPagination(industry).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
