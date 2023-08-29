@@ -66,7 +66,62 @@ public class ApplicationDao extends AbstractJpaDao {
 		return listApplication;
 	}
 	
-	public List<Application> getByCandidate(String candidateId) {
+	public List<Application> getByCandidate(String candidateId, Integer startIndex, Integer endIndex) {
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tjs.status_name, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ta.created_at, ta.ver, tj.job_code ");
+		sql.append("FROM t_application ta ");
+		sql.append("INNER JOIN t_job tj ON ta.job_id = tj.id ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("WHERE ta.candidate_id = :candidateId AND ta.is_active = TRUE ");
+
+		final List<?> applicationObjs = this.em().createNativeQuery(sql.toString())
+				.setParameter("candidateId", candidateId)
+				.setFirstResult(startIndex)
+				.setMaxResults(endIndex)
+				.getResultList();
+		
+		final List<Application> listApplication = new ArrayList<>();
+		
+		if (applicationObjs.size() > 0) {
+			for (Object applicationObj : applicationObjs) {
+				final Object[] applicationArr = (Object[]) applicationObj;
+
+				final Application application = new Application();
+				application.setId(applicationArr[0].toString());
+
+				final Job job = new Job();
+				job.setId(applicationArr[1].toString());
+				job.setJobTitle(applicationArr[2].toString());
+				job.setJobCode(applicationArr[9].toString());
+
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(applicationArr[3].toString());
+				job.setJobStatus(jobStatus);
+
+				final Company company = new Company();
+				company.setId(applicationArr[4].toString());
+				company.setCompanyName(applicationArr[5].toString());
+
+				final File file = new File();
+				file.setId(applicationArr[6].toString());
+				company.setFile(file);
+				job.setCompany(company);
+
+				application.setJob(job);
+				application.setCreatedAt(Timestamp.valueOf(applicationArr[7].toString()).toLocalDateTime());
+				application.setVersion(Integer.valueOf(applicationArr[8].toString()));
+
+				listApplication.add(application);
+			}
+		}
+
+		return listApplication;
+	}
+
+	public List<Application> getByCandidateNonPagination(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tjs.status_name, ");
 		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ta.created_at, ta.ver, tj.job_code ");
@@ -118,7 +173,7 @@ public class ApplicationDao extends AbstractJpaDao {
 
 		return listApplication;
 	}
-
+	
 	public Application getByCandidateAndJob(String candidateId, String jobId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT ta.id AS application_id, tj.id AS job_id, tj.job_title, tjs.status_name, ");

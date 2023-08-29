@@ -28,7 +28,7 @@ public class SaveJobDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
-	public List<SaveJob> countSaveJob(String candidateId) {
+	public List<SaveJob> getByCandidateNonPagination(String candidateId) {
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
 		sql.append("tc.company_name, tjp.position_name, tjs.status_name, tet.employment_name, sj.ver, ");
