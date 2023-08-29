@@ -32,7 +32,7 @@ public class JobDao extends AbstractJpaDao{
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
 		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
-		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
 		sql.append("FROM t_job tj ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
 		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
@@ -40,7 +40,7 @@ public class JobDao extends AbstractJpaDao{
 		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
 		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
 		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
-		sql.append("WHERE ti.id ILIKE :industry || '%'");
+		sql.append("WHERE ti.id ILIKE :industry || '%' ");
 		
 		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("industry", industry)
@@ -105,7 +105,7 @@ public class JobDao extends AbstractJpaDao{
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
 		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
-		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
 		sql.append("FROM t_job tj ");
 		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
 		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
