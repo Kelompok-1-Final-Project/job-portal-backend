@@ -391,7 +391,7 @@ public class JobService {
 	
 	public List<JobGetResDto> getFilter(String name, String city, String position, List<String> employment, Integer salaryStart, Integer salaryEnd, String userId, Integer startIndex, Integer endIndex) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
-		final List<SaveJob> saveJob = saveJobDao.getByCandidate(userId);
+		final List<SaveJob> saveJob = saveJobDao.countSaveJob(userId);
 		final Integer totalJob = jobDao.filterCountSearch(name, city, position, employment, salaryStart, salaryEnd).size();
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(userId);
 		
@@ -444,7 +444,7 @@ public class JobService {
 		final Job job = jobDao.getById(Job.class, jobDb.getId());
 
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(candidateId);
-		final List<SaveJob> saveJob = saveJobDao.getByCandidate(candidateId);
+		final List<SaveJob> saveJob = saveJobDao.countSaveJob(candidateId);
 		
 		final JobGetResDto jobGetResDto = new JobGetResDto();
 		jobGetResDto.setId(job.getId());
@@ -489,7 +489,7 @@ public class JobService {
 		final Job job = jobDao.getById(Job.class, jobId);
 
 		final List<JobCandidateStatus> jobCandidateStatus = jobCandidateStatusDao.getByCandidate(candidateId);
-		final List<SaveJob> saveJob = saveJobDao.getByCandidate(candidateId);
+		final List<SaveJob> saveJob = saveJobDao.countSaveJob(candidateId);
 		
 		final JobGetResDto jobGetResDto = new JobGetResDto();
 		jobGetResDto.setId(job.getId());

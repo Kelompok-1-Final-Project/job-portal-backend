@@ -33,9 +33,10 @@ public class SaveJobController {
 		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/{candidateId}")
-	public ResponseEntity<List<SaveJobGetResDto>> getSaveJobByCandidate(@PathVariable String candidateId){
-		final List<SaveJobGetResDto> response = saveJobService.getByCandidate(candidateId);
+	@GetMapping("/{candidateId}/{startIndex}/{endIndex}")
+	public ResponseEntity<List<SaveJobGetResDto>> getSaveJobByCandidate(@PathVariable String candidateId, 
+			@PathVariable Integer startIndex, @PathVariable Integer endIndex){
+		final List<SaveJobGetResDto> response = saveJobService.getByCandidate(candidateId, startIndex, endIndex);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
