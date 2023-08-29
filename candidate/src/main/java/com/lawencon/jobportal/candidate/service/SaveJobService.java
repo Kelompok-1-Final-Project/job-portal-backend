@@ -35,11 +35,11 @@ public class SaveJobService {
 		return ConnHandler.getManager();
 	}
 	
-	public List<SaveJobGetResDto> getByCandidate(String candidateId) {
+	public List<SaveJobGetResDto> getByCandidate(String candidateId, Integer startIndex, Integer endIndex) {
 		final List<SaveJobGetResDto> saveJobGetResDtos = new ArrayList<>();
-		final Integer saveJobTotal = saveJobDao.getByCandidate(candidateId).size();
+		final Integer saveJobTotal = saveJobDao.countSaveJob(candidateId).size();
 		
-		saveJobDao.getByCandidate(candidateId).forEach(sj -> {
+		saveJobDao.getByCandidate(candidateId, startIndex, endIndex).forEach(sj -> {
 			final SaveJobGetResDto saveJobGetResDto = new SaveJobGetResDto();
 			saveJobGetResDto.setId(sj.getId());
 			saveJobGetResDto.setCompanyName(sj.getJob().getCompany().getCompanyName());
