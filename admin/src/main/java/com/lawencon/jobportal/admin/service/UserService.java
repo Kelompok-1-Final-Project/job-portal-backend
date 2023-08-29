@@ -93,10 +93,6 @@ public class UserService implements UserDetailsService {
 
 		final String pass = GeneratorId.generateCode();
 
-		final String message = "Email: " + data.getUserEmail() + "\nPassword: " + pass;
-		
-		emailService.sendEmail(data.getUserEmail(), "Registrasi User", message);
-
 		final String passEncode = passwordEncoder.encode(pass);
 		user.setPass(passEncode);
 		user.setProfile(profileResult);
@@ -105,6 +101,8 @@ public class UserService implements UserDetailsService {
 		user.setRole(role);
 
 		userResult = userDao.save(user);
+		
+		emailService.sendEmailNewUser("Registered Account", userResult, pass);
 
 		if (userResult != null) {
 			insertResDto.setId(userResult.getId());

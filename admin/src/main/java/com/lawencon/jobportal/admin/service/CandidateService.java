@@ -157,15 +157,14 @@ public class CandidateService {
 			candidate.setEmail(data.getEmail());
 			candidate.setCandidateProfile(profileResult);
 
-			final String pass = GeneratorId.generateCode();
-			final String message = "Email: " + data.getEmail() + "\nPassword: " + pass;
-
-			emailService.sendEmail(data.getEmail(), "Registrasi User", message);
+			final String pass = GeneratorId.generateCode();			
 
 			final String password = passwordEncoder.encode(pass);
 			data.setPassword(password);
 			final Candidate candidateResult = candidateDao.save(candidate);
 
+			emailService.sendEmailNewCandidate("Registered Account ", candidateResult, pass);
+			
 			final String candidateInsertAPI = "http://localhost:8081/users/byadmin";
 
 			final HttpHeaders headers = new HttpHeaders();
