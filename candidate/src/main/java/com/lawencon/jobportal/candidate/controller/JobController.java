@@ -41,8 +41,9 @@ public class JobController {
 	}
 	
 	@GetMapping("filter/industry")
-	public ResponseEntity<List<JobGetResDto>> getByIndustry(@RequestParam("ind") String industry) {
-		final List<JobGetResDto> data = jobService.getByIndustry(industry);
+	public ResponseEntity<List<JobGetResDto>> getByIndustry(@RequestParam("ind") String industry, 
+			@RequestParam("start") Integer startIndex, @RequestParam("end") Integer endIndex) {
+		final List<JobGetResDto> data = jobService.getByIndustry(industry, startIndex, endIndex);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	

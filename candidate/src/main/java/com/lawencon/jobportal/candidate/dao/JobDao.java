@@ -28,44 +28,97 @@ public class JobDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	
-	public List<Job> getByIndustry(String industry) {
-		final String sql = "SELECT  "
-				+ "	tj.id,  "
-				+ "	tj.job_title,  "
-				+ "	tj.salary_start,  "
-				+ "	tj.salary_end,  "
-				+ "	tj.description,  "
-				+ "	tj.end_date,  "
-				+ " tc.id AS company_id,  "
-				+ "	tc.company_name,  "
-				+ " tc.file_id, "
-				+ "	ti.industry_name,  "
-				+ "	tci.city_name,  "
-				+ "	tjp.position_name,  "
-				+ "	tjs.status_name,  "
-				+ "	tet.employment_name,  "
-				+ "	tj.created_at,  "
-				+ " tj.updated_at,  "
-				+ "	tj.ver  "
-				+ "FROM  "
-				+ "t_job tj  "
-				+ "INNER JOIN  "
-				+ "	t_company tc ON tc.id = tj.company_id  "
-				+ "INNER JOIN  "
-				+ "	t_city tci ON tci.id = tc.city_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
-				+ "INNER JOIN   "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
-				+ "INNER JOIN  "
-				+ "t_industry ti ON tc.industry_id = ti.id  "
-				+ "WHERE  "
-				+ "ti.id ILIKE :industry || '%'";
+	public List<Job> getCountByIndustry(String industry) {
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE ti.id ILIKE :industry || '%'");
 		
-		final List<?> jobsObj = this.em().createNativeQuery(sql)
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("industry", industry)
+				.getResultList();
+		
+		final List<Job> listJob = new ArrayList<>();
+		
+		if(jobsObj.size() > 0) {
+			for(Object jobObj:jobsObj) {
+				final Object[] jobArr = (Object[]) jobObj;
+				final Job job = new Job();
+				job.setId(jobArr[0].toString());
+				job.setJobTitle(jobArr[1].toString());
+				job.setSalaryStart(Integer.valueOf(jobArr[2].toString()));
+				job.setSalaryEnd(Integer.valueOf(jobArr[3].toString()));
+				job.setDescription(jobArr[4].toString());
+				job.setEndDate(LocalDate.parse(jobArr[5].toString()));
+				
+				final Company company = new Company();
+				company.setId(jobArr[6].toString());
+				company.setCompanyName(jobArr[7].toString());
+				
+				final File file = new File();
+				file.setId(jobArr[8].toString());
+				company.setFile(file);
+				
+				final Industry industrySet = new Industry();
+				industrySet.setIndustryName(jobArr[9].toString());
+				company.setIndustry(industrySet);
+				
+				final City city = new City();
+				city.setCityName(jobArr[10].toString());
+				company.setCity(city);
+				
+				job.setCompany(company);
+				
+				final JobPosition jobPosition = new JobPosition();
+				jobPosition.setPositionName(jobArr[11].toString());
+				job.setJobPosition(jobPosition);
+				
+				final JobStatus jobStatus = new JobStatus();
+				jobStatus.setStatusName(jobArr[12].toString());
+				job.setJobStatus(jobStatus);
+				
+				final EmploymentType employmentType = new EmploymentType();
+				employmentType.setEmploymentName(jobArr[13].toString());
+				job.setEmployementType(employmentType);
+				
+				job.setCreatedAt(Timestamp.valueOf(jobArr[14].toString()).toLocalDateTime());
+				if(jobArr[15] != null) {
+					job.setUpdatedAt(Timestamp.valueOf(jobArr[15].toString()).toLocalDateTime());					
+				}
+				job.setVersion(Integer.valueOf(jobArr[16].toString()));
+				listJob.add(job);
+			}
+		}
+		
+		return listJob;
+	}
+	
+	public List<Job> getByIndustry(String industry, Integer startIndex, Integer endIndex) {
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE ti.id ILIKE :industry || '%'");
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
+				.setParameter("industry", industry)
+				.setFirstResult(startIndex)
+				.setMaxResults(endIndex)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
 		if(jobsObj.size() > 0) {

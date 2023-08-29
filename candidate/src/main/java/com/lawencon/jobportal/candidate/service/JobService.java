@@ -356,11 +356,11 @@ public class JobService {
 		return jobGetResDtos;
 	}
 	
-	public List<JobGetResDto> getByIndustry(String industry) {
+	public List<JobGetResDto> getByIndustry(String industry, Integer startIndex, Integer endIndex) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
-		final Integer totalJob = jobDao.getByIndustry(industry).size();
+		final Integer totalJob = jobDao.getCountByIndustry(industry).size();
 		
-		jobDao.getByIndustry(industry).forEach(j -> {
+		jobDao.getByIndustry(industry, startIndex, endIndex).forEach(j -> {
 			final JobGetResDto jobGetResDto = new JobGetResDto();
 			jobGetResDto.setId(j.getId());
 			jobGetResDto.setJobTitle(j.getJobTitle());
