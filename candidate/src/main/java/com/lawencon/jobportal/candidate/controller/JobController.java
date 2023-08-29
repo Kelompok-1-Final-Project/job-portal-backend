@@ -80,6 +80,14 @@ public class JobController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
+	@GetMapping("/filternonpagination")
+	public ResponseEntity<List<JobGetResDto>> getByFilterWithoutPagination(@RequestParam("n") String name, 
+			@RequestParam("c") String city, @RequestParam("p") String position, @RequestParam("e") List<String> employment, 
+			@RequestParam("ss") Integer salaryStart, @RequestParam("se") Integer salaryEnd, @RequestParam("u") String user) {
+		final List<JobGetResDto> data = jobService.getFilterWithoutPagination(name, city, position, employment, salaryStart, salaryEnd, user);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+	
 	@GetMapping("/filter/id")
 	public ResponseEntity<JobGetResDto> getById(@RequestParam("id") String jobId, @RequestParam("can") String candidateId){
 		final JobGetResDto response = jobService.getById(jobId, candidateId);
