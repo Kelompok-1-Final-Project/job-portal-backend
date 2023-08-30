@@ -33,11 +33,11 @@ public class UserController {
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
-//	@GetMapping
-//	public ResponseEntity<UserGetResDto> getById(String userId) {
-//		final UserGetResDto data = userService.getById(userId);
-//		return new ResponseEntity<>(data, HttpStatus.OK);
-//	}
+	@GetMapping("/detail")
+	public ResponseEntity<UserGetResDto> getById(String userId) {
+		final UserGetResDto data = userService.getById(userId);
+		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
 	
 	@GetMapping("/hr")
 	public ResponseEntity<List<UserGetResDto>> getAllHr() {
