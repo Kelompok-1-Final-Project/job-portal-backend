@@ -1394,3 +1394,18 @@ INNER JOIN t_candidate tc ON tof.candidate_id = tc.id
 INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id 
 WHERE tj.hr_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5' OR tj.interviewer_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5'
 
+
+SELECT 
+tcp.full_name, tj.job_title, tet.employment_name, ABS(DATE_PART('day', th.created_at - ta.created_at)) as date_diff
+FROM
+t_application ta 
+INNER JOIN
+t_hired th ON ta.candidate_id = th.candidate_id 
+INNER JOIN 
+t_candidate tc ON ta.candidate_id = tc.id 
+INNER JOIN
+t_candidate_profile tcp ON tc.profile_id = tcp.id 
+INNER JOIN
+t_job tj ON ta.job_id = tj.id 
+INNER JOIN 
+t_employment_type tet ON tj.employment_type_id = tet.id;

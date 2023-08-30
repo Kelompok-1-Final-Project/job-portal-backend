@@ -6,6 +6,8 @@ public class UserInsertReqDto {
 	private String roleCode;
 	private String userPhone;
 	private String genderCode;
+	private String file;
+	private String ext;
 
 	public String getUserEmail() {
 		return userEmail;
@@ -45,6 +47,22 @@ public class UserInsertReqDto {
 
 	public void setGenderCode(String genderCode) {
 		this.genderCode = genderCode;
+	}
+
+	public String getFile() {
+		return file;
+	}
+
+	public void setFile(String file) {
+		this.file = file;
+	}
+
+	public String getExt() {
+		return ext;
+	}
+
+	public void setExt(String ext) {
+		this.ext = ext;
 	}
 
 }

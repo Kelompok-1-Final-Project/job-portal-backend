@@ -27,7 +27,6 @@ import com.lawencon.jobportal.admin.service.BenefitService;
 @RequestMapping("benefits")
 public class BenefitController {
 	
-
 	@Autowired
 	private BenefitService benefitService;
 	

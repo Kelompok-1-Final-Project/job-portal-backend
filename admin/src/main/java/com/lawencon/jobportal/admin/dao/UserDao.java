@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Profile;
 import com.lawencon.jobportal.admin.model.Role;
 import com.lawencon.jobportal.admin.model.User;
@@ -21,7 +22,7 @@ public class UserDao extends AbstractJpaDao{
 	
 	public User getByEmail(String userEmail) {
 		final StringBuilder sql = new StringBuilder();
-		sql.append("SELECT u.id AS user_id, p.full_name, r.role_code, u.is_active, u.pass ");
+		sql.append("SELECT u.id AS user_id, p.full_name, r.role_code, u.is_active, u.pass, p.file_id ");
 		sql.append("FROM t_user u ");
 		sql.append("INNER JOIN t_role r ON r.id = u.role_id ");
 		sql.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
@@ -42,6 +43,13 @@ public class UserDao extends AbstractJpaDao{
 							
 				final Profile profile = new Profile();
 				profile.setFullName(userArr[1].toString());
+				
+				if(userArr[5] != null) {
+					final File file = new File();
+					file.setId(userArr[5].toString());
+					profile.setFile(file);
+				}
+				
 				user.setProfile(profile);
 				
 				final Role role = new Role();
