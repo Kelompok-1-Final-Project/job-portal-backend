@@ -17,16 +17,14 @@ public class UserDao extends AbstractJpaDao{
 	}
 	
 	public User getByEmail(String userEmail) {
-		final String sql = "SELECT "
-				+ "u.id AS user_id, p.full_name, u.is_active, u.pass, p.photo_id, u.email "
-				+ "FROM "
-				+ "t_user u "
-				+ "INNER JOIN "
-				+ "t_profile p ON p.id = u.profile_id "
-				+ "WHERE "
-				+ "u.email = :userEmail ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT u.id AS user_id, p.full_name, u.is_active, u.pass, p.photo_id, u.email ");
+		sql.append("FROM t_user u ");
+		sql.append("INNER JOIN t_profile p ON p.id = u.profile_id ");
+		sql.append("WHERE u.email = :userEmail ");
+
 		try {
-			final Object userObj = em().createNativeQuery(sql)
+			final Object userObj = em().createNativeQuery(sql.toString())
 					.setParameter("userEmail", userEmail)
 					.getSingleResult();
 			

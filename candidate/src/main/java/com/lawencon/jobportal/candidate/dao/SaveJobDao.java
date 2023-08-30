@@ -197,27 +197,19 @@ public class SaveJobDao extends AbstractJpaDao{
 	}
 	
 	public List<SaveJob> getByJob(String jobId) {
-		final String sql = "SELECT "
-				+ "j.id, j.job_title, j.salary_start, j.salary_end, j.description, j.end_date, "
-				+ "c.company_name, jp.position_name, js.status_name, et.employment_name "
-				+ "FROM "
-				+ "	t_save_job sj "
-				+ "INNER JOIN "
-				+ "	t_job tj  "
-				+ "INNER JOIN  "
-				+ "	t_company tc ON tc.id = tj.company_id  "
-				+ "INNER JOIN  "
-				+ "	t_city tci ON tci.id = tc.city_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id "
-				+ "WHERE "
-				+ "j.id = :jobId ";
-		
-		final List<?> saveJobsObj = em().createNativeQuery(sql)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT j.id, j.job_title, j.salary_start, j.salary_end, j.description, j.end_date, ");
+		sql.append("c.company_name, jp.position_name, js.status_name, et.employment_name ");
+		sql.append("FROM t_save_job sj ");
+		sql.append("INNER JOIN t_job tj ON sj.job_id = tj.id ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("WHERE tj.id = :jobId ");
+
+		final List<?> saveJobsObj = em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
 				.getResultList();
 		
@@ -262,27 +254,19 @@ public class SaveJobDao extends AbstractJpaDao{
 	}
 	
 	public List<SaveJob> getByJobAndCandidate(String jobId, String candidateId) {
-		final String sql = "SELECT  "
-				+ "tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date,  "
-				+ "tc.company_name, tjp.position_name, tjs.status_name, tet.employment_name  "
-				+ "FROM  "
-				+ "	t_save_job tsj  "
-				+ "INNER JOIN  "
-				+ "	t_job tj ON tj.id = tsj.job_id "
-				+ "INNER JOIN   "
-				+ "	t_company tc ON tc.id = tj.company_id   "
-				+ "INNER JOIN   "
-				+ "	t_city tci ON tci.id = tc.city_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
-				+ "INNER JOIN   "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "WHERE  "
-				+ "tj.id = :jobId AND tsj.candidate_id = :candidateId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT j.id, j.job_title, j.salary_start, j.salary_end, j.description, j.end_date, ");
+		sql.append("c.company_name, jp.position_name, js.status_name, et.employment_name ");
+		sql.append("FROM t_save_job sj ");
+		sql.append("INNER JOIN t_job tj ON sj.job_id = tj.id ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("WHERE tj.id = :jobId AND tsj.candidate_id = :candidateId ");
 		
-		final List<?> saveJobsObj = em().createNativeQuery(sql)
+		final List<?> saveJobsObj = em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
 				.setParameter("candidateId", candidateId)
 				.getResultList();

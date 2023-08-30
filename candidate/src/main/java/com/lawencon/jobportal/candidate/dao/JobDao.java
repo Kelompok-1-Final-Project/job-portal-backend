@@ -175,41 +175,20 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByName(String jobName) {
-		final String sql = "SELECT  "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE  "
-				+ "tj.job_title ILIKE '%' || :jobName || '%'";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE tj.job_title ILIKE '%' || :jobName || '%'");
 		
-		final List<?> jobsObj = this.em().createNativeQuery(sql)
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("jobName", jobName)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -262,41 +241,20 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByLocation(String location) {
-		final String sql = "SELECT  "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE  "
-				+ "city_name ILIKE :location || '%'";
-		
-		final List<?> jobsObj = this.em().createNativeQuery(sql)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE city_name ILIKE :location || '%'");
+
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("location", location)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -349,14 +307,10 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public Job getByCode(String jobCode) {
-		final String sql = "SELECT "
-				+ "j "
-				+ "FROM "
-				+ "Job j "
-				+ "WHERE "
-				+ "j.jobCode = :jobCode";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT j FROM Job j WHERE j.jobCode = :jobCode ");
 		
-		final Job job = em().createQuery(sql, Job.class)
+		final Job job = em().createQuery(sql.toString(), Job.class)
 				.setParameter("jobCode", jobCode)
 				.getSingleResult();
 		
@@ -364,40 +318,20 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByCompany(String companyName){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE   "
-				+ "	company_name ILIKE :company || '%'";
-		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE company_name ILIKE :company || '%'");
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("company", companyName)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -450,40 +384,20 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByEmploymentType(String employmentName){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE   "
-				+ "	employment_name ILIKE :employment || '%'";
-		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE employment_name ILIKE :employment || '%'");
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("employment", employmentName)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -536,40 +450,20 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByPosition(String positionName){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE   "
-				+ "	position_name ILIKE :position || '%'";
-		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE position_name ILIKE :position || '%'");
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("position", positionName)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -622,40 +516,20 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByStatus(String status){
-		final String sql = "SELECT   "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE   "
-				+ "	status_name ILIKE :status  || '%'";
-		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE status_name ILIKE :status  || '%'");
+		
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("status", status)
 				.getResultList();
 		final List<Job> listJob = new ArrayList<>();
@@ -708,43 +582,20 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getBySalary(Integer salaryStart, Integer salaryEnd){
-		final String sql = "SELECT "
-				+ "	tj.id, "
-				+ "	tj.job_title, "
-				+ "	tj.salary_start, "
-				+ "	tj.salary_end, "
-				+ "	tj.description, "
-				+ "	tj.end_date, "
-				+ " tc.id AS company_id "
-				+ "	tc.company_name, "
-				+ "	ti.industry_name, "
-				+ "	tci.city_name, "
-				+ "	tjp.position_name, "
-				+ "	tjs.status_name, "
-				+ "	tet.employment_name, "
-				+ "	tj.created_at, "
-				+ " tj.updated_at, "
-				+ "	tj.ver "
-				+ "FROM "
-				+ "t_job tj "
-				+ "INNER JOIN "
-				+ "	t_company tc ON tc.id = tj.company_id "
-				+ "INNER JOIN "
-				+ "	t_city tci ON tci.id = tc.city_id "
-				+ "INNER JOIN "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id  "
-				+ "INNER JOIN "
-				+ "t_industry ti ON tc.industry_id = ti.id "
-				+ "WHERE"
-				+ "	tj.salary_start >= :start "
-				+ "	AND "
-				+ "	tj.salary_end <= :end ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, tc.file_id, ti.industry_name, tci.city_name, ");
+		sql.append("tjp.position_name, tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, tj.ver ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = ti.id ");
+		sql.append("WHERE tj.salary_start >= :start AND tj.salary_end <= :end ");
 		
-		final List<?> jobsObj = this.em().createNativeQuery(sql, Job.class)
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("start", salaryStart)
 				.setParameter("end", salaryEnd)
 				.getResultList();
