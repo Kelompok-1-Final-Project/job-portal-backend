@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -34,7 +35,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/detail")
-	public ResponseEntity<UserGetResDto> getById(String userId) {
+	public ResponseEntity<UserGetResDto> getById(@RequestParam String userId) {
 		final UserGetResDto data = userService.getById(userId);
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
@@ -58,7 +59,7 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@PatchMapping()
+	@PatchMapping
 	public ResponseEntity<UpdateResDto> updateUser(
 			@RequestBody UserUpdateReqDto data){
 		final UpdateResDto response = userService.updateUser(data);
