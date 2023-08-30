@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
-import com.lawencon.jobportal.admin.model.Company;
 import com.lawencon.jobportal.admin.model.Industry;
 
 @Repository
@@ -16,14 +15,12 @@ public class IndustryDao extends AbstractJpaDao {
 	}
 
 	public Industry getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, industry_name, industry_code, ver "
-				+ "FROM " 
-				+ "t_industry " 
-				+ "WHERE "
-				+ "industry_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, industry_name, industry_code, ver ");
+		sql.append("FROM t_industry ");
+		sql.append("WHERE industry_code = :code ");
 
-		final Object industryObj = this.em().createNativeQuery(sql)
+		final Object industryObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -43,15 +40,13 @@ public class IndustryDao extends AbstractJpaDao {
 	}
 	
 	public Industry getByName(String industryName) {
-		final String sql = "SELECT "
-				+ "id, industry_name, industry_code, ver "
-				+ "FROM " 
-				+ "t_industry " 
-				+ "WHERE "
-				+ "industry_name ILIKE :industryName";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, industry_name, industry_code, ver ");
+		sql.append("FROM t_industry ");
+		sql.append("WHERE industry_name ILIKE :industryName ");
 
 		try {
-			final Object industryObj = this.em().createNativeQuery(sql)
+			final Object industryObj = this.em().createNativeQuery(sql.toString())
 					.setParameter("industryName", industryName)
 					.getSingleResult();
 

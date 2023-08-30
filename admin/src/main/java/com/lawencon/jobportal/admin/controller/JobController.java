@@ -20,6 +20,7 @@ import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.JobBenefitResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.job.EmploymentTypeGetResDto;
+import com.lawencon.jobportal.admin.dto.job.JobGetPreviewResDto;
 import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
@@ -135,6 +136,12 @@ public class JobController {
 	@GetMapping("/filter")
 	public ResponseEntity<JobGetResDto> getById(@RequestParam String jobId){
 		final JobGetResDto response = jobService.getById(jobId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/preview")
+	public ResponseEntity<JobGetPreviewResDto> getPreview(@RequestParam String jobId){
+		final JobGetPreviewResDto response = jobService.getPreview(jobId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

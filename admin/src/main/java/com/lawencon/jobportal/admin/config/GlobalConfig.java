@@ -9,18 +9,17 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class GlobalConfig {
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
+
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 	}
-	
-	
+
 //	@Bean(name = "initTable")
 //	public SpringLiquibase initTable(DataSource dataSource) {
 //		final SpringLiquibase springLiquibase = new SpringLiquibase();
@@ -37,6 +36,5 @@ public class GlobalConfig {
 //		springLiquibase.setDataSource(dataSource);
 //		return springLiquibase;
 //	}
-	
-	
+
 }

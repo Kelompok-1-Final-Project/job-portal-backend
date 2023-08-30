@@ -1,7 +1,9 @@
 package com.lawencon.jobportal.admin.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -24,6 +26,7 @@ import com.lawencon.jobportal.admin.dao.EmployeeDao;
 import com.lawencon.jobportal.admin.dao.FileDao;
 import com.lawencon.jobportal.admin.dao.HiredDao;
 import com.lawencon.jobportal.admin.dao.InterviewDao;
+import com.lawencon.jobportal.admin.dao.JobBenefitDao;
 import com.lawencon.jobportal.admin.dao.JobCandidateStatusDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
 import com.lawencon.jobportal.admin.dao.MedicalCheckupDao;
@@ -47,6 +50,7 @@ import com.lawencon.jobportal.admin.dto.hired.HiredInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewGetResDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewInsertReqDto;
 import com.lawencon.jobportal.admin.dto.interview.InterviewUpdateReqDto;
+import com.lawencon.jobportal.admin.dto.jasper.JasperBenefitResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupGetResDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupInsertReqDto;
 import com.lawencon.jobportal.admin.dto.medicalcheckup.MedicalCheckupUpdateReqDto;
@@ -61,12 +65,14 @@ import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Hired;
 import com.lawencon.jobportal.admin.model.Interview;
 import com.lawencon.jobportal.admin.model.Job;
+import com.lawencon.jobportal.admin.model.JobBenefit;
 import com.lawencon.jobportal.admin.model.JobCandidateStatus;
 import com.lawencon.jobportal.admin.model.MedicalCheckup;
 import com.lawencon.jobportal.admin.model.Offering;
 import com.lawencon.jobportal.admin.model.StatusProcess;
 import com.lawencon.jobportal.admin.model.User;
 import com.lawencon.jobportal.admin.util.DateConvert;
+import com.lawencon.util.JasperUtil;
 
 @Service
 public class ProgressStatusService {
@@ -104,6 +110,9 @@ public class ProgressStatusService {
 
 	@Autowired
 	private JobDao jobDao;
+	
+	@Autowired
+	private JobBenefitDao jobBenefitDao;
 
 	@Autowired
 	private UserDao userDao;
@@ -113,6 +122,12 @@ public class ProgressStatusService {
 	
 	@Autowired
 	private FileDao fileDao;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private JasperUtil jasperUtil;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -284,6 +299,8 @@ public class ProgressStatusService {
 			
 			final Assessment assessments = assessmentDao.save(assessment);
 
+			emailService.sendEmailAssessment("Assessment Schedule", candidate, assessments);
+			
 			result.setId(assessments.getId());
 			result.setMessage("Insert Assessment Successfully.");
 
@@ -324,6 +341,8 @@ public class ProgressStatusService {
 			
 			final MedicalCheckup medicalCheckups = medicalCheckupDao.save(medicalCheckup);
 
+			emailService.sendEmailMedicalCheckup("Medical Checkup Schedule", candidate, medicalCheckup);
+			
 			result.setId(medicalCheckups.getId());
 			result.setMessage("Insert Medical Checkup Successfully.");
 
@@ -366,6 +385,8 @@ public class ProgressStatusService {
 			assessmentDao.save(assessment);
 			
 			final Interview interviews = interviewDao.save(interview);
+			
+			emailService.sendEmailInterview("Interview Schedule", candidate, interviews);
 
 			result.setId(interviews.getId());
 			result.setMessage("Insert Interview Successfully.");
@@ -406,7 +427,26 @@ public class ProgressStatusService {
 			medicalCheckupDao.save(medicalCheckup);
 			
 			final Offering offerings = offeringDao.save(offering);
+			
+			final Map<String, Object> offeringData = new HashMap<>();
+			offeringData.put("company", offerings.getJob().getCompany().getCompanyName());
+			offeringData.put("jobPosition", offerings.getJob().getJobPosition().getPositionName());
+			offeringData.put("name", candidate.getCandidateProfile().getFullName());
+			offeringData.put("salary", offerings.getJob().getSalaryStart().toString());
+			offeringData.put("salaryEnd", offerings.getJob().getSalaryEnd().toString());
+			
+			final List<JasperBenefitResDto> benefitJaspers = new ArrayList<>();
+			final List<JobBenefit> jobBenefits = jobBenefitDao.getByJob(job.getId());
+			for(JobBenefit jb : jobBenefits) {
+				final JasperBenefitResDto dataJasperBenefit = new JasperBenefitResDto();
+				dataJasperBenefit.setBenefitName(jb.getBenefit().getBenefitName());
+				benefitJaspers.add(dataJasperBenefit);
+			}
 
+			final byte[] dataBenefit = jasperUtil.responseToByteArray(benefitJaspers, offeringData, "Offering");
+			
+			emailService.sendEmailOffering("Offering Letter", candidate, offerings, dataBenefit);
+			
 			result.setId(offerings.getId());
 			result.setMessage("Insert Offering Successfully.");
 

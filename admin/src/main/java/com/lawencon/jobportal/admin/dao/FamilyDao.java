@@ -22,24 +22,15 @@ public class FamilyDao extends AbstractJpaDao {
 	}
 	
 	public List<Family> getAllFamilyCandidate(String candidateId) {
-		final String sql = "SELECT  "
-				+ "	tf.id,  "
-				+ "	tf.family_name,  "
-				+ "	tr.relationship_code,  "
-				+ "	tr.relationship_name,  "
-				+ "	td.degree_code,  "
-				+ "	td.degree_name,  "
-				+ "	tf.birthdate "
-				+ "FROM "
-				+ "	t_family tf "
-				+ "INNER JOIN "
-				+ "	t_degree td ON td.id = tf.degree_id "
-				+ "INNER JOIN  "
-				+ "	t_relationship tr ON tr.id = tf.relationship_id "
-				+ "WHERE  "
-				+ "	candidate_id = :candidateId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tf.id, tf.family_name, tr.relationship_code, tr.relationship_name, ");
+		sql.append("td.degree_code, td.degree_name, tf.birthdate ");
+		sql.append("FROM t_family tf ");
+		sql.append("INNER JOIN t_degree td ON td.id = tf.degree_id ");
+		sql.append("INNER JOIN t_relationship tr ON tr.id = tf.relationship_id ");
+		sql.append("WHERE candidate_id = :candidateId ");
 		
-		final List<?> familyObj = this.em().createNativeQuery(sql)
+		final List<?> familyObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		

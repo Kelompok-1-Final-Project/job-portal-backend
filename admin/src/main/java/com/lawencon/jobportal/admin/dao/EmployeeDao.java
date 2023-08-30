@@ -20,20 +20,15 @@ public class EmployeeDao extends AbstractJpaDao{
 		return ConnHandler.getManager();
 	}
 	public List<Employee> getAllNotBlacklist(){
-		final String sql = "SELECT  "
-				+ "	te.id AS employee_id, tca.id AS candidate_id, tcp.full_name, tc.id, tc.company_name  "
-				+ "FROM  "
-				+ "	t_employee te  "
-				+ "INNER JOIN "
-				+ "	t_candidate tca ON te.candidate_id = tca.id  "
-				+ "INNER JOIN "
-				+ "	t_candidate_profile tcp ON tca.profile_id  = tcp.id  "
-				+ "INNER JOIN "
-				+ "	t_company tc ON te.company_id = tc.id   "
-				+ "WHERE "
-				+ "	te.candidate_id NOT IN (SELECT tb.candidate_id FROM t_blacklist tb)";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT te.id AS employee_id, tca.id AS candidate_id, tcp.full_name, tc.id, tc.company_name ");
+		sql.append("FROM t_employee te ");
+		sql.append("INNER JOIN t_candidate tca ON te.candidate_id = tca.id ");
+		sql.append("INNER JOIN t_candidate_profile tcp ON tca.profile_id  = tcp.id ");
+		sql.append("INNER JOIN t_company tc ON te.company_id = tc.id ");
+		sql.append("WHERE te.candidate_id NOT IN (SELECT tb.candidate_id FROM t_blacklist tb) ");
 		
-		final List<?> employeeObjs = this.em().createNativeQuery(sql)
+		final List<?> employeeObjs = this.em().createNativeQuery(sql.toString())
 				.getResultList();
 		
 		final List<Employee> listEmployee = new ArrayList<>();
