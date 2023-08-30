@@ -119,52 +119,25 @@ public class JobDao extends AbstractJpaDao{
 	}
 	
 	public List<Job> getByIndustry(String industry, Integer startPosition, Integer endPosition) {
-		final String sql = "SELECT  "
-				+ "	tj.id,  "
-				+ "	tj.job_title,  "
-				+ "	tj.salary_start,  "
-				+ "	tj.salary_end,  "
-				+ "	tj.description,  "
-				+ "	tj.end_date,  "
-				+ " tc.id AS company_id , "
-				+ "	tc.company_name,  "
-				+ "	ti.industry_name,  "
-				+ "	tci.city_name,  "
-				+ "	tjp.position_name,  "
-				+ "	tjs.status_name,  "
-				+ "	tet.employment_name,  "
-				+ "	tj.created_at,  "
-				+ " tj.updated_at,  "
-				+ "	tj.ver, "
-				+ "	tpi.full_name AS interviewer, "
-				+ "	tph.full_name AS hr "
-				+ " tj.job_code "
-				+ "FROM  "
-				+ "	t_job tj  "
-				+ "INNER JOIN  "
-				+ "	t_company tc ON tc.id = tj.company_id  "
-				+ "INNER JOIN  "
-				+ "	t_city tci ON tci.id = tc.city_id  "
-				+ "INNER JOIN  "
-				+ "	t_job_position tjp ON tjp.id = tj.job_position_id   "
-				+ "INNER JOIN   "
-				+ "	t_job_status tjs ON tjs.id = tj.job_status_id   "
-				+ "INNER JOIN   "
-				+ "	t_employment_type tet ON tet.id = tj.employment_type_id   "
-				+ "INNER JOIN  "
-				+ "	t_industry ti ON tc.industry_id = tc.industry_id  "
-				+ "INNER JOIN  "
-				+ "	t_user tuh ON tj.hr_id = tuh.id  "
-				+ "INNER JOIN "
-				+ "	t_user tui ON tj.interviewer_id = tui.id  "
-				+ "INNER JOIN  "
-				+ "	t_profile tph ON tuh.profile_id = tph.id  "
-				+ "INNER JOIN "
-				+ "	t_profile tpi ON tui.profile_id = tpi.id "
-				+ "WHERE  "
-				+ "ti.industry_name  ILIKE '%' || :industry || '%'";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tj.id, tj.job_title, tj.salary_start, tj.salary_end, tj.description, tj.end_date, ");
+		sql.append("tc.id AS company_id, tc.company_name, ti.industry_name, tci.city_name, tjp.position_name, ");
+		sql.append("tjs.status_name, tet.employment_name, tj.created_at, tj.updated_at, ");
+		sql.append("tj.ver, tpi.full_name AS interviewer, tph.full_name AS hr, tj.job_code ");
+		sql.append("FROM t_job tj ");
+		sql.append("INNER JOIN t_company tc ON tc.id = tj.company_id ");
+		sql.append("INNER JOIN t_city tci ON tci.id = tc.city_id ");
+		sql.append("INNER JOIN t_job_position tjp ON tjp.id = tj.job_position_id ");
+		sql.append("INNER JOIN t_job_status tjs ON tjs.id = tj.job_status_id ");
+		sql.append("INNER JOIN t_employment_type tet ON tet.id = tj.employment_type_id ");
+		sql.append("INNER JOIN t_industry ti ON tc.industry_id = tc.industry_id ");
+		sql.append("INNER JOIN t_user tuh ON tj.hr_id = tuh.id ");
+		sql.append("INNER JOIN t_user tui ON tj.interviewer_id = tui.id ");
+		sql.append("INNER JOIN t_profile tph ON tuh.profile_id = tph.id ");
+		sql.append("INNER JOIN t_profile tpi ON tui.profile_id = tpi.id ");
+		sql.append("WHERE ti.industry_name  ILIKE '%' || :industry || '%' ");
 		
-		final List<?> jobsObj = this.em().createNativeQuery(sql)
+		final List<?> jobsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("industry", industry)
 				.setFirstResult(startPosition)
 				.setMaxResults(endPosition)

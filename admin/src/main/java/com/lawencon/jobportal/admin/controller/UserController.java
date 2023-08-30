@@ -17,6 +17,7 @@ import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.user.UserGetResDto;
 import com.lawencon.jobportal.admin.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserUpdateIsActiveReqDto;
+import com.lawencon.jobportal.admin.dto.user.UserUpdateReqDto;
 import com.lawencon.jobportal.admin.service.UserService;
 
 @RestController
@@ -31,6 +32,12 @@ public class UserController {
 		final List<UserGetResDto> data = userService.getAll();
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
+	
+//	@GetMapping
+//	public ResponseEntity<UserGetResDto> getById(String userId) {
+//		final UserGetResDto data = userService.getById(userId);
+//		return new ResponseEntity<>(data, HttpStatus.OK);
+//	}
 	
 	@GetMapping("/hr")
 	public ResponseEntity<List<UserGetResDto>> getAllHr() {
@@ -51,10 +58,17 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
+	@PatchMapping()
+	public ResponseEntity<UpdateResDto> updateUser(
+			@RequestBody UserUpdateReqDto data){
+		final UpdateResDto response = userService.updateUser(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 	@PatchMapping("/update-active")
 	public ResponseEntity<UpdateResDto> updateIsActive(
 			@RequestBody UserUpdateIsActiveReqDto data){
-		final UpdateResDto response = userService.updateUser(data);
+		final UpdateResDto response = userService.updateIsActive(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

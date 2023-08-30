@@ -32,6 +32,7 @@ import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.JobBenefitResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
 import com.lawencon.jobportal.admin.dto.job.EmploymentTypeGetResDto;
+import com.lawencon.jobportal.admin.dto.job.JobGetPreviewResDto;
 import com.lawencon.jobportal.admin.dto.job.JobGetResDto;
 import com.lawencon.jobportal.admin.dto.job.JobInsertReqDto;
 import com.lawencon.jobportal.admin.dto.job.JobStatusGetResDto;
@@ -125,6 +126,34 @@ public class JobService {
 		});
 
 		return jobGetResDtos;
+	}
+	
+	public JobGetPreviewResDto getPreview(String jobId) {
+		final Job job = jobDao.getById(Job.class, jobId);
+		
+		final JobGetPreviewResDto jobGetPreviewResDto = new JobGetPreviewResDto();
+		jobGetPreviewResDto.setId(job.getId());
+		jobGetPreviewResDto.setJobTitle(job.getJobTitle());
+		jobGetPreviewResDto.setSalaryStart(job.getSalaryStart());
+		jobGetPreviewResDto.setSalaryEnd(job.getSalaryEnd());
+		jobGetPreviewResDto.setDescription(job.getDescription());
+		jobGetPreviewResDto.setEndDate(job.getEndDate().toString());
+		jobGetPreviewResDto.setCompanyId(job.getCompany().getId());
+		jobGetPreviewResDto.setCompanyName(job.getCompany().getCompanyName());
+		jobGetPreviewResDto.setCompanyPhoto(job.getCompany().getFile().getId());
+		jobGetPreviewResDto.setIndustryName(job.getCompany().getIndustry().getIndustryName());
+		jobGetPreviewResDto.setCityName(job.getCompany().getCity().getCityName());
+		jobGetPreviewResDto.setPositionName(job.getJobPosition().getPositionName());
+		jobGetPreviewResDto.setStatusName(job.getJobStatus().getStatusName());
+		jobGetPreviewResDto.setEmploymentName(job.getEmployementType().getEmploymentName());
+		jobGetPreviewResDto.setCreatedAt(job.getCreatedAt().toString());
+		if(job.getUpdatedAt() != null) {
+			jobGetPreviewResDto.setUpdatedAt(job.getUpdatedAt().toString());				
+		}
+		jobGetPreviewResDto.setVer(job.getVersion());
+		
+		return jobGetPreviewResDto;
+		
 	}
 
 	public List<JobGetResDto> getByLocation(String location, Integer startPosition, Integer endPosition) {

@@ -20,15 +20,12 @@ public class EducationDao extends AbstractJpaDao{
 	
 	public List<Education> getByCandidate(String candidateId){
 		final List<Education> educations = new ArrayList<>();
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, education_name, start_date, end_date, ver ");
+		sql.append("FROM t_education ");
+		sql.append("WHERE candidate_id = :candidateId ");
 		
-		final String sql = "SELECT "
-				+ "id, education_name, start_date, end_date, ver "
-				+ "FROM "
-				+ "t_education "
-				+ "WHERE "
-				+ "candidate_id = :candidateId ";
-		
-		final List<?> educationObjs = em().createNativeQuery(sql)
+		final List<?> educationObjs = em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		

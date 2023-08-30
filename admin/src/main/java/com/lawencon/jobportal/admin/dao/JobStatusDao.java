@@ -15,14 +15,12 @@ public class JobStatusDao extends AbstractJpaDao {
 	}
 
 	public JobStatus getByCode(String statusCode) {
-		final String sql = "SELECT "
-				+ "id, status_code, status_name, ver "
-				+ "FROM "
-				+ "t_job_status "
-				+ "WHERE "
-				+ "status_code = :statusCode ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, status_code, status_name, ver ");
+		sql.append("FROM t_job_status ");
+		sql.append("WHERE status_code = :statusCode ");
 
-		final Object jobStatusObj = em().createNativeQuery(sql)
+		final Object jobStatusObj = em().createNativeQuery(sql.toString())
 				.setParameter("statusCode", statusCode)
 				.getSingleResult();
 

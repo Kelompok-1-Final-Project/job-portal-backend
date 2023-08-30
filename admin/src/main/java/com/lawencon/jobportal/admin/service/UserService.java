@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.jobportal.admin.constant.RoleEnum;
+import com.lawencon.jobportal.admin.dao.FileDao;
 import com.lawencon.jobportal.admin.dao.GenderDao;
 import com.lawencon.jobportal.admin.dao.ProfileDao;
 import com.lawencon.jobportal.admin.dao.RoleDao;
@@ -25,6 +26,8 @@ import com.lawencon.jobportal.admin.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserLoginResDto;
 import com.lawencon.jobportal.admin.dto.user.UserUpdateIsActiveReqDto;
+import com.lawencon.jobportal.admin.dto.user.UserUpdateReqDto;
+import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Gender;
 import com.lawencon.jobportal.admin.model.Profile;
 import com.lawencon.jobportal.admin.model.Role;
@@ -46,6 +49,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private ProfileDao profileDao;
+	
+	@Autowired
+	private FileDao fileDao;
 
 	@Autowired
 	private RoleDao roleDao;
@@ -70,6 +76,20 @@ public class UserService implements UserDetailsService {
 		});
 
 		return usersDto;
+	}
+	
+	public UserGetResDto getById(String userId) {
+		final User user = userDao.getById(User.class, userId);
+		
+		final UserGetResDto userGetResDto = new UserGetResDto();
+		userGetResDto.setUserId(user.getId());
+		userGetResDto.setUserEmail(user.getEmail());
+		userGetResDto.setRoleName(user.getRole().getRoleName());
+		userGetResDto.setFullName(user.getProfile().getFullName());
+		userGetResDto.setUserPhone(user.getProfile().getMobileNumber());
+		userGetResDto.setIsActive(user.getIsActive());
+		
+		return userGetResDto;
 	}
 
 	public InsertResDto insert(UserInsertReqDto data) {
@@ -169,7 +189,36 @@ public class UserService implements UserDetailsService {
 		return usersDto;
 	}
 	
-	public UpdateResDto updateUser(UserUpdateIsActiveReqDto data)  {
+	public UpdateResDto updateUser(UserUpdateReqDto data)  {
+		em().getTransaction().begin();
+
+		final User userDb = userDao.getById(User.class, data.getUserId());
+		final Role role = roleDao.getById(Role.class, data.getRoleId());
+		userDb.setRole(role);
+		userDb.setEmail(data.getEmail());
+		
+		final Profile profileDb = profileDao.getById(Profile.class, userDb.getProfile().getId());
+		profileDb.setFullName(data.getFullName());
+		profileDb.setMobileNumber(data.getMobileNumber());
+		
+		final Gender gender = genderDao.getById(Gender.class, data.getGenderId());
+		profileDb.setGender(gender);
+			
+		final Profile profileResult = profileDao.save(profileDb);
+		userDb.setProfile(profileResult);
+		final User userResult = userDao.save(userDb);
+		
+		final UpdateResDto updateResDto = new UpdateResDto();
+		
+		updateResDto.setVersion(userResult.getVersion());
+		updateResDto.setMessage("Update Berhasil!!!");
+		
+		em().getTransaction().commit();
+
+		return updateResDto;
+	}
+	
+	public UpdateResDto updateIsActive(UserUpdateIsActiveReqDto data)  {
 		em().getTransaction().begin();
 		
 		final User userDb = userDao.getById(User.class, data.getUserId());
