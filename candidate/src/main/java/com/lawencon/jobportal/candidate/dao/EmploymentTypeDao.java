@@ -15,14 +15,12 @@ public class EmploymentTypeDao extends AbstractJpaDao{
 	}
 	
 	public EmploymentType getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, employment_code, employment_name, ver " 
-				+ "FROM " 
-				+ "t_employment_type " 
-				+ "WHERE "
-				+ "employment_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, employment_code, employment_name, ver ");
+		sql.append("FROM t_employment_type ");
+		sql.append("WHERE employment_code = :code ");
 
-		final Object employmentTypeObj = em().createNativeQuery(sql)
+		final Object employmentTypeObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 

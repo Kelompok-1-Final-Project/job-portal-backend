@@ -22,19 +22,15 @@ public class FamilyDao extends AbstractJpaDao{
 	
 	public List<Family> getByCandidate(String candidateId){
 		final List<Family> families = new ArrayList<>();
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tf.id, tf.family_name, tr.relationship_name, td.degree_name, tf.birthdate, ");
+		sql.append("tf.ver, tr.relationship_code, td.degree_code ");
+		sql.append("FROM t_family tf ");
+		sql.append("INNER JOIN t_relationship tr ON tf.relationship_id = tr.id ");
+		sql.append("INNER JOIN t_degree td ON td.id = tf.degree_id ");
+		sql.append("WHERE candidate_id = :candidateId ");
 		
-		final String sql = "SELECT "
-				+ "tf.id, tf.family_name, tr.relationship_name, td.degree_name, tf.birthdate, tf.ver, tr.relationship_code, td.degree_code "
-				+ "FROM "
-				+ "t_family tf "
-				+ "INNER JOIN "
-				+ "t_relationship tr ON tf.relationship_id = tr.id "
-				+ "INNER JOIN "
-				+ "t_degree td ON td.id = tf.degree_id "
-				+ "WHERE "
-				+ "candidate_id = :candidateId ";
-		
-		final List<?> familyObjs = em().createNativeQuery(sql)
+		final List<?> familyObjs = em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		

@@ -20,15 +20,12 @@ public class OrganizationDao extends AbstractJpaDao{
 	
 	public List<Organization> getByCandidate(String candidateId){
 		final List<Organization> organizations = new ArrayList<>();
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, organization_name, position_name, start_date, end_date, description, ver ");
+		sql.append("FROM t_organization ");
+		sql.append("WHERE candidate_id = :candidateId ");
 		
-		final String sql = "SELECT "
-				+ "id, organization_name, position_name, start_date, end_date, description, ver "
-				+ "FROM "
-				+ "t_organization "
-				+ "WHERE "
-				+ "candidate_id = :candidateId ";
-		
-		final List<?> organizationObjs = em().createNativeQuery(sql)
+		final List<?> organizationObjs = em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		

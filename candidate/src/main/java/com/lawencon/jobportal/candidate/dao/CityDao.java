@@ -20,15 +20,12 @@ public class CityDao extends AbstractJpaDao {
 
 	public List<City> getByCityName(String cityName) {
 		final List<City> cities = new ArrayList<>();
-
-		final String sql = "SELECT "
-				+ "id, city_name, city_code, ver "
-				+ "FROM "
-				+ "t_city "
-				+ "WHERE "
-				+ "city_name ILIKE ':cityName%'";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, city_name, city_code, ver ");
+		sql.append("FROM t_city ");
+		sql.append("WHERE city_name ILIKE ':cityName%' ");
 		
-		final List<?> cityObjs = this.em().createNativeQuery(sql)
+		final List<?> cityObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("cityName", cityName)
 				.getResultList();
 
@@ -49,14 +46,12 @@ public class CityDao extends AbstractJpaDao {
 	}
 
 	public City getByCode(String cityCode) {
-		final String sql = "SELECT "
-				+ "id, city_name, city_code, ver "
-				+ "FROM "
-				+ "t_city "
-				+ "WHERE "
-				+ "city_code = :cityCode";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, city_name, city_code, ver ");
+		sql.append("FROM t_city ");
+		sql.append("WHERE city_code = :cityCode ");
 		
-		final Object cityObj = this.em().createNativeQuery(sql)
+		final Object cityObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("cityCode", cityCode)
 				.getSingleResult();
 		

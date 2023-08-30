@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.candidate.dto.InsertResDto;
 import com.lawencon.jobportal.candidate.dto.UpdateResDto;
+import com.lawencon.jobportal.candidate.dto.user.UserChangePassReqDto;
 import com.lawencon.jobportal.candidate.dto.user.UserEmailGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserGetResDto;
 import com.lawencon.jobportal.candidate.dto.user.UserInsertReqDto;
@@ -56,6 +57,13 @@ public class UserController {
 	public ResponseEntity<UpdateResDto> updateIsActive(
 			@RequestBody UserUpdateIsActiveReqDto data){
 		final UpdateResDto response = userService.updateIsActive(data);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PatchMapping("/change-password")
+	public ResponseEntity<UpdateResDto> changePassword(
+			@RequestBody UserChangePassReqDto data){
+		final UpdateResDto response = userService.changePassword(data);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
