@@ -269,6 +269,7 @@ public class UserService implements UserDetailsService {
 
 	public UpdateResDto changePassword(UserChangePassReqDto data) {
 		final UpdateResDto updateResDto = new UpdateResDto();
+		em().getTransaction().begin();
 		final User user = userDao.getById(User.class, data.getUserId());
 
 		if (passwordEncoder.matches(data.getUserOldPass(), user.getPass())) {
@@ -287,7 +288,7 @@ public class UserService implements UserDetailsService {
 		}
 
 		updateResDto.setMessage("Update Gagal, password lama anda tidak sama!!!");
-
+		em().getTransaction() .commit();
 		return updateResDto;
 	}
 
