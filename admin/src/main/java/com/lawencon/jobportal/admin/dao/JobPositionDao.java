@@ -20,15 +20,12 @@ public class JobPositionDao extends AbstractJpaDao{
 	
 	public List<JobPosition> getByPositionName(String positionName){
 		final List<JobPosition> jobPositions = new ArrayList<>();
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, position_code, position_name, ver ");
+		sql.append("FROM t_job_position ");
+		sql.append("WHERE position_name ILIKE ':positionName%' ");
 		
-		final String sql = "SELECT "
-				+ "id, position_code, position_name, ver "
-				+ "FROM "
-				+ "t_job_position "
-				+ "WHERE "
-				+ "position_name ILIKE ':positionName%'";
-		
-		final List<?> positionObjs = this.em().createNativeQuery(sql)
+		final List<?> positionObjs = this.em().createNativeQuery(sql.toString())
 				.setParameter("positionName", positionName)
 				.getResultList();
 		
@@ -49,14 +46,12 @@ public class JobPositionDao extends AbstractJpaDao{
 	}
 	
 	public JobPosition getByCode(String positionCode) {
-		final String sql = "SELECT "
-				+ "id, position_code, position_name, ver "
-				+ "FROM "
-				+ "t_job_position "
-				+ "WHERE "
-				+ "position_code = :positionCode";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, position_code, position_name, ver ");
+		sql.append("FROM t_job_position ");
+		sql.append("WHERE position_code = :positionCode ");
 		
-		final Object jobPositionObj = this.em().createNativeQuery(sql)
+		final Object jobPositionObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("positionCode", positionCode)
 				.getSingleResult();
 		

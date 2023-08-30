@@ -15,14 +15,12 @@ public class GenderDao extends AbstractJpaDao{
 	}
 	
 	public Gender getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, gender_name, gender_code, ver "
-				+ "FROM "
-				+ "t_gender "
-				+ "WHERE "
-				+ "gender_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, gender_name, gender_code, ver ");
+		sql.append("FROM t_gender ");
+		sql.append("WHERE gender_code = :code ");
 		
-		final Object genderObj = this.em().createNativeQuery(sql)
+		final Object genderObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 		

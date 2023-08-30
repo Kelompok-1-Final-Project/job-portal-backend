@@ -21,7 +21,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 @Component
 public class JasperUtil {
 
-//	@Value("${jasper.template-folder}")
+	@Value("${jasper.template-folder}")
 	private String jasperTemplateFolder;
 	
 	public byte[] responseToByteArray(

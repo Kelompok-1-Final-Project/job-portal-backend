@@ -17,14 +17,12 @@ public class LevelDao extends AbstractJpaDao {
 	}
 	
 	public Level getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, level_code, level_name, ver "
-				+ "FROM "
-				+ "t_level "
-				+ "WHERE "
-				+ "level_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, level_code, level_name, ver ");
+		sql.append("FROM t_level ");
+		sql.append("WHERE level_code = :code ");
 
-		final Object levelObj = em().createNativeQuery(sql, Level.class)
+		final Object levelObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 
