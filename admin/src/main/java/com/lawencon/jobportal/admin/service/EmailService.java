@@ -140,7 +140,7 @@ public class EmailService {
 		thread.start();
 	}
 	
-	public void sendEmailAssessment(String subject, Candidate candidate, Assessment assessment) {
+	public void sendEmailAssessment(String subject, Candidate candidate, Assessment assessment, String skillTestId) {
 
 		Thread thread = new Thread() {
 			public void run() {
@@ -162,6 +162,9 @@ public class EmailService {
 					ctx.setVariable("address", assessment.getJob().getCompany().getAddress());
 					ctx.setVariable("city", assessment.getJob().getCompany().getCity().getCityName());
 					ctx.setVariable("date", assessment.getSchedule().toString());
+					if(skillTestId != null) {
+						ctx.setVariable("link", "Test Link: <a href='http://localhost:4200/tests/" + skillTestId + "'> Click to start the Test</a>");						
+					}
 					ctx.setVariable("inLookLogo", INLOOK_LOGO_IMAGE);
 					ctx.setVariable("url", loginUrl);
 
