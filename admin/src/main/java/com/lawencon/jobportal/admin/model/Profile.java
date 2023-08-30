@@ -21,6 +21,10 @@ public class Profile extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "gender_id")
 	private Gender gender;
+	
+	@OneToOne
+	@JoinColumn(name = "file_id")
+	private File file;
 
 	public String getFullName() {
 		return fullName;
@@ -46,4 +50,13 @@ public class Profile extends BaseEntity {
 		this.gender = gender;
 	}
 
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	
 }
