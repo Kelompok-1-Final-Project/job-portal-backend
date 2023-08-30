@@ -432,7 +432,8 @@ public class ProgressStatusService {
 			offeringData.put("company", offerings.getJob().getCompany().getCompanyName());
 			offeringData.put("jobPosition", offerings.getJob().getJobPosition().getPositionName());
 			offeringData.put("name", candidate.getCandidateProfile().getFullName());
-			offeringData.put("salary", offerings.getJob().getSalaryStart());
+			offeringData.put("salary", offerings.getJob().getSalaryStart().toString());
+			offeringData.put("salaryEnd", offerings.getJob().getSalaryEnd().toString());
 			
 			final List<JasperBenefitResDto> benefitJaspers = new ArrayList<>();
 			final List<JobBenefit> jobBenefits = jobBenefitDao.getByJob(job.getId());

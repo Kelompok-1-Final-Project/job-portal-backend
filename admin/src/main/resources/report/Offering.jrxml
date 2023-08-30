@@ -7,10 +7,11 @@
 	<parameter name="jobPosition" class="java.lang.String"/>
 	<parameter name="name" class="java.lang.String"/>
 	<parameter name="salary" class="java.lang.String"/>
+	<parameter name="salaryEnd" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT * FROM t_job_benefit tjb INNER JOIN t_benefit tb ON tjb.benefit_id = tb.id]]>
 	</queryString>
-	<field name="benefit_name" class="java.lang.String">
+	<field name="benefitName" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="benefit_name"/>
 		<property name="com.jaspersoft.studio.field.label" value="benefit_name"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="t_benefit"/>
@@ -49,7 +50,7 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="165" splitType="Stretch">
+		<band height="185" splitType="Stretch">
 			<staticText>
 				<reportElement x="203" y="11" width="166" height="30" uuid="e89680df-b749-48d2-802f-f1f0fe7762ce"/>
 				<textElement markup="styled">
@@ -65,14 +66,14 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 				<textFieldExpression><![CDATA["On behalf of  " + $P{company}  + " We are delighted to offer you the position of " +  $P{jobPosition} + " at " + $P{company} + ". We noticed your impressive skills and experiences during the selection process, and we believe you would be a valuable addition. "]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="83" width="550" height="50" uuid="df545435-c6b6-419c-b055-e966cd5af898"/>
+				<reportElement x="0" y="83" width="550" height="67" uuid="df545435-c6b6-419c-b055-e966cd5af898"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Name : " + $P{name} + "\n" + "Position : " + $P{jobPosition} + "\n" + "Salary : " + $P{salary} + "n"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Name : " + $P{name} + "\n" + "Position : " + $P{jobPosition} + "\n" + "Salary Start : Rp. " + $P{salary} + "\n" + "Salary End : Rp. " + $P{salaryEnd} + "\n"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="143" width="550" height="20" uuid="a26d7cb0-a763-44c9-8641-740bcd815cbf"/>
+				<reportElement x="0" y="159" width="550" height="20" uuid="a26d7cb0-a763-44c9-8641-740bcd815cbf"/>
 				<textElement>
 					<font fontName="Arial" size="12"/>
 				</textElement>
@@ -82,13 +83,6 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 	</pageHeader>
 	<detail>
 		<band height="24" splitType="Stretch">
-			<textField>
-				<reportElement x="10" y="4" width="100" height="18" uuid="7fb03aeb-8be0-4855-8f51-59e4ca3edcd0"/>
-				<textElement>
-					<font fontName="Arial" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{benefit_name}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="0" y="4" width="17" height="16" uuid="ecd67e4a-93b2-4859-9384-6422dae374da"/>
 				<textElement>
@@ -96,6 +90,13 @@ Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
 				</textElement>
 				<text><![CDATA[•]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="10" y="4" width="100" height="14" uuid="2dd43ea7-2c6c-4cbd-a3e6-d29c8802cfa6"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{benefitName}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>

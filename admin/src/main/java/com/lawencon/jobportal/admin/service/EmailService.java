@@ -277,7 +277,7 @@ public class EmailService {
 
 					email.setTo(candidate.getEmail());
 					email.setSubject(subject);
-					email.addAttachment("Offering Letter", new ByteArrayResource(attachment));
+					email.addAttachment("Offering Letter.pdf", new ByteArrayResource(attachment));
 
 					final Context ctx = new Context(LocaleContextHolder.getLocale());
 					ctx.setVariable("name", candidate.getCandidateProfile().getFullName());
@@ -286,7 +286,7 @@ public class EmailService {
 					ctx.setVariable("inLookLogo", INLOOK_LOGO_IMAGE);
 					ctx.setVariable("url", loginUrl);
 
-					final String htmlContent = htmlTemplateEngine.process("MCU", ctx);
+					final String htmlContent = htmlTemplateEngine.process("Offering", ctx);
 					email.setText(htmlContent, true);
 
 					ClassPathResource clr = new ClassPathResource(INLOOK_LOGO_IMAGE);
