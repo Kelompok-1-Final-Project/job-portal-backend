@@ -575,6 +575,8 @@ public class ProgressStatusService {
 	public UpdateResDto updateMedical(MedicalCheckupUpdateReqDto data) {
 		final UpdateResDto result = new UpdateResDto();
 		try {
+			em().getTransaction().begin();
+			
 			final MedicalCheckup medicalCheckup = medicalCheckupDao.getById(MedicalCheckup.class, data.getMedicalId());
 			
 			final File file = new File();
@@ -587,6 +589,8 @@ public class ProgressStatusService {
 			
 			result.setVersion(medicalCheckupResult.getVersion());
 			result.setMessage("Update Medical File Successfully.");
+			
+			em().getTransaction().commit();
 			
 		}catch (Exception e) {
 			em().getTransaction().rollback();
