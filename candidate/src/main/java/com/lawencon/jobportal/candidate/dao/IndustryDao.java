@@ -15,14 +15,12 @@ public class IndustryDao extends AbstractJpaDao{
 	}
 	
 	public Industry getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, industry_name, industry_code, ver "
-				+ "FROM " 
-				+ "t_industry " 
-				+ "WHERE "
-				+ "industry_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, industry_name, industry_code, ver ");
+		sql.append("FROM t_industry ");
+		sql.append("WHERE industry_code = :code ");
 
-		final Object industryObj = em().createNativeQuery(sql)
+		final Object industryObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -42,14 +40,12 @@ public class IndustryDao extends AbstractJpaDao{
 	}
 	
 	public Industry getByName(String industryName) {
-		final String sql = "SELECT "
-				+ "id, industry_name, industry_code, ver "
-				+ "FROM " 
-				+ "t_industry " 
-				+ "WHERE "
-				+ "industry_name = :industryName";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, industry_name, industry_code, ver ");
+		sql.append("FROM t_industry ");
+		sql.append("WHERE industry_name = :industryName ");
 
-		final Object industryObj = em().createNativeQuery(sql, Industry.class)
+		final Object industryObj = em().createNativeQuery(sql.toString())
 				.setParameter("industryName", industryName)
 				.getSingleResult();
 
