@@ -21,23 +21,14 @@ public class UserSkillDao extends AbstractJpaDao{
 	
 	public List<UserSkill> getByCandidate(String candidateId){
 		final List<UserSkill> userSkills = new ArrayList<>();
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tus.id, ts.skill_name, tl.level_name, tus.ver, ts.skill_code, tl.level_code ");
+		sql.append("FROM t_user_skill tus ");
+		sql.append("INNER JOIN t_skill ts ON ts.id = tus.skill_id ");
+		sql.append("INNER JOIN t_level tl ON tus.level_id = tl.id ");
+		sql.append("WHERE candidate_id = :candidateId ");
 		
-		final String sql = "SELECT "
-				+ "tus.id, ts.skill_name, tl.level_name, tus.ver, ts.skill_code, tl.level_code "
-				+ "FROM "
-				+ "t_user_skill tus "
-				+ "INNER JOIN "
-				+ "t_skill ts "
-				+ "ON "
-				+ "ts.id = tus.skill_id "
-				+ "INNER JOIN "
-				+ "t_level tl "
-				+ "ON "
-				+ "tus.level_id = tl.id "
-				+ "WHERE "
-				+ "candidate_id = :candidateId ";
-		
-		final List<?> userSkillObjs = em().createNativeQuery(sql)
+		final List<?> userSkillObjs = em().createNativeQuery(sql.toString())
 				.setParameter("candidateId", candidateId)
 				.getResultList();
 		
