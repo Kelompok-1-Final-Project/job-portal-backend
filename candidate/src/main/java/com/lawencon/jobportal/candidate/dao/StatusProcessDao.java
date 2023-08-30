@@ -16,14 +16,12 @@ public class StatusProcessDao extends AbstractJpaDao{
 	}
 	
 	public StatusProcess getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, process_name, process_code, ver " 
-				+ "FROM " 
-				+ "t_status_process " 
-				+ "WHERE "
-				+ "process_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, process_name, process_code, ver ");
+		sql.append("FROM t_status_process ");
+		sql.append("WHERE process_code = :code ");
 
-		final Object statusObj = this.em().createNativeQuery(sql)
+		final Object statusObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 

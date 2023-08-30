@@ -15,14 +15,12 @@ public class SkillDao extends AbstractJpaDao{
 	}
 
 	public Skill getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, skill_name, skill_code, ver " 
-				+ "FROM " 
-				+ "t_skill " 
-				+ "WHERE "
-				+ "skill_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, skill_name, skill_code, ver ");
+		sql.append("FROM t_skill ");
+		sql.append("WHERE skill_code = :code ");
 
-		final Object skillObj = em().createNativeQuery(sql)
+		final Object skillObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 
@@ -42,14 +40,12 @@ public class SkillDao extends AbstractJpaDao{
 	}
 	
 	public Skill getByName(String skillName) {
-		final String sql = "SELECT "
-				+ "id, skill_name, skill_code, ver " 
-				+ "FROM " 
-				+ "t_skill " 
-				+ "WHERE "
-				+ "skill_name = :skillName";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, skill_name, skill_code, ver ");
+		sql.append("FROM t_skill ");
+		sql.append("WHERE skill_name = :skillName ");
 
-		final Object skillObj = em().createNativeQuery(sql)
+		final Object skillObj = em().createNativeQuery(sql.toString())
 				.setParameter("skillName", skillName)
 				.getSingleResult();
 
