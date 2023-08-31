@@ -32,7 +32,11 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<InsertResDto> registerUser(@RequestBody UserInsertReqDto data){
 		final InsertResDto response = userService.registerUser(data);
-		return new ResponseEntity<>(response, HttpStatus.CREATED);
+		if(response.getHttpStatus() != "" && response.getHttpStatus() != null) {
+			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+		}else {
+			return new ResponseEntity<>(response, HttpStatus.CREATED);
+		}
 	}
 	
 	@PostMapping("/byadmin")

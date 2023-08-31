@@ -194,24 +194,29 @@ public class CandidateService {
 	}
 
 	public InsertResDto selfRegister(CandidateSelfRegisterReqDto data) {
-
-		em().getTransaction().begin();
-
-		final CandidateProfile profile = new CandidateProfile();
-		profile.setFullName(data.getFullname());
-		final PersonType personType = personTypeDao.getByCode(PersonTypeEnum.CANDIDATE.typeCode);
-		profile.setPersonType(personType);
-		final CandidateProfile profiles = candidateProfileDao.saveNoLogin(profile, () -> "SYSTEM");
-
-		final Candidate candidate = new Candidate();
-		candidate.setEmail(data.getEmail());
-		candidate.setCandidateProfile(profiles);
-		final Candidate candidates = candidateDao.saveNoLogin(candidate, () -> "SYSTEM");
-
 		final InsertResDto result = new InsertResDto();
-		result.setId(candidates.getId());
-		result.setMessage("Register Successfully.");
-		em().getTransaction().commit();
+		try {
+			em().getTransaction().begin();
+			
+			final CandidateProfile profile = new CandidateProfile();
+			profile.setFullName(data.getFullname());
+			final PersonType personType = personTypeDao.getByCode(PersonTypeEnum.CANDIDATE.typeCode);
+			profile.setPersonType(personType);
+			final CandidateProfile profiles = candidateProfileDao.saveNoLogin(profile, () -> "SYSTEM");
+			
+			final Candidate candidate = new Candidate();
+			candidate.setEmail(data.getEmail());
+			candidate.setCandidateProfile(profiles);
+			final Candidate candidates = candidateDao.saveNoLogin(candidate, () -> "SYSTEM");
+			
+			result.setId(candidates.getId());
+			result.setMessage("Register Successfully.");
+			
+			em().getTransaction().commit();			
+		}catch (Exception e) {
+			e.printStackTrace();
+			em().getTransaction().rollback();
+		}
 
 		return result;
 	}

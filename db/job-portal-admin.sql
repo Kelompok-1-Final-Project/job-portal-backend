@@ -1409,6 +1409,6 @@ t_candidate_profile tcp ON tc.profile_id = tcp.id
 INNER JOIN
 t_job tj ON ta.job_id = tj.id 
 INNER JOIN 
-t_employment_type tet ON tj.employment_type_id = tet.id;
+t_employment_type tet ON tj.employment_type_id = tet.id
 WHERE 
-ta.created_at >= '' AND th.created_at <= ''
+ta.created_at >= '2023-08-23' AND th.created_at <= '2023-08-31';
