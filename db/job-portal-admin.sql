@@ -1396,7 +1396,8 @@ WHERE tj.hr_id = '052b733b-2723-4d0b-a2fa-5888428ef6a5' OR tj.interviewer_id = '
 
 
 SELECT 
-tcp.full_name, tj.job_title, tet.employment_name, ABS(DATE_PART('day', th.created_at - ta.created_at)) as date_diff
+tcp.full_name, tj.job_title, tet.employment_name, ABS(DATE_PART('day', th.created_at - ta.created_at)) as date_diff,
+th.created_at , ta.created_at 
 FROM
 t_application ta 
 INNER JOIN
@@ -1409,3 +1410,5 @@ INNER JOIN
 t_job tj ON ta.job_id = tj.id 
 INNER JOIN 
 t_employment_type tet ON tj.employment_type_id = tet.id;
+WHERE 
+ta.created_at >= '' AND th.created_at <= ''
