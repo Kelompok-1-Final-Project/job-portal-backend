@@ -163,7 +163,7 @@ public class EmailService {
 					ctx.setVariable("city", assessment.getJob().getCompany().getCity().getCityName());
 					ctx.setVariable("date", assessment.getSchedule().toString());
 					if(skillTestId != null) {
-						ctx.setVariable("link", "Test Link: <a href='http://localhost:4200/tests/" + skillTestId + "'> Click to start the Test</a>");						
+						ctx.setVariable("link", "Test Link: <a href='http://localhost:4200/tests/" + assessment.getJob().getId() + "'> Click to start the Test</a>");						
 					}
 					ctx.setVariable("inLookLogo", INLOOK_LOGO_IMAGE);
 					ctx.setVariable("url", loginUrl);
