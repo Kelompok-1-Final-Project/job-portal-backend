@@ -304,7 +304,7 @@ public class ProgressStatusService {
 			
 			final Assessment assessments = assessmentDao.save(assessment);
 			
-			final SkillTest skillTest = skillTestDao.getByCandidateAndJob(candidate.getId(), assessment.getJob().getId());
+			final SkillTest skillTest = skillTestDao.getByJob(assessment.getJob().getId());
 
 			emailService.sendEmailAssessment("Assessment Schedule", candidate, assessments, skillTest.getId());
 			

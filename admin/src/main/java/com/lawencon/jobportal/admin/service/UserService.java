@@ -27,6 +27,7 @@ import com.lawencon.jobportal.admin.dto.user.UserLoginReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserLoginResDto;
 import com.lawencon.jobportal.admin.dto.user.UserUpdateIsActiveReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserUpdateReqDto;
+import com.lawencon.jobportal.admin.model.File;
 import com.lawencon.jobportal.admin.model.Gender;
 import com.lawencon.jobportal.admin.model.Profile;
 import com.lawencon.jobportal.admin.model.Role;
@@ -160,7 +161,9 @@ public class UserService implements UserDetailsService {
 		userLoginResDto.setUserId(user.getId());
 		userLoginResDto.setRoleCode(user.getRole().getRoleCode());
 		userLoginResDto.setUserName(user.getProfile().getFullName());
-		userLoginResDto.setPhotoId(user.getProfile().getFile().getId());
+		if(user.getProfile().getFile() != null) {
+			userLoginResDto.setPhotoId(user.getProfile().getFile().getId());			
+		}
 
 		return userLoginResDto;
 	}
