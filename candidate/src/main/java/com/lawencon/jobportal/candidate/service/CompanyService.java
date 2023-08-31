@@ -55,6 +55,8 @@ public class CompanyService {
 			result.setDescription(c.getDescription());
 			result.setAddress(c.getAddress());
 			result.setCityName(c.getCity().getCityName());
+			result.setCreatedAt(c.getCreatedAt().toString());
+			result.setUpdatedAt(c.getUpdatedAt().toString());
 			listResult.add(result);
 		}
 		return listResult;
@@ -132,6 +134,8 @@ public class CompanyService {
 		result.setDescription(company.getDescription());
 		result.setAddress(company.getAddress());
 		result.setCityName(company.getCity().getCityName());
+		result.setCreatedAt(company.getCreatedAt().toString());
+		result.setUpdatedAt(company.getUpdatedAt().toString());
 		
 		return result;
 	}

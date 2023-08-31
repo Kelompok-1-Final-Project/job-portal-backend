@@ -18,16 +18,13 @@ public class QuestionDao extends AbstractJpaDao{
 	}
 	
 	public List<Question> getBySkillTest(String skillTestId){
-		final String sql = "SELECT  "
-				+ "	tq.id, tq.question "
-				+ "FROM  "
-				+ "	t_question tq  "
-				+ "INNER JOIN  "
-				+ "	t_skill_test_question tstq ON tstq.question_id = tq.id "
-				+ "WHERE  "
-				+ "	tstq.skill_test_id = :skillTestId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tq.id, tq.question ");
+		sql.append("FROM t_question tq ");
+		sql.append("INNER JOIN t_skill_test_question tstq ON tstq.question_id = tq.id ");
+		sql.append("WHERE tstq.skill_test_id = :skillTestId ");
 		
-		final List<?> questionObj = this.em().createNativeQuery(sql)
+		final List<?> questionObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("skillTestId", skillTestId)
 				.getResultList();
 		
@@ -46,14 +43,10 @@ public class QuestionDao extends AbstractJpaDao{
 	}
 	
 	public Question getByCode(String questionCode) {
-		final String sql = "SELECT "
-				+ "q "
-				+ "FROM "
-				+ "Question q "
-				+ "WHERE "
-				+ "q.questionCode = :questionCode";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT q FROM Question q WHERE q.questionCode = :questionCode");
 		
-		final Question question = em().createQuery(sql, Question.class)
+		final Question question = em().createQuery(sql.toString(), Question.class)
 				.setParameter("questionCode", questionCode)
 				.getSingleResult();
 		

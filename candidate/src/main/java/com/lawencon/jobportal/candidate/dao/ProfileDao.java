@@ -13,7 +13,6 @@ import com.lawencon.jobportal.candidate.model.Gender;
 import com.lawencon.jobportal.candidate.model.MaritalStatus;
 import com.lawencon.jobportal.candidate.model.PersonType;
 import com.lawencon.jobportal.candidate.model.Profile;
-import com.lawencon.jobportal.candidate.model.User;
 
 @Repository
 public class ProfileDao extends AbstractJpaDao{
@@ -24,33 +23,17 @@ public class ProfileDao extends AbstractJpaDao{
 	
 	
 	public Profile getByUser(String userId) {
-		final String sql = "SELECT  "
-				+ "	tp.id, "
-				+ "	tp.id_number, "
-				+ "	tp.full_name, "
-				+ "	tp.summary, "
-				+ "	tp.birthdate, "
-				+ "	tp.mobile_number, "
-				+ "	tp.photo_id, "
-				+ "	tp.cv_id, "
-				+ "	tp.expected_salary, "
-				+ "	tg.gender_name, "
-				+ "	tms.status_name, "
-				+ "	tpt.type_name  "
-				+ "FROM  "
-				+ "	t_profile tp  "
-				+ "INNER JOIN "
-				+ "	t_user tu ON tu.profile_id = tp.id  "
-				+ "INNER JOIN  "
-				+ "	t_gender tg ON tg.id = tp.gender_id  "
-				+ "INNER JOIN  "
-				+ "	t_marital_status tms ON tms.id = tp.marital_status_id  "
-				+ "INNER JOIN  "
-				+ "	t_person_type tpt ON tpt.id = tp.person_type_id ; "
-				+ "WHERE  "
-				+ "	tu.id = :userId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tp.id, tp.id_number, tp.full_name, tp.summary, tp.birthdate, tp.mobile_number, tp.photo_id, ");
+		sql.append("tp.cv_id, tp.expected_salary, tg.gender_name, tms.status_name, tpt.type_name ");
+		sql.append("FROM t_profile tp ");
+		sql.append("INNER JOIN t_user tu ON tu.profile_id = tp.id ");
+		sql.append("INNER JOIN t_gender tg ON tg.id = tp.gender_id ");
+		sql.append("INNER JOIN t_marital_status tms ON tms.id = tp.marital_status_id ");
+		sql.append("INNER JOIN t_person_type tpt ON tpt.id = tp.person_type_id ");
+		sql.append("WHERE tu.id = :userId ");
 		
-		final Object profileObj = this.em().createNativeQuery(sql, User.class)
+		final Object profileObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("userId", userId)
 				.getSingleResult();
 		

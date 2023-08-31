@@ -20,7 +20,6 @@ public class SkillTestDao extends AbstractJpaDao{
 		sql.append("SELECT id, test_name, test_code, job_id, ver ");
 		sql.append("FROM t_skill_test ");
 		sql.append("WHERE job_id = :jobId ");
-
 		
 		final Object skillTestObj = em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
@@ -51,7 +50,7 @@ public class SkillTestDao extends AbstractJpaDao{
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT id, test_name, job_id, ver ");
 		sql.append("FROM t_skill_test ");
-		sql.append("WHERE job_id = :jobId AND candidate_id = : candidateId ");
+		sql.append("WHERE job_id = :jobId AND candidate_id = :candidateId ");
 		
 		final Object skillTestObj = em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
