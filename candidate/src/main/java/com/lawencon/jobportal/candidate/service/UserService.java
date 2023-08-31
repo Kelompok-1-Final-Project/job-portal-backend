@@ -141,6 +141,8 @@ public class UserService implements UserDetailsService {
 			}
 
 		} catch (Exception e) {
+			result.setMessage("Email is already exist");
+			result.setHttpStatus("400");
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
