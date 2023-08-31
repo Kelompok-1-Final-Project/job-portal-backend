@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private ProfileDao profileDao;
-	
+
 	@Autowired
 	private FileDao fileDao;
 
@@ -71,17 +71,19 @@ public class UserService implements UserDetailsService {
 			userGetResDto.setRoleName(u.getRole().getRoleName());
 			userGetResDto.setFullName(u.getProfile().getFullName());
 			userGetResDto.setUserPhone(u.getProfile().getMobileNumber());
-			userGetResDto.setFileId(u.getProfile().getFile().getId());
+			if(u.getProfile().getFile()!= null) {
+				userGetResDto.setFileId(u.getProfile().getFile().getId());				
+			}
 			userGetResDto.setIsActive(u.getIsActive());
 			usersDto.add(userGetResDto);
 		});
 
 		return usersDto;
 	}
-	
+
 	public UserGetResDto getById(String userId) {
 		final User user = userDao.getById(User.class, userId);
-		
+
 		final UserGetResDto userGetResDto = new UserGetResDto();
 		userGetResDto.setUserId(user.getId());
 		userGetResDto.setUserEmail(user.getEmail());
@@ -89,9 +91,11 @@ public class UserService implements UserDetailsService {
 		userGetResDto.setFullName(user.getProfile().getFullName());
 		userGetResDto.setUserPhone(user.getProfile().getMobileNumber());
 		userGetResDto.setUserGender(user.getProfile().getGender().getGenderName());
-		userGetResDto.setFileId(user.getProfile().getFile().getId());
+		if (user.getProfile().getFile() != null) {
+			userGetResDto.setFileId(user.getProfile().getFile().getId());
+		}
 		userGetResDto.setIsActive(user.getIsActive());
-		
+
 		return userGetResDto;
 	}
 
@@ -104,17 +108,17 @@ public class UserService implements UserDetailsService {
 
 			final Profile profile = new Profile();
 			profile.setFullName(data.getFullName());
-			
-			if(data.getUserPhone() != null) {
-				profile.setMobileNumber(data.getUserPhone());			
+
+			if (data.getUserPhone() != null) {
+				profile.setMobileNumber(data.getUserPhone());
 			}
 
-			if(data.getGenderCode() != null) {
+			if (data.getGenderCode() != null) {
 				final Gender gender = genderDao.getByCode(data.getGenderCode());
-				profile.setGender(gender);			
+				profile.setGender(gender);
 			}
-			
-			if(data.getFile() != null) {
+
+			if (data.getFile() != null) {
 				final File file = new File();
 				file.setFile(data.getFile());
 				file.setExt(data.getExt());
@@ -136,7 +140,7 @@ public class UserService implements UserDetailsService {
 			user.setRole(role);
 
 			userResult = userDao.save(user);
-			
+
 			emailService.sendEmailNewUser("Registered Account", userResult, pass);
 
 			if (userResult != null) {
@@ -145,8 +149,8 @@ public class UserService implements UserDetailsService {
 			}
 
 			em().getTransaction().commit();
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
@@ -161,8 +165,8 @@ public class UserService implements UserDetailsService {
 		userLoginResDto.setUserId(user.getId());
 		userLoginResDto.setRoleCode(user.getRole().getRoleCode());
 		userLoginResDto.setUserName(user.getProfile().getFullName());
-		if(user.getProfile().getFile() != null) {
-			userLoginResDto.setPhotoId(user.getProfile().getFile().getId());			
+		if (user.getProfile().getFile() != null) {
+			userLoginResDto.setPhotoId(user.getProfile().getFile().getId());
 		}
 
 		return userLoginResDto;
@@ -176,10 +180,10 @@ public class UserService implements UserDetailsService {
 		}
 		throw new UsernameNotFoundException("Email tidak ditemukan");
 	}
-	
+
 	public List<UserGetResDto> getAllHr() {
 		final List<UserGetResDto> usersDto = new ArrayList<>();
-		
+
 		userDao.getByRoleCode(RoleEnum.HR.roleCode).forEach(u -> {
 			final UserGetResDto userGetResDto = new UserGetResDto();
 			userGetResDto.setUserId(u.getId());
@@ -194,10 +198,10 @@ public class UserService implements UserDetailsService {
 
 		return usersDto;
 	}
-	
+
 	public List<UserGetResDto> getAllInterviewer() {
 		final List<UserGetResDto> usersDto = new ArrayList<>();
-		
+
 		userDao.getByRoleCode(RoleEnum.INTERVIEWER.roleCode).forEach(u -> {
 			final UserGetResDto userGetResDto = new UserGetResDto();
 			userGetResDto.setUserId(u.getId());
@@ -212,8 +216,8 @@ public class UserService implements UserDetailsService {
 
 		return usersDto;
 	}
-	
-	public UpdateResDto updateUser(UserUpdateReqDto data)  {
+
+	public UpdateResDto updateUser(UserUpdateReqDto data) {
 		final UpdateResDto updateResDto = new UpdateResDto();
 		try {
 			em().getTransaction().begin();
@@ -222,61 +226,60 @@ public class UserService implements UserDetailsService {
 			final Role role = roleDao.getById(Role.class, data.getRoleId());
 			userDb.setRole(role);
 			userDb.setEmail(data.getEmail());
-			
+
 			final Profile profileDb = profileDao.getById(Profile.class, userDb.getProfile().getId());
 			profileDb.setFullName(data.getFullName());
-			
-			if(data.getRoleId() != null) {
-				profileDb.setMobileNumber(data.getMobileNumber());			
+
+			if (data.getRoleId() != null) {
+				profileDb.setMobileNumber(data.getMobileNumber());
 			}
-			
-			if(data.getGenderId() != null) {
+
+			if (data.getGenderId() != null) {
 				final Gender gender = genderDao.getById(Gender.class, data.getGenderId());
-				profileDb.setGender(gender);			
+				profileDb.setGender(gender);
 			}
-			
-			if(data.getFile() != null) {
+
+			if (data.getFile() != null) {
 				final String oldFileId = userDb.getProfile().getFile().getId();
-				
+
 				final File file = new File();
 				file.setFile(data.getFile());
 				file.setExt(data.getExt());
-				
-				if(oldFileId != null) {
+
+				if (oldFileId != null) {
 					fileDao.deleteById(File.class, oldFileId);
 				}
 			}
-				
+
 			final Profile profileResult = profileDao.save(profileDb);
 			userDb.setProfile(profileResult);
 			final User userResult = userDao.save(userDb);
-			
+
 			updateResDto.setVersion(userResult.getVersion());
 			updateResDto.setMessage("Update Berhasil!!!");
-			
+
 			em().getTransaction().commit();
 
-			
-		}catch (Exception e) {
+		} catch (Exception e) {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
 		return updateResDto;
 	}
-	
-	public UpdateResDto updateIsActive(UserUpdateIsActiveReqDto data)  {
+
+	public UpdateResDto updateIsActive(UserUpdateIsActiveReqDto data) {
 		em().getTransaction().begin();
-		
+
 		final User userDb = userDao.getById(User.class, data.getUserId());
 		userDb.setIsActive(data.getIsActive());
-		
+
 		final User userResult = userDao.save(userDb);
-		
+
 		final UpdateResDto updateResDto = new UpdateResDto();
-		
+
 		updateResDto.setVersion(userResult.getVersion());
 		updateResDto.setMessage("Update Berhasil!!!");
-		
+
 		em().getTransaction().commit();
 
 		return updateResDto;
