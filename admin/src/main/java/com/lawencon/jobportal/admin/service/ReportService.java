@@ -15,9 +15,9 @@ public class ReportService {
 	@Autowired
 	private ReportDao reportDao;
 	
-	public List<ReportGetResDto> getReport() {
+	public List<ReportGetResDto> getReport(String startDate, String endDate) {
 		final List<ReportGetResDto> reportGetResDtos = new ArrayList<>();
-		reportDao.getReport().forEach(r -> {
+		reportDao.getReport(startDate, endDate).forEach(r -> {
 			final ReportGetResDto reportGetResDto = new ReportGetResDto();
 			reportGetResDto.setCandidateName(r.getCandidateName());
 			reportGetResDto.setJobName(r.getJobName());

@@ -54,4 +54,27 @@ public class ResultDao extends AbstractJpaDao{
 		}
 		return results;
 	}
+	
+	public Result getByCandidateAndSkillTest(String candidateId, String skillTestId){
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tr.id ");
+		sql.append("FROM t_result tr ");
+		sql.append("WHERE tr.candidate_id = :candidateId AND tr.skill_test_id = :skillTestId ");
+		
+		final Object resultObj = em().createNativeQuery(sql.toString())
+				.setParameter("candidateId", candidateId)
+				.setParameter("skillTestId", skillTestId)
+				.getSingleResult();
+		
+		final Object[] resultArr = (Object[]) resultObj;
+		
+		Result result = null;
+		
+		if (resultArr.length > 0) {
+			result = new Result();
+			result.setId(resultArr[0].toString());
+		}
+		
+		return result;
+	}
 }
