@@ -136,7 +136,9 @@ public class ProfileService {
 				}
 			}
 			
-			candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));
+			if(candidateProfile.getExpectedSalary() != null) {
+				candidateProfile.setExpectedSalary(Integer.valueOf(data.getExpectedSalary()));				
+			}
 
 			final MaritalStatus maritalStatus = maritalStatusDao.getByCode(data.getMaritalStatusCode());
 			final MaritalStatus maritalResult = maritalStatusDao.getById(MaritalStatus.class, maritalStatus.getId());

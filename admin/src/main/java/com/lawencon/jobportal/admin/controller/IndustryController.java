@@ -38,7 +38,7 @@ public class IndustryController {
 	
 	@GetMapping
 	public ResponseEntity<List<IndustryGetResDto>> getAllIndustry() {
-		final List<IndustryGetResDto>data = industryService.getAllIndustry();
+		final List<IndustryGetResDto> data = industryService.getAllIndustry();
 		return new ResponseEntity<>(data, HttpStatus.OK);
 	}
 	
