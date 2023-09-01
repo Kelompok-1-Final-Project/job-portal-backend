@@ -15,14 +15,12 @@ public class RelationshipDao extends AbstractJpaDao{
 	}
 
 	public Relationship getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, relationship_code, relationship_name, ver "
-				+ "FROM "
-				+ "t_relationship "
-				+ "WHERE "
-				+ "relationship_code = :code";
-		
-		final Object relationshipObj = em().createNativeQuery(sql)
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, relationship_code, relationship_name, ver ");
+		sql.append("FROM t_relationship ");
+		sql.append("WHERE relationship_code = :code ");
+
+		final Object relationshipObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 		

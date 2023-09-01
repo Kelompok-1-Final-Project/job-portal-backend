@@ -21,14 +21,11 @@ public class JobCandidateStatusDao extends AbstractJpaDao{
 	}
 	
 	public JobCandidateStatus getByCandidateAndJob(String candidateEmail, String jobCode) {
-		final String sql = "SELECT "
-				+ "jcs "
-				+ "FROM "
-				+ "JobCandidateStatus jcs "
-				+ "WHERE "
-				+ "jcs.job.jobCode = :jobCode AND jcs.candidate.email = :candidateEmail ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT jcs FROM JobCandidateStatus jcs ");
+		sql.append("WHERE jcs.job.jobCode = :jobCode AND jcs.candidate.email = :candidateEmail ");
 		
-		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql, JobCandidateStatus.class)
+		final JobCandidateStatus jobCandidateStatus = em().createQuery(sql.toString(), JobCandidateStatus.class)
 				.setParameter("jobCode", jobCode)
 				.setParameter("candidateEmail", candidateEmail)
 				.getSingleResult();

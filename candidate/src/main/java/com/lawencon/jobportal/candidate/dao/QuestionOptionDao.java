@@ -19,14 +19,13 @@ public class QuestionOptionDao extends AbstractJpaDao{
 	}
 	
 	public List<QuestionOption> getByQuestion(String questionId){
-		final String sql = "SELECT  "
-				+ "id, labels, is_answer "
-				+ "FROM  "
-				+ "	t_question_option tqo  "
-				+ "WHERE  "
-				+ "	question_id = :questionId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, labels, is_answer ");
+		sql.append("FROM t_question_option tqo ");
+		sql.append("WHERE question_id = :questionId ");
 		
-		final List<?> optionObj = this.em().createNativeQuery(sql)
+		
+		final List<?> optionObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("questionId", questionId)
 				.getResultList();
 		
@@ -45,14 +44,10 @@ public class QuestionOptionDao extends AbstractJpaDao{
 	}
 	
 	public QuestionOption getByCode(String optionCode) {
-		final String sql = "SELECT "
-				+ "qo "
-				+ "FROM "
-				+ "QuestionOption qo "
-				+ "WHERE "
-				+ "qo.optionCode = :optionCode";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT qo FROM QuestionOption qo WHERE qo.optionCode = :optionCode ");
 		
-		final QuestionOption questionOption = em().createQuery(sql, QuestionOption.class)
+		final QuestionOption questionOption = em().createQuery(sql.toString(), QuestionOption.class)
 				.setParameter("optionCode", optionCode)
 				.getSingleResult();
 		

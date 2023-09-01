@@ -15,14 +15,12 @@ public class MaritalStatusDao extends AbstractJpaDao{
 	}
 	
 	public MaritalStatus getByCode(String code) {
-		final String sql = "SELECT "
-				+ "id, status_name, status_code, ver " 
-				+ "FROM " 
-				+ "t_marital_status " 
-				+ "WHERE "
-				+ "status_code = :code";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT id, status_name, status_code, ver ");
+		sql.append("FROM t_marital_status ");
+		sql.append("WHERE status_code = :code ");
 
-		final Object maritalObj = em().createNativeQuery(sql)
+		final Object maritalObj = em().createNativeQuery(sql.toString())
 				.setParameter("code", code)
 				.getSingleResult();
 

@@ -20,18 +20,14 @@ public class JobBenefitDao extends AbstractJpaDao{
 	}
 	
 	public List<JobBenefit> getByJob(String jobId){
-		final String sql = "SELECT  "
-				+ "	tjb.id, tb.benefit_name, tjb.ver  "
-				+ "FROM  "
-				+ "	t_job_benefit tjb  "
-				+ "INNER JOIN  "
-				+ "	t_job tj ON tj.id = tjb.job_id  "
-				+ "INNER JOIN  "
-				+ "	t_benefit tb ON tb.id = tjb.benefit_id  "
-				+ "WHERE  "
-				+ "	tjb.job_id = :jobId ";
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tjb.id, tb.benefit_name, tjb.ver ");
+		sql.append("FROM t_job_benefit tjb ");
+		sql.append("INNER JOIN t_job tj ON tj.id = tjb.job_id ");
+		sql.append("INNER JOIN t_benefit tb ON tb.id = tjb.benefit_id ");
+		sql.append("WHERE tjb.job_id = :jobId ");
 		
-		final List<?> benefitsObj = this.em().createNativeQuery(sql)
+		final List<?> benefitsObj = this.em().createNativeQuery(sql.toString())
 				.setParameter("jobId", jobId)
 				.getResultList();
 		
@@ -52,19 +48,15 @@ public class JobBenefitDao extends AbstractJpaDao{
 	}
 	
 	public JobBenefit getByJobAndBenefit(String jobId, String benefitId){
-		final String sql = "SELECT  "
-				+ "	tjb.id, tb.benefit_name, tjb.ver  "
-				+ "FROM  "
-				+ "	t_job_benefit tjb  "
-				+ "INNER JOIN  "
-				+ "	t_job tj ON tj.id = tjb.job_id  "
-				+ "INNER JOIN  "
-				+ "	t_benefit tb ON tb.id = tjb.benefit_id  "
-				+ "WHERE  "
-				+ "	tjb.job_id = :jobId AND tjb.benefit_id = :benefitId";
-		
+		final StringBuilder sql = new StringBuilder();
+		sql.append("SELECT tjb.id, tb.benefit_name, tjb.ver ");
+		sql.append("FROM t_job_benefit tjb ");
+		sql.append("INNER JOIN t_job tj ON tj.id = tjb.job_id ");
+		sql.append("INNER JOIN t_benefit tb ON tb.id = tjb.benefit_id ");
+		sql.append("WHERE tjb.job_id = :jobId AND tjb.benefit_id = :benefitId ");
+
 		try {
-			final Object jobBenefitObjs = em().createNativeQuery(sql)
+			final Object jobBenefitObjs = em().createNativeQuery(sql.toString())
 					.setParameter("jobId", jobId)
 					.setParameter("benefitId", benefitId)
 					.getSingleResult();

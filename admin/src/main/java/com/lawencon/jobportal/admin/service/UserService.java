@@ -71,8 +71,8 @@ public class UserService implements UserDetailsService {
 			userGetResDto.setRoleName(u.getRole().getRoleName());
 			userGetResDto.setFullName(u.getProfile().getFullName());
 			userGetResDto.setUserPhone(u.getProfile().getMobileNumber());
-			if(u.getProfile().getFile()!= null) {
-				userGetResDto.setFileId(u.getProfile().getFile().getId());				
+			if (u.getProfile().getFile() != null) {
+				userGetResDto.setFileId(u.getProfile().getFile().getId());
 			}
 			userGetResDto.setIsActive(u.getIsActive());
 			usersDto.add(userGetResDto);
@@ -122,7 +122,8 @@ public class UserService implements UserDetailsService {
 				final File file = new File();
 				file.setFile(data.getFile());
 				file.setExt(data.getExt());
-				fileDao.save(file);
+				final File files = fileDao.save(file);
+				profile.setFile(files);
 			}
 
 			final Profile profileResult = profileDao.save(profile);
@@ -191,7 +192,9 @@ public class UserService implements UserDetailsService {
 			userGetResDto.setRoleName(u.getRole().getRoleName());
 			userGetResDto.setFullName(u.getProfile().getFullName());
 			userGetResDto.setUserPhone(u.getProfile().getMobileNumber());
-			userGetResDto.setFileId(u.getProfile().getFile().getId());
+			if (u.getProfile().getFile() != null) {
+				userGetResDto.setFileId(u.getProfile().getFile().getId());
+			}
 			userGetResDto.setIsActive(u.getIsActive());
 			usersDto.add(userGetResDto);
 		});
@@ -209,7 +212,9 @@ public class UserService implements UserDetailsService {
 			userGetResDto.setRoleName(u.getRole().getRoleName());
 			userGetResDto.setFullName(u.getProfile().getFullName());
 			userGetResDto.setUserPhone(u.getProfile().getMobileNumber());
-			userGetResDto.setFileId(u.getProfile().getFile().getId());
+			if (u.getProfile().getFile() != null) {
+				userGetResDto.setFileId(u.getProfile().getFile().getId());
+			}
 			userGetResDto.setIsActive(u.getIsActive());
 			usersDto.add(userGetResDto);
 		});
@@ -223,30 +228,38 @@ public class UserService implements UserDetailsService {
 			em().getTransaction().begin();
 
 			final User userDb = userDao.getById(User.class, data.getUserId());
-			final Role role = roleDao.getById(Role.class, data.getRoleId());
-			userDb.setRole(role);
-			userDb.setEmail(data.getEmail());
+			if (data.getRoleId() != null && data.getRoleId() != "") {
+				final Role role = roleDao.getById(Role.class, data.getRoleId());
+				userDb.setRole(role);
+			}
+
+			if (data.getEmail() != null && data.getEmail() != "") {
+				userDb.setEmail(data.getEmail());
+			}
 
 			final Profile profileDb = profileDao.getById(Profile.class, userDb.getProfile().getId());
 			profileDb.setFullName(data.getFullName());
 
-			if (data.getRoleId() != null) {
+			if (data.getMobileNumber() != null && data.getMobileNumber() != "") {
 				profileDb.setMobileNumber(data.getMobileNumber());
 			}
 
-			if (data.getGenderId() != null) {
+			if (data.getGenderId() != null && data.getGenderId() != "") {
 				final Gender gender = genderDao.getById(Gender.class, data.getGenderId());
 				profileDb.setGender(gender);
 			}
 
-			if (data.getFile() != null) {
+			if (data.getFile() != null && data.getFile() != "") {
+
 				final String oldFileId = userDb.getProfile().getFile().getId();
 
 				final File file = new File();
 				file.setFile(data.getFile());
 				file.setExt(data.getExt());
-
-				if (oldFileId != null) {
+				final File files = fileDao.save(file);
+				profileDb.setFile(files);
+				
+				if (oldFileId != null && oldFileId != "") {
 					fileDao.deleteById(File.class, oldFileId);
 				}
 			}
@@ -257,10 +270,11 @@ public class UserService implements UserDetailsService {
 
 			updateResDto.setVersion(userResult.getVersion());
 			updateResDto.setMessage("Update Berhasil!!!");
-
 			em().getTransaction().commit();
 
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}

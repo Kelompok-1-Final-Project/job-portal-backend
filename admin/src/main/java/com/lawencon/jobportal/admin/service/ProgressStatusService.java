@@ -31,6 +31,7 @@ import com.lawencon.jobportal.admin.dao.JobCandidateStatusDao;
 import com.lawencon.jobportal.admin.dao.JobDao;
 import com.lawencon.jobportal.admin.dao.MedicalCheckupDao;
 import com.lawencon.jobportal.admin.dao.OfferingDao;
+import com.lawencon.jobportal.admin.dao.SkillTestDao;
 import com.lawencon.jobportal.admin.dao.StatusProcessDao;
 import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
@@ -69,6 +70,7 @@ import com.lawencon.jobportal.admin.model.JobBenefit;
 import com.lawencon.jobportal.admin.model.JobCandidateStatus;
 import com.lawencon.jobportal.admin.model.MedicalCheckup;
 import com.lawencon.jobportal.admin.model.Offering;
+import com.lawencon.jobportal.admin.model.SkillTest;
 import com.lawencon.jobportal.admin.model.StatusProcess;
 import com.lawencon.jobportal.admin.model.User;
 import com.lawencon.jobportal.admin.util.DateConvert;
@@ -119,6 +121,9 @@ public class ProgressStatusService {
 	
 	@Autowired
 	private EmployeeDao employeeDao;
+	
+	@Autowired
+	private SkillTestDao skillTestDao;
 	
 	@Autowired
 	private FileDao fileDao;
@@ -298,8 +303,10 @@ public class ProgressStatusService {
 			applicationDao.save(application);
 			
 			final Assessment assessments = assessmentDao.save(assessment);
+			
+			final SkillTest skillTest = skillTestDao.getByJob(assessment.getJob().getId());
 
-			emailService.sendEmailAssessment("Assessment Schedule", candidate, assessments);
+			emailService.sendEmailAssessment("Assessment Schedule", candidate, assessments, skillTest.getId());
 			
 			result.setId(assessments.getId());
 			result.setMessage("Insert Assessment Successfully.");
