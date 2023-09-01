@@ -9,6 +9,15 @@ public class CompanyUpdateReqDto {
 	private String ext;
 	private String file;
 	private String industryCode;
+	private String cityCode;
+
+	public String getCityCode() {
+		return cityCode;
+	}
+
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
+	}
 
 	public String getCompanyCode() {
 		return companyCode;

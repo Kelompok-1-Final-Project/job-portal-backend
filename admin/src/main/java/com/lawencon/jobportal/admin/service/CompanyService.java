@@ -131,7 +131,7 @@ public class CompanyService {
 			System.out.println(companyDb+ "Company ");
 			System.out.println(companyDb.getId() + "ID ");
 			final Company company = companyDao.getById(Company.class, companyDb.getId());
-
+			
 			final File file = new File();
 			file.setExt(data.getExt());
 			file.setFile(data.getFile());
@@ -139,11 +139,16 @@ public class CompanyService {
 
 			final Industry industryDb = industryDao.getByCode(data.getIndustryCode());
 			final Industry industry = industryDao.getById(Industry.class, industryDb.getId());
+			
+			final City cityDb = cityDao.getByCode(data.getCityCode());
+			final City city = cityDao.getById(City.class, cityDb.getId());
+			
 			company.setCompanyName(data.getCompanyName());
 			company.setAddress(data.getAddress());
 			company.setDescription(data.getDescription());
 			company.setFile(files);
 			company.setIndustry(industry);
+			company.setCity(city);
 			
 			final Company companyResult = companyDao.saveAndFlush(company);
 			
