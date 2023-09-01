@@ -21,6 +21,7 @@ import com.lawencon.jobportal.admin.dao.RoleDao;
 import com.lawencon.jobportal.admin.dao.UserDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
 import com.lawencon.jobportal.admin.dto.UpdateResDto;
+import com.lawencon.jobportal.admin.dto.user.UserChangePassReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserGetResDto;
 import com.lawencon.jobportal.admin.dto.user.UserInsertReqDto;
 import com.lawencon.jobportal.admin.dto.user.UserLoginReqDto;
@@ -71,8 +72,10 @@ public class UserService implements UserDetailsService {
 			userGetResDto.setRoleName(u.getRole().getRoleName());
 			userGetResDto.setFullName(u.getProfile().getFullName());
 			userGetResDto.setUserPhone(u.getProfile().getMobileNumber());
-			if (u.getProfile().getFile() != null) {
-				userGetResDto.setFileId(u.getProfile().getFile().getId());
+      
+			if(u.getProfile().getFile()!= null) {
+				userGetResDto.setFileId(u.getProfile().getFile().getId());				
+
 			}
 			userGetResDto.setIsActive(u.getIsActive());
 			usersDto.add(userGetResDto);
@@ -228,6 +231,7 @@ public class UserService implements UserDetailsService {
 			em().getTransaction().begin();
 
 			final User userDb = userDao.getById(User.class, data.getUserId());
+
 			if (data.getRoleId() != null && data.getRoleId() != "") {
 				final Role role = roleDao.getById(Role.class, data.getRoleId());
 				userDb.setRole(role);
@@ -249,13 +253,14 @@ public class UserService implements UserDetailsService {
 				profileDb.setGender(gender);
 			}
 
-			if (data.getFile() != null && data.getFile() != "") {
 
+			if (data.getFile() != null && data.getFile() != "") {
 				final String oldFileId = userDb.getProfile().getFile().getId();
 
 				final File file = new File();
 				file.setFile(data.getFile());
 				file.setExt(data.getExt());
+
 				final File files = fileDao.save(file);
 				profileDb.setFile(files);
 				
@@ -270,11 +275,10 @@ public class UserService implements UserDetailsService {
 
 			updateResDto.setVersion(userResult.getVersion());
 			updateResDto.setMessage("Update Berhasil!!!");
+
 			em().getTransaction().commit();
 
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			em().getTransaction().rollback();
 			e.printStackTrace();
 		}
@@ -296,6 +300,31 @@ public class UserService implements UserDetailsService {
 
 		em().getTransaction().commit();
 
+		return updateResDto;
+	}
+	
+	public UpdateResDto changePassword(UserChangePassReqDto data) {
+		final UpdateResDto updateResDto = new UpdateResDto();
+		em().getTransaction().begin();
+		final User user = userDao.getById(User.class, data.getUserId());
+
+		if (passwordEncoder.matches(data.getUserOldPass(), user.getPass())) {
+			if (data.getUserNewPass().equals(data.getUserConfirmNewPass())) {
+				final User updateUser = userDao.getById(User.class, data.getUserId());
+				updateUser.setPass(passwordEncoder.encode(data.getUserNewPass()));
+				userDao.save(updateUser);
+				updateResDto.setVersion(updateUser.getVersion());
+				updateResDto.setMessage("Update Berhasil!!");
+				return updateResDto;
+			} else {
+				updateResDto.setMessage("Password baru tidak sama!!!");
+				return updateResDto;
+			}
+
+		}
+
+		updateResDto.setMessage("Update Gagal, password lama anda tidak sama!!!");
+		em().getTransaction() .commit();
 		return updateResDto;
 	}
 }

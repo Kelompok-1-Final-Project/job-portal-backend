@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.admin.dto.DeleteResDto;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.result.ResultGetOnlyIdResDto;
 import com.lawencon.jobportal.admin.dto.result.ResultGetResDto;
 import com.lawencon.jobportal.admin.dto.result.ResultInsertReqDto;
 import com.lawencon.jobportal.admin.service.ResultService;
@@ -49,6 +50,12 @@ public class ResultController {
 	@GetMapping("/job/{jobId}")
 	public ResponseEntity<List<ResultGetResDto>> getByJob(@PathVariable String jobId){
 		final List<ResultGetResDto> response = resultService.getAllByJob(jobId);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{candidateId}/{skillTestId}")
+	public ResponseEntity<ResultGetOnlyIdResDto> getByCandidateAndSkillTest(@PathVariable String candidateId, @PathVariable String skillTestId){
+		final ResultGetOnlyIdResDto response = resultService.getByCandidateAndSkillTest(candidateId, skillTestId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

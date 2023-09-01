@@ -13,6 +13,7 @@ import com.lawencon.jobportal.admin.dao.CandidateDao;
 import com.lawencon.jobportal.admin.dao.ResultDao;
 import com.lawencon.jobportal.admin.dao.SkillTestDao;
 import com.lawencon.jobportal.admin.dto.InsertResDto;
+import com.lawencon.jobportal.admin.dto.result.ResultGetOnlyIdResDto;
 import com.lawencon.jobportal.admin.dto.result.ResultGetResDto;
 import com.lawencon.jobportal.admin.dto.result.ResultInsertReqDto;
 import com.lawencon.jobportal.admin.model.Candidate;
@@ -77,5 +78,14 @@ public class ResultService {
 		});
 		
 		return resultGetResDtos;
+	}
+	
+	public ResultGetOnlyIdResDto getByCandidateAndSkillTest(String candidateId, String skillTestId) {
+		final ResultGetOnlyIdResDto resultGetOnlyIdResDto = new ResultGetOnlyIdResDto();
+		
+		final Result result = resultDao.getByCandidateAndSkillTest(candidateId, skillTestId);
+		resultGetOnlyIdResDto.setId(result.getId());
+		
+		return resultGetOnlyIdResDto;
 	}
 }
