@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportHired" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e665e277-c02d-4793-86cf-ffe9e04faa8b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="today" class="java.lang.String"/>
+	<parameter name="startDate" class="java.lang.String"/>
+	<parameter name="endDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT tcp.full_name, tj.job_title, tet.employment_name, ABS(DATE_PART('day', th.created_at - ta.created_at)) as date_diff 
+FROM t_application ta 
+INNER JOIN t_hired th ON ta.candidate_id = th.candidate_id  
+INNER JOIN t_candidate tc ON ta.candidate_id = tc.id 
+INNER JOIN t_candidate_profile tcp ON tc.profile_id = tcp.id 
+INNER JOIN t_job tj ON ta.job_id = tj.id  
+INNER JOIN t_employment_type tet ON tj.employment_type_id = tet.id]]>
+	</queryString>
+	<field name="fullName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="full_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="full_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_candidate_profile"/>
+	</field>
+	<field name="jobTitle" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="job_title"/>
+		<property name="com.jaspersoft.studio.field.label" value="job_title"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_job"/>
+	</field>
+	<field name="employmentName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="employment_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="employment_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="t_employment_type"/>
+	</field>
+	<field name="dateDiff" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="date_diff"/>
+		<property name="com.jaspersoft.studio.field.label" value="date_diff"/>
+	</field>
+	<title>
+		<band height="97" splitType="Stretch">
+			<staticText>
+				<reportElement x="272" y="70" width="180" height="20" uuid="95a12824-d3dd-46b4-9be5-b91bfc0c2114"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[Email : inlook@contact.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="10" width="300" height="74" uuid="0ec41820-96e2-4984-b627-d89a0099eb57"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[PT. InLook Agency 
+Jalan Dummy, Blok Timur, Jawa Barat, 14045]]></text>
+			</staticText>
+			<image>
+				<reportElement x="30" y="4" width="90" height="88" uuid="08304f00-ba77-469b-bdcb-27586a4829aa"/>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/Kelompok-1-Final-Project/job-portal-frontend/master/projects/base/src/assets/images/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="287" y="47" width="150" height="20" uuid="cc00f893-c519-4be0-be78-e3daa03f18e1"/>
+				<textElement>
+					<font fontName="Arial" size="14"/>
+				</textElement>
+				<text><![CDATA[Telp : (021) 79187676]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="94" splitType="Stretch">
+			<staticText>
+				<reportElement x="187" y="16" width="181" height="24" uuid="080d28b0-7f3b-4a23-9526-38810f6616ea"/>
+				<textElement>
+					<font fontName="Arial" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[APPLICATION REPORT]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="50" width="554" height="44" uuid="81d6f306-ca21-405d-aa60-e01e93995a09"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["This report was created to provide information regarding the duration of candidates who have been accepted into the company from " +$P{startDate} + " to " + $P{endDate} + "."]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="160" height="16" uuid="04f37ea2-f037-45df-8769-d3a1798e37e0">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Full Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="0" width="165" height="16" uuid="c9d5116d-9c63-49d0-81d3-d7dc23514a4b">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Job Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="325" y="0" width="100" height="16" uuid="9a28e110-3289-4dd0-999e-c7ef218f06e6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Duration]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="425" y="0" width="130" height="16" uuid="bf9f9839-6d46-459a-83b7-6e2906c54c97"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Employment Type]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="160" height="30" uuid="997a2412-eba8-4f8c-9675-3888eb69f9ae">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ac8da0f8-7d2f-4255-8371-751a63c9cf77"/>
+				</reportElement>
+				<box padding="4">
+					<topPen lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fullName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="160" y="0" width="165" height="30" uuid="30136be5-05d0-47db-9c05-dcef702556ab">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f68916a9-a40b-4f09-8045-c2af6f7eb8da"/>
+				</reportElement>
+				<box padding="4">
+					<topPen lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jobTitle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="325" y="0" width="100" height="30" uuid="03eca98e-7ad6-452c-b511-c079bde63d3e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="85b7ff42-7cb5-4d4c-a653-871a277df8d1"/>
+				</reportElement>
+				<box padding="4">
+					<topPen lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateDiff} > 0 ? $F{dateDiff} + " days" : "Less than one day"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="425" y="0" width="130" height="30" uuid="0c11a5cb-d9c2-4811-b255-519cbd1970b5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4767c2a3-0682-4100-a1b9-07024ea845cf"/>
+				</reportElement>
+				<box padding="4">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employmentName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<lastPageFooter>
+		<band height="74">
+			<image>
+				<reportElement x="260" y="-3" width="50" height="48" uuid="12f2472e-6621-444b-b260-54046fb468c4"/>
+				<imageExpression><![CDATA["https://raw.githubusercontent.com/Kelompok-1-Final-Project/job-portal-frontend/master/projects/base/src/assets/images/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="215" y="40" width="140" height="20" uuid="24f62019-70b6-4a0d-b501-5ce3aded3b5f"/>
+				<textElement>
+					<font fontName="Arial" size="12"/>
+				</textElement>
+				<text><![CDATA[InLook © Copyright 2023]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="180" y="59" width="200" height="14" uuid="3f9cb3f9-971f-4881-839a-c626b4a3963f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Report Generated on " + $P{today}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

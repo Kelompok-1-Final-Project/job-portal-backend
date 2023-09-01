@@ -1,5 +1,6 @@
 package com.lawencon.jobportal.admin.dao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class ReportDao extends AbstractJpaDao {
 		return ConnHandler.getManager();
 	}
 	
-	public List<ReportGetResDto> getReport(String startDate, String endDate){
+	public List<ReportGetResDto> getReport(LocalDate startDate, LocalDate endDate){
 		final StringBuilder sql = new StringBuilder();
 		sql.append("SELECT tcp.full_name, tj.job_title, tet.employment_name, ");
 		sql.append("ABS(DATE_PART('day', th.created_at - ta.created_at)) as date_diff ");
@@ -30,13 +31,13 @@ public class ReportDao extends AbstractJpaDao {
 		sql.append("INNER JOIN t_employment_type tet ON tj.employment_type_id = tet.id ");
 		sql.append("WHERE 1 = 1 ");
 		
-		if(startDate != null && startDate != "" && endDate != null && endDate != "") {
+		if(startDate != null && endDate != null) {
 			sql.append("AND ta.created_at >= :startDate AND th.created_at <= :endDate ");
 		}
 		
 		final Query reportQuery = this.em().createNativeQuery(sql.toString());
 		
-		if (startDate != null && startDate != "" && endDate != null && endDate != "") {
+		if (startDate != null && endDate != null) {
 			reportQuery.setParameter("startDate", startDate);
 			reportQuery.setParameter("endDate", endDate);
 		}
