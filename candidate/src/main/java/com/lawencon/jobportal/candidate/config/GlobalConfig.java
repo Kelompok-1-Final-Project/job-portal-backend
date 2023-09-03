@@ -20,23 +20,4 @@ public class GlobalConfig {
 		return new RestTemplate(new HttpComponentsClientHttpRequestFactory());
 	}
 	
-
-//	@Bean(name = "initTable")
-//	public SpringLiquibase initTable(DataSource dataSource) {
-//		final SpringLiquibase springLiquibase = new SpringLiquibase();
-//		springLiquibase.setChangeLog("/db/migration/script/init_table_v001.sql");
-//		springLiquibase.setDataSource(dataSource);
-//		return springLiquibase;
-//	}
-//	
-//	@Bean(name = "initData")
-//	@DependsOn("initTable")
-//	public SpringLiquibase initData(DataSource dataSource) {
-//		final SpringLiquibase springLiquibase = new SpringLiquibase();
-//		springLiquibase.setChangeLog("/db/migration/script/init_data_v001.sql");
-//		springLiquibase.setDataSource(dataSource);
-//		return springLiquibase;
-//	}
-	
-	
 }
