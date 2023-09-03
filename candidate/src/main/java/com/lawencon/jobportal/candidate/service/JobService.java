@@ -129,7 +129,6 @@ public class JobService {
 	}
 	
 	public InsertResDto insertJob(JobInsertReqDto data) {
-		em().getTransaction().begin();
 		
 		final Job job = new Job();
 		job.setJobTitle(data.getJobTitle());
@@ -190,7 +189,6 @@ public class JobService {
 		result.setId(jobResult.getId());
 		result.setMessage("Job added successfully");
 		
-		em().getTransaction().commit();
 		return result;
 	}
 

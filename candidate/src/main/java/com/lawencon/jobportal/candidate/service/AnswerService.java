@@ -56,10 +56,10 @@ public class AnswerService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	public TestGetResDto getAllQuestion(String jobId){
+	public TestGetResDto getAllQuestion(String jobCode){
 		final TestGetResDto testGetResDto = new TestGetResDto();
 		
-		final SkillTest skillTest = skillTestDao.getByJob(jobId);
+		final SkillTest skillTest = skillTestDao.getByJob(jobCode);
 		testGetResDto.setTestId(skillTest.getId());
 		testGetResDto.setTestName(skillTest.getTestName());
 		testGetResDto.setTestCode(skillTest.getTestCode());

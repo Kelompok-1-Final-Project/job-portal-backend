@@ -101,7 +101,6 @@ public class JobService {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
 		final User user = userDao.getById(User.class, userId);
-		
 		if(user.getRole().getRoleCode().equals(RoleEnum.ADMIN.roleCode)) {
 			jobDao.getAll(Job.class).forEach(j -> {
 				final JobGetResDto jobGetResDto = new JobGetResDto();
