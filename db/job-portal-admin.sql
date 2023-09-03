@@ -21,7 +21,7 @@
 --DROP TABLE IF EXISTS t_education;
 --DROP TABLE IF EXISTS t_organization;
 --DROP TABLE IF EXISTS t_work_experience;
---DROP TABLE IF EXISTS t_employee
+--DROP TABLE IF EXISTS t_employee;
 --DROP TABLE IF EXISTS t_candidate;
 --DROP TABLE IF EXISTS t_candidate_profile;
 --DROP TABLE IF EXISTS t_job;
