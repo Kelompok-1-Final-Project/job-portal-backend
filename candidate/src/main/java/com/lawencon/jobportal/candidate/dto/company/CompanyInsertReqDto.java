@@ -6,6 +6,25 @@ public class CompanyInsertReqDto {
 	private String companyCode;
 	private String industryCode;
 	private String cityCode;
+	private String address;
+	private String description;
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	private String ext;
 	private String file;
 
