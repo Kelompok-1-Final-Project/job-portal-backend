@@ -129,7 +129,7 @@ public class JobService {
 	}
 	
 	public InsertResDto insertJob(JobInsertReqDto data) {
-		
+		em().getTransaction().begin();
 		final Job job = new Job();
 		job.setJobTitle(data.getJobTitle());
 		job.setSalaryStart(data.getSalaryStart());
@@ -175,6 +175,7 @@ public class JobService {
 			final SkillTest skillTestResult = skillTestDao.save(skillTest);
 			
 			for (String q : data.getQuestionCode()) {
+				System.out.print(q);
 				final Question question = questionDao.getByCode(q);
 				
 				final SkillTestQuestion skillTestQuestion = new SkillTestQuestion();
@@ -188,7 +189,7 @@ public class JobService {
 		final InsertResDto result = new InsertResDto();
 		result.setId(jobResult.getId());
 		result.setMessage("Job added successfully");
-		
+		em().getTransaction().commit();
 		return result;
 	}
 
