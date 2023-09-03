@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
 import com.lawencon.config.JwtConfig;
+import com.lawencon.jobportal.admin.constant.RoleEnum;
 import com.lawencon.jobportal.admin.dao.BenefitDao;
 import com.lawencon.jobportal.admin.dao.CompanyDao;
 import com.lawencon.jobportal.admin.dao.EmploymentTypeDao;
@@ -99,31 +100,63 @@ public class JobService {
 	public List<JobGetResDto> getAll(String userId) {
 		final List<JobGetResDto> jobGetResDtos = new ArrayList<>();
 
-		jobDao.getByUser(userId).forEach(j -> {
-			final JobGetResDto jobGetResDto = new JobGetResDto();
-			jobGetResDto.setId(j.getId());
-			jobGetResDto.setJobTitle(j.getJobTitle());
-			jobGetResDto.setSalaryStart(j.getSalaryStart());
-			jobGetResDto.setSalaryEnd(j.getSalaryEnd());
-			jobGetResDto.setDescription(j.getDescription());
-			jobGetResDto.setEndDate(j.getEndDate().toString());
-			jobGetResDto.setCompanyId(j.getCompany().getId());
-			jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
-			jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
-			jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
-			jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
-			jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
-			jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
-			jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
-			if(j.getUpdatedAt()!=null) {
-				jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
-			}
-			jobGetResDto.setVer(j.getVersion());
-			jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
-			jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
-			jobGetResDto.setJobCode(j.getJobCode());
-			jobGetResDtos.add(jobGetResDto);
-		});
+		final User user = userDao.getById(User.class, userId);
+		
+		if(user.getRole().getRoleCode().equals(RoleEnum.ADMIN.roleCode)) {
+			jobDao.getAll(Job.class).forEach(j -> {
+				final JobGetResDto jobGetResDto = new JobGetResDto();
+				jobGetResDto.setId(j.getId());
+				jobGetResDto.setJobTitle(j.getJobTitle());
+				jobGetResDto.setSalaryStart(j.getSalaryStart());
+				jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+				jobGetResDto.setDescription(j.getDescription());
+				jobGetResDto.setEndDate(j.getEndDate().toString());
+				jobGetResDto.setCompanyId(j.getCompany().getId());
+				jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+				jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+				jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
+				jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+				jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+				jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+				jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+				if(j.getUpdatedAt()!=null) {
+					jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+				}
+				jobGetResDto.setVer(j.getVersion());
+				jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+				jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+				jobGetResDto.setJobCode(j.getJobCode());
+				jobGetResDtos.add(jobGetResDto);
+			});
+		}else {
+			jobDao.getByUser(userId).forEach(j -> {
+				final JobGetResDto jobGetResDto = new JobGetResDto();
+				jobGetResDto.setId(j.getId());
+				jobGetResDto.setJobTitle(j.getJobTitle());
+				jobGetResDto.setSalaryStart(j.getSalaryStart());
+				jobGetResDto.setSalaryEnd(j.getSalaryEnd());
+				jobGetResDto.setDescription(j.getDescription());
+				jobGetResDto.setEndDate(j.getEndDate().toString());
+				jobGetResDto.setCompanyId(j.getCompany().getId());
+				jobGetResDto.setCompanyName(j.getCompany().getCompanyName());
+				jobGetResDto.setIndustryName(j.getCompany().getIndustry().getIndustryName());
+				jobGetResDto.setCityName(j.getCompany().getCity().getCityName());
+				jobGetResDto.setPositionName(j.getJobPosition().getPositionName());
+				jobGetResDto.setStatusName(j.getJobStatus().getStatusName());
+				jobGetResDto.setEmploymentName(j.getEmployementType().getEmploymentName());
+				jobGetResDto.setCreatedAt(j.getCreatedAt().toString());
+				if(j.getUpdatedAt()!=null) {
+					jobGetResDto.setUpdatedAt(j.getUpdatedAt().toString());				
+				}
+				jobGetResDto.setVer(j.getVersion());
+				jobGetResDto.setInterviewerName(j.getInterviewer().getProfile().getFullName());
+				jobGetResDto.setHrName(j.getHr().getProfile().getFullName());
+				jobGetResDto.setJobCode(j.getJobCode());
+				jobGetResDtos.add(jobGetResDto);
+			});
+		}
+		
+		
 
 		return jobGetResDtos;
 	}
