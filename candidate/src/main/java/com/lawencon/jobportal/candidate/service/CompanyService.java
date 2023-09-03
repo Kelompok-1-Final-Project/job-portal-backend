@@ -80,6 +80,8 @@ public class CompanyService {
 			final Company company = new Company();
 			company.setCompanyName(data.getCompanyName());
 			company.setCompanyCode(data.getCompanyCode());
+			company.setAddress(data.getAddress());
+			company.setDescription(data.getDescription());
 			company.setIndustry(industry);
 			company.setCity(city);
 			company.setFile(files);
