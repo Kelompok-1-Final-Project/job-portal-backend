@@ -230,7 +230,7 @@ public class CandidateService {
 			final Candidate candidate = candidateDao.getById(Candidate.class, candidateDb.getId());
 			final CandidateProfile profile = candidateProfileDao.getById(CandidateProfile.class,
 					candidate.getCandidateProfile().getId());
-			final String oldFileId = profile.getCv().getId();
+			final File oldFileId = profile.getCv();
 
 			final File file = new File();
 			file.setFile(data.getFile());
@@ -241,7 +241,7 @@ public class CandidateService {
 			final CandidateProfile newProfile = candidateProfileDao.saveAndFlush(profile);
 
 			if(oldFileId != null) {
-				fileDao.deleteById(File.class, oldFileId);				
+				fileDao.deleteById(File.class, oldFileId.getId());				
 			}
 
 			result.setVersion(newProfile.getVersion());
