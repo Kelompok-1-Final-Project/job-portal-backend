@@ -203,6 +203,7 @@ public class ProfileService {
 			em().getTransaction().begin();
 			final User candidate = userDao.getById(User.class, data.getCandidateId());
 			final Profile profile = profileDao.getById(Profile.class, candidate.getProfile().getId());
+
 			final File oldFileId = profile.getCv();
 
 			final File file = new File();

@@ -982,7 +982,8 @@ INSERT INTO t_gender(id, gender_code, gender_name, created_by, created_at, is_ac
 
 INSERT INTO t_industry (id, industry_code, industry_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'ID001', 'Technology', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
-	(uuid_generate_v4(), 'ID002', 'Finance', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
+	(uuid_generate_v4(), 'ID002', 'Finance', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
+	(uuid_generate_v4(), 'ID003', 'Construction', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0);
 
 INSERT INTO t_level(id, level_code, level_name, created_by, created_at, is_active, ver) VALUES 
 	(uuid_generate_v4(), 'LV001', 'Basic', (SELECT id FROM t_user  WHERE email = 'system'), NOW(), TRUE, 0),
