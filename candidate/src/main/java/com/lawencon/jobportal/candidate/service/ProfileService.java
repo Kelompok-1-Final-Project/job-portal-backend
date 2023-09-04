@@ -203,10 +203,8 @@ public class ProfileService {
 			em().getTransaction().begin();
 			final User candidate = userDao.getById(User.class, data.getCandidateId());
 			final Profile profile = profileDao.getById(Profile.class, candidate.getProfile().getId());
-			String oldFileId = null;
-			if(profile.getCv().getId()!=null) {
-				oldFileId = profile.getCv().getId();
-			}
+
+			final File oldFileId = profile.getCv();
 
 			final File file = new File();
 			file.setFile(data.getFile());
@@ -217,7 +215,7 @@ public class ProfileService {
 			final Profile newProfile = profileDao.saveAndFlush(profile);
 
 			if(oldFileId != null) {
-				fileDao.deleteById(File.class, oldFileId);				
+				fileDao.deleteById(File.class, oldFileId.getId());				
 			}
 
 			final UpdateCvSendAdminReqDto sendData = new UpdateCvSendAdminReqDto();
@@ -246,6 +244,7 @@ public class ProfileService {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			em().getTransaction().rollback();
 		}
 
